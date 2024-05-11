@@ -1,15 +1,4 @@
 import InfoBox from "./InfoBox"
-interface ButtonInfo {
-  text: string
-  link: string
-  backgroundColor: string
-}
-interface InfoBoxProps {
-  heading: string
-  backgroundColor: string
-  buttonInfo: ButtonInfo
-  children: React.ReactNode
-}
 const InfoBoxes: React.FC = () => {
   return (
     <section>
