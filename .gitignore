@@ -13,3 +13,8 @@ build/
 *.log
 # environment variables
 *.env
+# public
+public/
+# typescript
+*.tsbuildinfo
+next-env.d.ts

@@ -2,4 +2,4 @@
 
 ## Description
 
-This is the PropertyPulse project from Brad Traversy's 2024 Next.js from Scratch on O'Reilly, with some minor modifications.
+This is the PropertyPulse project from Brad Traversy's 2024 Next.js from Scratch course on O'Reilly, using TypeScript as well as some other minor modifications.
