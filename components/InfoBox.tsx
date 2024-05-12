@@ -1,17 +1,5 @@
 import Link from "next/link"
-import {ReactNode} from "react"
-interface ButtonInfo {
-  link: string
-  text: string
-  backgroundColor: string
-}
-interface InfoBoxProps {
-  heading: string
-  backgroundColor?: string
-  textColor?: string
-  buttonInfo: ButtonInfo
-  children: ReactNode
-}
+import {InfoBoxProps} from "@/interfaces"
 const InfoBox: React.FC<InfoBoxProps> = ({
   heading,
   backgroundColor = 'bg-gray-100',

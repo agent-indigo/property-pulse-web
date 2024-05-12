@@ -9,6 +9,7 @@ out/
 build/
 # misc
 .DS_Store
+properties.json
 # logs
 *.log
 # environment variables
