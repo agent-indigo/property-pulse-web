@@ -19,15 +19,7 @@ const HomeProperties: React.FC = () => {
               recentProperties.map((property: Property) => (
                 <PropertyCard
                   key={property._id}
-                  _id={property._id}
-                  images={property.images}
-                  type={property.type}
-                  name={property.name}
-                  beds={property.beds}
-                  baths={property.baths}
-                  square_feet={property.square_feet}
-                  rates={property.rates}
-                  location={property.location}
+                  {...property}
                 />
               ))
             )}
