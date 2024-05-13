@@ -1,4 +1,7 @@
 import {ReactNode} from "react"
+export interface RootLayoutProps {
+  children: ReactNode
+}
 interface ButtonInfo {
   link: string
   text: string

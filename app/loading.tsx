@@ -1,5 +1,5 @@
 'use client'
-import { ClipLoader } from 'react-spinners'
+import {ClipLoader} from 'react-spinners'
 const Spinner: React.FC<boolean> = (loading: boolean) => {
   return (
     <ClipLoader
