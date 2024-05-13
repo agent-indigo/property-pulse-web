@@ -1,5 +1,5 @@
 import {ReactNode} from "react"
-export interface RootLayoutProps {
+export interface Layout {
   children: ReactNode
 }
 interface ButtonInfo {
