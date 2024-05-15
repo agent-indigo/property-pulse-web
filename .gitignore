@@ -7,15 +7,16 @@ coverage/
 out/
 # production
 build/
-# misc
+# Mac OS
 .DS_Store
-properties.json
 # logs
 *.log
 # environment variables
 *.env
-# public
-public/
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# public
+public/
+# sample data
+sampleData/

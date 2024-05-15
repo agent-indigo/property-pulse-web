@@ -1,5 +1,5 @@
-import Link from "next/link"
-import {InfoBoxProps} from "@/interfaces"
+import Link from 'next/link'
+import {InfoBoxProps} from '@/utilities/interfaces'
 const InfoBox: React.FC<InfoBoxProps> = ({
   heading,
   backgroundColor = 'bg-gray-100',

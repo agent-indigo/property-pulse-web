@@ -1,6 +1,5 @@
-'use client'
 import {ClipLoader} from 'react-spinners'
-const LoadingPage: React.FC<boolean> = (loading: boolean) => {
+const Spinner: React.FC<{loading: boolean}> = ({loading}: {loading: boolean}) => {
   return (
     <ClipLoader
       color='#3b82f6'
@@ -14,4 +13,4 @@ const LoadingPage: React.FC<boolean> = (loading: boolean) => {
     />
   )
 }
-export default LoadingPage
+export default Spinner

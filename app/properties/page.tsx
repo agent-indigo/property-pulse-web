@@ -1,19 +1,19 @@
-import type {Metadata} from "next"
-import {Property} from "@/interfaces"
-import PropertyCard from "@/components/PropertyCard"
-import data from "@/properties.json"
+import type {Metadata} from 'next'
+import {getProperties} from '@/utilities/requests'
+import {Property} from '@/utilities/interfaces'
+import PropertyCard from '@/components/PropertyCard'
 export const metadata: Metadata = {
-  title: "Properties | PropertyPulse | Find the Perfect Rental",
+  title: 'Properties | PropertyPulse | Find the Perfect Rental',
 }
-const Properties: React.FC = () => {
-  const properties: Property[] = data
+const PropertiesPage: React.FC = async (): Promise<any> => {
+  const properties: Property[] = await getProperties()
   return (
-    <section className="px-4 py-6">
-      <div className="container-xl lg:container m-auto px-4 py-6">
+    <section className='px-4 py-6'>
+      <div className='container-xl lg:container m-auto px-4 py-6'>
         {properties.length === 0 ? (
           <p>None found...</p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
             {properties.map((property: Property) => (
               <PropertyCard
                 key={property._id}
@@ -26,4 +26,4 @@ const Properties: React.FC = () => {
     </section>
   )
 }
-export default Properties
+export default PropertiesPage
