@@ -1,5 +1,9 @@
 import Link from 'next/link'
 import {FaExclamationTriangle} from 'react-icons/fa'
+import type {Metadata} from 'next'
+export const metadata: Metadata = {
+  title: 'Not Found | PropertyPulse | Find the Perfect Rental Property'
+}
 const NotFoundPage: React.FC = () => {
   return (
     <section className='bg-blue-50 min-h-screen flex-grow'>

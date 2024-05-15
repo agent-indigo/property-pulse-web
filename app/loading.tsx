@@ -1,5 +1,9 @@
 'use client'
 import {ClipLoader} from 'react-spinners'
+import type {Metadata} from 'next'
+export const metadata: Metadata = {
+  title: 'Loading... | PropertyPulse | Find the Perfect Rental Property'
+}
 const LoadingPage: React.FC<boolean> = (loading: boolean) => {
   return (
     <ClipLoader

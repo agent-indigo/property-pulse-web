@@ -1,5 +1,4 @@
 'use client'
-import type {Metadata} from 'next'
 import Link from 'next/link'
 import {useParams} from 'next/navigation'
 import {useEffect, useState} from 'react'
@@ -9,15 +8,10 @@ import {getProperty} from '@/utilities/requests'
 import Spinner from '@/components/Spinner'
 import PropertyHeaderImage from '@/components/PropertyHeaderImage'
 import PropertyDetails from '@/components/PropertyDetails'
-let tabTitle: string = ''
-export const metadata: Metadata = {
-  title: `${tabTitle} | PropertyPulse | Find the Perfect Rental`
-}
 const PropertyPage: React.FC = () => {
   const {id}: {id: string} = useParams<any>()
   const [property, setProperty] = useState<Property | null>(null)
   const [headerImage, setHeaderImage] = useState<string>('')
-  const [name, setName] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(true)
   useEffect(() => {
     const getPropertyData: Function = async (): Promise<any> => {
@@ -26,7 +20,6 @@ const PropertyPage: React.FC = () => {
           const property: Property = await getProperty(id)
           setProperty(property)
           setHeaderImage(property.images[0])
-          setName(property.name)
         } catch (error) {
           console.error(`Error fetching property:\n${error}`)
         } finally {
@@ -40,22 +33,14 @@ const PropertyPage: React.FC = () => {
   }, [id, property])
   if (!property && !loading) {
     return (
-      <>
-        <h1 className='text-center text-2xl font-bold mt-10'>
-          Property not found.
-        </h1>
-      </>,
-      tabTitle = 'Not found'
+      <h1 className='text-center text-2xl font-bold mt-10'>
+        Property not found.
+      </h1>
     )
   } else {
     return (
       <>
-        {loading && (
-          <>
-            <Spinner loading={loading}/>
-          </>,
-          tabTitle = 'Loading...'
-        )}
+        {loading && <Spinner loading={loading}/>}
         {!loading && property && (
           <>
             <PropertyHeaderImage image={headerImage}/>
@@ -158,8 +143,7 @@ const PropertyPage: React.FC = () => {
             </section>
           </>
         )}
-      </>,
-      tabTitle = name
+      </>
     )
   }
 }
