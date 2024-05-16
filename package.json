@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "seed": "ts-node utilities/seeder.mts -s",
-    "delete": "ts-node utilities/seeder.mts -d"
+    "seed": "node --loader ts-node/esm utilities/seeder.mts -s",
+    "delete": "node --loader ts-node/esm utilities/seeder.mts -d"
   },
   "dependencies": {
     "mapbox-gl": "^3.3.0",

@@ -1,8 +1,9 @@
 import Link from 'next/link'
+import {ReactElement} from 'react'
 import {getProperties} from '@/utilities/requests'
 import {Property} from '@/utilities/interfaces'
 import PropertyCard from '@/components/PropertyCard'
-const HomeProperties: React.FC = async (): Promise<any> => {
+const HomeProperties: React.FC = async (): Promise<ReactElement> => {
   const properties: Property[] = await getProperties()
   return (
     <>

@@ -10,7 +10,7 @@ const Navbar: React.FC = () => {
   const [isMobileMenuOpen, setIsModileMenuOpen] = useState<boolean>(false)
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState<boolean>(false)
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
-  const pathname = usePathname()
+  const pathname: string = usePathname()
   return (
     <nav className='bg-blue-700 border-b border-blue-500'>
       <div className='mx-auto max-w-7xl px-2 sm:px-6 lg:px-8'>

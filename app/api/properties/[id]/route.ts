@@ -8,10 +8,10 @@ import {Property} from '@/utilities/interfaces'
  * @route   GET /api/properties/:_id
  * @access  public
  */
-export const GET: Function = async (request: NextApiRequest, {params}: {params: any}): Promise<Response> => {
+export const GET: Function = async (request: NextApiRequest, {params}: {params: {id: string}}): Promise<Response> => {
     try {
         await connectToMongoDB()
-        const property: Property | null = await propertyModel.findById(params._id)
+        const property: Property | null = await propertyModel.findById(params.id)
         if (property) {
             return new Response(JSON.stringify(property), {status: 200})
         } else {

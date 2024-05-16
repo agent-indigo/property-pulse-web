@@ -9,12 +9,13 @@ import Spinner from '@/components/Spinner'
 import PropertyHeaderImage from '@/components/PropertyHeaderImage'
 import PropertyDetails from '@/components/PropertyDetails'
 const PropertyPage: React.FC = () => {
-  const {id}: {id: string} = useParams<any>()
+  const params = useParams<{id: string}>()
   const [property, setProperty] = useState<Property | null>(null)
   const [headerImage, setHeaderImage] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(true)
   useEffect(() => {
-    const getPropertyData: Function = async (): Promise<any> => {
+    const getPropertyData: Function = async (): Promise<Property | undefined> => {
+      const {id}: {id: string} = params
       if (id) {
         try {
           const property: Property = await getProperty(id)
@@ -30,7 +31,7 @@ const PropertyPage: React.FC = () => {
       }
     }
     if (!property) getPropertyData()
-  }, [id, property])
+  }, [params, property])
   if (!property && !loading) {
     return (
       <h1 className='text-center text-2xl font-bold mt-10'>

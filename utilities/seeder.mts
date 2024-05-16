@@ -1,9 +1,9 @@
 import {readFileSync} from 'fs'
 import {dirname} from 'path'
 import {fileURLToPath} from 'url'
-import {Property} from '@/utilities/interfaces'
-import propertyModel from '@/models/propertyModel'
-import connectToMongoDB from '@/utilities/connectToMongoDB'
+import {Property} from './interfaces'
+import propertyModel from '../models/propertyModel'
+import connectToMongoDB from './connectToMongoDB'
 connectToMongoDB()
 const deleteData: Function = async (): Promise<void> => {
     try {

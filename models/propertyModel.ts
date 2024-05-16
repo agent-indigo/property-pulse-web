@@ -34,8 +34,7 @@ const propertySchema = new Schema<Property>({
         zipcode: {
             type: String,
             required: true
-        },
-        required: true
+        }
     },
     beds: {
         type: Number,
@@ -64,8 +63,7 @@ const propertySchema = new Schema<Property>({
         },
         monthly: {
             type: Number
-        },
-        required: true
+        }
     },
     seller_info: {
         name: {
@@ -79,8 +77,7 @@ const propertySchema = new Schema<Property>({
         phone: {
             type: String,
             required: true
-        },
-        required: true
+        }
     },
     images: [
         {
