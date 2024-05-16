@@ -1,6 +1,6 @@
 import type {Metadata} from 'next'
 export const metadata: Metadata = {
-  title: 'Add Property | PropertyPulse | Find the Perfect Rental',
+  title: 'Add Property'
 }
 const AddPropertyPage: React.FC = () => {
   return <h1>Add property</h1>

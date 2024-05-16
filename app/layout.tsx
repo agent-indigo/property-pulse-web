@@ -6,9 +6,12 @@ import Footer from '@/components/Footer'
 import '@/assets/styles.css'
 const inter = Inter({subsets: ['latin']})
 export const metadata: Metadata = {
-  title: 'PropertyPulse | Find the Perfect Rental',
+  title: {
+    template: '%s | PropertyPulse | Find the Perfect Rental',
+    default: 'PropertyPulse | Find the Perfect Rental'
+  },
   description: 'Find the perfect rental property.',
-  keywords: 'find, rental, property',
+  keywords: 'find, rental, property'
 }
 const RootLayout: React.FC<{children: ReactNode}> = ({children}: {children: ReactNode}) => {
   return (

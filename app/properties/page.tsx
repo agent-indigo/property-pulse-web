@@ -4,7 +4,7 @@ import {getProperties} from '@/utilities/requests'
 import {IProperty} from '@/utilities/interfaces'
 import PropertyCard from '@/components/PropertyCard'
 export const metadata: Metadata = {
-  title: 'Properties | PropertyPulse | Find the Perfect Rental',
+  title: 'Properties'
 }
 const PropertiesPage: React.FC = async (): Promise<ReactElement> => {
   const properties: IProperty[] = await getProperties()

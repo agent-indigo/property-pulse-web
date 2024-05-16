@@ -2,7 +2,9 @@ import Link from 'next/link'
 import {FaExclamationTriangle} from 'react-icons/fa'
 import type {Metadata} from 'next'
 export const metadata: Metadata = {
-  title: 'Not Found | PropertyPulse | Find the Perfect Rental Property'
+  title: 'Not Found | PropertyPulse | Find the Perfect Rental',
+  description: 'Find the perfect rental property.',
+  keywords: 'find, rental, property'
 }
 const NotFoundPage: React.FC = () => {
   return (
@@ -13,9 +15,9 @@ const NotFoundPage: React.FC = () => {
             <FaExclamationTriangle className='fas fa-exclamation-triangle fa-5x text-8xl text-yellow-400'/>
           </div>
           <div className='text-center'>
-            <h1 className='text-3xl font-bold mt-4 mb-2'>Page Not Found</h1>
+            <h1 className='text-3xl font-bold mt-4 mb-2'>Error 404</h1>
             <p className='text-gray-500 text-xl mb-10'>
-              The page you are looking for does not exist.
+              Page not Found
             </p>
             <Link
               href='/'

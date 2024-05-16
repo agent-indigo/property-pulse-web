@@ -1,10 +1,10 @@
 'use client'
+import {useEffect} from 'react'
 import {ClipLoader} from 'react-spinners'
-import type {Metadata} from 'next'
-export const metadata: Metadata = {
-  title: 'Loading... | PropertyPulse | Find the Perfect Rental Property'
-}
 const LoadingPage: React.FC<boolean> = (loading: boolean) => {
+  useEffect(() => {
+    if (loading) document.title = 'Loading... | PropertyPulse | Find the Perfect Rental'
+  }, [loading])
   return (
     <ClipLoader
       color='#3b82f6'
