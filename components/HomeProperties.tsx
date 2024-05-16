@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import {ReactElement} from 'react'
 import {getProperties} from '@/utilities/requests'
-import {Property} from '@/utilities/interfaces'
+import {IProperty} from '@/utilities/interfaces'
 import PropertyCard from '@/components/PropertyCard'
 const HomeProperties: React.FC = async (): Promise<ReactElement> => {
-  const properties: Property[] = await getProperties()
+  const properties: IProperty[] = await getProperties()
   return (
     <>
       <section className='px-4 py-6'>
@@ -16,7 +16,7 @@ const HomeProperties: React.FC = async (): Promise<ReactElement> => {
             {properties.length === 0 ? (
               <p>None found...</p>
             ) : (
-              properties.sort(() => Math.random() - Math.random()).slice(0, 3).map((property: Property) => (
+              properties.sort(() => Math.random() - Math.random()).slice(0, 3).map((property: IProperty) => (
                 <PropertyCard
                   key={property._id}
                   {...property}

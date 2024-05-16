@@ -1,6 +1,6 @@
 import {Schema, model, models} from 'mongoose'
-import {User} from '@/utilities/interfaces'
-const userSchema = new Schema<User>({
+import {IUser} from '@/utilities/interfaces'
+const userSchema = new Schema<IUser>({
     email: {
         type: String,
         unique: true,
@@ -23,5 +23,5 @@ const userSchema = new Schema<User>({
 }, {
     timestamps: true
 })
-const userModel = models.userModel || model<User>('User', userSchema)
+const userModel = models.User || model<IUser>('User', userSchema)
 export default userModel

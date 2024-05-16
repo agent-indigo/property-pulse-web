@@ -1,7 +1,7 @@
 import {NextApiRequest} from 'next'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
-import {Property} from '@/utilities/interfaces'
+import {IProperty} from '@/utilities/interfaces'
 /**
  * @name    GET
  * @desc    GET all properties
@@ -11,7 +11,7 @@ import {Property} from '@/utilities/interfaces'
 export const GET: Function = async (request: NextApiRequest): Promise<Response> => {
     try {
         await connectToMongoDB()
-        const properties: Property[] = await propertyModel.find({})
+        const properties: IProperty[] = await propertyModel.find({})
         return new Response(JSON.stringify(properties), {status: 200})
     } catch (error) {
         return new Response(`Error fetching properties:\n${error}`, {status: 500})

@@ -1,7 +1,7 @@
 import {NextApiRequest} from 'next'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
-import {Property} from '@/utilities/interfaces'
+import {IProperty} from '@/utilities/interfaces'
 /**
  * @name    GET
  * @desc    GET a single property
@@ -11,7 +11,7 @@ import {Property} from '@/utilities/interfaces'
 export const GET: Function = async (request: NextApiRequest, {params}: {params: {id: string}}): Promise<Response> => {
     try {
         await connectToMongoDB()
-        const property: Property | null = await propertyModel.findById(params.id)
+        const property: IProperty | null = await propertyModel.findById(params.id)
         if (property) {
             return new Response(JSON.stringify(property), {status: 200})
         } else {

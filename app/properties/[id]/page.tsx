@@ -3,22 +3,22 @@ import Link from 'next/link'
 import {useParams} from 'next/navigation'
 import {useEffect, useState} from 'react'
 import {FaArrowLeft} from 'react-icons/fa'
-import {Property} from '@/utilities/interfaces'
+import {IProperty} from '@/utilities/interfaces'
 import {getProperty} from '@/utilities/requests'
 import Spinner from '@/components/Spinner'
 import PropertyHeaderImage from '@/components/PropertyHeaderImage'
 import PropertyDetails from '@/components/PropertyDetails'
 const PropertyPage: React.FC = () => {
   const params = useParams<{id: string}>()
-  const [property, setProperty] = useState<Property | null>(null)
+  const [property, setProperty] = useState<IProperty | null>(null)
   const [headerImage, setHeaderImage] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(true)
   useEffect(() => {
-    const getPropertyData: Function = async (): Promise<Property | undefined> => {
+    const getPropertyData: Function = async (): Promise<IProperty | undefined> => {
       const {id}: {id: string} = params
       if (id) {
         try {
-          const property: Property = await getProperty(id)
+          const property: IProperty = await getProperty(id)
           setProperty(property)
           setHeaderImage(property.images[0])
         } catch (error) {

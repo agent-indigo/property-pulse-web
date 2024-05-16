@@ -28,7 +28,7 @@ interface SellerInfo {
   email: string
   phone: string
 }
-export interface Property {
+export interface IProperty {
   _id: string
   owner: Schema.Types.ObjectId
   name: string
@@ -46,7 +46,7 @@ export interface Property {
   createdAt: string
   updatedAt: string
 }
-export interface User {
+export interface IUser {
   email: string
   username: string
   image?: string
