@@ -6,9 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "seed": "node --loader ts-node/esm utilities/seeder.mts -s",
-    "delete": "node --loader ts-node/esm utilities/seeder.mts -d"
+    "lint": "next lint"
   },
   "dependencies": {
     "mapbox-gl": "^3.3.0",
@@ -38,7 +36,6 @@
     "prettier": "^3.2.5",
     "prettier-plugin-tailwindcss": "^0.5.14",
     "tailwindcss": "^3.4.1",
-    "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   }
 }
