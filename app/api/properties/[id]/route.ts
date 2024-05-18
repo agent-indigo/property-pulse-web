@@ -17,7 +17,7 @@ export const GET: Function = async (request: NextApiRequest, {params}: {params: 
         } else {
             return new Response('Property not found.', {status: 404})
         }
-    } catch (error) {
+    } catch (error: unknown) {
         return new Response(`Error fetching property:\n${error}`, {status: 500})
     }
 }

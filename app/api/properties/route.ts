@@ -13,7 +13,7 @@ export const GET: Function = async (request: NextApiRequest): Promise<Response> 
         await connectToMongoDB()
         const properties: IProperty[] = await propertyModel.find({})
         return new Response(JSON.stringify(properties), {status: 200})
-    } catch (error) {
+    } catch (error: unknown) {
         return new Response(`Error fetching properties:\n${error}`, {status: 500})
     }
 }

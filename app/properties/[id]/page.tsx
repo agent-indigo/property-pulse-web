@@ -24,7 +24,7 @@ const PropertyPage: React.FC = () => {
           document.title = `${property.name} | PropertyPulse | Find the Perfect Rental`
           setProperty(property)
           setHeaderImage(property.images[0])
-        } catch (error) {
+        } catch (error: unknown) {
           console.error(`Error fetching property:\n${error}`)
         } finally {
           setLoading(false)

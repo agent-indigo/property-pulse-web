@@ -17,7 +17,7 @@ export const getProperties: Function = async (): Promise<any> => {
                 throw new Error('Error fetching properties.')
             }
         }
-    } catch (error) {
+    } catch (error: unknown) {
         console.error(`Error fetching properties:\n${error}`)
         return []
     }
@@ -40,7 +40,7 @@ export const getProperty: Function = async (id: string): Promise<any> => {
                 throw new Error('Error fetching property.')
             }
         }
-    } catch (error) {
+    } catch (error: unknown) {
         console.error(`Error fetching property:\n${error}`)
         return null
     }

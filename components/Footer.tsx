@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import logo from '@/assets/images/logo.png'
 const Footer: React.FC = () => {
-  const currentYear = new Date().getFullYear()
+  const currentYear: number = new Date().getFullYear()
   return (
     <footer className='bg-gray-200 py-4 mt-24'>
       <div className='container mx-auto flex flex-col md:flex-row items-center justify-between px-4'>
