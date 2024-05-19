@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import logo from '@/assets/images/logo.png'
 const Footer: React.FC = () => {
   const currentYear: number = new Date().getFullYear()
@@ -6,7 +7,9 @@ const Footer: React.FC = () => {
     <footer className='bg-gray-200 py-4 mt-24'>
       <div className='container mx-auto flex flex-col md:flex-row items-center justify-between px-4'>
         <div className='mb-4 md:mb-0'>
-          <Image src={logo} alt='Logo' className='h-8 w-auto'/>
+          <Link href='/'>
+            <Image src={logo} alt='Logo' className='h-8 w-auto'/>
+          </Link>
         </div>
         <div>
           <p className='text-sm text-gray-500 mt-2 md:mt-0'>
