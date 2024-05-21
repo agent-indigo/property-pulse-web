@@ -1,3 +1,13 @@
 import {NextConfig} from 'next'
-const config: NextConfig = {}
-export default config
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'lh2.googleusercontent.com',
+        pathname: '**'
+      }
+    ]
+  }
+}
+export default nextConfig

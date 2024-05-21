@@ -1,5 +1,5 @@
 import type {Config} from 'tailwindcss'
-const config: Config = {
+const tailwindConfig: Config = {
   content: ['**/*.tsx'],
   theme: {
     extend: {
@@ -12,4 +12,4 @@ const config: Config = {
     }
   }
 }
-export default config
+export default tailwindConfig

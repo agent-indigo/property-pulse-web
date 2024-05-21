@@ -1,16 +1,29 @@
 'use client'
-import {useState} from 'react'
+import {ClientSafeProvider, LiteralUnion} from 'next-auth/react'
+import {BuiltInProviderType} from 'next-auth/providers/index'
+import {useEffect, useState} from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {usePathname} from 'next/navigation'
+import {Session} from 'next-auth'
+import {signIn, signOut, useSession, getProviders} from 'next-auth/react'
 import {FaGoogle} from 'react-icons/fa'
 import logo from '@/assets/images/logo-white.png'
 import profileDefault from '@/assets/images/profile.png'
 const Navbar: React.FC = () => {
-  const [isMobileMenuOpen, setIsModileMenuOpen] = useState<boolean>(false)
+  const {data: session}: {data: Session | null} = useSession<boolean>()
+  const profileImage: string | null | undefined = session?.user?.image
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false)
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState<boolean>(false)
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false)
+  const [providers, setProviders] = useState<Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null>(null)
   const pathname: string = usePathname()
+  useEffect(() => {
+    const setAuthProviders: Function = async (): Promise<void> => {
+      const response: Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null = await getProviders()
+      setProviders(response)
+    }
+    setAuthProviders()
+  }, [])
   return (
     <nav className='bg-blue-700 border-b border-blue-500'>
       <div className='mx-auto max-w-7xl px-2 sm:px-6 lg:px-8'>
@@ -23,7 +36,7 @@ const Navbar: React.FC = () => {
               className='relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white'
               aria-controls='mobile-menu'
               aria-expanded='false'
-              onClick={() => setIsModileMenuOpen((previousValue: boolean) => !previousValue)}
+              onClick={() => setIsMobileMenuOpen((previousValue: boolean) => !previousValue)}
             >
               <span className='absolute -inset-0.5'></span>
               <span className='sr-only'>
@@ -75,7 +88,7 @@ const Navbar: React.FC = () => {
                 >
                   Properties
                 </Link>
-                {isLoggedIn && (
+                {session && (
                   <Link
                     href='/properties/add'
                     className={`${pathname === '/properties/add' ? 'bg-black' : ''} text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2`}
@@ -87,20 +100,22 @@ const Navbar: React.FC = () => {
             </div>
           </div>
           {/* user menu (logged out) */}
-          {!isLoggedIn && (
+          {!session && (
             <div className='hidden md:block md:ml-6'>
               <div className='flex items-center'>
-                <button className='flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2'>
-                  <FaGoogle className='text-white mr-2'/>
-                  <span>
-                    Login or Register
-                  </span>
-                </button>
+                {providers && Object.values(providers).map((provider: ClientSafeProvider, index: number) => (
+                  <button key={index} onClick={() => signIn(provider.id)} className='flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2'>
+                    <FaGoogle className='text-white mr-2'/>
+                    <span>
+                      Log In or Register
+                    </span>
+                  </button>
+                ))}
               </div>
             </div>
           )}
           {/* user menu (logged in) */}
-          {isLoggedIn && (
+          {session && (
             <div className='absolute inset-y-0 right-0 flex items-center pr-2 md:static md:inset-auto md:ml-6 md:pr-0'>
               <Link
                 href='/messages'
@@ -151,8 +166,10 @@ const Navbar: React.FC = () => {
                     </span>
                     <Image
                       className='h-8 w-8 rounded-full'
-                      src={profileDefault}
+                      src={profileImage || profileDefault}
                       alt=''
+                      width={40}
+                      height={40}
                     />
                   </button>
                 </div>
@@ -172,6 +189,7 @@ const Navbar: React.FC = () => {
                       role='menuitem'
                       tabIndex={-1}
                       id='user-menu-item-0'
+                      onClick={() => setIsProfileMenuOpen(false)}
                     >
                       Your Profile
                     </Link>
@@ -181,6 +199,7 @@ const Navbar: React.FC = () => {
                       role='menuitem'
                       tabIndex={-1}
                       id='user-menu-item-2'
+                      onClick={() => setIsProfileMenuOpen(false)}
                     >
                       Bookmarked Properties
                     </Link>
@@ -190,8 +209,12 @@ const Navbar: React.FC = () => {
                       role='menuitem'
                       tabIndex={-1}
                       id='user-menu-item-2'
+                      onClick={() => {
+                        setIsProfileMenuOpen(false)
+                        signOut()
+                      }}
                     >
-                      Sign Out
+                      Log Out
                     </Link>
                   </div>
                 )}
@@ -216,7 +239,7 @@ const Navbar: React.FC = () => {
             >
               Properties
             </Link>
-            {isLoggedIn && (
+            {session && (
               <Link
                 href='/properties/add'
                 className={`${pathname === '/properties/add' ? 'bg-black' : ''} text-white block rounded-md px-3 py-2 text-base font-medium`}
@@ -224,14 +247,14 @@ const Navbar: React.FC = () => {
                 Add Property
               </Link>
             )}
-            {!isLoggedIn && (
-              <button className='flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2 my-4'>
+            {!session && providers && Object.values(providers).map((provider: ClientSafeProvider, index: number) => (
+              <button key={index} onClick={() => signIn(provider.id)} className='flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2'>
                 <FaGoogle className='text-white mr-2'/>
                 <span>
-                  Login or Register
+                  Log In or Register
                 </span>
               </button>
-            )}
+            ))}
           </div>
         </div>
       )}

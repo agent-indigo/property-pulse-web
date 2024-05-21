@@ -1,6 +1,7 @@
 import {ReactNode} from 'react'
 import {Schema} from 'mongoose'
-interface ButtonInfo {
+import {Session} from 'next-auth'
+interface ButtonProps {
   link: string
   text: string
   backgroundColor: string
@@ -9,7 +10,7 @@ export interface InfoBoxProps {
   heading: string
   backgroundColor?: string
   textColor?: string
-  buttonInfo: ButtonInfo
+  buttonInfo: ButtonProps
   children: ReactNode
 }
 interface Location {
@@ -28,7 +29,7 @@ interface SellerInfo {
   email: string
   phone: string
 }
-export interface IProperty {
+export interface ListedProperty {
   _id: string
   owner: Schema.Types.ObjectId
   name: string
@@ -46,11 +47,16 @@ export interface IProperty {
   createdAt: string
   updatedAt: string
 }
-export interface IUser {
+export interface RegisteredUser {
+  _id: string
   email: string
-  username: string
+  username?: string
+  shadow?: string
   image?: string
   bookmarks?: Schema.Types.ObjectId[]
   createdAt: string
   updatedAt: string
+}
+export interface UserSession extends Session {
+  user: RegisteredUser
 }

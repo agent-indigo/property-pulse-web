@@ -1,8 +1,8 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import {FaBed, FaBath, FaRulerCombined, FaMoneyBill, FaMapMarker} from 'react-icons/fa'
-import {IProperty} from '@/utilities/interfaces'
-const PropertyCard: React.FC<IProperty> = property => {
+import {ListedProperty} from '@/utilities/interfaces'
+const PropertyCard: React.FC<ListedProperty> = property => {
   const getRateDisplay = () => {
     if (property.rates.monthly) {
       return `${property.rates.monthly.toLocaleString()}/mo`

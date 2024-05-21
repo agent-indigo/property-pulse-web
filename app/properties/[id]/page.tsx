@@ -4,7 +4,7 @@ import {useParams, useRouter} from 'next/navigation'
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import {useEffect, useState} from 'react'
 import {FaArrowLeft} from 'react-icons/fa'
-import {IProperty} from '@/utilities/interfaces'
+import {ListedProperty} from '@/utilities/interfaces'
 import {getProperty} from '@/utilities/requests'
 import Spinner from '@/components/Spinner'
 import PropertyHeaderImage from '@/components/PropertyHeaderImage'
@@ -12,15 +12,15 @@ import PropertyDetails from '@/components/PropertyDetails'
 const PropertyPage: React.FC = () => {
   const router: AppRouterInstance = useRouter()
   const params = useParams<{id: string}>()
-  const [property, setProperty] = useState<IProperty | null>(null)
+  const [property, setProperty] = useState<ListedProperty | null>(null)
   const [headerImage, setHeaderImage] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(true)
   useEffect(() => {
-    const getPropertyData: Function = async (): Promise<IProperty | undefined> => {
+    const getPropertyData: Function = async (): Promise<ListedProperty | undefined> => {
       const {id}: {id: string} = params
       if (id) {
         try {
-          const property: IProperty = await getProperty(id)
+          const property: ListedProperty = await getProperty(id)
           document.title = `${property.name} | PropertyPulse | Find the Perfect Rental`
           setProperty(property)
           setHeaderImage(property.images[0])

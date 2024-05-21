@@ -1,6 +1,7 @@
 import {ReactNode} from 'react'
 import type {Metadata} from 'next'
 import {Inter} from 'next/font/google'
+import AuthProvider from '@/components/AuthProvider'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import '@/assets/styles.css'
@@ -15,13 +16,15 @@ export const metadata: Metadata = {
 }
 const RootLayout: React.FC<{children: ReactNode}> = ({children}: {children: ReactNode}) => {
   return (
-    <html lang='en'>
-      <body className={inter.className}>
-        <Navbar/>
-        <main>{children}</main>
-        <Footer/>
-      </body>
-    </html>
+    <AuthProvider>
+      <html lang='en'>
+        <body className={inter.className}>
+          <Navbar/>
+          <main>{children}</main>
+          <Footer/>
+        </body>
+      </html>
+    </AuthProvider>
   )
 }
 export default RootLayout

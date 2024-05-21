@@ -1,6 +1,6 @@
 import {FaBed, FaBath, FaRulerCombined, FaTimes, FaCheck, FaMapMarker} from 'react-icons/fa'
-import {IProperty} from '@/utilities/interfaces'
-const PropertyDetails: React.FC<IProperty> = property => {
+import {ListedProperty} from '@/utilities/interfaces'
+const PropertyDetails: React.FC<ListedProperty> = property => {
   return (
     <main>
       <div className='bg-white p-6 rounded-lg shadow-md text-center md:text-left'>
