@@ -3,7 +3,6 @@ import {JWT} from 'next-auth/jwt'
 import {AdapterUser} from 'next-auth/adapters'
 import {CredentialInput} from 'next-auth/providers/credentials'
 import Google, {GoogleProfile} from 'next-auth/providers/google'
-import Email, {EmailConfig} from 'next-auth/providers/email'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import userModel from '@/models/userModel'
 import {RegisteredUser, UserSession} from '@/utilities/interfaces'
@@ -19,18 +18,7 @@ const authOptions: AuthOptions = {
           response_type: 'code'
         }
       }
-    }),
-    Email({
-      server: {
-        host: process.env.EMAIL_SERVER_HOST,
-        port: process.env.EMAIL_SERVER_PORT,
-        auth: {
-          user: process.env.EMAIL_SERVER_USER,
-          pass: process.env.EMAIL_SERVER_PASSWORD
-        }
-      },
-      from: process.env.EMAIL_FROM ?? ''
-    } as EmailConfig)
+    })
   ],
   callbacks: {
     async signIn(params: {

@@ -51,7 +51,6 @@ export interface RegisteredUser {
   _id: string
   email: string
   username?: string
-  shadow?: string
   image?: string
   bookmarks?: Schema.Types.ObjectId[]
   createdAt: string

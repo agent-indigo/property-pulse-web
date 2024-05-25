@@ -10,9 +10,6 @@ const userSchema = new Schema<RegisteredUser>({
     type: String,
     unique: true,
   },
-  shadow: {
-    type: String
-  },
   image: {
     type: String
   },
