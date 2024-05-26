@@ -50,7 +50,7 @@ export interface ListedProperty {
 export interface RegisteredUser {
   _id: string
   email: string
-  username?: string
+  username: string
   image?: string
   bookmarks?: Schema.Types.ObjectId[]
   createdAt: string

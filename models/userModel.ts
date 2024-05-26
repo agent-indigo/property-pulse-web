@@ -8,7 +8,7 @@ const userSchema = new Schema<RegisteredUser>({
   },
   username: {
     type: String,
-    unique: true,
+    required: [true, 'Please provide a user name.']
   },
   image: {
     type: String
