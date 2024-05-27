@@ -16,6 +16,7 @@ build/
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# public
+public/
 # sample data
 sampleData/
-public/images/
