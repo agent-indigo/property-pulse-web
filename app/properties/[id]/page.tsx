@@ -2,14 +2,14 @@
 import Link from 'next/link'
 import {useParams, useRouter} from 'next/navigation'
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
-import {useEffect, useState} from 'react'
+import {ReactElement, useEffect, useState} from 'react'
 import {FaArrowLeft} from 'react-icons/fa'
 import {ListedProperty} from '@/utilities/interfaces'
 import {getProperty} from '@/utilities/requests'
 import Spinner from '@/components/Spinner'
 import PropertyHeaderImage from '@/components/PropertyHeaderImage'
 import PropertyDetails from '@/components/PropertyDetails'
-const PropertyPage: React.FC = () => {
+const PropertyPage: React.FC = (): ReactElement => {
   const router: AppRouterInstance = useRouter()
   const params = useParams<{id: string}>()
   const [property, setProperty] = useState<ListedProperty | null>(null)

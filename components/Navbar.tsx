@@ -1,7 +1,7 @@
 'use client'
 import {ClientSafeProvider, LiteralUnion} from 'next-auth/react'
 import {BuiltInProviderType} from 'next-auth/providers/index'
-import {useEffect, useState} from 'react'
+import {ReactElement, useEffect, useState} from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {usePathname} from 'next/navigation'
@@ -10,7 +10,7 @@ import {signIn, signOut, useSession, getProviders} from 'next-auth/react'
 import {FaGoogle} from 'react-icons/fa'
 import logo from '@/assets/images/logo-white.png'
 import profileDefault from '@/assets/images/profile.png'
-const Navbar: React.FC = () => {
+const Navbar: React.FC = (): ReactElement => {
   const {data: session}: {data: Session | null} = useSession<boolean>()
   const profileImage: string | null | undefined = session?.user?.image
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false)
@@ -100,7 +100,7 @@ const Navbar: React.FC = () => {
             </div>
           </div>
           {/* user menu (logged out) */}
-          {!session && providers && (
+          {!session && (
             <div className='hidden md:block md:ml-6'>
               <div className='flex items-center'>
                 {providers && Object.values(providers).map((provider: ClientSafeProvider, index: number) => (

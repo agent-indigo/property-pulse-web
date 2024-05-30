@@ -1,5 +1,6 @@
 import Image from 'next/image'
-const PropertyHeaderImage: React.FC<{image: string}> = ({image}: {image: string}) => {
+import {ReactElement} from 'react'
+const PropertyHeaderImage: React.FC<{image: string}> = ({image}: {image: string}): ReactElement => {
   return (
     <section>
       <div className='container-xl m-auto'>

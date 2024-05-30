@@ -1,5 +1,6 @@
+import {ReactElement} from 'react'
 import InfoBox from '@/components/InfoBox'
-const InfoBoxes: React.FC = () => {
+const InfoBoxes: React.FC = (): ReactElement => {
   return (
     <section>
       <div className='container-xl lg:container m-auto'>

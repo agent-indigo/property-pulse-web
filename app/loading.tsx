@@ -1,7 +1,7 @@
 'use client'
-import {useEffect} from 'react'
+import {ReactElement, useEffect} from 'react'
 import {ClipLoader} from 'react-spinners'
-const LoadingPage: React.FC<boolean> = (loading: boolean) => {
+const LoadingPage: React.FC<boolean> = (loading: boolean): ReactElement => {
   useEffect(() => {
     if (loading) document.title = 'Loading... | PropertyPulse | Find the Perfect Rental'
   }, [loading])

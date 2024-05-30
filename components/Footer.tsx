@@ -1,7 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
+import {ReactElement} from 'react'
 import logo from '@/assets/images/logo.png'
-const Footer: React.FC = () => {
+const Footer: React.FC = (): ReactElement => {
   const currentYear: number = new Date().getFullYear()
   return (
     <footer className='bg-gray-200 py-4 mt-24'>

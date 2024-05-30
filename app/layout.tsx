@@ -1,4 +1,4 @@
-import {ReactNode} from 'react'
+import {ReactElement, ReactNode} from 'react'
 import type {Metadata} from 'next'
 import {Inter} from 'next/font/google'
 import {NextFont} from 'next/dist/compiled/@next/font'
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   description: 'Find the perfect rental property.',
   keywords: 'find, rental, property'
 }
-const RootLayout: React.FC<{children: ReactNode}> = ({children}: {children: ReactNode}) => {
+const RootLayout: React.FC<{children: ReactNode}> = ({children}: {children: ReactNode}): ReactElement => {
   return (
     <AuthProvider>
       <html lang='en'>

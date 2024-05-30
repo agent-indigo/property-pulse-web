@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import {ReactElement} from 'react'
 import {InfoBoxProps} from '@/utilities/interfaces'
 const InfoBox: React.FC<InfoBoxProps> = ({
   heading,
@@ -6,7 +7,7 @@ const InfoBox: React.FC<InfoBoxProps> = ({
   textColor = 'text-gray-800',
   buttonInfo,
   children
-}) => {
+}): ReactElement => {
   return (
     <div className={`${backgroundColor} p-6 rounded-lg shadow-md`}>
       <h2 className={`${textColor} text-2xl font-bold`}>{heading}</h2>

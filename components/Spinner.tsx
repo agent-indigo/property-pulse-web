@@ -1,5 +1,6 @@
+import {ReactElement} from 'react'
 import {ClipLoader} from 'react-spinners'
-const Spinner: React.FC<{loading: boolean}> = ({loading}: {loading: boolean}) => {
+const Spinner: React.FC<{loading: boolean}> = ({loading}: {loading: boolean}): ReactElement => {
   return (
     <ClipLoader
       color='#3b82f6'
