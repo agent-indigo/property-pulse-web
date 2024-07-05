@@ -1,5 +1,4 @@
 import {Account, AuthOptions, Profile, Session, User} from 'next-auth'
-import {ObjectId} from 'mongoose'
 import {JWT} from 'next-auth/jwt'
 import {AdapterUser} from 'next-auth/adapters'
 import {CredentialInput} from 'next-auth/providers/credentials'
@@ -8,7 +7,7 @@ import {AuthorizationEndpointHandler, Provider} from 'next-auth/providers/index'
 import {SignInAuthorizationParams} from 'next-auth/react'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import userModel from '@/models/userModel'
-import {RegisteredUser, UserSession} from '@/utilities/interfaces'
+import {AdapterUserWithId, RegisteredUser, UserSession} from '@/utilities/interfaces'
 const authOptions: AuthOptions = {
   providers: [
     Google<GoogleProfile>({
@@ -27,32 +26,41 @@ const authOptions: AuthOptions = {
     async signIn(params: {
       user?: User | AdapterUser
       account?: Account | null
-      profile?: Profile
+      profile?: Profile | GoogleProfile | undefined
       email?: {verificationRequest?: boolean}
-      credentials?: CredentialInput
+      credentials?: Record<string, CredentialInput>
     }): Promise<boolean> {
-      const {profile}: {profile?: Profile} = params as {profile?: Profile}
+      const {profile}: {profile?: GoogleProfile} = params as {profile?: GoogleProfile}
       await connectToMongoDB() as void
       const registeredUser: RegisteredUser | null = await userModel.findOne({email: profile?.email as string}) as RegisteredUser | null
-      if (!registeredUser) await userModel.create(profile as Profile)
+      if (!registeredUser) await userModel.create({
+        email: profile?.email as string,
+        username: profile?.name as string,
+        image: profile?.picture as string
+      } as RegisteredUser) as RegisteredUser
       return true as boolean
     },
     async session(
       params: {
         session: Session
         token?: JWT
-        user?: AdapterUser
+        user?: AdapterUserWithId
       } & {
         newSession: UserSession
         trigger: 'update'
       }
     ): Promise<UserSession> {
       const {newSession}: {newSession: UserSession} = params as {newSession: UserSession}
-      if (newSession.user as RegisteredUser) {
-        const registeredUser: RegisteredUser | null = await userModel.findOne({email: newSession.user.email as string}) as RegisteredUser | null
-        if (registeredUser) newSession.user._id = registeredUser._id as ObjectId
+      await connectToMongoDB() as void
+      const registeredUser: RegisteredUser = await userModel.findOne({email: newSession.user?.email as string}) as RegisteredUser
+      const id: string = registeredUser._id.toString() as string
+      return {
+        ...newSession as UserSession,
+        user: {
+          ...newSession.user as AdapterUserWithId,
+          id
+        }
       }
-      return newSession as UserSession
     }
   }
 }

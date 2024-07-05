@@ -27,12 +27,12 @@ export const GET: Function = async (request: NextApiRequest): Promise<Response> 
  * @route   POST /api/properties
  * @access  private
  */
-export const POST: Function = async (request: NextApiRequest): Promise<any> => {
+export const POST: Function = async (request: NextApiRequest): Promise<Response> => {
   try {
     const subittedForm: ListedProperty = await request.body.formData() as ListedProperty
-    const uploadedImages: File[] = subittedForm.images?.filter((image: File | string) => typeof image === 'object' && image.name as string !== '' as string) as File[]
+    const imageFiles: File[] = subittedForm.imageFiles?.filter((image: File) => image.name as string !== '' as string) as File[]
     const imageUploadPromises: string[] = [] as string[]
-    for (const image of uploadedImages as File[]) {
+    for (const image of imageFiles as File[]) {
       const imageBuffer: ArrayBuffer = await image.arrayBuffer() as ArrayBuffer
       const imageArray: number[] = Array.from(new Uint8Array(imageBuffer as ArrayBuffer)) as number[]
       const imageData: Buffer = Buffer.from(imageArray as number[]) as Buffer
@@ -40,7 +40,7 @@ export const POST: Function = async (request: NextApiRequest): Promise<any> => {
       const response: UploadApiResponse = await cloudinary.uploader.upload(`data:image/png;base64,${imageBase64 as string}` as string, {folder: 'PropertyPulse' as string}) as UploadApiResponse
       imageUploadPromises.push(response.secure_url as string)
     }
-    const images: string[] = await Promise.all(imageUploadPromises) as string[]
+    const images: string[] = await Promise.all(imageUploadPromises as string[]) as string[]
     await connectToMongoDB() as void
     const owner: Schema.Types.ObjectId = await getSessionUser()._id as Schema.Types.ObjectId
     const propertyData: ListedProperty = {

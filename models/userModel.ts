@@ -1,4 +1,4 @@
-import {Model, Schema, model, models} from 'mongoose'
+import {Model, ObjectIdSchemaDefinition, Schema, model, models} from 'mongoose'
 import {RegisteredUser} from '@/utilities/interfaces'
 const userSchema = new Schema<RegisteredUser>({
   email: {
@@ -15,7 +15,7 @@ const userSchema = new Schema<RegisteredUser>({
   },
   bookmarks: [
     {
-      type: Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId as ObjectIdSchemaDefinition,
       ref: 'Property' as string
     }
   ]

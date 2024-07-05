@@ -1,8 +1,8 @@
-import {Model, Schema, model, models} from 'mongoose'
+import {Model, ObjectIdSchemaDefinition, Schema, model, models} from 'mongoose'
 import {ListedProperty} from '@/utilities/interfaces'
 const propertySchema = new Schema<ListedProperty>({
   owner : {
-    type: Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId as ObjectIdSchemaDefinition,
     ref: 'User' as string,
     required: [true as boolean, 'Please provide the owner.' as string]
   },

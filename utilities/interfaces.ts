@@ -1,6 +1,7 @@
 import {ReactNode} from 'react'
-import {Schema} from 'mongoose'
+import {Date, Schema} from 'mongoose'
 import {Session} from 'next-auth'
+import {AdapterUser} from 'next-auth/adapters'
 export interface ButtonProps {
   link: string
   text: string
@@ -42,6 +43,7 @@ export interface ListedProperty {
   amenities: string[]
   rates: Rates
   seller_info: SellerInfo
+  imageFiles?: File[]
   images?: any
   is_featured?: boolean
   createdAt?: string
@@ -53,9 +55,12 @@ export interface RegisteredUser {
   username: string
   image?: string
   bookmarks?: Schema.Types.ObjectId[]
-  createdAt: string
-  updatedAt: string
+  createdAt: Date
+  updatedAt: Date
+}
+export interface AdapterUserWithId extends AdapterUser {
+  id: string
 }
 export interface UserSession extends Session {
-  user: RegisteredUser
+  user: AdapterUserWithId
 }

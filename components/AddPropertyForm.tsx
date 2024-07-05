@@ -1,34 +1,9 @@
 'use client' as string
 import {ChangeEvent, ChangeEventHandler, ReactElement, useEffect, useState} from 'react'
-import {ListedProperty, Location, Rates, SellerInfo} from '@/utilities/interfaces'
+import {ListedProperty} from '@/utilities/interfaces'
 const AddPropertyForm: React.FC = (): ReactElement | null => {
   const [mounted, setMounted] = useState<boolean>(false)
-  const [fields, setFields] = useState<ListedProperty>({
-    type: 'Apartment' as string,
-    name: 'Test Property' as string,
-    description: '' as string,
-    location: {
-      street: '' as string,
-      city: 'Test City' as string,
-      state: 'Test State' as string,
-      zipcode: '' as string
-    } as Location,
-    beds: 3 as number,
-    baths: 2 as number,
-    square_feet: 1000 as number,
-    amenities: [] as string[],
-    rates: {
-      nightly: undefined,
-      weekly: undefined,
-      monthly: 2000 as number
-    } as Rates,
-    seller_info: {
-      name: '' as string,
-      email: 'test@test.com' as string,
-      phone: '' as string
-    } as SellerInfo,
-    images: undefined
-  } as ListedProperty)
+  const [fields, setFields] = useState<ListedProperty>({} as ListedProperty)
   const inputHandler: ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement> = (event: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => {
     const {name, value}: {name: string, value: string} = event.target as HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement
     if (name.includes('.' as string) as boolean) {
@@ -62,14 +37,14 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
     } as ListedProperty)) as void
   }
   const imageUploadHandler: ChangeEventHandler<HTMLInputElement> = (event: ChangeEvent<HTMLInputElement>) => {
-    const images: FileList = event.target.files as FileList
-    const uploadedImages: File[] = [...fields.images as File[]] as File[]
-    if (images as FileList) for (const image of Array.from(images as FileList)) {
-      uploadedImages.push(image as File)
+    const uploadedImages: FileList = event.target.files as FileList
+    const imageFiles: File[] = [...fields.imageFiles as File[]] as File[]
+    if (uploadedImages as FileList) for (const image of Array.from(uploadedImages as FileList)) {
+      imageFiles.push(image as File)
     }
     setFields((previousValues: ListedProperty) => ({
       ...previousValues as ListedProperty,
-      images: uploadedImages as File[]
+      imageFiles
     } as ListedProperty)) as void
   }
   useEffect((): void => setMounted(true as boolean), []) as void
@@ -530,7 +505,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           name='images'
           className='border rounded w-full py-2 px-3'
           accept='image/*'
-          onChange={imageUploadHandler as ChangeEventHandler<any>}
+          onChange={imageUploadHandler as ChangeEventHandler<HTMLInputElement>}
           multiple
           required
         />

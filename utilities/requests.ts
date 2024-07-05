@@ -8,12 +8,12 @@ const api: string = process.env.NEXT_PUBLIC_API_DOMAIN ?? '' as string
  */
 export const getProperties: Function = async (): Promise<ListedProperty[]> => {
   try {
-    if (api === '' as string | undefined | null) {
+    if (api as string === '' as string) {
       return [] as ListedProperty[]
     } else {
-      const response: Response = await fetch(`${api}/properties` as string, {cache: 'no-store'}) as Response
+      const response: Response = await fetch(`${api as string}/properties` as string, {cache: 'no-store'}) as Response
       if (response.ok as boolean) {
-        return response.json()
+        return response.json() as Promise<ListedProperty[]>
       } else {
         throw new Error('Error fetching properties.' as string) as Error
       }
@@ -31,12 +31,12 @@ export const getProperties: Function = async (): Promise<ListedProperty[]> => {
  */
 export const getProperty: Function = async (id: string): Promise<ListedProperty | null> => {
   try {
-    if (api === '' as string | undefined | null) {
+    if (api as string === '' as string) {
       return null
     } else {
-      const response: Response = await fetch(`${api}/properties/${id}` as string) as Response
+      const response: Response = await fetch(`${api as string}/properties/${id as string}` as string) as Response
       if (response.ok as boolean) {
-        return response.json()
+        return response.json() as Promise<ListedProperty>
       } else {
         throw new Error('Error fetching property.' as string) as Error
       }
