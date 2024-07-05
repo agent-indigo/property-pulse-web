@@ -10,14 +10,14 @@ import {ListedProperty} from '@/utilities/interfaces'
  */
 export const GET: Function = async (request: NextApiRequest, {params}: {params: {id: string}}): Promise<Response> => {
   try {
-    await connectToMongoDB()
-    const property: ListedProperty | null = await propertyModel.findById(params.id)
-    if (property) {
-      return new Response(JSON.stringify(property), {status: 200})
+    await connectToMongoDB() as void
+    const property: ListedProperty | null = await propertyModel.findById(params.id as string) as ListedProperty
+    if (property as ListedProperty) {
+      return new Response(JSON.stringify(property as ListedProperty) as string, {status: 200 as number}) as Response
     } else {
-      return new Response('Property not found.', {status: 404})
+      return new Response('Property not found.' as string, {status: 404 as number}) as Response
     }
   } catch (error: unknown) {
-    return new Response(`Error fetching property:\n${error}`, {status: 500})
+    return new Response(`Error fetching property:\n${error as string}` as string, {status: 500 as number}) as Response
   }
 }

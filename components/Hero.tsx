@@ -53,4 +53,4 @@ const Hero: React.FC = (): ReactElement => {
     </section>
   )
 }
-export default Hero
+export default Hero as React.FC

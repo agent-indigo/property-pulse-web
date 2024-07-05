@@ -6,11 +6,11 @@ const PropertyHeaderImage: React.FC<{image: string}> = ({image}: {image: string}
       <div className='container-xl m-auto'>
         <div className='grid grid-cols-1'>
           <Image
-            src={`/images/properties/${image}`}
+            src={image as string}
             alt=''
             className='object-cover h-[400px] w-full'
-            width={0}
-            height={0}
+            width={0 as number}
+            height={0 as number}
             sizes='100vw'
           />
         </div>
@@ -18,4 +18,4 @@ const PropertyHeaderImage: React.FC<{image: string}> = ({image}: {image: string}
     </section>
   )
 }
-export default PropertyHeaderImage
+export default PropertyHeaderImage as React.FC<{image: string}>

@@ -1,5 +1,6 @@
 import {ReactElement} from 'react'
 import InfoBox from '@/components/InfoBox'
+import {ButtonProps} from '@/utilities/interfaces'
 const InfoBoxes: React.FC = (): ReactElement => {
   return (
     <section>
@@ -9,10 +10,10 @@ const InfoBoxes: React.FC = (): ReactElement => {
             heading='For Renters'
             backgroundColor='bg-gray-100'
             buttonInfo={{
-              text: 'Browse Properties',
-              link: '/properties',
-              backgroundColor: 'bg-black'
-            }}
+              text: 'Browse Properties' as string,
+              link: '/properties' as string,
+              backgroundColor: 'bg-black' as string
+            } as ButtonProps}
           >
             Find your dream rental property.
             Bookmark properties and contact owners.
@@ -21,10 +22,10 @@ const InfoBoxes: React.FC = (): ReactElement => {
             heading='For Property Owners'
             backgroundColor='bg-blue-100'
             buttonInfo={{
-              text: 'Add Property',
-              link: '/properties/add',
-              backgroundColor: 'bg-blue-500'
-            }}
+              text: 'Add Property' as string,
+              link: '/properties/add' as string,
+              backgroundColor: 'bg-blue-500' as string
+            } as ButtonProps}
           >
             List your properties and reach potential renters.
             Rent as an Airbnb or long term.
@@ -34,4 +35,4 @@ const InfoBoxes: React.FC = (): ReactElement => {
     </section>
   )
 }
-export default InfoBoxes
+export default InfoBoxes as React.FC

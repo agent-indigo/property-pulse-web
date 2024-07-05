@@ -1,7 +1,7 @@
 import {ReactNode} from 'react'
 import {Schema} from 'mongoose'
 import {Session} from 'next-auth'
-interface ButtonProps {
+export interface ButtonProps {
   link: string
   text: string
   backgroundColor: string
@@ -13,25 +13,25 @@ export interface InfoBoxProps {
   buttonInfo: ButtonProps
   children: ReactNode
 }
-interface Location {
+export interface Location {
   street: string
   city: string
   state: string
   zipcode: string
 }
-interface Rates {
+export interface Rates {
   nightly?: number
   weekly?: number
   monthly?: number
 }
-interface SellerInfo {
+export interface SellerInfo {
   name: string
   email: string
   phone: string
 }
 export interface ListedProperty {
-  _id: string
-  owner: Schema.Types.ObjectId
+  _id?: Schema.Types.ObjectId
+  owner?: Schema.Types.ObjectId
   name: string
   type: string
   description: string
@@ -42,13 +42,13 @@ export interface ListedProperty {
   amenities: string[]
   rates: Rates
   seller_info: SellerInfo
-  images: string[]
-  is_featured: boolean
-  createdAt: string
-  updatedAt: string
+  images?: any
+  is_featured?: boolean
+  createdAt?: string
+  updatedAt?: string
 }
 export interface RegisteredUser {
-  _id: string
+  _id: Schema.Types.ObjectId
   email: string
   username: string
   image?: string

@@ -1,8 +1,8 @@
-'use client'
-import {ClientSafeProvider, LiteralUnion} from 'next-auth/react'
+'use client' as string
+import {ClientSafeProvider, LiteralUnion, SignInResponse} from 'next-auth/react'
 import {BuiltInProviderType} from 'next-auth/providers/index'
 import {ReactElement, useEffect, useState} from 'react'
-import Image from 'next/image'
+import Image, {StaticImageData} from 'next/image'
 import Link from 'next/link'
 import {usePathname} from 'next/navigation'
 import {Session} from 'next-auth'
@@ -11,18 +11,18 @@ import {FaGoogle} from 'react-icons/fa'
 import logo from '@/assets/images/logo-white.png'
 import profileDefault from '@/assets/images/profile.png'
 const Navbar: React.FC = (): ReactElement => {
-  const {data: session}: {data: Session | null} = useSession<boolean>()
-  const profileImage: string | null | undefined = session?.user?.image
+  const {data: session}: {data: Session | null} = useSession<boolean>() as {data: Session | null}
+  const profileImage: string | null | undefined = session?.user?.image as string | undefined | null
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false)
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState<boolean>(false)
   const [providers, setProviders] = useState<Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null>(null)
-  const pathname: string = usePathname()
-  useEffect(() => {
+  const pathname: string = usePathname() as string
+  useEffect((): void => {
     const setAuthProviders: Function = async (): Promise<void> => {
-      const response: Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null = await getProviders()
-      setProviders(response)
+      const response: Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null = await getProviders() as Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null
+      setProviders(response as Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null) as void
     }
-    setAuthProviders()
+    setAuthProviders() as void
   }, [])
   return (
     <nav className='bg-blue-700 border-b border-blue-500'>
@@ -36,7 +36,7 @@ const Navbar: React.FC = (): ReactElement => {
               className='relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white'
               aria-controls='mobile-menu'
               aria-expanded='false'
-              onClick={() => setIsMobileMenuOpen((previousValue: boolean) => !previousValue)}
+              onClick={(): void => setIsMobileMenuOpen((previousValue: boolean) => !previousValue as boolean) as void}
             >
               <span className='absolute -inset-0.5'></span>
               <span className='sr-only'>
@@ -66,7 +66,7 @@ const Navbar: React.FC = (): ReactElement => {
             >
               <Image
                 className='h-10 w-auto'
-                src={logo}
+                src={logo as StaticImageData}
                 alt='PropertyPulse'
               />
               <span className='hidden md:block text-white text-2xl font-bold ml-2'>
@@ -78,20 +78,20 @@ const Navbar: React.FC = (): ReactElement => {
               <div className='flex space-x-2'>
                 <Link
                   href='/'
-                  className={`${pathname === '/' ? 'bg-black' : ''} text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2`}
+                  className={`${pathname as string === '/' as string ? 'bg-black' as string : '' as string} text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2` as string}
                 >
                   Home
                 </Link>
                 <Link
                   href='/properties'
-                  className={`${pathname === '/properties' ? 'bg-black' : ''} text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2`}
+                  className={`${pathname as string === '/properties' as string ? 'bg-black' as string : '' as string} text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2` as string}
                 >
                   Properties
                 </Link>
                 {session && (
                   <Link
                     href='/properties/add'
-                    className={`${pathname === '/properties/add' ? 'bg-black' : ''} text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2`}
+                    className={`${pathname as string === '/properties/add' as string ? 'bg-black' as string : '' as string} text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2` as string}
                   >
                     Add Property
                   </Link>
@@ -100,13 +100,13 @@ const Navbar: React.FC = (): ReactElement => {
             </div>
           </div>
           {/* user menu (logged out) */}
-          {!session && (
+          {!session as boolean && (
             <div className='hidden md:block md:ml-6'>
               <div className='flex items-center'>
-                {providers && Object.values(providers).map((provider: ClientSafeProvider, index: number) => (
+                {providers as Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null && Object.values(providers as Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider>).map((provider: ClientSafeProvider, index: number) => (
                   <button
-                    key={index}
-                    onClick={() => signIn(provider.id)}
+                    key={index as number}
+                    onClick={(): Promise<SignInResponse> => signIn(provider.id as string) as Promise<SignInResponse>}
                     className='flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2'
                   >
                     <FaGoogle className='text-white mr-2'/>
@@ -119,7 +119,7 @@ const Navbar: React.FC = (): ReactElement => {
             </div>
           )}
           {/* user menu (logged in) */}
-          {session && (
+          {session as Session && (
             <div className='absolute inset-y-0 right-0 flex items-center pr-2 md:static md:inset-auto md:ml-6 md:pr-0'>
               <Link
                 href='/messages'
@@ -162,7 +162,7 @@ const Navbar: React.FC = (): ReactElement => {
                     id='user-menu-button'
                     aria-expanded='false'
                     aria-haspopup='true'
-                    onClick={() => setIsProfileMenuOpen((previousValue: boolean) => !previousValue)}
+                    onClick={():void => setIsProfileMenuOpen((previousValue: boolean) => !previousValue as boolean) as void}
                   >
                     <span className='absolute -inset-1.5'></span>
                     <span className='sr-only'>
@@ -170,30 +170,30 @@ const Navbar: React.FC = (): ReactElement => {
                     </span>
                     <Image
                       className='h-8 w-8 rounded-full'
-                      src={profileImage || profileDefault}
+                      src={profileImage as string || profileDefault as StaticImageData}
                       alt=''
-                      width={40}
-                      height={40}
+                      width={40 as number}
+                      height={40 as number}
                     />
                   </button>
                 </div>
                 {/* profile dropdown */}
-                {isProfileMenuOpen && (
+                {isProfileMenuOpen as boolean && (
                   <div
                     id='user-menu'
                     className='hidden absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'
                     role='menu'
                     aria-orientation='vertical'
                     aria-labelledby='user-menu-button'
-                    tabIndex={-1}
+                    tabIndex={-1 as number}
                   >
                     <Link
                       href='/profile'
                       className='block px-4 py-2 text-sm text-gray-700'
                       role='menuitem'
-                      tabIndex={-1}
+                      tabIndex={-1 as number}
                       id='user-menu-item-0'
-                      onClick={() => setIsProfileMenuOpen(false)}
+                      onClick={(): void => setIsProfileMenuOpen(false as boolean) as void}
                     >
                       Your Profile
                     </Link>
@@ -201,9 +201,9 @@ const Navbar: React.FC = (): ReactElement => {
                       href='/properties/bookmarked'
                       className='block px-4 py-2 text-sm text-gray-700'
                       role='menuitem'
-                      tabIndex={-1}
+                      tabIndex={-1 as number}
                       id='user-menu-item-2'
-                      onClick={() => setIsProfileMenuOpen(false)}
+                      onClick={(): void => setIsProfileMenuOpen(false as boolean) as void}
                     >
                       Bookmarked Properties
                     </Link>
@@ -211,11 +211,11 @@ const Navbar: React.FC = (): ReactElement => {
                       href='#'
                       className='block px-4 py-2 text-sm text-gray-700'
                       role='menuitem'
-                      tabIndex={-1}
+                      tabIndex={-1 as number}
                       id='user-menu-item-2'
-                      onClick={() => {
-                        setIsProfileMenuOpen(false)
-                        signOut()
+                      onClick={(): void => {
+                        setIsProfileMenuOpen(false as boolean) as void
+                        signOut() as Promise<void>
                       }}
                     >
                       Log Out
@@ -228,33 +228,33 @@ const Navbar: React.FC = (): ReactElement => {
         </div>
       </div>
       {/* mobile menu, show/hide based on menu state */}
-      {isMobileMenuOpen && (
+      {isMobileMenuOpen as boolean && (
         <div id='mobile-menu'>
           <div className='space-y-1 px-2 pb-3 pt-2'>
             <Link
               href='/'
-              className={`${pathname === '/' ? 'bg-black' : ''} text-white block rounded-md px-3 py-2 text-base font-medium`}
+              className={`${pathname as string === '/' as string ? 'bg-black' as string : '' as string} text-white block rounded-md px-3 py-2 text-base font-medium` as string}
             >
               Home
             </Link>
             <Link
               href='/properties'
-              className={`${pathname === '/properties' ? 'bg-black' : ''} text-white block rounded-md px-3 py-2 text-base font-medium`}
+              className={`${pathname as string === '/properties' as string ? 'bg-black' as string : '' as string} text-white block rounded-md px-3 py-2 text-base font-medium` as string}
             >
               Properties
             </Link>
-            {session && (
+            {session as Session && (
               <Link
                 href='/properties/add'
-                className={`${pathname === '/properties/add' ? 'bg-black' : ''} text-white block rounded-md px-3 py-2 text-base font-medium`}
+                className={`${pathname as string === '/properties/add' as string ? 'bg-black' as string : '' as string} text-white block rounded-md px-3 py-2 text-base font-medium` as string}
               >
                 Add Property
               </Link>
             )}
-            {!session && providers && Object.values(providers).map((provider: ClientSafeProvider, index: number) => (
+            {!session as boolean && providers as Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null && Object.values(providers as Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider>).map((provider: ClientSafeProvider, index: number) => (
               <button
-                key={index}
-                onClick={() => signIn(provider.id)}
+                key={index as number}
+                onClick={(): Promise<SignInResponse> => signIn(provider.id as string) as Promise<SignInResponse>}
                 className='flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2'
               >
                 <FaGoogle className='text-white mr-2'/>
@@ -269,4 +269,4 @@ const Navbar: React.FC = (): ReactElement => {
     </nav>
   )
 }
-export default Navbar
+export default Navbar as React.FC

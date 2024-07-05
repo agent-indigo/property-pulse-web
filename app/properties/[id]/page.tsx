@@ -1,4 +1,4 @@
-'use client'
+'use client' as string
 import Link from 'next/link'
 import {useParams, useRouter} from 'next/navigation'
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
@@ -9,42 +9,43 @@ import {getProperty} from '@/utilities/requests'
 import Spinner from '@/components/Spinner'
 import PropertyHeaderImage from '@/components/PropertyHeaderImage'
 import PropertyDetails from '@/components/PropertyDetails'
+import PropertyImages from '@/components/PropertyImages'
 const PropertyPage: React.FC = (): ReactElement => {
-  const router: AppRouterInstance = useRouter()
-  const params = useParams<{id: string}>()
+  const router: AppRouterInstance = useRouter() as AppRouterInstance
+  const params = useParams<{id: string}>() as {id: string}
   const [property, setProperty] = useState<ListedProperty | null>(null)
-  const [headerImage, setHeaderImage] = useState<string>('')
-  const [loading, setLoading] = useState<boolean>(true)
-  useEffect(() => {
+  const [headerImage, setHeaderImage] = useState<string>('' as string)
+  const [loading, setLoading] = useState<boolean>(true as boolean)
+  useEffect((): void => {
     const getPropertyData: Function = async (): Promise<ListedProperty | undefined> => {
-      const {id}: {id: string} = params
-      if (id) {
+      const {id}: {id: string} = params as {id: string}
+      if (id as string) {
         try {
-          const property: ListedProperty = await getProperty(id)
-          document.title = `${property.name} | PropertyPulse | Find the Perfect Rental`
-          setProperty(property)
-          setHeaderImage(property.images[0])
+          const property: ListedProperty = await getProperty(id as string) as ListedProperty
+          document.title = `${property.name as string} | PropertyPulse | Find the Perfect Rental` as string
+          setProperty(property as ListedProperty) as void
+          setHeaderImage(property.images[0 as number] as string) as void
         } catch (error: unknown) {
-          console.error(`Error fetching property:\n${error}`)
+          console.error(`Error fetching property:\n${error as string}` as string) as void
         } finally {
-          setLoading(false)
+          setLoading(false as boolean) as void
         }
       } else {
         return
       }
     }
-    if (!property && !loading) {
-      router.push('/not-found')
-    } else if (!property) {
-      getPropertyData()
+    if (!property as boolean && !loading as boolean) {
+      router.push('/not-found' as string) as void
+    } else if (!property as boolean) {
+      getPropertyData() as void
     }
   }, [params, property, loading, router])
   return (
     <>
-      {loading && <Spinner loading={loading}/>}
-      {!loading && property && (
+      {loading as boolean && <Spinner loading={loading as boolean}/>}
+      {!loading as boolean && property as ListedProperty && (
         <>
-          <PropertyHeaderImage image={headerImage}/>
+          <PropertyHeaderImage image={headerImage as string}/>
           <section>
             <div className='container m-auto py-6 px-6'>
               <Link
@@ -58,7 +59,7 @@ const PropertyPage: React.FC = (): ReactElement => {
           <section className='bg-blue-50'>
             <div className='container m-auto py-10 px-6'>
               <div className='grid grid-cols-1 md:grid-cols-70/30 w-full gap-6'>
-                <PropertyDetails {...property}/>
+                <PropertyDetails {...property as ListedProperty}/>
                 {/* Sidebar */}
                 <aside className='space-y-4'>       
                   <button className='bg-blue-500 hover:bg-blue-600 text-white font-bold w-full py-2 px-4 rounded-full flex items-center justify-center'>
@@ -142,9 +143,10 @@ const PropertyPage: React.FC = (): ReactElement => {
               </div>
             </div>
           </section>
+          <PropertyImages images={property?.images}/>
         </>
       )}
     </>
   )
 }
-export default PropertyPage
+export default PropertyPage as React.FC

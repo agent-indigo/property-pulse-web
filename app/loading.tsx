@@ -1,21 +1,21 @@
-'use client'
-import {ReactElement, useEffect} from 'react'
+'use client' as string
+import {CSSProperties, ReactElement, useEffect} from 'react'
 import {ClipLoader} from 'react-spinners'
 const LoadingPage: React.FC<boolean> = (loading: boolean): ReactElement => {
-  useEffect(() => {
-    if (loading) document.title = 'Loading... | PropertyPulse | Find the Perfect Rental'
+  useEffect((): void => {
+    if (loading as boolean) document.title = 'Loading... | PropertyPulse | Find the Perfect Rental' as string
   }, [loading])
   return (
     <ClipLoader
       color='#3b82f6'
-      loading={loading}
+      loading={loading as boolean}
       cssOverride={{
-        display: 'block',
-        margin: '100px auto'
-      }}
-      size={150}
+        display: 'block' as string,
+        margin: '100px auto' as string
+      } as CSSProperties}
+      size={150 as number}
       aria-label='Loading Spinner'
     />
   )
 }
-export default LoadingPage
+export default LoadingPage as React.FC<boolean>

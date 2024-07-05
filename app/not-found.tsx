@@ -3,10 +3,10 @@ import {FaExclamationTriangle} from 'react-icons/fa'
 import type {Metadata} from 'next'
 import {ReactElement} from 'react'
 export const metadata: Metadata = {
-  title: 'Not Found | PropertyPulse | Find the Perfect Rental',
-  description: 'Find the perfect rental property.',
-  keywords: 'find, rental, property'
-}
+  title: 'Not Found | PropertyPulse | Find the Perfect Rental' as string,
+  description: 'Find the perfect rental property.' as string,
+  keywords: 'find, rental, property' as string
+} as Metadata
 const NotFoundPage: React.FC = (): ReactElement => {
   return (
     <section className='bg-blue-50 min-h-screen flex-grow'>
@@ -33,4 +33,4 @@ const NotFoundPage: React.FC = (): ReactElement => {
     </section>
   )
 }
-export default NotFoundPage
+export default NotFoundPage as React.FC
