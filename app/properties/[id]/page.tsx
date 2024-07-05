@@ -143,7 +143,7 @@ const PropertyPage: React.FC = (): ReactElement => {
               </div>
             </div>
           </section>
-          <PropertyImages images={property?.images}/>
+          <PropertyImages images={property?.images as string[]}/>
         </>
       )}
     </>

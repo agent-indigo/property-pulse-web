@@ -24,16 +24,16 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
   }
   const checkboxHandler: ChangeEventHandler<HTMLInputElement> = (event: ChangeEvent<HTMLInputElement>) => {
     const {value, checked}: {value: string, checked: boolean} = event.target as HTMLInputElement
-    const availableAmenities: string[] = [...fields.amenities as string[]] as string[]
+    const amenities: string[] = [...fields.amenities as string[]] as string[]
     if (checked as boolean) {
-      availableAmenities.push(value as string)
+      amenities.push(value as string)
     } else {
-      const index: number = availableAmenities.indexOf(value as string) as number
-      if (index as number !== -1 as number) availableAmenities.splice(index as number, 1 as number)
+      const index: number = amenities.indexOf(value as string) as number
+      if (index as number !== -1 as number) amenities.splice(index as number, 1 as number)
     }
     setFields((previousValues: ListedProperty) => ({
       ...previousValues as ListedProperty,
-      amenities: availableAmenities as string[]
+      amenities
     } as ListedProperty)) as void
   }
   const imageUploadHandler: ChangeEventHandler<HTMLInputElement> = (event: ChangeEvent<HTMLInputElement>) => {
