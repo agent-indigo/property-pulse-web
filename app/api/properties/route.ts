@@ -30,7 +30,17 @@ export const GET: Function = async (request: NextApiRequest): Promise<Response> 
 export const POST: Function = async (request: NextApiRequest): Promise<any> => {
   try {
     const subittedForm: ListedProperty = await request.body.formData() as ListedProperty
-    const images: File[] = subittedForm.images?.filter((image: File | string) => typeof image === 'object' && image.name as string !== '' as string) as File[]
+    const uploadedImages: File[] = subittedForm.images?.filter((image: File | string) => typeof image === 'object' && image.name as string !== '' as string) as File[]
+    const imageUploadPromises: string[] = [] as string[]
+    for (const image of uploadedImages as File[]) {
+      const imageBuffer: ArrayBuffer = await image.arrayBuffer() as ArrayBuffer
+      const imageArray: number[] = Array.from(new Uint8Array(imageBuffer as ArrayBuffer)) as number[]
+      const imageData: Buffer = Buffer.from(imageArray as number[]) as Buffer
+      const imageBase64: string = imageData.toString('base64') as string
+      const response: UploadApiResponse = await cloudinary.uploader.upload(`data:image/png;base64,${imageBase64 as string}` as string, {folder: 'PropertyPulse' as string}) as UploadApiResponse
+      imageUploadPromises.push(response.secure_url as string)
+    }
+    const images: string[] = await Promise.all(imageUploadPromises) as string[]
     await connectToMongoDB() as void
     const owner: Schema.Types.ObjectId = await getSessionUser()._id as Schema.Types.ObjectId
     const propertyData: ListedProperty = {
@@ -57,19 +67,9 @@ export const POST: Function = async (request: NextApiRequest): Promise<any> => {
         name: subittedForm.seller_info.name as string,
         email: subittedForm.seller_info.email as string,
         phone: subittedForm.seller_info.phone as string
-      } as SellerInfo
-    }
-    const imageUploadPromises: string[] = [] as string[]
-    for (const image of images as File[]) {
-      const imageBuffer: ArrayBuffer = await image.arrayBuffer() as ArrayBuffer
-      const imageArray: number[] = Array.from(new Uint8Array(imageBuffer as ArrayBuffer)) as number[]
-      const imageData: Buffer = Buffer.from(imageArray as number[]) as Buffer
-      const imageBase64: string = imageData.toString('base64') as string
-      const response: UploadApiResponse = await cloudinary.uploader.upload(`data:image/png;base64,${imageBase64 as string}` as string, {folder: 'PropertyPulse' as string}) as UploadApiResponse
-      imageUploadPromises.push(response.secure_url as string)
-    }
-    const uploadedImages: string[] = await Promise.all(imageUploadPromises) as string[]
-    propertyData.images = uploadedImages
+      } as SellerInfo,
+      images
+    } as ListedProperty
     const property: Document<ListedProperty> & ListedProperty & Required<{_id: Schema.Types.ObjectId}> = new propertyModel(propertyData as ListedProperty) as Document<ListedProperty> & ListedProperty & Required<{_id: Schema.Types.ObjectId}>
     await property.save() as Document<ListedProperty> & ListedProperty & Required<{_id: Schema.Types.ObjectId}>
     return Response.redirect(`${process.env.NEXTAUTH_URL as string}/properties/${property._id as Schema.Types.ObjectId}` as string) as Response
