@@ -31,9 +31,9 @@ const authOptions: AuthOptions = {
       email?: {verificationRequest?: boolean}
       credentials?: CredentialInput
     }): Promise<boolean> {
-      const {profile}: {profile?: Profile} = params
+      const {profile}: {profile?: Profile} = params as {profile?: Profile}
       await connectToMongoDB() as void
-      const registeredUser: RegisteredUser | null = await userModel.findOne({email: profile?.email as string})
+      const registeredUser: RegisteredUser | null = await userModel.findOne({email: profile?.email as string}) as RegisteredUser | null
       if (!registeredUser) await userModel.create(profile as Profile)
       return true as boolean
     },
@@ -47,9 +47,9 @@ const authOptions: AuthOptions = {
         trigger: 'update'
       }
     ): Promise<UserSession> {
-      const {newSession}: {newSession: UserSession} = params
+      const {newSession}: {newSession: UserSession} = params as {newSession: UserSession}
       if (newSession.user as RegisteredUser) {
-        const registeredUser: RegisteredUser | null = await userModel.findOne({email: newSession.user.email as string})
+        const registeredUser: RegisteredUser | null = await userModel.findOne({email: newSession.user.email as string}) as RegisteredUser | null
         if (registeredUser) newSession.user._id = registeredUser._id as ObjectId
       }
       return newSession as UserSession
