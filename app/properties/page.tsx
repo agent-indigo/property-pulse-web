@@ -25,6 +25,6 @@ const PropertiesPage: React.FC = async (): Promise<ReactElement> => {
         )}
       </div>
     </section>
-  )
+  ) as ReactElement
 }
 export default PropertiesPage as React.FC

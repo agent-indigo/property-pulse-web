@@ -68,6 +68,6 @@ const PropertyCard: React.FC<ListedProperty> = (property: ListedProperty): React
         </div>
       </div>
     </div>
-  )
+  ) as ReactElement
 }
 export default PropertyCard as React.FC<ListedProperty>

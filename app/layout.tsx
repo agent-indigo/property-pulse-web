@@ -26,6 +26,6 @@ const RootLayout: React.FC<{children: ReactNode}> = ({children}: {children: Reac
         </body>
       </html>
     </AuthProvider>
-  )
+  ) as ReactElement
 }
 export default RootLayout as React.FC<{children: ReactNode}>

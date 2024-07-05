@@ -13,7 +13,7 @@ const PropertyImages: React.FC<{images: string[]}> = ({images}: {images: string[
             height={400 as number}
             priority={true as boolean}
           />
-        ) : (
+        ) as ReactElement : (
           <div className="grid grid-cols-2 gap-4">
             {images.map((image: string, index: number) => {
               return (
@@ -30,12 +30,12 @@ const PropertyImages: React.FC<{images: string[]}> = ({images}: {images: string[
                     priority={true as boolean}
                   />
                 </div>
-              )
+              ) as ReactElement
             })}
           </div>
         )}
       </div>
     </section>
-  )
+  ) as ReactElement
 }
 export default PropertyImages as React.FC<{images: string[]}>

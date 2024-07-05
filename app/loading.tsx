@@ -4,7 +4,7 @@ import {ClipLoader} from 'react-spinners'
 const LoadingPage: React.FC<boolean> = (loading: boolean): ReactElement => {
   useEffect((): void => {
     if (loading as boolean) document.title = 'Loading... | PropertyPulse | Find the Perfect Rental' as string
-  }, [loading])
+  }, [loading]) as void
   return (
     <ClipLoader
       color='#3b82f6'
@@ -16,6 +16,6 @@ const LoadingPage: React.FC<boolean> = (loading: boolean): ReactElement => {
       size={150 as number}
       aria-label='Loading Spinner'
     />
-  )
+  ) as ReactElement
 }
 export default LoadingPage as React.FC<boolean>

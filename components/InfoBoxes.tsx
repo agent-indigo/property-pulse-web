@@ -33,6 +33,6 @@ const InfoBoxes: React.FC = (): ReactElement => {
         </div>
       </div>
     </section>
-  )
+  ) as ReactElement
 }
 export default InfoBoxes as React.FC

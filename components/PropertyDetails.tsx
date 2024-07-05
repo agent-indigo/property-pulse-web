@@ -84,6 +84,6 @@ const PropertyDetails: React.FC<ListedProperty> = (property: ListedProperty): Re
         <div id='map'/>
       </div>
     </main>
-  )
+  ) as ReactElement
 }
 export default PropertyDetails as React.FC<ListedProperty>

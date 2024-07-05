@@ -51,6 +51,6 @@ const Hero: React.FC = (): ReactElement => {
         </form>
       </div>
     </section>
-  )
+  ) as ReactElement
 }
 export default Hero as React.FC

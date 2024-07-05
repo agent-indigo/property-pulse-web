@@ -39,7 +39,7 @@ const PropertyPage: React.FC = (): ReactElement => {
     } else if (!property as boolean) {
       getPropertyData() as void
     }
-  }, [params, property, loading, router])
+  }, [params, property, loading, router]) as void
   return (
     <>
       {loading as boolean && <Spinner loading={loading as boolean}/>}
@@ -147,6 +147,6 @@ const PropertyPage: React.FC = (): ReactElement => {
         </>
       )}
     </>
-  )
+  ) as ReactElement
 }
 export default PropertyPage as React.FC

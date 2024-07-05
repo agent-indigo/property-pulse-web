@@ -15,6 +15,6 @@ const HomePage: React.FC = (): ReactElement => {
       <InfoBoxes/>
       <HomeProperties/>
     </>
-  )
+  ) as ReactElement
 }
 export default HomePage as React.FC

@@ -19,6 +19,6 @@ const InfoBox: React.FC<InfoBoxProps> = ({
         {buttonInfo.text as string}
       </Link>
     </div>
-  )
+  ) as ReactElement
 }
 export default InfoBox as React.FC<InfoBoxProps>

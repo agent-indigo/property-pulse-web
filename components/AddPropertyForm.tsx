@@ -544,6 +544,6 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
         </button>
       </div>
     </form>
-  ) : null)
+  ) : null) as ReactElement
 }
 export default AddPropertyForm as React.FC

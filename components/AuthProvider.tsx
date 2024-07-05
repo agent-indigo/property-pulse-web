@@ -6,6 +6,6 @@ const AuthProvider: React.FC<{children: ReactNode}> = ({children}: {children: Re
     <SessionProvider>
       {children as ReactNode}
     </SessionProvider>
-  )
+  ) as ReactElement
 }
 export default AuthProvider as React.FC<{children: ReactNode}>

@@ -13,6 +13,6 @@ const AddPropertyPage: React.FC = (): ReactElement => {
         </div>
       </div>
     </section>
-  )
+  ) as ReactElement
 }
 export default AddPropertyPage as React.FC

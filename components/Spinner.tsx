@@ -12,6 +12,6 @@ const Spinner: React.FC<{loading: boolean}> = ({loading}: {loading: boolean}): R
       size={150 as number}
       aria-label='Loading Spinner'
     />
-  )
+  ) as ReactElement
 }
 export default Spinner as React.FC<{loading: boolean}>

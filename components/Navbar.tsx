@@ -23,7 +23,7 @@ const Navbar: React.FC = (): ReactElement => {
       setProviders(response as Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null) as void
     }
     setAuthProviders() as void
-  }, [])
+  }, []) as void
   return (
     <nav className='bg-blue-700 border-b border-blue-500'>
       <div className='mx-auto max-w-7xl px-2 sm:px-6 lg:px-8'>
@@ -267,6 +267,6 @@ const Navbar: React.FC = (): ReactElement => {
         </div>
       )}
     </nav>
-  )
+  ) as ReactElement
 }
 export default Navbar as React.FC

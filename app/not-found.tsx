@@ -31,6 +31,6 @@ const NotFoundPage: React.FC = (): ReactElement => {
       </div>
       <div className='flex-grow'/>
     </section>
-  )
+  ) as ReactElement
 }
 export default NotFoundPage as React.FC

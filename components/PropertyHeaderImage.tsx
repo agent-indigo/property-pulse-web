@@ -16,6 +16,6 @@ const PropertyHeaderImage: React.FC<{image: string}> = ({image}: {image: string}
         </div>
       </div>
     </section>
-  )
+  ) as ReactElement
 }
 export default PropertyHeaderImage as React.FC<{image: string}>

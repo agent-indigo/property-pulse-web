@@ -35,6 +35,6 @@ const HomeProperties: React.FC = async (): Promise<ReactElement> => {
         </Link>
       </section>
     </>
-  )
+  ) as ReactElement
 }
 export default HomeProperties as React.FC

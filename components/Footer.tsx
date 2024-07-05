@@ -19,6 +19,6 @@ const Footer: React.FC = (): ReactElement => {
         </div>
       </div>
     </footer>
-  )
+  ) as ReactElement
 }
 export default Footer as React.FC
