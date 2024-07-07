@@ -57,9 +57,10 @@ const authOptions: AuthOptions = {
       const _id: Schema.Types.ObjectId = registeredUser._id as Schema.Types.ObjectId
       const id: string = _id.toString() as string
       newSession.user.id = id as string
-      console.log(`_id: ${id as string}` as string) as void
-      console.log(`newSession.user.id: ${newSession.user.id as string}` as string) as void
-      console.log(`newSession.user.name: ${newSession.user.name as string}` as string) as void
+      console.log(`_id                  : ${_id as Schema.Types.ObjectId}` as string) as void
+      console.log(`_id.toString()       : ${id as string}` as string) as void
+      console.log(`newSession.user.id   : ${newSession.user.id as string}` as string) as void
+      console.log(`newSession.user.name : ${newSession.user.name as string}` as string) as void
       console.log(`newSession.user.email: ${newSession.user.email as string}` as string) as void
       console.log(`newSession.user.image: ${newSession.user.image as string}` as string) as void
       return newSession as SessionWithUserId
