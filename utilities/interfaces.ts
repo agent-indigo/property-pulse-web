@@ -61,6 +61,6 @@ export interface RegisteredUser {
 export interface AdapterUserWithId extends AdapterUser {
   id: string
 }
-export interface UserSession extends Session {
+export interface SessionWithUserId extends Session {
   user: AdapterUserWithId
 }

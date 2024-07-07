@@ -7,11 +7,11 @@ import Link from 'next/link'
 import {usePathname} from 'next/navigation'
 import {signIn, signOut, useSession, getProviders} from 'next-auth/react'
 import {FaGoogle} from 'react-icons/fa'
-import {UserSession} from '@/utilities/interfaces'
+import {SessionWithUserId} from '@/utilities/interfaces'
 import logo from '@/assets/images/logo-white.png'
 import profileDefault from '@/assets/images/profile.png'
 const Navbar: React.FC = (): ReactElement => {
-  const {data: session}: {data: UserSession | null} = useSession<boolean>() as {data: UserSession | null}
+  const {data: session}: {data: SessionWithUserId | null} = useSession<boolean>() as {data: SessionWithUserId | null}
   const profileImage: string | null | undefined = session?.user?.image as string | undefined | null
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false)
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState<boolean>(false)
@@ -119,7 +119,7 @@ const Navbar: React.FC = (): ReactElement => {
             </div>
           )}
           {/* user menu (logged in) */}
-          {session as UserSession && (
+          {session as SessionWithUserId && (
             <div className='absolute inset-y-0 right-0 flex items-center pr-2 md:static md:inset-auto md:ml-6 md:pr-0'>
               <Link
                 href='/messages'
@@ -243,7 +243,7 @@ const Navbar: React.FC = (): ReactElement => {
             >
               Properties
             </Link>
-            {session as UserSession && (
+            {session as SessionWithUserId && (
               <Link
                 href='/properties/add'
                 className={`${pathname as string === '/properties/add' as string ? 'bg-black' as string : '' as string} text-white block rounded-md px-3 py-2 text-base font-medium` as string}

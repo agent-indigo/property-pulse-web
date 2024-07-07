@@ -5,9 +5,10 @@ import {CredentialInput} from 'next-auth/providers/credentials'
 import Google, {GoogleProfile} from 'next-auth/providers/google'
 import {AuthorizationEndpointHandler, Provider} from 'next-auth/providers/index'
 import {SignInAuthorizationParams} from 'next-auth/react'
+import {Schema} from 'mongoose'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import userModel from '@/models/userModel'
-import {AdapterUserWithId, RegisteredUser, UserSession} from '@/utilities/interfaces'
+import {AdapterUserWithId, RegisteredUser, SessionWithUserId} from '@/utilities/interfaces'
 const authOptions: AuthOptions = {
   providers: [
     Google<GoogleProfile>({
@@ -44,21 +45,29 @@ const authOptions: AuthOptions = {
       params: {
         session: Session
         token?: JWT
-        user?: AdapterUserWithId
+        user?: AdapterUser
       } & {
-        newSession: UserSession
+        newSession: SessionWithUserId
         trigger: 'update'
       }
-    ): Promise<UserSession> {
-      const {newSession}: {newSession: UserSession} = params as {newSession: UserSession}
+    ): Promise<SessionWithUserId> {
+      const {newSession}: {newSession: SessionWithUserId} = params as {newSession: SessionWithUserId}
       await connectToMongoDB() as void
       const registeredUser: RegisteredUser = await userModel.findOne({email: newSession.user?.email as string}) as RegisteredUser
-      const id: string = registeredUser._id.toString() as string
+      const _id: Schema.Types.ObjectId = registeredUser._id as Schema.Types.ObjectId
+      const id: string = _id.toString() as string
+      console.log(id as string) as void
+      const image: string = registeredUser.image as string
+      const email: string = registeredUser.email as string
+      const name: string = registeredUser.username as string
       return {
-        ...newSession as UserSession,
+        ...newSession as SessionWithUserId,
         user: {
           ...newSession.user as AdapterUserWithId,
-          id
+          id,
+          image,
+          email,
+          name
         }
       }
     }
