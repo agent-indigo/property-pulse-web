@@ -56,20 +56,13 @@ const authOptions: AuthOptions = {
       const registeredUser: RegisteredUser = await userModel.findOne({email: newSession.user?.email as string}) as RegisteredUser
       const _id: Schema.Types.ObjectId = registeredUser._id as Schema.Types.ObjectId
       const id: string = _id.toString() as string
-      console.log(id as string) as void
-      const image: string = registeredUser.image as string
-      const email: string = registeredUser.email as string
-      const name: string = registeredUser.username as string
-      return {
-        ...newSession as SessionWithUserId,
-        user: {
-          ...newSession.user as AdapterUserWithId,
-          id,
-          image,
-          email,
-          name
-        }
-      }
+      newSession.user.id = id as string
+      console.log(`_id: ${id as string}` as string) as void
+      console.log(`newSession.user.id: ${newSession.user.id as string}` as string) as void
+      console.log(`newSession.user.name: ${newSession.user.name as string}` as string) as void
+      console.log(`newSession.user.email: ${newSession.user.email as string}` as string) as void
+      console.log(`newSession.user.image: ${newSession.user.image as string}` as string) as void
+      return newSession as SessionWithUserId
     }
   }
 }
