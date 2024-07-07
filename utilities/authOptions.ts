@@ -52,14 +52,19 @@ const authOptions: AuthOptions = {
       }
     ): Promise<SessionWithUserId> {
       const {session}: {session: Session} = params as {session: Session}
-      const {newSession}: {newSession: SessionWithUserId} = params as {newSession: SessionWithUserId}
       await connectToMongoDB() as void
       const registeredUser: RegisteredUser = await userModel.findOne({email: session.user?.email as string}) as RegisteredUser
       const _id: Schema.Types.ObjectId = registeredUser._id as Schema.Types.ObjectId
       const id: string = _id.toString() as string
       console.log(`_id                  : ${_id as Schema.Types.ObjectId}` as string) as void
       console.log(`_id.toString()       : ${id as string}` as string) as void
-      newSession.user.id = id as string
+      const newSession: SessionWithUserId = {
+        ...session as SessionWithUserId,
+        user: {
+          ...session.user as AdapterUserWithId,
+          id
+        }
+      }
       console.log(`newSession.user.id   : ${newSession.user.id as string}` as string) as void
       console.log(`newSession.user.name : ${newSession.user.name as string}` as string) as void
       console.log(`newSession.user.email: ${newSession.user.email as string}` as string) as void
