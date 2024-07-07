@@ -5,7 +5,6 @@ import {CredentialInput} from 'next-auth/providers/credentials'
 import Google, {GoogleProfile} from 'next-auth/providers/google'
 import {AuthorizationEndpointHandler, Provider} from 'next-auth/providers/index'
 import {SignInAuthorizationParams} from 'next-auth/react'
-import {Schema} from 'mongoose'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import userModel from '@/models/userModel'
 import {AdapterUserWithId, RegisteredUser, SessionWithUserId} from '@/utilities/interfaces'
@@ -52,23 +51,14 @@ const authOptions: AuthOptions = {
       }
     ): Promise<SessionWithUserId> {
       const {session}: {session: Session} = params as {session: Session}
-      await connectToMongoDB() as void
       const registeredUser: RegisteredUser = await userModel.findOne({email: session.user?.email as string}) as RegisteredUser
-      const _id: Schema.Types.ObjectId = registeredUser._id as Schema.Types.ObjectId
-      const id: string = _id.toString() as string
-      console.log(`_id                  : ${_id as Schema.Types.ObjectId}` as string) as void
-      console.log(`_id.toString()       : ${id as string}` as string) as void
       const newSession: SessionWithUserId = {
         ...session as SessionWithUserId,
         user: {
           ...session.user as AdapterUserWithId,
-          id
+          id: registeredUser._id.toString() as string
         }
       }
-      console.log(`newSession.user.id   : ${newSession.user.id as string}` as string) as void
-      console.log(`newSession.user.name : ${newSession.user.name as string}` as string) as void
-      console.log(`newSession.user.email: ${newSession.user.email as string}` as string) as void
-      console.log(`newSession.user.image: ${newSession.user.image as string}` as string) as void
       return newSession as SessionWithUserId
     }
   }
