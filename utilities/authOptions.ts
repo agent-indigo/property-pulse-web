@@ -51,9 +51,10 @@ const authOptions: AuthOptions = {
         trigger: 'update'
       }
     ): Promise<SessionWithUserId> {
+      const {session}: {session: Session} = params as {session: Session}
       const {newSession}: {newSession: SessionWithUserId} = params as {newSession: SessionWithUserId}
       await connectToMongoDB() as void
-      const registeredUser: RegisteredUser = await userModel.findOne({email: newSession.user?.email as string}) as RegisteredUser
+      const registeredUser: RegisteredUser = await userModel.findOne({email: session.user?.email as string}) as RegisteredUser
       const _id: Schema.Types.ObjectId = registeredUser._id as Schema.Types.ObjectId
       const id: string = _id.toString() as string
       console.log(`_id                  : ${_id as Schema.Types.ObjectId}` as string) as void
