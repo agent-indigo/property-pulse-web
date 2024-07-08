@@ -33,16 +33,16 @@ const PropertyCard: React.FC<ListedProperty> = (property: ListedProperty): React
         </h3>
         <div className='flex justify-center gap-4 text-gray-500 mb-4'>
           <p>
-            <FaBed className='inline mr-2'/> {property.beds as number}
-            <span className='md:hidden lg:inline'>Beds</span>
+            <FaBed className='inline mr-2'/>{property.beds as number}
+            <span className='md:hidden lg:inline'> Beds</span>
           </p>
           <p>
-            <FaBath className='inline mr-2'/> {property.baths as number}
-            <span className='md:hidden lg:inline'>Baths</span>
+            <FaBath className='inline mr-2'/>{property.baths as number}
+            <span className='md:hidden lg:inline'> Baths</span>
           </p>
           <p>
-            <FaRulerCombined className='inline mr-2'/> {property.square_feet as number}
-            <span className='md:hidden lg:inline'>sqft</span>
+            <FaRulerCombined className='inline mr-2'/>{property.square_feet as number}
+            <span className='md:hidden lg:inline'> sqft</span>
           </p>
         </div>
         <div className='flex justify-center gap-4 text-green-900 text-sm mb-4'>
