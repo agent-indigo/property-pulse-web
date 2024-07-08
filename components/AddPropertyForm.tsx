@@ -1,9 +1,34 @@
 'use client' as string
 import {ChangeEvent, ChangeEventHandler, ReactElement, useEffect, useState} from 'react'
-import {ListedProperty} from '@/utilities/interfaces'
+import {ListedProperty, Location, Rates, SellerInfo} from '@/utilities/interfaces'
 const AddPropertyForm: React.FC = (): ReactElement | null => {
   const [mounted, setMounted] = useState<boolean>(false)
-  const [fields, setFields] = useState<ListedProperty>({} as ListedProperty)
+  const [fields, setFields] = useState<ListedProperty>({
+    name: '' as string,
+    type: '' as string,
+    description: '' as string,
+    location: {
+      street: '' as string,
+      city: '' as string,
+      state: '' as string,
+      zipcode: '' as string
+    } as Location,
+    beds: 0 as number,
+    baths: 0 as number,
+    square_feet: 0 as number,
+    amenities: [] as string[],
+    rates: {
+      nightly: undefined,
+      weekly: undefined,
+      monthly: undefined
+    } as Rates,
+    seller_info: {
+      name: '' as string,
+      email: '' as string,
+      phone: '' as string
+    } as SellerInfo,
+    imageFiles: [] as File[]
+  } as ListedProperty)
   const inputHandler: ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement> = (event: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => {
     const {name, value}: {name: string, value: string} = event.target as HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement
     if (name.includes('.' as string) as boolean) {
