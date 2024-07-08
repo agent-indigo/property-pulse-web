@@ -1,5 +1,5 @@
 import {ListedProperty} from '@/utilities/interfaces'
-const api: string = process.env.NEXT_PUBLIC_API_DOMAIN ?? '' as string
+const api: string = process.env.NEXT_PUBLIC_API_DOMAIN as string
 /**
  * @name    getProperties
  * @desc    GET all properties

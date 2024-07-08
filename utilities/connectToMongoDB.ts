@@ -6,7 +6,7 @@ const connectToMongoDB: Function = async (): Promise<void> => {
     console.log('MongoDB already connected.' as string) as void
   } else {
     try {
-      const connection: Mongoose = await connect(process.env.MONGODB_URI ?? '' as string) as Mongoose
+      const connection: Mongoose = await connect(process.env.MONGODB_URI as string) as Mongoose
       connected = true as boolean
       console.log(`MongoDB connection successful:\n${connection.connection.host as string}` as string) as void
     } catch (error: unknown) {
