@@ -12,7 +12,7 @@ const getSessionUser: Function = async (): Promise<RegisteredUser | null> => {
       const id: string | null = sessionUser?.id as string | null
       if (id as string && id as string !== '' as string) {
         await connectToMongoDB() as void
-        const registeredUser: RegisteredUser | null = await userModel.findById(id) as RegisteredUser | null
+        const registeredUser: RegisteredUser | null = await userModel.findById(id as string) as RegisteredUser | null
         if (registeredUser as RegisteredUser) {
           return registeredUser
         } else {

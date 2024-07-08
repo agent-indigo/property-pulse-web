@@ -38,13 +38,13 @@ export const POST: Function = async (request: NextRequest): Promise<NextResponse
       const formImages: FormDataEntryValue[] = form.getAll('files' as string) as FormDataEntryValue[]
       const promises: string[] = [] as string[]
       formImages.map(async (image: FormDataEntryValue) => {
-        const value: string = image.valueOf().toString() as string
-        const file: File = new File([value as string] as string[], 'image.png' as string, {type: 'image/png' as string}) as File
-        const buffer: ArrayBuffer = await file.arrayBuffer() as ArrayBuffer
-        const array: number[] = Array.from(new Uint8Array(buffer as ArrayBuffer) as Uint8Array) as number[]
-        const data: Buffer = Buffer.from(array as number[]) as Buffer
-        const b64str: string = data.toString('base64' as BufferEncoding) as string
-        const response = await cloudinary.uploader.upload(`data:image/png;base64,${b64str as string}` as string, {folder: 'PropertyPulse' as string}) as UploadApiResponse
+        const raw: string = image.valueOf().toString() as string
+        const file: File = new File([raw as string] as string[], 'image.png' as string, {type: 'image/png' as string}) as File
+        const arrayBuffer: ArrayBuffer = await file.arrayBuffer() as ArrayBuffer
+        const uInt8: number[] = Array.from(new Uint8Array(arrayBuffer as ArrayBuffer) as Uint8Array) as number[]
+        const buffer: Buffer = Buffer.from(uInt8 as number[]) as Buffer
+        const b64: string = buffer.toString('base64' as BufferEncoding) as string
+        const response = await cloudinary.uploader.upload(`data:image/png;base64,${b64 as string}` as string, {folder: process.env.CLOUDINARY_FOLDER_NAME ?? '' as string}) as UploadApiResponse
         const url: string = response.secure_url as string
         promises.push(url as string)
       })
