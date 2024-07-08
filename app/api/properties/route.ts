@@ -31,23 +31,23 @@ export const POST: Function = async (request: NextRequest): Promise<NextResponse
   try {
     const registeredUser: RegisteredUser | null = await getSessionUser() as RegisteredUser | null
     if (registeredUser as RegisteredUser) {
-      const subittedForm: FormData = await request.formData() as FormData
-      const amenitiesFromForm: FormDataEntryValue[] = subittedForm.getAll('amenities' as string) as FormDataEntryValue[]
+      const form: FormData = await request.formData() as FormData
+      const formAmenities: FormDataEntryValue[] = form.getAll('amenities' as string) as FormDataEntryValue[]
       const amenities: string[] = [] as string[]
-      amenitiesFromForm.map((amenity: FormDataEntryValue) => amenities.push(amenity.valueOf() as string))
-      const imagesFromForm: FormDataEntryValue[] = subittedForm.getAll('imageFiles' as string) as FormDataEntryValue[]
-      const imageFiles: File[] = [] as File[]
-      imagesFromForm.map((image: FormDataEntryValue) => {
+      formAmenities.map((amenity: FormDataEntryValue) => amenities.push(amenity.valueOf() as string))
+      const formImages: FormDataEntryValue[] = form.getAll('files' as string) as FormDataEntryValue[]
+      const files: File[] = [] as File[]
+      formImages.map((image: FormDataEntryValue) => {
         if (image.valueOf() as any instanceof File as boolean) {
           console.log('File found!' as string) as void
           const file: File = image.valueOf() as File
-          if (file.name as string !== '' as string) imageFiles.push(file as File)
+          if (file.name as string !== '' as string) files.push(file as File)
         } else {
           console.error('No file found...' as string) as void
         }
       })
       const images: string[] = [] as string[]
-      imageFiles.map(async (image: File) => {
+      files.map(async (image: File) => {
         const imageBuffer: ArrayBuffer = await image.arrayBuffer() as ArrayBuffer
         const imageArray: number[] = Array.from(new Uint8Array(imageBuffer as ArrayBuffer)) as number[]
         imageArray.map((bits: number) => console.log(bits as number) as void)
@@ -62,23 +62,23 @@ export const POST: Function = async (request: NextRequest): Promise<NextResponse
       let nightly: number | undefined = undefined
       let weekly: number | undefined = undefined
       let monthly: number | undefined = undefined
-      if (subittedForm.get('rates.nightly' as string) as FormDataEntryValue) nightly = Number.parseFloat(subittedForm.get('rates.nightly' as string)?.toString() as string) as number
-      if (subittedForm.get('rates.weekly' as string) as FormDataEntryValue) weekly = Number.parseFloat(subittedForm.get('rates.weekly' as string)?.toString() as string) as number
-      if (subittedForm.get('rates.monthly' as string) as FormDataEntryValue) monthly = Number.parseFloat(subittedForm.get('rates.monthly' as string)?.toString() as string) as number
+      if (form.get('rates.nightly' as string) as FormDataEntryValue) nightly = Number.parseFloat(form.get('rates.nightly' as string)?.toString() as string) as number
+      if (form.get('rates.weekly' as string) as FormDataEntryValue) weekly = Number.parseFloat(form.get('rates.weekly' as string)?.toString() as string) as number
+      if (form.get('rates.monthly' as string) as FormDataEntryValue) monthly = Number.parseFloat(form.get('rates.monthly' as string)?.toString() as string) as number
       const propertyData: ListedProperty = {
         owner,
-        type: subittedForm.get('type' as string)?.toString() as string,
-        name: subittedForm.get('name' as string)?.toString() as string,
-        description: subittedForm.get('description' as string)?.toString() as string,
+        type: form.get('type' as string)?.toString() as string,
+        name: form.get('name' as string)?.toString() as string,
+        description: form.get('description' as string)?.toString() as string,
         location: {
-          street: subittedForm.get('location.street' as string)?.toString() as string,
-          city: subittedForm.get('location.city' as string)?.toString() as string,
-          state: subittedForm.get('location.state' as string)?.toString() as string,
-          zipcode: subittedForm.get('location.zipcode' as string)?.toString() as string
+          street: form.get('location.street' as string)?.toString() as string,
+          city: form.get('location.city' as string)?.toString() as string,
+          state: form.get('location.state' as string)?.toString() as string,
+          zipcode: form.get('location.zipcode' as string)?.toString() as string
         } as Location,
-        beds: Number.parseInt(subittedForm.get('beds' as string)?.toString() as string) as number,
-        baths: Number.parseFloat(subittedForm.get('baths' as string)?.toString() as string) as number,
-        square_feet: Number.parseFloat(subittedForm.get('square_feet' as string)?.toString() as string),
+        beds: Number.parseInt(form.get('beds' as string)?.toString() as string) as number,
+        baths: Number.parseFloat(form.get('baths' as string)?.toString() as string) as number,
+        square_feet: Number.parseFloat(form.get('square_feet' as string)?.toString() as string),
         amenities,
         rates: {
           nightly,
@@ -86,9 +86,9 @@ export const POST: Function = async (request: NextRequest): Promise<NextResponse
           monthly
         } as Rates,
         seller_info: {
-          name: subittedForm.get('seller_info.name' as string)?.toString() as string,
-          email: subittedForm.get('seller_info.email' as string)?.toString() as string,
-          phone: subittedForm.get('seller_info.phone' as string)?.toString() as string
+          name: form.get('seller_info.name' as string)?.toString() as string,
+          email: form.get('seller_info.email' as string)?.toString() as string,
+          phone: form.get('seller_info.phone' as string)?.toString() as string
         } as SellerInfo,
         images
       }

@@ -43,7 +43,7 @@ export interface ListedProperty {
   amenities: string[]
   rates: Rates
   seller_info: SellerInfo
-  imageFiles?: File[]
+  files?: File[]
   images?: any
   is_featured?: boolean
   createdAt?: string

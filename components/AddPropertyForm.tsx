@@ -27,7 +27,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
       email: '' as string,
       phone: '' as string
     } as SellerInfo,
-    imageFiles: [] as File[]
+    files: [] as File[]
   } as ListedProperty)
   const inputHandler: ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement> = (event: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => {
     const {name, value}: {name: string, value: string} = event.target as HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement
@@ -63,13 +63,13 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
   }
   const imageUploadHandler: ChangeEventHandler<HTMLInputElement> = (event: ChangeEvent<HTMLInputElement>) => {
     const uploadedImages: FileList = event.target.files as FileList
-    const imageFiles: File[] = [...fields.imageFiles as File[]] as File[]
+    const files: File[] = [...fields.files as File[]] as File[]
     if (uploadedImages as FileList) for (const image of Array.from(uploadedImages as FileList)) {
-      imageFiles.push(image as File)
+      files.push(image as File)
     }
     setFields((previousValues: ListedProperty) => ({
       ...previousValues as ListedProperty,
-      imageFiles
+      files
     } as ListedProperty)) as void
   }
   useEffect((): void => setMounted(true as boolean), []) as void
@@ -524,6 +524,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
         >
           Images (Select up to 4 images)
         </label>
+        <h6><strong>Note: Nameless files will be omitted.</strong></h6>
         <input
           type='file'
           id='images'
