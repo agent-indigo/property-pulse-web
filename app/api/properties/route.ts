@@ -15,7 +15,7 @@ import {ListedProperty, Location, Rates, RegisteredUser, SellerInfo} from '@/uti
 export const GET: Function = async (request: NextRequest): Promise<NextResponse> => {
   try {
     await connectToMongoDB() as void
-    const properties: ListedProperty[] = await propertyModel.find({}) as ListedProperty[]
+    const properties: ListedProperty[] = await propertyModel.find() as ListedProperty[]
     return new NextResponse(JSON.stringify(properties) as string, {status: 200 as number}) as NextResponse
   } catch (error: unknown) {
     return new NextResponse(`Error fetching properties:\n${error as string}` as string, {status: 500 as number}) as NextResponse
@@ -39,8 +39,8 @@ export const POST: Function = async (request: NextRequest): Promise<NextResponse
       const promises: string[] = [] as string[]
       formImages.map(async (image: FormDataEntryValue) => {
         const value: string = image.valueOf().toString() as string
-        const blob: Blob = new Blob([value as string] as string[]) as Blob
-        const buffer: ArrayBuffer = await blob.arrayBuffer() as ArrayBuffer
+        const file: File = new File([value as string] as string[], 'image.png' as string, {type: 'image/png' as string}) as File
+        const buffer: ArrayBuffer = await file.arrayBuffer() as ArrayBuffer
         const array: number[] = Array.from(new Uint8Array(buffer as ArrayBuffer) as Uint8Array) as number[]
         const data: Buffer = Buffer.from(array as number[]) as Buffer
         const b64str: string = data.toString('base64' as BufferEncoding) as string
