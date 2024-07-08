@@ -64,7 +64,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
   const imageUploadHandler: ChangeEventHandler<HTMLInputElement> = (event: ChangeEvent<HTMLInputElement>) => {
     const uploadedImages: FileList = event.target.files as FileList
     const files: File[] = [...fields.files as File[]] as File[]
-    if (uploadedImages as FileList) for (const image of Array.from(uploadedImages as FileList)) {
+    if (uploadedImages as FileList) for (const image of Array.from(uploadedImages as FileList) as File[]) {
       files.push(image as File)
     }
     setFields((previousValues: ListedProperty) => ({
