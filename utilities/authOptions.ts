@@ -52,11 +52,12 @@ const authOptions: AuthOptions = {
     ): Promise<SessionWithUserId> {
       const {session}: {session: Session} = params as {session: Session}
       const registeredUser: RegisteredUser = await userModel.findOne({email: session.user?.email as string}) as RegisteredUser
+      const id: string = registeredUser._id.toString() as string
       const newSession: SessionWithUserId = {
         ...session as SessionWithUserId,
         user: {
           ...session.user as AdapterUserWithId,
-          id: registeredUser._id.toString() as string
+          id
         }
       }
       return newSession as SessionWithUserId

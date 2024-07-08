@@ -37,9 +37,14 @@ export const POST: Function = async (request: NextRequest): Promise<NextResponse
       amenitiesFromForm.map((amenity: FormDataEntryValue) => amenities.push(amenity.valueOf() as string))
       const imagesFromForm: FormDataEntryValue[] = subittedForm.getAll('imageFiles' as string) as FormDataEntryValue[]
       const imageFiles: File[] = [] as File[]
-      imagesFromForm.map((image: any) => {
-        console.log(image instanceof File as boolean) as void
-        if (image instanceof File as boolean && image.name as string !== '' as string) imageFiles.push(image as File)
+      imagesFromForm.map((image: FormDataEntryValue) => {
+        if (image.valueOf() as any instanceof File as boolean) {
+          console.log('File found!' as string) as void
+          const file: File = image.valueOf() as File
+          if (file.name as string !== '' as string) imageFiles.push(file as File)
+        } else {
+          console.error('No file found...' as string) as void
+        }
       })
       const images: string[] = [] as string[]
       imageFiles.map(async (image: File) => {
