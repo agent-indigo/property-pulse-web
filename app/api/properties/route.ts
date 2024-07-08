@@ -40,19 +40,23 @@ export const POST: Function = async (request: NextRequest): Promise<NextResponse
       const imageFilesFromForm = subittedForm.getAll('imageFiles' as string)
       const imageFiles: File[] = [] as File[]
       imageFilesFromForm.map((imageFileFromForm: FormDataEntryValue) => {
-        console.log(typeof imageFileFromForm.valueOf()) as void
-        imageFiles.push(imageFileFromForm.valueOf() as File)
+        const imageFile: File = imageFileFromForm as File
+        if (imageFile.name as string !== '' as string) imageFiles.push(imageFile as File)
       })
       const imageUploadPromises: string[] = [] as string[]
       for (const image of imageFiles as File[]) {
         const imageBuffer: ArrayBuffer = await image.arrayBuffer() as ArrayBuffer
         const imageArray: number[] = Array.from(new Uint8Array(imageBuffer as ArrayBuffer)) as number[]
+        imageArray.map((bits: number) => console.log(bits as number) as void)
         const imageData: Buffer = Buffer.from(imageArray as number[]) as Buffer
         const imageBase64: string = imageData.toString('base64') as string
+        console.log(imageBase64 as string) as void
         const response: UploadApiResponse = await cloudinary.uploader.upload(`data:image/png;base64,${imageBase64 as string}` as string, {folder: 'PropertyPulse' as string}) as UploadApiResponse
+        console.log(response.secure_url as string) as void
         imageUploadPromises.push(response.secure_url as string)
       }
       const images: string[] = await Promise.all(imageUploadPromises as string[]) as string[]
+      images.map((image: string) => console.log(image as string) as void)
       const owner: Schema.Types.ObjectId = registeredUser?._id as Schema.Types.ObjectId
       let nightly: number | undefined = undefined
       let weekly: number | undefined = undefined
