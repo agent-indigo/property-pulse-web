@@ -36,19 +36,17 @@ export const POST: Function = async (request: NextRequest): Promise<NextResponse
       const amenities: string[] = [] as string[]
       formAmenities.map((amenity: FormDataEntryValue) => amenities.push(amenity.valueOf() as string))
       const formImages: FormDataEntryValue[] = form.getAll('files' as string) as FormDataEntryValue[]
-      const promises: string[] = [] as string[]
-      formImages.map(async (image: FormDataEntryValue) => {
-        const raw: string = image.valueOf().toString() as string
-        const file: File = new File([raw as string] as string[], 'image.png' as string, {type: 'image/png' as string}) as File
-        const arrayBuffer: ArrayBuffer = await file.arrayBuffer() as ArrayBuffer
+      const images: string[] = [] as string[]
+      for (const image in formImages as FormDataEntryValue[]) {
+        const blob: Blob = new Blob([image as string] as string[]) as Blob
+        const arrayBuffer: ArrayBuffer = await blob.arrayBuffer() as ArrayBuffer
         const uInt8: number[] = Array.from(new Uint8Array(arrayBuffer as ArrayBuffer) as Uint8Array) as number[]
         const buffer: Buffer = Buffer.from(uInt8 as number[]) as Buffer
         const b64: string = buffer.toString('base64' as BufferEncoding) as string
-        const response = await cloudinary.uploader.upload(`data:image/png;base64,${b64 as string}` as string, {folder: process.env.CLOUDINARY_FOLDER_NAME ?? '' as string}) as UploadApiResponse
+        const response: UploadApiResponse = await cloudinary.uploader.upload(`data:image/png;base64,${b64 as string}` as string, {folder: process.env.CLOUDINARY_FOLDER_NAME ?? '' as string}) as UploadApiResponse
         const url: string = response.secure_url as string
-        promises.push(url as string)
-      })
-      const images: string[] = await Promise.all(promises as string[]) as string[]
+        images.push(url as string)
+      }
       const owner: Schema.Types.ObjectId = registeredUser?._id as Schema.Types.ObjectId
       let nightly: number | undefined = undefined
       let weekly: number | undefined = undefined
