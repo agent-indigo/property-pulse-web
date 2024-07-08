@@ -36,14 +36,19 @@ export const POST: Function = async (request: NextRequest): Promise<NextResponse
       const amenities: string[] = [] as string[]
       formAmenities.map((amenity: FormDataEntryValue) => amenities.push(amenity.valueOf() as string))
       const formImages: FormDataEntryValue[] = form.getAll('files' as string) as FormDataEntryValue[]
-      const uploads: string[] = [] as string[]
+      const promises: string[] = [] as string[]
       formImages.map(async (image: FormDataEntryValue) => {
-        const dataValue: string = image.valueOf().toString() as string
-        const response: UploadApiResponse = await cloudinary.uploader.upload(dataValue as string, {folder: 'PropertyPulse' as string}) as UploadApiResponse
+        const value: string = image.valueOf().toString() as string
+        const blob: Blob = new Blob([value as string] as string[]) as Blob
+        const buffer: ArrayBuffer = await blob.arrayBuffer() as ArrayBuffer
+        const array: number[] = Array.from(new Uint8Array(buffer as ArrayBuffer) as Uint8Array) as number[]
+        const data: Buffer = Buffer.from(array as number[]) as Buffer
+        const b64str: string = data.toString('base64' as BufferEncoding) as string
+        const response = await cloudinary.uploader.upload(`data:image/png;base64,${b64str as string}` as string, {folder: 'PropertyPulse' as string}) as UploadApiResponse
         const url: string = response.secure_url as string
-        uploads.push(url as string)
+        promises.push(url as string)
       })
-      const images: string[] = await Promise.all(uploads as string[]) as string[]
+      const images: string[] = await Promise.all(promises as string[]) as string[]
       const owner: Schema.Types.ObjectId = registeredUser?._id as Schema.Types.ObjectId
       let nightly: number | undefined = undefined
       let weekly: number | undefined = undefined
