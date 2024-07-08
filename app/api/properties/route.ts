@@ -38,7 +38,7 @@ export const POST: Function = async (request: NextRequest): Promise<NextResponse
       const formImages: FormDataEntryValue[] = form.getAll('files' as string) as FormDataEntryValue[]
       const images: string[] = [] as string[]
       formImages.map(async (image: FormDataEntryValue) => {
-        const dataValue: string = image.toString() as string
+        const dataValue: string = image.valueOf().toString() as string
         const response: UploadApiResponse = await cloudinary.uploader.upload(dataValue as string, {folder: 'PropertyPulse' as string}) as UploadApiResponse
         const url: string = response.secure_url as string
         console.log(url as string) as void
