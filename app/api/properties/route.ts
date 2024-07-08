@@ -36,14 +36,14 @@ export const POST: Function = async (request: NextRequest): Promise<NextResponse
       const amenities: string[] = [] as string[]
       formAmenities.map((amenity: FormDataEntryValue) => amenities.push(amenity.valueOf() as string))
       const formImages: FormDataEntryValue[] = form.getAll('files' as string) as FormDataEntryValue[]
-      const images: string[] = [] as string[]
+      const uploads: string[] = [] as string[]
       formImages.map(async (image: FormDataEntryValue) => {
         const dataValue: string = image.valueOf().toString() as string
         const response: UploadApiResponse = await cloudinary.uploader.upload(dataValue as string, {folder: 'PropertyPulse' as string}) as UploadApiResponse
         const url: string = response.secure_url as string
-        console.log(url as string) as void
-        images.push(url as string)
+        uploads.push(url as string)
       })
+      const images: string[] = await Promise.all(uploads as string[]) as string[]
       const owner: Schema.Types.ObjectId = registeredUser?._id as Schema.Types.ObjectId
       let nightly: number | undefined = undefined
       let weekly: number | undefined = undefined
