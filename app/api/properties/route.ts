@@ -34,17 +34,15 @@ export const POST: Function = async (request: NextRequest): Promise<NextResponse
       const subittedForm: FormData = await request.formData() as FormData
       const amenitiesFromForm: FormDataEntryValue[] = subittedForm.getAll('amenities' as string) as FormDataEntryValue[]
       const amenities: string[] = [] as string[]
-      amenitiesFromForm.map((amenity: FormDataEntryValue) => {
-        amenities.push(amenity.valueOf() as string)
-      })
-      const imageFilesFromForm = subittedForm.getAll('imageFiles' as string)
+      amenitiesFromForm.map((amenity: FormDataEntryValue) => amenities.push(amenity.valueOf() as string))
+      const imagesFromForm: FormDataEntryValue[] = subittedForm.getAll('imageFiles' as string) as FormDataEntryValue[]
       const imageFiles: File[] = [] as File[]
-      imageFilesFromForm.map((imageFileFromForm: FormDataEntryValue) => {
-        const imageFile: File = imageFileFromForm as File
-        if (imageFile.name as string !== '' as string) imageFiles.push(imageFile as File)
+      imagesFromForm.map((image: any) => {
+        console.log(image instanceof File as boolean) as void
+        if (image instanceof File as boolean && image.name as string !== '' as string) imageFiles.push(image as File)
       })
-      const imageUploadPromises: string[] = [] as string[]
-      for (const image of imageFiles as File[]) {
+      const images: string[] = [] as string[]
+      imageFiles.map(async (image: File) => {
         const imageBuffer: ArrayBuffer = await image.arrayBuffer() as ArrayBuffer
         const imageArray: number[] = Array.from(new Uint8Array(imageBuffer as ArrayBuffer)) as number[]
         imageArray.map((bits: number) => console.log(bits as number) as void)
@@ -53,10 +51,8 @@ export const POST: Function = async (request: NextRequest): Promise<NextResponse
         console.log(imageBase64 as string) as void
         const response: UploadApiResponse = await cloudinary.uploader.upload(`data:image/png;base64,${imageBase64 as string}` as string, {folder: 'PropertyPulse' as string}) as UploadApiResponse
         console.log(response.secure_url as string) as void
-        imageUploadPromises.push(response.secure_url as string)
-      }
-      const images: string[] = await Promise.all(imageUploadPromises as string[]) as string[]
-      images.map((image: string) => console.log(image as string) as void)
+        images.push(response.secure_url as string)
+      })
       const owner: Schema.Types.ObjectId = registeredUser?._id as Schema.Types.ObjectId
       let nightly: number | undefined = undefined
       let weekly: number | undefined = undefined
