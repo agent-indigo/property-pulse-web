@@ -524,7 +524,6 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
         >
           Images (Select up to 4 images)
         </label>
-        <h6><strong>Note: Nameless files will be omitted.</strong></h6>
         <input
           type='file'
           id='images'
