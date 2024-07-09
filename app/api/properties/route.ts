@@ -1,9 +1,12 @@
 import {NextRequest, NextResponse} from 'next/server'
 import {Document, Schema} from 'mongoose'
+import { UploadApiResponse } from 'cloudinary'
+import cloudinary from '@/utilities/cloudinary'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import getSessionUser from '@/utilities/getSessionUser'
 import propertyModel from '@/models/propertyModel'
 import {ListedProperty, Location, Rates, RegisteredUser, SellerInfo} from '@/utilities/interfaces'
+import { unlinkSync } from 'fs'
 /**
  * @name    GET
  * @desc    GET all properties
@@ -34,9 +37,46 @@ export const POST: Function = async (request: NextRequest): Promise<NextResponse
       const amenities: string[] = [] as string[]
       formAmenities.map((amenity: FormDataEntryValue) => amenities.push(amenity.valueOf() as string))
       const formImages: FormDataEntryValue[] = form.getAll('files' as string) as FormDataEntryValue[]
+      const images: string[] = [] as string[]
+      const processUpload: Function = async (input: any): Promise<void> => {
+        try {
+          const response: UploadApiResponse = await cloudinary.uploader.upload(input, {folder: process.env.CLOUDINARY_FOLDER_NAME ?? '' as string})
+          const url: string = response.secure_url as string
+          images.push(url as string)
+        } catch (error: unknown) {
+          console.error(error) as void
+          process.exit(1 as number) as void
+        }
+      }
       formImages.map((formImage: FormDataEntryValue) => {
-        console.log(formImage) as void
-        return new NextResponse(formImage, {status: 200 as number})
+        if (formImage instanceof File) {
+          console.log('formImage is a File' as string) as void
+          processUpload(formImage as File) as void
+        } else if (typeof formImage.valueOf() === 'object') {
+          if (formImage.valueOf() as Object instanceof File) {
+            console.log('formImage.valueOf() is a File.' as string) as void
+            processUpload(formImage.valueOf()) as void
+          } else {
+            console.log('formImage.valueOf() is an Object.' as string) as void
+            try {
+              const {key, value} = formImage.valueOf() as any
+              console.log(typeof key) as void
+              if (value instanceof File) {
+                console.log('formImage.valueOf().{value} is a File.')
+                processUpload(value as File) as void
+              } else {
+                console.error(typeof value) as void
+                process.exit(1 as number) as void
+              }
+            } catch (error: unknown) {
+              console.error(error) as void
+              process.exit(1 as number) as void
+            }
+          }
+        } else if (typeof formImage.valueOf() === 'string') {
+          console.log('formImage.valueOf() is a String.' as string) as void
+          processUpload(formImage.valueOf() as string) as void
+        }
       })
       const owner: Schema.Types.ObjectId = registeredUser?._id as Schema.Types.ObjectId
       let nightly: number | undefined = undefined
@@ -69,7 +109,8 @@ export const POST: Function = async (request: NextRequest): Promise<NextResponse
           name: form.get('seller_info.name' as string)?.valueOf() as string,
           email: form.get('seller_info.email' as string)?.valueOf() as string,
           phone: form.get('seller_info.phone' as string)?.valueOf() as string
-        } as SellerInfo
+        } as SellerInfo,
+        images
       }
       await connectToMongoDB() as void
       const property: Document<ListedProperty> & ListedProperty & Required<{_id: Schema.Types.ObjectId}> = new propertyModel(propertyData as ListedProperty) as Document<ListedProperty> & ListedProperty & Required<{_id: Schema.Types.ObjectId}>
