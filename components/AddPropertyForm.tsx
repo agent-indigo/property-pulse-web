@@ -27,7 +27,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
       email: '' as string,
       phone: '' as string
     } as SellerInfo,
-    files: [] as File[]
+    files: undefined
   } as ListedProperty)
   const inputHandler: ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement> = (event: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => {
     const {name, value}: {name: string, value: string} = event.target as HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement
@@ -62,8 +62,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
     } as ListedProperty)) as void
   }
   const imageUploadHandler: ChangeEventHandler<HTMLInputElement> = (event: ChangeEvent<HTMLInputElement>) => {
-    const uploadedImages: FileList = event.target.files as FileList
-    const files: File[] = Array.from(uploadedImages as FileList) as File[]
+    const files: FileList = event.target.files as FileList
     setFields((previousValues: ListedProperty) => ({
       ...previousValues as ListedProperty,
       files
@@ -130,7 +129,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           name='description'
           className='border rounded w-full py-2 px-3'
           rows={4 as number}
-          placeholder='Add an optional description of your property'
+          placeholder='Add a description of your property'
           value={fields.description as string}
           onChange={inputHandler as ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>}
         />
@@ -138,6 +137,12 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
       <div className='mb-4 bg-blue-50 p-4'>
         <label className='block text-gray-700 font-bold mb-2'>
           Location
+        </label>
+        <label
+          htmlFor="street"
+          className='block text-gray-700 font-bold mb-2'
+        >
+          Street
         </label>
         <input
           type='text'
@@ -148,6 +153,12 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           value={fields.location.street as string}
           onChange={inputHandler as ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>}
         />
+        <label
+          htmlFor="city"
+          className='block text-gray-700 font-bold mb-2'
+        >
+          City
+        </label>
         <input
           type='text'
           id='city'
@@ -158,6 +169,12 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           onChange={inputHandler as ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>}
           required
         />
+        <label
+          htmlFor="state"
+          className='block text-gray-700 font-bold mb-2'
+        >
+          State
+        </label>
         <input
           type='text'
           id='state'
@@ -168,6 +185,12 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           onChange={inputHandler as ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>}
           required
         />
+        <label
+          htmlFor="zipcode"
+          className='block text-gray-700 font-bold mb-2'
+        >
+          Zip Code
+        </label>
         <input
           type='text'
           id='zipcode'
@@ -467,7 +490,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           htmlFor='seller_name'
           className='block text-gray-700 font-bold mb-2'
         >
-          Seller Name
+          Owner Name
         </label>
         <input
           type='text'
@@ -484,7 +507,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           htmlFor='seller_email'
           className='block text-gray-700 font-bold mb-2'
         >
-          Seller Email
+          Owner Email
         </label>
         <input
           type='email'
@@ -502,7 +525,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           htmlFor='seller_phone'
           className='block text-gray-700 font-bold mb-2'
         >
-          Seller Phone
+          Owner Phone
         </label>
         <input
           type='tel'
@@ -519,7 +542,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           htmlFor='images'
           className='block text-gray-700 font-bold mb-2'
         >
-          Images (Select up to 4 images)
+          Images (Only the first 4 will be displayed.)
         </label>
         <input
           type='file'
