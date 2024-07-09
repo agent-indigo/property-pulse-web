@@ -36,8 +36,10 @@ export const POST: Function = async (request: NextRequest): Promise<NextResponse
       const amenities: string[] = [] as string[]
       formAmenities.map((amenity: FormDataEntryValue) => amenities.push(amenity.valueOf() as string))
       const formImages: FormDataEntryValue[] = form.getAll('files' as string) as FormDataEntryValue[]
-      const images: string[] = [] as string[]
-      for (const image in formImages as FormDataEntryValue[]) {
+      const promises: string[] = [] as string[]
+      let images: string[] = [] as string[]
+      for (const formImage in formImages as FormDataEntryValue[]) {
+        const image: string = formImage.valueOf().toString() as string
         const blob: Blob = new Blob([image as string] as string[]) as Blob
         const arrayBuffer: ArrayBuffer = await blob.arrayBuffer() as ArrayBuffer
         const uInt8: number[] = Array.from(new Uint8Array(arrayBuffer as ArrayBuffer) as Uint8Array) as number[]
@@ -45,7 +47,8 @@ export const POST: Function = async (request: NextRequest): Promise<NextResponse
         const b64: string = buffer.toString('base64' as BufferEncoding) as string
         const response: UploadApiResponse = await cloudinary.uploader.upload(`data:image/png;base64,${b64 as string}` as string, {folder: process.env.CLOUDINARY_FOLDER_NAME ?? '' as string}) as UploadApiResponse
         const url: string = response.secure_url as string
-        images.push(url as string)
+        promises.push(url as string)
+        images = await Promise.all(promises as string[]) as string[]
       }
       const owner: Schema.Types.ObjectId = registeredUser?._id as Schema.Types.ObjectId
       let nightly: number | undefined = undefined

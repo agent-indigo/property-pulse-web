@@ -63,10 +63,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
   }
   const imageUploadHandler: ChangeEventHandler<HTMLInputElement> = (event: ChangeEvent<HTMLInputElement>) => {
     const uploadedImages: FileList = event.target.files as FileList
-    const files: File[] = [...fields.files as File[]] as File[]
-    if (uploadedImages as FileList) for (const image of Array.from(uploadedImages as FileList) as File[]) {
-      files.push(image as File)
-    }
+    const files: File[] = Array.from(uploadedImages as FileList) as File[]
     setFields((previousValues: ListedProperty) => ({
       ...previousValues as ListedProperty,
       files
@@ -527,7 +524,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
         <input
           type='file'
           id='images'
-          name='images'
+          name='files'
           className='border rounded w-full py-2 px-3'
           accept='image/*'
           onChange={imageUploadHandler as ChangeEventHandler<HTMLInputElement>}
