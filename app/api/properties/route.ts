@@ -48,22 +48,25 @@ export const POST: Function = async (request: NextRequest): Promise<NextResponse
           process.exit(1 as number) as void
         }
       }
-      formImages.map((formImage: FormDataEntryValue) => {
+      formImages.map(async (formImage: FormDataEntryValue) => {
         if (formImage instanceof File) {
           console.log('formImage is a File' as string) as void
-          processUpload(formImage as File) as void
+          await processUpload(formImage as File) as void
         } else if (typeof formImage.valueOf() === 'object') {
           if (formImage.valueOf() as Object instanceof File) {
-            console.log('formImage.valueOf() is a File.' as string) as void
-            processUpload(formImage.valueOf()) as void
+            console.log('formImage.valueOf() is a File' as string) as void
+            await processUpload(formImage.valueOf()) as void
           } else {
-            console.log('formImage.valueOf() is an Object.' as string) as void
+            console.log('formImage.valueOf() is an Object' as string) as void
             try {
               const {key, value} = formImage.valueOf() as any
               console.log(typeof key) as void
               if (value instanceof File) {
-                console.log('formImage.valueOf().{value} is a File.')
-                processUpload(value as File) as void
+                console.log('formImage.valueOf() {value} is a File' as string) as void
+                await processUpload(value as File) as void
+              } else if (typeof value == 'string') {
+                console.log('formImage.valueOf() {value} is a String' as string) as void
+                await processUpload(value as string) as void
               } else {
                 console.error(typeof value) as void
                 process.exit(1 as number) as void
@@ -75,7 +78,7 @@ export const POST: Function = async (request: NextRequest): Promise<NextResponse
           }
         } else if (typeof formImage.valueOf() === 'string') {
           console.log('formImage.valueOf() is a String.' as string) as void
-          processUpload(formImage.valueOf() as string) as void
+          await processUpload(formImage.valueOf() as string) as void
         }
       })
       const owner: Schema.Types.ObjectId = registeredUser?._id as Schema.Types.ObjectId
