@@ -27,7 +27,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
       email: '' as string,
       phone: '' as string
     } as SellerInfo,
-    files: undefined
+    files: [] as File[]
   } as ListedProperty)
   const inputHandler: ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement> = (event: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => {
     const {name, value}: {name: string, value: string} = event.target as HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement
@@ -62,7 +62,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
     } as ListedProperty)) as void
   }
   const imageUploadHandler: ChangeEventHandler<HTMLInputElement> = (event: ChangeEvent<HTMLInputElement>) => {
-    const files: FileList = event.target.files as FileList
+    const list: FileList = event.target.files as FileList
+    const files: File[] = Array.from(list) as File[]
     setFields((previousValues: ListedProperty) => ({
       ...previousValues as ListedProperty,
       files
