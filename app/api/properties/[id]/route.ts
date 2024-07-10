@@ -17,7 +17,7 @@ export const GET: Function = async (request: NextRequest, {params}: {params: {id
     } else {
       return new NextResponse('Property not found.' as string, {status: 404 as number}) as NextResponse
     }
-  } catch (error: unknown) {
-    return new NextResponse(`Error fetching property:\n${error as string}` as string, {status: 500 as number}) as NextResponse
+  } catch (error: any) {
+    return new NextResponse(`Error fetching property:\n${error.toString() as string}` as string, {status: 500 as number}) as NextResponse
   }
 }

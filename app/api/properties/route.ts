@@ -1,12 +1,11 @@
 import {NextRequest, NextResponse} from 'next/server'
 import {Document, Schema} from 'mongoose'
-import { UploadApiResponse } from 'cloudinary'
+import {UploadApiResponse} from 'cloudinary'
 import cloudinary from '@/utilities/cloudinary'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import getSessionUser from '@/utilities/getSessionUser'
 import propertyModel from '@/models/propertyModel'
 import {ListedProperty, Location, Rates, RegisteredUser, SellerInfo} from '@/utilities/interfaces'
-import { unlinkSync } from 'fs'
 /**
  * @name    GET
  * @desc    GET all properties
@@ -18,8 +17,8 @@ export const GET: Function = async (request: NextRequest): Promise<NextResponse>
     await connectToMongoDB() as void
     const properties: ListedProperty[] = await propertyModel.find() as ListedProperty[]
     return new NextResponse(JSON.stringify(properties) as string, {status: 200 as number}) as NextResponse
-  } catch (error: unknown) {
-    return new NextResponse(`Error fetching properties:\n${error as string}` as string, {status: 500 as number}) as NextResponse
+  } catch (error: any) {
+    return new NextResponse(`Error fetching properties:\n${error.toString() as string}` as string, {status: 500 as number}) as NextResponse
   }
 }
 /**
@@ -37,48 +36,21 @@ export const POST: Function = async (request: NextRequest): Promise<NextResponse
       const amenities: string[] = [] as string[]
       formAmenities.map((amenity: FormDataEntryValue) => amenities.push(amenity.valueOf() as string))
       const formImages: FormDataEntryValue[] = form.getAll('files' as string) as FormDataEntryValue[]
-      const images: string[] = [] as string[]
-      const processUpload: Function = async (input: any): Promise<void> => {
-        try {
-          const response: UploadApiResponse = await cloudinary.uploader.upload(input, {folder: process.env.CLOUDINARY_FOLDER_NAME ?? '' as string})
+      const promises: string[] = [] as string[]
+      let images: string[] = [] as string[]
+      formImages.map(async (image: FormDataEntryValue): Promise<void> => {
+        if (image instanceof File) {
+          const arrayBuffer: ArrayBuffer = await image.arrayBuffer() as ArrayBuffer
+          const uInt8array: Uint8Array = new Uint8Array(arrayBuffer as ArrayBuffer) as Uint8Array
+          const buffer: Buffer = Buffer.from(uInt8array as Uint8Array) as Buffer
+          const base64string: string = buffer.toString('base64') as string
+          const response: UploadApiResponse = await cloudinary.uploader.upload(`data:image/png;base64,${base64string as string}` as string, {folder: process.env.CLOUDINARY_FOLDER_NAME ?? '' as string}) as UploadApiResponse
           const url: string = response.secure_url as string
-          images.push(url as string)
-        } catch (error: unknown) {
-          console.error(error) as void
+          promises.push(url as string)
+          images = await Promise.all(promises as string[]) as string[]
+        } else {
+          console.error('Failed to cast image as File.' as string) as void
           process.exit(1 as number) as void
-        }
-      }
-      formImages.map(async (formImage: FormDataEntryValue) => {
-        if (formImage instanceof File) {
-          console.log('formImage is a File' as string) as void
-          await processUpload(formImage as File) as void
-        } else if (typeof formImage.valueOf() === 'object') {
-          if (formImage.valueOf() as Object instanceof File) {
-            console.log('formImage.valueOf() is a File' as string) as void
-            await processUpload(formImage.valueOf()) as void
-          } else {
-            console.log('formImage.valueOf() is an Object' as string) as void
-            try {
-              const {key, value} = formImage.valueOf() as any
-              console.log(typeof key) as void
-              if (value instanceof File) {
-                console.log('formImage.valueOf() {value} is a File' as string) as void
-                await processUpload(value as File) as void
-              } else if (typeof value == 'string') {
-                console.log('formImage.valueOf() {value} is a String' as string) as void
-                await processUpload(value as string) as void
-              } else {
-                console.error(typeof value) as void
-                process.exit(1 as number) as void
-              }
-            } catch (error: unknown) {
-              console.error(error) as void
-              process.exit(1 as number) as void
-            }
-          }
-        } else if (typeof formImage.valueOf() === 'string') {
-          console.log('formImage.valueOf() is a String.' as string) as void
-          await processUpload(formImage.valueOf() as string) as void
         }
       })
       const owner: Schema.Types.ObjectId = registeredUser?._id as Schema.Types.ObjectId
@@ -122,7 +94,7 @@ export const POST: Function = async (request: NextRequest): Promise<NextResponse
     } else {
       return new NextResponse('Unauthorized' as string, {status: 401 as number}) as NextResponse
     }
-  } catch (error: unknown) {
-    return new NextResponse(`Error adding property:\n${error as string}` as string, {status: 500 as number}) as NextResponse
+  } catch (error: any) {
+    return new NextResponse(`Error adding property:\n${error.toString() as string}` as string, {status: 500 as number}) as NextResponse
   }
 }

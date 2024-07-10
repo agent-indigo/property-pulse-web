@@ -1,10 +1,7 @@
 'use client' as string
-import {CSSProperties, ReactElement, useEffect} from 'react'
+import {CSSProperties, ReactElement} from 'react'
 import {ClipLoader} from 'react-spinners'
 const LoadingPage: React.FC<boolean> = (loading: boolean): ReactElement => {
-  useEffect((): void => {
-    if (loading as boolean) document.title = 'Loading... | PropertyPulse | Find the Perfect Rental' as string
-  }, [loading]) as void
   return (
     <ClipLoader
       color='#3b82f6'

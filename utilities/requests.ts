@@ -18,8 +18,8 @@ export const getProperties: Function = async (): Promise<ListedProperty[]> => {
         throw new Error('Error fetching properties.' as string) as Error
       }
     }
-  } catch (error: unknown) {
-    console.error(`Error fetching properties:\n${error as string}` as string)
+  } catch (error: any) {
+    console.error(`Error fetching properties:\n${error.toString() as string}` as string)
     return [] as ListedProperty[]
   }
 }
@@ -41,8 +41,8 @@ export const getProperty: Function = async (id: string): Promise<ListedProperty 
         throw new Error('Error fetching property.' as string) as Error
       }
     }
-  } catch (error: unknown) {
-    console.error(`Error fetching property:\n${error as string}` as string)
+  } catch (error: any) {
+    console.error(`Error fetching property:\n${error.toString() as string}` as string)
     return null
   }
 }
