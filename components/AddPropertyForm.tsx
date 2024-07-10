@@ -36,7 +36,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
       setFields((previousValues: ListedProperty) => ({
         ...previousValues as ListedProperty,
         [outerKey as keyof ListedProperty]: {
-          ...previousValues[outerKey as keyof ListedProperty],
+          ...previousValues[outerKey as keyof ListedProperty] as object,
           [innerKey as string]: value as string
         }
       } as ListedProperty)) as void

@@ -16,7 +16,7 @@ const PropertyCard: React.FC<ListedProperty> = (property: ListedProperty): React
   return (
     <div className='rounded-xl shadow-md relative'>
       <Image
-        src={property.images[0 as number] as string}
+        src={property.images?.[0 as number] as string ?? '' as string}
         alt=''
         height={0 as number}
         width={0 as number}

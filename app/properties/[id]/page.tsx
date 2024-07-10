@@ -24,7 +24,7 @@ const PropertyPage: React.FC = (): ReactElement => {
           const property: ListedProperty = await getProperty(id as string) as ListedProperty
           document.title = `${property.name as string} | PropertyPulse | Find the Perfect Rental` as string
           setProperty(property as ListedProperty) as void
-          setHeaderImage(property.images[0 as number] as string) as void
+          setHeaderImage(property.images?.[0 as number] as string ?? '' as string) as void
         } catch (error: unknown) {
           console.error(`Error fetching property:\n${error as string}` as string) as void
         } finally {
