@@ -1,5 +1,5 @@
 import type {Config} from 'tailwindcss'
-import { CustomThemeConfig } from 'tailwindcss/types/config'
+import {CustomThemeConfig} from 'tailwindcss/types/config'
 const tailwindConfig: Config = {
   content: ['**/*.tsx' as string] as string[],
   theme: {
@@ -12,5 +12,5 @@ const tailwindConfig: Config = {
       } as Partial<CustomThemeConfig>
     } as Partial<CustomThemeConfig>
   } as Partial<CustomThemeConfig>
-}
+} as Config
 export default tailwindConfig as Config
