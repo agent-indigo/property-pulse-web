@@ -4,7 +4,7 @@ import {getProperties} from '@/utilities/requests'
 import {ListedProperty} from '@/utilities/interfaces'
 import PropertyCard from '@/components/PropertyCard'
 const HomeProperties: React.FC = async (): Promise<ReactElement> => {
-  const properties: ListedProperty[] = await getProperties() as ListedProperty[]
+  const properties: ListedProperty[] = await getProperties()
   return (
     <>
       <section className='px-4 py-6'>
@@ -13,13 +13,13 @@ const HomeProperties: React.FC = async (): Promise<ReactElement> => {
             Recent Properties
           </h2>
           <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-            {properties.length as number === 0 as number ? (
+            {properties.length === 0 ? (
               <p>None found...</p>
             ) : (
-              properties.sort((): number => Math.random() as number - Math.random() as number).slice(0 as number, 3 as number).map((property: ListedProperty) => (
+              properties.sort((): number => Math.random() - Math.random()).slice(0, 3).map((property: ListedProperty) => (
                 <PropertyCard
-                  key={property._id as Key | null | undefined}
-                  {...property as ListedProperty}
+                  key={property._id as Key | undefined}
+                  {...property}
                 />
               ))
             )}
@@ -35,6 +35,6 @@ const HomeProperties: React.FC = async (): Promise<ReactElement> => {
         </Link>
       </section>
     </>
-  ) as ReactElement
+  )
 }
-export default HomeProperties as React.FC
+export default HomeProperties

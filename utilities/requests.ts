@@ -1,5 +1,5 @@
 import {ListedProperty} from '@/utilities/interfaces'
-const api: string = process.env.NEXT_PUBLIC_API_DOMAIN as string
+const api: string = process.env.NEXT_PUBLIC_API_DOMAIN ?? ''
 /**
  * @name    getProperties
  * @desc    GET all properties
@@ -8,19 +8,19 @@ const api: string = process.env.NEXT_PUBLIC_API_DOMAIN as string
  */
 export const getProperties: Function = async (): Promise<ListedProperty[]> => {
   try {
-    if (api as string === '' as string) {
-      return [] as ListedProperty[]
+    if (api === '') {
+      return []
     } else {
-      const response: Response = await fetch(`${api as string}/properties` as string, {cache: 'no-store'}) as Response
-      if (response.ok as boolean) {
-        return response.json() as Promise<ListedProperty[]>
+      const response: Response = await fetch(`${api}/properties`, {cache: 'no-store'})
+      if (response.ok) {
+        return response.json()
       } else {
-        throw new Error('Error fetching properties.' as string) as Error
+        throw new Error('Error fetching properties.')
       }
     }
   } catch (error: any) {
-    console.error(`Error fetching properties:\n${error.toString() as string}` as string)
-    return [] as ListedProperty[]
+    console.error(`Error fetching properties:\n${error.toString()}`)
+    return []
   }
 }
 /**
@@ -31,18 +31,18 @@ export const getProperties: Function = async (): Promise<ListedProperty[]> => {
  */
 export const getProperty: Function = async (id: string): Promise<ListedProperty | null> => {
   try {
-    if (api as string === '' as string) {
+    if (api === '') {
       return null
     } else {
-      const response: Response = await fetch(`${api as string}/properties/${id as string}` as string) as Response
-      if (response.ok as boolean) {
-        return response.json() as Promise<ListedProperty>
+      const response: Response = await fetch(`${api}/properties/${id}`)
+      if (response.ok) {
+        return response.json()
       } else {
-        throw new Error('Error fetching property.' as string) as Error
+        throw new Error('Error fetching property.')
       }
     }
   } catch (error: any) {
-    console.error(`Error fetching property:\n${error.toString() as string}` as string)
+    console.error(`Error fetching property:\n${error.toString()}`)
     return null
   }
 }

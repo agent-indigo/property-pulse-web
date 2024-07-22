@@ -1,97 +1,97 @@
-import {Model, ObjectIdSchemaDefinition, Schema, model, models} from 'mongoose'
+import {Model, Schema, model, models} from 'mongoose'
 import {ListedProperty} from '@/utilities/interfaces'
 const propertySchema = new Schema<ListedProperty>({
   owner : {
-    type: Schema.Types.ObjectId as ObjectIdSchemaDefinition,
-    ref: 'User' as string,
-    required: [true as boolean, 'Please provide the owner.' as string]
+    type: Schema.Types.ObjectId,
+    ref: 'User',
+    required: [true, 'Please provide the owner.']
   },
   name: {
-    type: String as StringConstructor,
-    required: [true as boolean, 'Please provide a property name.' as string]
+    type: String,
+    required: [true, 'Please provide a property name.']
   },
   type: {
-    type: String as StringConstructor,
-    required: [true as boolean, 'Please provide the property type.' as string]
+    type: String,
+    required: [true, 'Please provide the property type.']
   },
   description: {
-    type: String as StringConstructor,
-    required: [true as boolean, 'Please provide a description.' as string]
+    type: String,
+    required: [true, 'Please provide a description.']
   },
   location: {
     street: {
-      type: String as StringConstructor,
-      required: [true as boolean, 'Please provide the street.' as string]
+      type: String,
+      required: [true, 'Please provide the street.']
     },
     city: {
-      type: String as StringConstructor,
-      required: [true as boolean, 'Please provide the city.' as string]
+      type: String,
+      required: [true, 'Please provide the city.']
     },
     state: {
-      type: String as StringConstructor,
-      required: [true as boolean, 'Please provide the state.' as string]
+      type: String,
+      required: [true, 'Please provide the state.']
     },
     zipcode: {
-      type: String as StringConstructor,
-      required: [true as boolean, 'Please provide the zip code.' as string]
+      type: String,
+      required: [true, 'Please provide the zip code.']
     }
   },
   beds: {
-    type: Number as NumberConstructor,
-    required: [true as boolean, 'Please provide the number of beds.' as string]
+    type: Number,
+    required: [true, 'Please provide the number of beds.']
   },
   baths: {
-    type: Number as NumberConstructor,
-    required: [true as boolean, 'Please provide the number of baths.' as string]
+    type: Number,
+    required: [true, 'Please provide the number of baths.']
   },
   square_feet: {
-    type: Number as NumberConstructor,
-    required: [true as boolean, 'Please provide the size in square feet.' as string]
+    type: Number,
+    required: [true, 'Please provide the size in square feet.']
   },
   amenities: [
     {
-      type: String as StringConstructor,
-      required: [true as boolean, 'Please list the available amenities.' as string]
+      type: String,
+      required: [true, 'Please list the available amenities.']
     }
   ],
   rates: {
     nightly: {
-      type: Number as NumberConstructor
+      type: Number
     },
     weekly: {
-      type: Number as NumberConstructor
+      type: Number
     },
     monthly: {
-      type: Number as NumberConstructor
+      type: Number
     }
   },
   seller_info: {
     name: {
-      type: String as StringConstructor,
-      required: [true as boolean, 'Please provide the owner\'s name.' as string]
+      type: String,
+      required: [true, 'Please provide the owner\'s name.']
     },
     email: {
-      type: String as StringConstructor,
-      required: [true as boolean, 'Please provide the owner\'s email address.' as string]
+      type: String,
+      required: [true, 'Please provide the owner\'s email address.']
     },
     phone: {
-      type: String as StringConstructor,
-      required: [true as boolean, 'Please provide the owner\'s phone number.' as string]
+      type: String,
+      required: [true, 'Please provide the owner\'s phone number.']
     }
   },
   images: [
     {
-      type: String as StringConstructor,
-      required: [true as boolean, 'Please upload some photos of the property.' as string]
+      type: String,
+      required: [true, 'Please upload some photos of the property.']
     }
   ],
   is_featured: {
-    type: Boolean as BooleanConstructor,
-    default: false as boolean,
-    required: true as boolean
+    type: Boolean,
+    default: false,
+    required: true
   }
 }, {
-  timestamps: true as boolean
+  timestamps: true
 })
-const propertyModel: Model<ListedProperty> = models.Property as Model<ListedProperty> || model<ListedProperty>('Property' as string, propertySchema as Schema<ListedProperty>) as Model<ListedProperty>
-export default propertyModel as Model<ListedProperty>
+const propertyModel: Model<ListedProperty> = models.Property || model<ListedProperty>('Property', propertySchema)
+export default propertyModel

@@ -3,8 +3,6 @@ import {JWT} from 'next-auth/jwt'
 import {AdapterUser} from 'next-auth/adapters'
 import {CredentialInput} from 'next-auth/providers/credentials'
 import Google, {GoogleProfile} from 'next-auth/providers/google'
-import {AuthorizationEndpointHandler, Provider} from 'next-auth/providers/index'
-import {SignInAuthorizationParams} from 'next-auth/react'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import userModel from '@/models/userModel'
 import {AdapterUserWithId, RegisteredUser, SessionWithUserId} from '@/utilities/interfaces'
@@ -15,13 +13,13 @@ const authOptions: AuthOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       authorization: {
         params: {
-          prompt: 'consent' as string,
-          access_type: 'offline' as string,
-          response_type: 'code' as string
-        } as SignInAuthorizationParams
-      } as AuthorizationEndpointHandler
-    }) as Provider
-  ] as Provider[],
+          prompt: 'consent',
+          access_type: 'offline',
+          response_type: 'code'
+        }
+      }
+    })
+  ],
   callbacks: {
     async signIn(params: {
       user?: User | AdapterUser
@@ -31,14 +29,13 @@ const authOptions: AuthOptions = {
       credentials?: Record<string, CredentialInput>
     }): Promise<boolean> {
       const {profile}: {profile?: GoogleProfile} = params as {profile?: GoogleProfile}
-      await connectToMongoDB() as void
-      const registeredUser: RegisteredUser | null = await userModel.findOne({email: profile?.email as string}) as RegisteredUser | null
-      if (!registeredUser) await userModel.create({
-        email: profile?.email as string,
-        username: profile?.name as string,
-        image: profile?.picture as string
-      } as RegisteredUser) as RegisteredUser
-      return true as boolean
+      await connectToMongoDB()
+      if (!await userModel.findOne({email: profile?.email})) await userModel.create({
+        email: profile?.email,
+        username: profile?.name,
+        image: profile?.picture
+      })
+      return true
     },
     async session(
       params: {
@@ -50,18 +47,16 @@ const authOptions: AuthOptions = {
         trigger: 'update'
       }
     ): Promise<SessionWithUserId> {
-      const {session}: {session: Session} = params as {session: Session}
-      const registeredUser: RegisteredUser = await userModel.findOne({email: session.user?.email as string}) as RegisteredUser
-      const id: string = registeredUser._id.toString() as string
-      const newSession: SessionWithUserId = {
-        ...session as SessionWithUserId,
+      const {session}: {session: Session} = params
+      const sessionUser: AdapterUserWithId = session.user as AdapterUserWithId
+      return {
+        ...session,
         user: {
-          ...session.user as AdapterUserWithId,
-          id
+          ...sessionUser,
+          id: (await userModel.findOne({email: sessionUser.email}) as RegisteredUser)._id.toString()
         }
       }
-      return newSession as SessionWithUserId
     }
   }
 }
-export default authOptions as AuthOptions
+export default authOptions

@@ -1,11 +1,10 @@
 import {NextRequest, NextResponse} from 'next/server'
 import {Document, Schema} from 'mongoose'
-import {UploadApiResponse} from 'cloudinary'
 import cloudinary from '@/utilities/cloudinary'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import getSessionUser from '@/utilities/getSessionUser'
 import propertyModel from '@/models/propertyModel'
-import {ListedProperty, Location, Rates, RegisteredUser, SellerInfo} from '@/utilities/interfaces'
+import {ListedProperty, RegisteredUser} from '@/utilities/interfaces'
 /**
  * @name    GET
  * @desc    GET all properties
@@ -14,11 +13,10 @@ import {ListedProperty, Location, Rates, RegisteredUser, SellerInfo} from '@/uti
  */
 export const GET: Function = async (request: NextRequest): Promise<NextResponse> => {
   try {
-    await connectToMongoDB() as void
-    const properties: ListedProperty[] = await propertyModel.find() as ListedProperty[]
-    return new NextResponse(JSON.stringify(properties) as string, {status: 200 as number}) as NextResponse
+    await connectToMongoDB()
+    return new NextResponse(JSON.stringify(await propertyModel.find()), {status: 200})
   } catch (error: any) {
-    return new NextResponse(`Error fetching properties:\n${error.toString() as string}` as string, {status: 500 as number}) as NextResponse
+    return new NextResponse(`Error fetching properties:\n${error.toString()}`, {status: 500})
   }
 }
 /**
@@ -28,64 +26,40 @@ export const GET: Function = async (request: NextRequest): Promise<NextResponse>
  * @access  private
  */
 export const POST: Function = async (request: NextRequest): Promise<NextResponse> => {
-  const registeredUser: RegisteredUser | null = await getSessionUser() as RegisteredUser | null
-  if (registeredUser as RegisteredUser) {
-    const form: FormData = await request.formData() as FormData
-    const formAmenities: FormDataEntryValue[] = form.getAll('amenities' as string) as FormDataEntryValue[]
-    const amenities: string[] = [] as string[]
-    formAmenities.map((amenity: FormDataEntryValue) => amenities.push(amenity.valueOf() as string))
-    const formImages: FormDataEntryValue[] = form.getAll('files' as string) as FormDataEntryValue[]
-    const images: string[] = [] as string[]
-    await Promise.all(formImages.map(async (image: FormDataEntryValue): Promise<void> => {
-      if (image instanceof File) {
-        const arrayBuffer: ArrayBuffer = await image.arrayBuffer() as ArrayBuffer
-        const uInt8array: Uint8Array = new Uint8Array(arrayBuffer as ArrayBuffer) as Uint8Array
-        const buffer: Buffer = Buffer.from(uInt8array as Uint8Array) as Buffer
-        const base64string: string = buffer.toString('base64') as string
-        const response: UploadApiResponse = await cloudinary.uploader.upload(`data:image/png;base64,${base64string as string}` as string, {folder: process.env.CLOUDINARY_FOLDER_NAME ?? '' as string}) as UploadApiResponse
-        const url: string = response.secure_url as string
-        images.push(url as string)
-      }
-    }))
-    const owner: Schema.Types.ObjectId = registeredUser?._id as Schema.Types.ObjectId
-    let nightly: number | undefined = undefined
-    let weekly: number | undefined = undefined
-    let monthly: number | undefined = undefined
-    if (form.get('rates.nightly' as string) as FormDataEntryValue) nightly = Number.parseFloat(form.get('rates.nightly' as string)?.valueOf() as string) as number
-    if (form.get('rates.weekly' as string) as FormDataEntryValue) weekly = Number.parseFloat(form.get('rates.weekly' as string)?.valueOf() as string) as number
-    if (form.get('rates.monthly' as string) as FormDataEntryValue) monthly = Number.parseFloat(form.get('rates.monthly' as string)?.valueOf() as string) as number
-    const propertyData: ListedProperty = {
-      owner,
-      type: form.get('type' as string)?.valueOf() as string,
-      name: form.get('name' as string)?.valueOf() as string,
-      description: form.get('description' as string)?.valueOf() as string,
+  const registeredUser: RegisteredUser | null = await getSessionUser()
+  if (registeredUser) {
+    const form: FormData = await request.formData()
+    await connectToMongoDB()
+    const property: Document<unknown, {}, ListedProperty> & Required<{_id: Schema.Types.ObjectId;}> = new propertyModel({
+      owner: registeredUser?._id,
+      type: form.get('type')?.valueOf() as string,
+      name: form.get('name')?.valueOf() as string,
+      description: form.get('description')?.valueOf() as string,
       location: {
-        street: form.get('location.street' as string)?.valueOf() as string,
-        city: form.get('location.city' as string)?.valueOf() as string,
-        state: form.get('location.state' as string)?.valueOf() as string,
-        zipcode: form.get('location.zipcode' as string)?.valueOf() as string
-      } as Location,
-      beds: Number.parseInt(form.get('beds' as string)?.valueOf() as string) as number,
-      baths: Number.parseFloat(form.get('baths' as string)?.valueOf() as string) as number,
-      square_feet: Number.parseFloat(form.get('square_feet' as string)?.valueOf() as string),
-      amenities,
+        street: form.get('location.street')?.valueOf() as string,
+        city: form.get('location.city')?.valueOf() as string,
+        state: form.get('location.state')?.valueOf() as string,
+        zipcode: form.get('location.zipcode')?.valueOf() as string
+      },
+      beds: Number.parseInt(form.get('beds')?.valueOf() as string),
+      baths: Number.parseFloat(form.get('baths')?.valueOf() as string),
+      square_feet: Number.parseFloat(form.get('square_feet')?.valueOf() as string),
+      amenities: form.getAll('amenities').map((amenity: FormDataEntryValue) => amenity.valueOf() as string),
       rates: {
-        nightly,
-        weekly,
-        monthly
-      } as Rates,
+        nightly: form.get('rates.nightly') ? Number.parseFloat(form.get('rates.nightly')?.valueOf() as string) : undefined,
+        weekly: form.get('rates.weekly') ? Number.parseFloat(form.get('rates.weekly')?.valueOf() as string) : undefined,
+        monthly: form.get('rates.monthly') ? Number.parseFloat(form.get('rates.monthly')?.valueOf() as string) : undefined
+      },
       seller_info: {
-        name: form.get('seller_info.name' as string)?.valueOf() as string,
-        email: form.get('seller_info.email' as string)?.valueOf() as string,
-        phone: form.get('seller_info.phone' as string)?.valueOf() as string
-      } as SellerInfo,
-      images
-    }
-    await connectToMongoDB() as void
-    const property: Document<ListedProperty> & ListedProperty & Required<{_id: Schema.Types.ObjectId}> = new propertyModel(propertyData as ListedProperty) as Document<ListedProperty> & ListedProperty & Required<{_id: Schema.Types.ObjectId}>
-    await property.save() as Document<ListedProperty> & ListedProperty & Required<{_id: Schema.Types.ObjectId}>
-    return NextResponse.redirect(`${process.env.NEXTAUTH_URL as string}/properties/${property._id.toString() as string}` as string) as NextResponse
+        name: form.get('seller_info.name')?.valueOf() as string,
+        email: form.get('seller_info.email')?.valueOf() as string,
+        phone: form.get('seller_info.phone')?.valueOf() as string
+      },
+      images: await Promise.all(form.getAll('files').map(async (image: FormDataEntryValue): Promise<string> => (await cloudinary.uploader.upload(`data:image/png;base64,${Buffer.from(new Uint8Array(await (image as File).arrayBuffer())).toString('base64')}`, {folder: process.env.CLOUDINARY_FOLDER_NAME ?? ''})).secure_url))
+    })
+    await property.save()
+    return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/properties/${property._id.toString()}`)
   } else {
-    return new NextResponse('Unauthorized' as string, {status: 401 as number}) as NextResponse
+    return new NextResponse('Unauthorized', {status: 401})
   }
 }

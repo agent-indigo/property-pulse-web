@@ -1,17 +1,17 @@
-import {connect, Mongoose, MongooseOptions, set} from 'mongoose'
+import {connect, Mongoose, set} from 'mongoose'
 const connectToMongoDB: Function = async (): Promise<void> => {
-  let connected: boolean = false as boolean
-  set('strictQuery' as keyof MongooseOptions, true as boolean)
-  if (connected as boolean) {
-    console.log('MongoDB already connected.' as string) as void
+  let connected: boolean = false
+  set('strictQuery', true)
+  if (connected) {
+    console.log('MongoDB already connected.')
   } else {
     try {
-      const connection: Mongoose = await connect(process.env.MONGODB_URI as string) as Mongoose
-      connected = true as boolean
-      console.log(`MongoDB connection successful:\n${connection.connection.host as string}` as string) as void
+      const connection: Mongoose = await connect(process.env.MONGODB_URI as string)
+      connected = true
+      console.log(`MongoDB connection successful:\n${connection.connection.host}`)
     } catch (error: any) {
-      console.error(`Error connecting to MongoDB:\n${error.toString() as string}` as string) as void
+      console.error(`Error connecting to MongoDB:\n${error.toString()}`)
     }
   }
 }
-export default connectToMongoDB as Function
+export default connectToMongoDB

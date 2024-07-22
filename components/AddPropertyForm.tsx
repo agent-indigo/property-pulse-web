@@ -1,76 +1,50 @@
-'use client' as string
+'use client'
 import {ChangeEvent, ChangeEventHandler, ReactElement, useEffect, useState} from 'react'
-import {ListedProperty, Location, Rates, SellerInfo} from '@/utilities/interfaces'
+import {ListedProperty} from '@/utilities/interfaces'
 const AddPropertyForm: React.FC = (): ReactElement | null => {
   const [mounted, setMounted] = useState<boolean>(false)
-  const [fields, setFields] = useState<ListedProperty>({
-    name: '' as string,
-    type: '' as string,
-    description: '' as string,
-    location: {
-      street: '' as string,
-      city: '' as string,
-      state: '' as string,
-      zipcode: '' as string
-    } as Location,
-    beds: 0 as number,
-    baths: 0 as number,
-    square_feet: 0 as number,
-    amenities: [] as string[],
-    rates: {
-      nightly: undefined,
-      weekly: undefined,
-      monthly: undefined
-    } as Rates,
-    seller_info: {
-      name: '' as string,
-      email: '' as string,
-      phone: '' as string
-    } as SellerInfo,
-    files: [] as File[]
-  } as ListedProperty)
+  const [fields, setFields] = useState<ListedProperty>({} as ListedProperty)
   const inputHandler: ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement> = (event: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => {
-    const {name, value}: {name: string, value: string} = event.target as HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement
-    if (name.includes('.' as string) as boolean) {
-      const [outerKey, innerKey] = name.split('.' as string) as [keyof ListedProperty, string]
+    const {name, value}: {name: string, value: string} = event.target
+    if (name.includes('.')) {
+      const [outerKey, innerKey] = name.split('.')
       setFields((previousValues: ListedProperty) => ({
-        ...previousValues as ListedProperty,
-        [outerKey as keyof ListedProperty]: {
+        ...previousValues,
+        [outerKey]: {
           ...previousValues[outerKey as keyof ListedProperty] as object,
-          [innerKey as string]: value as string
+          [innerKey]: value
         }
-      } as ListedProperty)) as void
+      }))
     } else {
       setFields((previousValues: ListedProperty) => ({
-        ...previousValues as ListedProperty,
-        [name as string]: value as string
-      } as ListedProperty)) as void
+        ...previousValues,
+        [name]: value
+      }))
     }
   }
   const checkboxHandler: ChangeEventHandler<HTMLInputElement> = (event: ChangeEvent<HTMLInputElement>) => {
-    const {value, checked}: {value: string, checked: boolean} = event.target as HTMLInputElement
-    const amenities: string[] = [...fields.amenities as string[]] as string[]
-    if (checked as boolean) {
-      amenities.push(value as string)
+    const {value, checked}: {value: string, checked: boolean} = event.target
+    const amenities: string[] = [...fields.amenities]
+    if (checked) {
+      amenities.push(value)
     } else {
-      const index: number = amenities.indexOf(value as string) as number
-      if (index as number !== -1 as number) amenities.splice(index as number, 1 as number)
+      const index: number = amenities.indexOf(value)
+      if (index !== -1) amenities.splice(index, 1)
     }
     setFields((previousValues: ListedProperty) => ({
-      ...previousValues as ListedProperty,
+      ...previousValues,
       amenities
-    } as ListedProperty)) as void
+    }))
   }
   const imageUploadHandler: ChangeEventHandler<HTMLInputElement> = (event: ChangeEvent<HTMLInputElement>) => {
-    const list: FileList = event.target.files as FileList
-    const files: File[] = Array.from(list) as File[]
+    const files: File[] = Array.from(event.target.files as FileList)
     setFields((previousValues: ListedProperty) => ({
-      ...previousValues as ListedProperty,
+      ...previousValues,
       files
-    } as ListedProperty)) as void
+    }))
   }
-  useEffect((): void => setMounted(true as boolean), []) as void
-  return (mounted as boolean ? (
+  useEffect((): void => setMounted(true), [])
+  return mounted ? (
     <form
       action='/api/properties'
       method='POST'
@@ -90,8 +64,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           id='type'
           name='type'
           className='border rounded w-full py-2 px-3'
-          value={fields.type as string}
-          onChange={inputHandler as ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>}
+          value={fields.type}
+          onChange={inputHandler}
           required
         >
           <option value='Apartment'>Apartment</option>
@@ -113,8 +87,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           name='name'
           className='border rounded w-full py-2 px-3 mb-2'
           placeholder='eg. Beautiful Apartment In Miami'
-          value={fields.name as string}
-          onChange={inputHandler as ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>}
+          value={fields.name}
+          onChange={inputHandler}
           required
         />
       </div>
@@ -131,8 +105,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           className='border rounded w-full py-2 px-3'
           rows={4 as number}
           placeholder='Add a description of your property'
-          value={fields.description as string}
-          onChange={inputHandler as ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>}
+          value={fields.description}
+          onChange={inputHandler}
         />
       </div>
       <div className='mb-4 bg-blue-50 p-4'>
@@ -151,8 +125,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           name='location.street'
           className='border rounded w-full py-2 px-3 mb-2'
           placeholder='Street'
-          value={fields.location.street as string}
-          onChange={inputHandler as ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>}
+          value={fields.location.street}
+          onChange={inputHandler}
         />
         <label
           htmlFor="city"
@@ -166,8 +140,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           name='location.city'
           className='border rounded w-full py-2 px-3 mb-2'
           placeholder='City'
-          value={fields.location.city as string}
-          onChange={inputHandler as ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>}
+          value={fields.location.city}
+          onChange={inputHandler}
           required
         />
         <label
@@ -182,8 +156,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           name='location.state'
           className='border rounded w-full py-2 px-3 mb-2'
           placeholder='State'
-          value={fields.location.state as string}
-          onChange={inputHandler as ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>}
+          value={fields.location.state}
+          onChange={inputHandler}
           required
         />
         <label
@@ -198,8 +172,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           name='location.zipcode'
           className='border rounded w-full py-2 px-3 mb-2'
           placeholder='Zipcode'
-          value={fields.location.zipcode as string}
-          onChange={inputHandler as ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>}
+          value={fields.location.zipcode}
+          onChange={inputHandler}
         />
       </div>
       <div className='mb-4 flex flex-wrap'>
@@ -215,8 +189,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
             id='beds'
             name='beds'
             className='border rounded w-full py-2 px-3'
-            value={fields.beds as number}
-            onChange={inputHandler as ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>}
+            value={fields.beds}
+            onChange={inputHandler}
             required
           />
         </div>
@@ -232,8 +206,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
             id='baths'
             name='baths'
             className='border rounded w-full py-2 px-3'
-            value={fields.baths as number}
-            onChange={inputHandler as ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>}
+            value={fields.baths}
+            onChange={inputHandler}
             required
           />
         </div>
@@ -249,8 +223,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
             id='square_feet'
             name='square_feet'
             className='border rounded w-full py-2 px-3'
-            value={fields.square_feet as number}
-            onChange={inputHandler as ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>}
+            value={fields.square_feet}
+            onChange={inputHandler}
             required
           />
         </div>
@@ -267,8 +241,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
               name='amenities'
               value='Wifi'
               className='mr-2'
-              checked={fields.amenities.includes('Wifi' as string) as boolean}
-              onChange={checkboxHandler as ChangeEventHandler<HTMLInputElement>}
+              checked={fields.amenities.includes('Wifi')}
+              onChange={checkboxHandler}
             />
             <label htmlFor='amenity_wifi'>Wifi</label>
           </div>
@@ -279,8 +253,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
               name='amenities'
               value='Full Kitchen'
               className='mr-2'
-              checked={fields.amenities.includes('Full Kitchen' as string) as boolean}
-              onChange={checkboxHandler as ChangeEventHandler<HTMLInputElement>}
+              checked={fields.amenities.includes('Full Kitchen')}
+              onChange={checkboxHandler}
             />
             <label htmlFor='amenity_kitchen'>Full kitchen</label>
           </div>
@@ -291,8 +265,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
               name='amenities'
               value='Washer & Dryer'
               className='mr-2'
-              checked={fields.amenities.includes('Washer & Dryer' as string) as boolean}
-              onChange={checkboxHandler as ChangeEventHandler<HTMLInputElement>}
+              checked={fields.amenities.includes('Washer & Dryer')}
+              onChange={checkboxHandler}
             />
             <label htmlFor='amenity_washer_dryer'>Washer & Dryer</label>
           </div>
@@ -303,8 +277,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
               name='amenities'
               value='Free Parking'
               className='mr-2'
-              checked={fields.amenities.includes('Free Parking' as string) as boolean}
-              onChange={checkboxHandler as ChangeEventHandler<HTMLInputElement>}
+              checked={fields.amenities.includes('Free Parking')}
+              onChange={checkboxHandler}
             />
             <label htmlFor='amenity_free_parking'>Free Parking</label>
           </div>
@@ -315,8 +289,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
               name='amenities'
               value='Swimming Pool'
               className='mr-2'
-              checked={fields.amenities.includes('Swimming Pool' as string) as boolean}
-              onChange={checkboxHandler as ChangeEventHandler<HTMLInputElement>}
+              checked={fields.amenities.includes('Swimming Pool')}
+              onChange={checkboxHandler}
             />
             <label htmlFor='amenity_pool'>Swimming Pool</label>
           </div>
@@ -327,8 +301,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
               name='amenities'
               value='Hot Tub'
               className='mr-2'
-              checked={fields.amenities.includes('Hot Tub' as string) as boolean}
-              onChange={checkboxHandler as ChangeEventHandler<HTMLInputElement>}
+              checked={fields.amenities.includes('Hot Tub')}
+              onChange={checkboxHandler}
             />
             <label htmlFor='amenity_hot_tub'>Hot Tub</label>
           </div>
@@ -339,8 +313,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
               name='amenities'
               value='24/7 Security'
               className='mr-2'
-              checked={fields.amenities.includes('24/7 Security' as string) as boolean}
-              onChange={checkboxHandler as ChangeEventHandler<HTMLInputElement>}
+              checked={fields.amenities.includes('24/7 Security')}
+              onChange={checkboxHandler}
             />
             <label htmlFor='amenity_24_7_security'>24/7 Security</label>
           </div>
@@ -351,8 +325,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
               name='amenities'
               value='Wheelchair Accessible'
               className='mr-2'
-              checked={fields.amenities.includes('Wheelchair Accessible' as string) as boolean}
-              onChange={checkboxHandler as ChangeEventHandler<HTMLInputElement>}
+              checked={fields.amenities.includes('Wheelchair Accessible')}
+              onChange={checkboxHandler}
             />
             <label htmlFor='amenity_wheelchair_accessible'>
               Wheelchair Accessible
@@ -365,8 +339,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
               name='amenities'
               value='Elevator Access'
               className='mr-2'
-              checked={fields.amenities.includes('Elevator Access' as string) as boolean}
-              onChange={checkboxHandler as ChangeEventHandler<HTMLInputElement>}
+              checked={fields.amenities.includes('Elevator Access')}
+              onChange={checkboxHandler}
             />
             <label htmlFor='amenity_elevator_access'>Elevator Access</label>
           </div>
@@ -377,8 +351,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
               name='amenities'
               value='Dishwasher'
               className='mr-2'
-              checked={fields.amenities.includes('Dishwasher' as string) as boolean}
-              onChange={checkboxHandler as ChangeEventHandler<HTMLInputElement>}
+              checked={fields.amenities.includes('Dishwasher')}
+              onChange={checkboxHandler}
             />
             <label htmlFor='amenity_dishwasher'>Dishwasher</label>
           </div>
@@ -389,8 +363,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
               name='amenities'
               value='Gym/Fitness Center'
               className='mr-2'
-              checked={fields.amenities.includes('Gym/Fitness Center' as string) as boolean}
-              onChange={checkboxHandler as ChangeEventHandler<HTMLInputElement>}
+              checked={fields.amenities.includes('Gym/Fitness Center')}
+              onChange={checkboxHandler}
             />
             <label htmlFor='amenity_gym_fitness_center'>Gym/Fitness Center</label>
           </div>
@@ -401,8 +375,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
               name='amenities'
               value='Air Conditioning'
               className='mr-2'
-              checked={fields.amenities.includes('Air Conditioning' as string) as boolean}
-              onChange={checkboxHandler as ChangeEventHandler<HTMLInputElement>}
+              checked={fields.amenities.includes('Air Conditioning')}
+              onChange={checkboxHandler}
             />
             <label htmlFor='amenity_air_conditioning'>Air Conditioning</label>
           </div>
@@ -413,8 +387,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
               name='amenities'
               value='Balcony/Patio'
               className='mr-2'
-              checked={fields.amenities.includes('Balcony/Patio' as string) as boolean}
-              onChange={checkboxHandler as ChangeEventHandler<HTMLInputElement>}
+              checked={fields.amenities.includes('Balcony/Patio')}
+              onChange={checkboxHandler}
             />
             <label htmlFor='amenity_balcony_patio'>Balcony/Patio</label>
           </div>
@@ -425,8 +399,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
               name='amenities'
               value='Smart TV'
               className='mr-2'
-              checked={fields.amenities.includes('Smart TV' as string) as boolean}
-              onChange={checkboxHandler as ChangeEventHandler<HTMLInputElement>}
+              checked={fields.amenities.includes('Smart TV')}
+              onChange={checkboxHandler}
             />
             <label htmlFor='amenity_smart_tv'>Smart TV</label>
           </div>
@@ -437,8 +411,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
               name='amenities'
               value='Coffee Maker'
               className='mr-2'
-              checked={fields.amenities.includes('Coffee Maker' as string) as boolean}
-              onChange={checkboxHandler as ChangeEventHandler<HTMLInputElement>}
+              checked={fields.amenities.includes('Coffee Maker')}
+              onChange={checkboxHandler}
             />
             <label htmlFor='amenity_coffee_maker'>Coffee Maker</label>
           </div>
@@ -458,8 +432,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
               id='weekly_rate'
               name='rates.weekly'
               className='border rounded w-full py-2 px-3'
-              value={fields.rates.weekly as number}
-              onChange={inputHandler as ChangeEventHandler<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>}
+              value={fields.rates.weekly}
+              onChange={inputHandler}
             />
           </div>
           <div className='flex items-center'>
@@ -469,8 +443,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
               id='monthly_rate'
               name='rates.monthly'
               className='border rounded w-full py-2 px-3'
-              value={fields.rates.monthly as number}
-              onChange={inputHandler as ChangeEventHandler<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>}
+              value={fields.rates.monthly}
+              onChange={inputHandler}
             />
           </div>
           <div className='flex items-center'>
@@ -480,8 +454,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
               id='nightly_rate'
               name='rates.nightly'
               className='border rounded w-full py-2 px-3'
-              value={fields.rates.nightly as number}
-              onChange={inputHandler as ChangeEventHandler<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>}
+              value={fields.rates.nightly}
+              onChange={inputHandler}
             />
           </div>
         </div>
@@ -499,8 +473,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           name='seller_info.name'
           className='border rounded w-full py-2 px-3'
           placeholder='Name'
-          value={fields.seller_info.name as string}
-          onChange={inputHandler as ChangeEventHandler<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>}
+          value={fields.seller_info.name}
+          onChange={inputHandler}
         />
       </div>
       <div className='mb-4'>
@@ -516,8 +490,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           name='seller_info.email'
           className='border rounded w-full py-2 px-3'
           placeholder='Email address'
-          value={fields.seller_info.email as string}
-          onChange={inputHandler as ChangeEventHandler<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>}
+          value={fields.seller_info.email}
+          onChange={inputHandler}
           required
         />
       </div>
@@ -534,8 +508,8 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           name='seller_info.phone'
           className='border rounded w-full py-2 px-3'
           placeholder='Phone'
-          value={fields.seller_info.phone as string}
-          onChange={inputHandler as ChangeEventHandler<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>}
+          value={fields.seller_info.phone}
+          onChange={inputHandler}
         />
       </div>
       <div className='mb-4'>
@@ -551,7 +525,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           name='files'
           className='border rounded w-full py-2 px-3'
           accept='image/*'
-          onChange={imageUploadHandler as ChangeEventHandler<HTMLInputElement>}
+          onChange={imageUploadHandler}
           multiple
           required
         />
@@ -565,6 +539,6 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
         </button>
       </div>
     </form>
-  ) : null) as ReactElement
+  ) : null
 }
-export default AddPropertyForm as React.FC
+export default AddPropertyForm

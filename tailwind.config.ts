@@ -1,16 +1,15 @@
 import type {Config} from 'tailwindcss'
-import {CustomThemeConfig} from 'tailwindcss/types/config'
 const tailwindConfig: Config = {
-  content: ['**/*.tsx' as string] as string[],
+  content: ['**/*.tsx'],
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Poppins' as string, 'sans-serif' as string] as string[]
-      } as Partial<CustomThemeConfig>,
+        sans: ['Poppins', 'sans-serif']
+      },
       gridTemplateColumns: {
-        '70/30': '70% 28%' as string
-      } as Partial<CustomThemeConfig>
-    } as Partial<CustomThemeConfig>
-  } as Partial<CustomThemeConfig>
-} as Config
-export default tailwindConfig as Config
+        '70/30': '70% 28%'
+      }
+    }
+  }
+}
+export default tailwindConfig

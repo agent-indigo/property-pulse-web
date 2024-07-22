@@ -6,26 +6,24 @@ import AuthProvider from '@/components/AuthProvider'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import '@/assets/styles.css'
-const inter: NextFont = Inter({subsets: ['latin']}) as NextFont
+const inter: NextFont = Inter({subsets: ['latin']})
 export const metadata: Metadata = {
   title: {
-    template: '%s | PropertyPulse | Find the Perfect Rental' as string,
-    default: 'PropertyPulse | Find the Perfect Rental' as string
+    template: '%s | PropertyPulse | Find the Perfect Rental',
+    default: 'PropertyPulse | Find the Perfect Rental'
   },
-  description: 'Find the perfect rental property.' as string,
-  keywords: 'find, rental, property' as string
-} as Metadata
-const RootLayout: React.FC<{children: ReactNode}> = ({children}: {children: ReactNode}): ReactElement => {
-  return (
-    <AuthProvider>
-      <html lang='en'>
-        <body className={inter.className as string}>
-          <Navbar/>
-          <main>{children as ReactNode}</main>
-          <Footer/>
-        </body>
-      </html>
-    </AuthProvider>
-  ) as ReactElement
+  description: 'Find the perfect rental property.',
+  keywords: 'find, rental, property'
 }
-export default RootLayout as React.FC<{children: ReactNode}>
+const RootLayout: React.FC<{children: ReactNode}> = ({children}: {children: ReactNode}): ReactElement => (
+  <AuthProvider>
+    <html lang='en'>
+      <body className={inter.className}>
+        <Navbar/>
+        <main>{children}</main>
+        <Footer/>
+      </body>
+    </html>
+  </AuthProvider>
+)
+export default RootLayout
