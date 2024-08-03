@@ -8,5 +8,11 @@ export const metadata: Metadata = {
   description: 'Find the perfect rental property.',
   keywords: 'find, rental, property'
 }
-const HomePage: React.FC = (): ReactElement => <><Hero/><InfoBoxes/><HomeProperties/></>
+const HomePage: React.FC = (): ReactElement => (
+  <>
+    <Hero/>
+    <InfoBoxes/>
+    <HomeProperties/>
+  </>
+)
 export default HomePage

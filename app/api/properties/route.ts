@@ -14,9 +14,15 @@ import {ListedProperty, RegisteredUser} from '@/utilities/interfaces'
 export const GET: Function = async (request: NextRequest): Promise<NextResponse> => {
   try {
     await connectToMongoDB()
-    return new NextResponse(JSON.stringify(await propertyModel.find()), {status: 200})
+    return new NextResponse(
+      JSON.stringify(await propertyModel.find()),
+      {status: 200}
+    )
   } catch (error: any) {
-    return new NextResponse(`Error fetching properties:\n${error.toString()}`, {status: 500})
+    return new NextResponse(
+      `Error fetching properties:\n${error.toString()}`,
+      {status: 500}
+    )
   }
 }
 /**
@@ -60,6 +66,9 @@ export const POST: Function = async (request: NextRequest): Promise<NextResponse
     await property.save()
     return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/properties/${property._id.toString()}`)
   } else {
-    return new NextResponse('Unauthorized', {status: 401})
+    return new NextResponse(
+      'Unauthorized',
+      {status: 401}
+    )
   }
 }

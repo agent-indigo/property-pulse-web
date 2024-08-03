@@ -12,8 +12,14 @@ export const GET: Function = async (request: NextRequest, {params}: {params: {id
   try {
     await connectToMongoDB()
     const property: ListedProperty | null = await propertyModel.findById(params.id)
-    return property ? new NextResponse(JSON.stringify(property), {status: 200}) : new NextResponse('Property not found.', {status: 404})
+    return new NextResponse(
+      property ? JSON.stringify(property) : 'Property not found.',
+      {status: property ? 200 : 404}
+    )
   } catch (error: any) {
-    return new NextResponse(`Error fetching property:\n${error.toString()}`, {status: 500})
+    return new NextResponse(
+      `Error fetching property:\n${error.toString()}`,
+      {status: 500}
+    )
   }
 }
