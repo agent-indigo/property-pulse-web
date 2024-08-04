@@ -1,22 +1,6 @@
-# dependencies
-node_modules/
-# testing
-coverage/
-# next.js
 .next/
-out/
-# production
 build/
-# Mac OS
+node_modules/
 .DS_Store
-# logs
-*.log
-# environment variables
-*.env
-# typescript
-*.tsbuildinfo
+.env
 next-env.d.ts
-# public
-public/
-# sample data
-sampleData/
