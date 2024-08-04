@@ -17,13 +17,16 @@ const Navbar: React.FC = (): ReactElement => {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState<boolean>(false)
   const [providers, setProviders] = useState<Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null>(null)
   const pathname: string = usePathname()
-  useEffect((): void => {
-    const setAuthProviders: Function = async (): Promise<void> => {
-      const response: Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null = await getProviders()
-      setProviders(response)
-    }
-    setAuthProviders()
-  }, [])
+  useEffect(
+    (): void => {
+      const setAuthProviders: Function = async (): Promise<void> => {
+        const response: Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null = await getProviders()
+        setProviders(response)
+      }
+      setAuthProviders()
+    },
+    []
+  )
   return (
     <nav className='bg-blue-700 border-b border-blue-500'>
       <div className='mx-auto max-w-7xl px-2 sm:px-6 lg:px-8'>

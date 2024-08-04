@@ -43,7 +43,10 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
       files
     }))
   }
-  useEffect((): void => setMounted(true), [])
+  useEffect(
+    (): void => setMounted(true),
+    []
+  )
   return mounted ? (
     <form
       action='/api/properties'

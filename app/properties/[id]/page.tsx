@@ -16,30 +16,34 @@ const PropertyPage: React.FC = (): ReactElement | null => {
   const [property, setProperty] = useState<ListedProperty | null>(null)
   const [headerImage, setHeaderImage] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(true)
-  useEffect((): void => {
-    const getPropertyData: Function = async (): Promise<ListedProperty | undefined> => {
-      const {id}: {id: string} = params
-      if (id) {
-        try {
-          const property: ListedProperty = await getProperty(id)
-          document.title = `${property.name} | PropertyPulse | Find the Perfect Rental`
-          setProperty(property)
-          setHeaderImage(property.images?.[0] ?? '')
-        } catch (error: any) {
-          console.error(`Error fetching property:\n${error.toString()}`)
-        } finally {
-          setLoading(false)
+  useEffect(
+    (): void => {
+      const getPropertyData: Function = async (): Promise<ListedProperty | undefined> => {
+        const {id}: {id: string} = params
+        if (id) {
+          try {
+            const property: ListedProperty = await getProperty(id)
+            document.title = `${property.name} | PropertyPulse | Find the Perfect Rental`
+            setProperty(property)
+            setHeaderImage(property.images?.[0] ?? '')
+          } catch (error: any) {
+            console.error(`Error fetching property:\n${error.toString()}`)
+          } finally {
+            setLoading(false)
+          }
+        } else {
+          return
         }
-      } else {
-        return
       }
-    }
-    if (!property && !loading) {
-      router.push('/not-found')
-    } else if (!property) {
-      getPropertyData()
-    }
-  }, [params, property, loading, router])
+      if (!property) loading ? getPropertyData() : router.push('/not-found')
+    },
+    [
+      params,
+      property,
+      loading,
+      router
+    ]
+  )
   return loading ? <Spinner loading={loading}/> : property && (
     <>
       <PropertyHeaderImage image={headerImage}/>
