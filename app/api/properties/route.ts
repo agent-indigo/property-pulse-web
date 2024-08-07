@@ -61,7 +61,10 @@ export const POST: Function = async (request: NextRequest): Promise<NextResponse
         email: form.get('seller_info.email')?.valueOf() as string,
         phone: form.get('seller_info.phone')?.valueOf() as string
       },
-      images: await Promise.all(form.getAll('files').map(async (image: FormDataEntryValue): Promise<string> => (await cloudinary.uploader.upload(`data:image/png;base64,${Buffer.from(new Uint8Array(await (image as File).arrayBuffer())).toString('base64')}`, {folder: process.env.CLOUDINARY_FOLDER_NAME ?? ''})).secure_url))
+      images: await Promise.all(form.getAll('files').map(async (image: FormDataEntryValue): Promise<string> => (await cloudinary.uploader.upload(
+        `data:image/png;base64,${Buffer.from(new Uint8Array(await (image as File).arrayBuffer())).toString('base64')}`,
+        {folder: process.env.CLOUDINARY_FOLDER_NAME ?? ''}
+      )).secure_url))
     })
     await property.save()
     return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/properties/${property._id.toString()}`)

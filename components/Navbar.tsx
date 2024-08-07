@@ -17,12 +17,9 @@ const Navbar: React.FC = (): ReactElement => {
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState<boolean>(false)
   const [providers, setProviders] = useState<Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null>(null)
   const pathname: string = usePathname()
+  const setAuthProviders: Function = async (): Promise<void> => setProviders(await getProviders())
   useEffect(
     (): void => {
-      const setAuthProviders: Function = async (): Promise<void> => {
-        const response: Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null = await getProviders()
-        setProviders(response)
-      }
       setAuthProviders()
     },
     []
