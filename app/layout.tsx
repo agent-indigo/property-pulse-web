@@ -15,7 +15,9 @@ export const metadata: Metadata = {
   description: 'Find the perfect rental property.',
   keywords: 'find, rental, property'
 }
-const RootLayout: React.FC<{children: ReactNode}> = ({children}: {children: ReactNode}): ReactElement => (
+const RootLayout: React.FC<{children: ReactNode}> = (
+  {children}: {children: ReactNode}
+): ReactElement => (
   <AuthProvider>
     <html lang='en'>
       <body className={inter.className}>

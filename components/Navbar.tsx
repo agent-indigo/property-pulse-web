@@ -19,9 +19,7 @@ const Navbar: React.FC = (): ReactElement => {
   const pathname: string = usePathname()
   const setAuthProviders: Function = async (): Promise<void> => setProviders(await getProviders())
   useEffect(
-    (): void => {
-      setAuthProviders()
-    },
+    (): void => setAuthProviders(),
     []
   )
   return (

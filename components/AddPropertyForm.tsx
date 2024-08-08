@@ -4,7 +4,9 @@ import {ListedProperty} from '@/utilities/interfaces'
 const AddPropertyForm: React.FC = (): ReactElement | null => {
   const [mounted, setMounted] = useState<boolean>(false)
   const [fields, setFields] = useState<ListedProperty>({} as ListedProperty)
-  const inputHandler: ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement> = (event: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => {
+  const inputHandler: ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement> = (
+    event: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const {name, value}: {name: string, value: string} = event.target
     if (name.includes('.')) {
       const [outerKey, innerKey] = name.split('.')
@@ -106,7 +108,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           id='description'
           name='description'
           className='border rounded w-full py-2 px-3'
-          rows={4 as number}
+          rows={4}
           placeholder='Add a description of your property'
           value={fields.description}
           onChange={inputHandler}
@@ -117,7 +119,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           Location
         </label>
         <label
-          htmlFor="street"
+          htmlFor='street'
           className='block text-gray-700 font-bold mb-2'
         >
           Street
@@ -132,7 +134,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           onChange={inputHandler}
         />
         <label
-          htmlFor="city"
+          htmlFor='city'
           className='block text-gray-700 font-bold mb-2'
         >
           City
@@ -148,7 +150,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           required
         />
         <label
-          htmlFor="state"
+          htmlFor='state'
           className='block text-gray-700 font-bold mb-2'
         >
           State
@@ -164,7 +166,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           required
         />
         <label
-          htmlFor="zipcode"
+          htmlFor='zipcode'
           className='block text-gray-700 font-bold mb-2'
         >
           Zip Code
@@ -331,9 +333,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
               checked={fields.amenities.includes('Wheelchair Accessible')}
               onChange={checkboxHandler}
             />
-            <label htmlFor='amenity_wheelchair_accessible'>
-              Wheelchair Accessible
-            </label>
+            <label htmlFor='amenity_wheelchair_accessible'>Wheelchair Accessible</label>
           </div>
           <div>
             <input
@@ -425,11 +425,14 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
         <label className='block text-gray-700 font-bold mb-2'>
           Rates (Leave blank if not applicable)
         </label>
-        <div
-          className='flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4'
-        >
+        <div className='flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4'>
           <div className='flex items-center'>
-            <label htmlFor='weekly_rate' className='mr-2'>Weekly</label>
+            <label
+              htmlFor='weekly_rate'
+              className='mr-2'
+            >
+              Weekly
+            </label>
             <input
               type='number'
               id='weekly_rate'
@@ -440,7 +443,12 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
             />
           </div>
           <div className='flex items-center'>
-            <label htmlFor='monthly_rate' className='mr-2'>Monthly</label>
+            <label
+              htmlFor='monthly_rate'
+              className='mr-2'
+            >
+              Monthly
+            </label>
             <input
               type='number'
               id='monthly_rate'
@@ -451,7 +459,12 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
             />
           </div>
           <div className='flex items-center'>
-            <label htmlFor='nightly_rate' className='mr-2'>Nightly</label>
+            <label
+              htmlFor='nightly_rate'
+              className='mr-2'
+            >
+              Nightly
+            </label>
             <input
               type='number'
               id='nightly_rate'

@@ -36,7 +36,7 @@ export const POST: Function = async (request: NextRequest): Promise<NextResponse
   if (registeredUser) {
     const form: FormData = await request.formData()
     await connectToMongoDB()
-    const property: Document<unknown, {}, ListedProperty> & Required<{_id: Schema.Types.ObjectId;}> = new propertyModel({
+    const property: Document<unknown, {}, ListedProperty> & Required<{_id: Schema.Types.ObjectId}> = new propertyModel({
       owner: registeredUser?._id,
       type: form.get('type')?.valueOf() as string,
       name: form.get('name')?.valueOf() as string,

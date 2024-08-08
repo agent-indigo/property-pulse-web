@@ -1,6 +1,8 @@
 import {ReactElement} from 'react'
 import {ClipLoader} from 'react-spinners'
-const LoadingPage: React.FC<boolean> = (loading: boolean): ReactElement => (
+const LoadingPage: React.FC<boolean> = (
+  loading: boolean
+): ReactElement => (
   <ClipLoader
     color='#3b82f6'
     loading={loading}

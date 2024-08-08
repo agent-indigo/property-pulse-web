@@ -1,88 +1,130 @@
 import {Model, Schema, model, models} from 'mongoose'
 import {ListedProperty} from '@/utilities/interfaces'
-const propertySchema = new Schema<ListedProperty>({
+const PropertySchema = new Schema<ListedProperty>({
   owner : {
     type: Schema.Types.ObjectId,
     ref: 'User',
-    required: [true, 'Please provide the owner.']
+    required: [
+      true,
+      'Please provide the owner.'
+    ]
   },
   name: {
     type: String,
-    required: [true, 'Please provide a property name.']
+    required: [
+      true,
+      'Please provide a property name.'
+    ]
   },
   type: {
     type: String,
-    required: [true, 'Please provide the property type.']
+    required: [
+      true,
+      'Please provide the property type.'
+    ]
   },
   description: {
     type: String,
-    required: [true, 'Please provide a description.']
+    required: [
+      true,
+      'Please provide a description.'
+    ]
   },
   location: {
     street: {
       type: String,
-      required: [true, 'Please provide the street.']
+      required: [
+        true,
+        'Please provide the street.'
+      ]
     },
     city: {
       type: String,
-      required: [true, 'Please provide the city.']
+      required: [
+        true,
+        'Please provide the city.'
+      ]
     },
     state: {
       type: String,
-      required: [true, 'Please provide the state.']
+      required: [
+        true,
+        'Please provide the state.'
+      ]
     },
     zipcode: {
       type: String,
-      required: [true, 'Please provide the zip code.']
+      required: [
+        true,
+        'Please provide the zip code.'
+      ]
     }
   },
   beds: {
     type: Number,
-    required: [true, 'Please provide the number of beds.']
+    required: [
+      true,
+      'Please provide the number of beds.'
+    ]
   },
   baths: {
     type: Number,
-    required: [true, 'Please provide the number of baths.']
+    required: [
+      true,
+      'Please provide the number of baths.'
+    ]
   },
   square_feet: {
     type: Number,
-    required: [true, 'Please provide the size in square feet.']
+    required: [
+      true,
+      'Please provide the size in square feet.'
+    ]
   },
   amenities: [
     {
       type: String,
-      required: [true, 'Please list the available amenities.']
+      required: [
+        true,
+        'Please list the available amenities.'
+      ]
     }
   ],
   rates: {
-    nightly: {
-      type: Number
-    },
-    weekly: {
-      type: Number
-    },
-    monthly: {
-      type: Number
-    }
+    nightly: {type: Number},
+    weekly: {type: Number},
+    monthly: {type: Number}
   },
   seller_info: {
     name: {
       type: String,
-      required: [true, 'Please provide the owner\'s name.']
+      required: [
+        true,
+        'Please provide the owner\'s name.'
+      ]
     },
     email: {
       type: String,
-      required: [true, 'Please provide the owner\'s email address.']
+      required: [
+        true,
+        'Please provide the owner\'s email address.'
+      ]
     },
     phone: {
       type: String,
-      required: [true, 'Please provide the owner\'s phone number.']
+      required: [
+        true,
+        'Please provide the owner\'s phone number.'
+      ]
     }
   },
   images: [
     {
       type: String,
-      required: [true, 'Please upload some photos of the property.']
+      required: [
+        true,
+        'Please upload some photos of the property.'
+      ]
     }
   ],
   is_featured: {
@@ -93,5 +135,8 @@ const propertySchema = new Schema<ListedProperty>({
 }, {
   timestamps: true
 })
-const propertyModel: Model<ListedProperty> = models.Property || model<ListedProperty>('Property', propertySchema)
+const propertyModel: Model<ListedProperty> = models.Property || model<ListedProperty>(
+  'Property',
+  PropertySchema
+)
 export default propertyModel
