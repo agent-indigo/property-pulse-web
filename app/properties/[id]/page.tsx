@@ -13,36 +13,28 @@ import PropertyImages from '@/components/PropertyImages'
 const PropertyPage: React.FC = (): ReactElement | null => {
   const router: AppRouterInstance = useRouter()
   const params = useParams<{id: string}>()
+  const {id}: {id: string | undefined} = params
   const [property, setProperty] = useState<ListedProperty | null>(null)
   const [headerImage, setHeaderImage] = useState<string>('')
   const [loading, setLoading] = useState<boolean>(true)
   useEffect(
     (): void => {
       const getPropertyData: Function = async (): Promise<ListedProperty | undefined> => {
-        const {id}: {id: string} = params
         if (id) {
-          try {
-            const property: ListedProperty = await getProperty(id)
+          const property: ListedProperty | undefined = await getProperty(id)
+          if (property) {
             document.title = `${property.name} | PropertyPulse | Find the Perfect Rental`
             setProperty(property)
             setHeaderImage(property.images?.[0] ?? '')
-          } catch (error: any) {
-            console.error(`Error fetching property:\n${error.toString()}`)
-          } finally {
-            setLoading(false)
           }
+          setLoading(false)
         } else {
           return
         }
       }
       if (!property) loading ? getPropertyData() : router.push('/not-found')
     },
-    [
-      params,
-      property,
-      loading,
-      router
-    ]
+    [params, property, loading, router, id]
   )
   return loading ? <Spinner loading={loading}/> : property && (
     <>
@@ -71,7 +63,9 @@ const PropertyPage: React.FC = (): ReactElement | null => {
               </button>
               {/* Contact Form */}
               <div className='bg-white p-6 rounded-lg shadow-md'>
-                <h3 className='text-xl font-bold mb-6'>Contact Property Manager</h3>
+                <h3 className='text-xl font-bold mb-6'>
+                  Contact Property Manager
+                </h3>
                 <form>
                 <div className='mb-4'>
                   <label

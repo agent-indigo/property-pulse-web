@@ -2,9 +2,11 @@ import {ReactElement, ReactNode} from 'react'
 import type {Metadata} from 'next'
 import {Inter} from 'next/font/google'
 import {NextFont} from 'next/dist/compiled/@next/font'
+import {ToastContainer} from 'react-toastify'
 import AuthProvider from '@/components/AuthProvider'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import 'react-toastify/dist/ReactToastify.css'
 import '@/assets/styles.css'
 const inter: NextFont = Inter({subsets: ['latin']})
 export const metadata: Metadata = {
@@ -22,8 +24,11 @@ const RootLayout: React.FC<{children: ReactNode}> = (
     <html lang='en'>
       <body className={inter.className}>
         <Navbar/>
-        <main>{children}</main>
+        <main>
+          {children}
+        </main>
         <Footer/>
+        <ToastContainer/>
       </body>
     </html>
   </AuthProvider>

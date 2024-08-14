@@ -1,7 +1,12 @@
 'use client'
-import {ChangeEvent, ChangeEventHandler, ReactElement, useEffect, useState} from 'react'
+import {ChangeEvent, ChangeEventHandler, FormEvent, FormEventHandler, ReactElement, useEffect, useState} from 'react'
+import {useParams} from 'next/navigation'
 import {ListedProperty} from '@/utilities/interfaces'
-const AddPropertyForm: React.FC = (): ReactElement | null => {
+import {getProperty, editProperty} from '@/utilities/requests'
+const EditPropertyForm: React.FC = (): ReactElement | null => {
+  const params = useParams<{id: string}>()
+  const {id}: {id: string | undefined} = params
+  const [loading, setLoading] = useState<boolean>(true)
   const [mounted, setMounted] = useState<boolean>(false)
   const [fields, setFields] = useState<ListedProperty>({} as ListedProperty)
   const handleInput: ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement> = (
@@ -38,25 +43,25 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
       amenities
     }))
   }
-  const handleImageUpload: ChangeEventHandler<HTMLInputElement> = (event: ChangeEvent<HTMLInputElement>) => {
-    const files: File[] = Array.from(event.target.files as FileList)
-    setFields((previousValues: ListedProperty) => ({
-      ...previousValues,
-      files
-    }))
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
+    event.preventDefault()
+    editProperty(
+      id,
+      new FormData(event.currentTarget)
+    )
   }
   useEffect(
-    (): void => setMounted(true),
-    []
+    (): void => {
+      setMounted(true)
+      if (id) setFields(getProperty(id))
+      setLoading(false)
+    },
+    [id]
   )
-  return mounted ? (
-    <form
-      action='/api/properties'
-      method='POST'
-      encType='multipart/form-data'
-    >
+  return mounted && !loading ? (
+    <form onSubmit={handleSubmit}>
       <h2 className='text-3xl text-center font-semibold mb-6'>
-        Add Property
+        Edit Property
       </h2>
       <div className='mb-4'>
         <label
@@ -482,7 +487,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
               id='weekly_rate'
               name='rates.weekly'
               className='border rounded w-full py-2 px-3'
-              value={fields.rates.weekly}
+              value={fields.rates.weekly ?? ''}
               onChange={handleInput}
             />
           </div>
@@ -498,7 +503,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
               id='monthly_rate'
               name='rates.monthly'
               className='border rounded w-full py-2 px-3'
-              value={fields.rates.monthly}
+              value={fields.rates.monthly ?? ''}
               onChange={handleInput}
             />
           </div>
@@ -514,7 +519,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
               id='nightly_rate'
               name='rates.nightly'
               className='border rounded w-full py-2 px-3'
-              value={fields.rates.nightly}
+              value={fields.rates.nightly ?? ''}
               onChange={handleInput}
             />
           </div>
@@ -572,33 +577,15 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
           onChange={handleInput}
         />
       </div>
-      <div className='mb-4'>
-        <label
-          htmlFor='images'
-          className='block text-gray-700 font-bold mb-2'
-        >
-          Images (Only the first 4 will be displayed.)
-        </label>
-        <input
-          type='file'
-          id='images'
-          name='files'
-          className='border rounded w-full py-2 px-3'
-          accept='image/*'
-          onChange={handleImageUpload}
-          multiple
-          required
-        />
-      </div>
       <div>
         <button
           className='bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline'
           type='submit'
         >
-          Add Property
+          Save Changes
         </button>
       </div>
     </form>
   ) : null
 }
-export default AddPropertyForm
+export default EditPropertyForm

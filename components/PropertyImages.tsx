@@ -1,6 +1,8 @@
 import Image from 'next/image'
 import {ReactElement} from 'react'
-const PropertyImages: React.FC<{images: string[]}> = ({images}: {images: string[]}): ReactElement => (
+const PropertyImages: React.FC<{images: string[]}> = (
+  {images}: {images: string[]}
+): ReactElement => (
   <section className='bg-blue-50 p-4'>
     <div className='container mx-auto'>
       {images.length === 1 ? (
@@ -14,11 +16,14 @@ const PropertyImages: React.FC<{images: string[]}> = ({images}: {images: string[
         />
       ) : (
         <div className='grid grid-cols-2 gap-4'>
-          {images.map((image: string, index: number) => {
+          {images.map((
+            image: string,
+            index: number
+          ) => {
             return (
               <div
                 key={index}
-                className={`${images.length === 3 && index === 2 ? 'col-span-2' : 'col-span-1'}`}
+                className={images.length === 3 && index === 2 ? 'col-span-2' : 'col-span-1'}
               >
                 <Image
                   src={image}

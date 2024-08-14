@@ -12,7 +12,6 @@ import logo from '@/assets/images/logo-white.png'
 import profileDefault from '@/assets/images/profile.png'
 const Navbar: React.FC = (): ReactElement => {
   const {data: session}: {data: SessionWithUserId | null} = useSession<boolean>() as {data: SessionWithUserId | null}
-  const profileImage: string | null | undefined = session?.user?.image
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false)
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState<boolean>(false)
   const [providers, setProviders] = useState<Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null>(null)
@@ -101,7 +100,10 @@ const Navbar: React.FC = (): ReactElement => {
           {!session && (
             <div className='hidden md:block md:ml-6'>
               <div className='flex items-center'>
-                {providers && Object.values(providers).map((provider: ClientSafeProvider, index: number) => (
+                {providers && Object.values(providers).map((
+                  provider: ClientSafeProvider,
+                  index: number
+                ) => (
                   <button
                     key={index}
                     onClick={(): Promise<SignInResponse> => signIn(provider.id) as Promise<SignInResponse>}
@@ -168,7 +170,7 @@ const Navbar: React.FC = (): ReactElement => {
                     </span>
                     <Image
                       className='h-8 w-8 rounded-full'
-                      src={profileImage || profileDefault}
+                      src={session?.user?.image || profileDefault}
                       alt=''
                       width={40}
                       height={40}
@@ -249,7 +251,10 @@ const Navbar: React.FC = (): ReactElement => {
                 Add Property
               </Link>
             )}
-            {!session && providers && Object.values(providers).map((provider: ClientSafeProvider, index: number) => (
+            {!session && providers && Object.values(providers).map((
+              provider: ClientSafeProvider,
+              index: number
+            ) => (
               <button
                 key={index}
                 onClick={(): Promise<SignInResponse> => signIn(provider.id) as Promise<SignInResponse>}

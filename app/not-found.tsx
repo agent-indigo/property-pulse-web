@@ -22,9 +22,9 @@ const NotFoundPage: React.FC = (): ReactElement => (
           <Link
             href='/'
             className='bg-blue-700 hover:bg-blue-800 text-white font-bold py-4 px-6 rounded'
-            >
-              Home
-            </Link>
+          >
+            Home
+          </Link>
         </div>
       </div>
     </div>
