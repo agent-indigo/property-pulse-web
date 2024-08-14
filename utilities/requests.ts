@@ -10,19 +10,16 @@ const api: string = process.env.NEXT_PUBLIC_API_DOMAIN ?? ''
 export const getProperties: Function = async (): Promise<ListedProperty[]> => {
   try {
     if (api === '') {
-      toast.error('Error fetching properties.')
       return []
     } else {
       const response: Response = await fetch(`${api}/properties`)
       if (response.ok) {
         return response.json()
       } else {
-        toast.error('Error fetching properties.')
         return []
       }
     }
   } catch (error: any) {
-    toast.error(`Error fetching properties:\n${error.toString()}`)
     return []
   }
 }
