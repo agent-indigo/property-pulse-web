@@ -11,7 +11,7 @@ export const getProperties: Function = async (): Promise<ListedProperty[]> => {
     if (api === '') {
       return []
     } else {
-      const response: Response = await fetch(`${api}/properties`, {cache: 'no-store'})
+      const response: Response = await fetch(`${api}/properties`)
       if (response.ok) {
         return response.json()
       } else {

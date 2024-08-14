@@ -11,7 +11,7 @@ import {ListedProperty, RegisteredUser} from '@/utilities/interfaces'
  * @route   GET /api/properties
  * @access  public
  */
-export const GET: Function = async (request: NextRequest): Promise<NextResponse> => {
+export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
     await connectToMongoDB()
     return new NextResponse(
@@ -31,7 +31,7 @@ export const GET: Function = async (request: NextRequest): Promise<NextResponse>
  * @route   POST /api/properties
  * @access  private
  */
-export const POST: Function = async (request: NextRequest): Promise<NextResponse> => {
+export const POST = async (request: NextRequest): Promise<NextResponse> => {
   const registeredUser: RegisteredUser | null = await getSessionUser()
   if (registeredUser) {
     const form: FormData = await request.formData()

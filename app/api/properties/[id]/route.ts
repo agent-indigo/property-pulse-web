@@ -8,7 +8,7 @@ import {ListedProperty} from '@/utilities/interfaces'
  * @route   GET /api/properties/:_id
  * @access  public
  */
-export const GET: Function = async (request: NextRequest, {params}: {params: {id: string}}): Promise<NextResponse> => {
+export const GET = async (request: NextRequest, {params}: {params: {id: string}}): Promise<NextResponse> => {
   try {
     await connectToMongoDB()
     const property: ListedProperty | null = await propertyModel.findById(params.id)
