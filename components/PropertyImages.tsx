@@ -1,8 +1,7 @@
 import Image from 'next/image'
 import {ReactElement} from 'react'
-const PropertyImages: React.FC<{images: string[]}> = (
-  {images}: {images: string[]}
-): ReactElement => (
+import {Images} from '@/utilities/interfaces'
+const PropertyImages: React.FC<Images> = ({images}: Images): ReactElement => (
   <section className='bg-blue-50 p-4'>
     <div className='container mx-auto'>
       {images.length === 1 ? (

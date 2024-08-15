@@ -5,6 +5,7 @@ import connectToMongoDB from '@/utilities/connectToMongoDB'
 import getSessionUser from '@/utilities/getSessionUser'
 import propertyModel from '@/models/propertyModel'
 import {ListedProperty, RegisteredUser} from '@/utilities/interfaces'
+import {e401response, e500response} from '@/utilities/apiResponses'
 /**
  * @name    GET
  * @desc    GET all properties
@@ -19,9 +20,9 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
       {status: 200}
     )
   } catch (error: any) {
-    return new NextResponse(
-      `Error fetching properties:\n${error.toString()}`,
-      {status: 500}
+    return e500response(
+      'fetching properties',
+      error
     )
   }
 }
@@ -70,15 +71,12 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
       await property.save()
       return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/properties/${property._id.toString()}`)
     } else {
-      return new NextResponse(
-        'Unauthorized.',
-        {status: 401}
-      )
+      return e401response
     }
   } catch (error: any) {
-    return new NextResponse(
-      `Error adding property:\n${error.toString()}`,
-      {status: 500}
+    return e500response(
+      'adding property',
+      error
     )
   }
 }

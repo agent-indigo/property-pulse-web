@@ -2,8 +2,9 @@ import {NextRequest, NextResponse} from 'next/server'
 import {Document, Schema} from 'mongoose'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
-import {ListedProperty, RegisteredUser} from '@/utilities/interfaces'
+import {ApiParams, ListedProperty, RegisteredUser} from '@/utilities/interfaces'
 import getSessionUser from '@/utilities/getSessionUser'
+import {e401response, e404response, e500response} from '@/utilities/apiResponses'
 /**
  * @name    GET
  * @desc    GET a single property
@@ -12,19 +13,19 @@ import getSessionUser from '@/utilities/getSessionUser'
  */
 export const GET = async (
   request: NextRequest,
-  {params}: {params: {id: string}}
+  {params}: ApiParams
 ): Promise<NextResponse> => {
   try {
     await connectToMongoDB()
     const property: ListedProperty | null = await propertyModel.findById(params.id)
-    return new NextResponse(
-      property ? JSON.stringify(property) : 'Property not found.',
-      {status: property ? 200 : 404}
-    )
+    return property ? new NextResponse(
+      JSON.stringify(property),
+      {status: 200}
+    ) : e404response('Property')
   } catch (error: any) {
-    return new NextResponse(
-      `Error fetching property:\n${error.toString()}`,
-      {status: 500}
+    return e500response(
+      'fetching property',
+      error
     )
   }
 }
@@ -36,7 +37,7 @@ export const GET = async (
  */
 export const DELETE = async (
   request: NextRequest,
-  {params}: {params: {id: string}}
+  {params}: ApiParams
 ): Promise<NextResponse> => {
   try {
     await connectToMongoDB()
@@ -51,27 +52,18 @@ export const DELETE = async (
             {status: 204}
           )
         } else {
-          return new NextResponse(
-            'Unauthorized.',
-            {status: 401}
-          )
+          return e401response
         }
       } else {
-        return new NextResponse(
-          'Unauthorized.',
-          {status: 401}
-        )
+        return e401response
       }
     } else {
-      return new NextResponse(
-        'Property not found.',
-        {status: 404}
-      )
+      return e404response('Property')
     }
   } catch (error: any) {
-    return new NextResponse(
-      `Error deleting property:\n${error.toString()}`,
-      {status: 500}
+    return e500response(
+      'deleting property',
+      error
     )
   }
 }
@@ -83,7 +75,7 @@ export const DELETE = async (
  */
 export const PUT = async (
   request: NextRequest,
-  {params}: {params: {id: string}}
+  {params}: ApiParams
 ): Promise<NextResponse> => {
   try {
     const user: RegisteredUser | null = await getSessionUser()
@@ -123,27 +115,18 @@ export const PUT = async (
           await propertyModel.findByIdAndUpdate(id, update)
           return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/properties/${id}`)
         } else {
-          return new NextResponse(
-            'Unauthorized.',
-            {status: 401}
-          )
+          return e401response
         }
       } else {
-        return new NextResponse(
-          'Property not found.',
-          {status: 404}
-        )
+        return e404response('Property')
       }
     } else {
-      return new NextResponse(
-        'Unauthorized.',
-        {status: 401}
-      )
+      return e401response
     }
   } catch (error: any) {
-    return new NextResponse(
-      `Error adding property:\n${error.toString()}`,
-      {status: 500}
+    return e500response(
+      'saving changes',
+      error
     )
   }
 }

@@ -5,7 +5,7 @@ const InfoBox: React.FC<InfoBoxProps> = ({
   heading,
   backgroundColor = 'bg-gray-100',
   textColor = 'text-gray-800',
-  buttonInfo,
+  buttonProps,
   children
 }): ReactElement => (
   <div className={`${backgroundColor} p-6 rounded-lg shadow-md`}>
@@ -16,10 +16,10 @@ const InfoBox: React.FC<InfoBoxProps> = ({
       {children}
     </p>
     <Link
-      href={buttonInfo.link}
-      className={`inline-block ${buttonInfo.backgroundColor} text-white rounded-lg px-4 py-2 hover:opacity-80`}
+      href={buttonProps.link}
+      className={`inline-block ${buttonProps.backgroundColor} text-white rounded-lg px-4 py-2 hover:opacity-80`}
     >
-      {buttonInfo.text}
+      {buttonProps.text}
     </Link>
   </div>
 )

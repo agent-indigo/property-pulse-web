@@ -1,13 +1,13 @@
 'use client'
 import {ChangeEvent, ChangeEventHandler, ReactElement, useEffect, useState} from 'react'
-import {ListedProperty} from '@/utilities/interfaces'
+import {FormCheck, FormInput, ListedProperty} from '@/utilities/interfaces'
 const AddPropertyForm: React.FC = (): ReactElement | null => {
   const [mounted, setMounted] = useState<boolean>(false)
   const [fields, setFields] = useState<ListedProperty>({} as ListedProperty)
   const handleInput: ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement> = (
     event: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const {name, value}: {name: string, value: string} = event.target
+    const {name, value}: FormInput = event.target
     if (name.includes('.')) {
       const [outerKey, innerKey] = name.split('.')
       setFields((previousValues: ListedProperty) => ({
@@ -25,7 +25,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
     }
   }
   const handleCheckbox: ChangeEventHandler<HTMLInputElement> = (event: ChangeEvent<HTMLInputElement>) => {
-    const {value, checked}: {value: string, checked: boolean} = event.target
+    const {value, checked}: FormCheck = event.target
     const amenities: string[] = [...fields.amenities]
     if (checked) {
       amenities.push(value)

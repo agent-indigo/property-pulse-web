@@ -1,10 +1,9 @@
 'use client'
-import {ReactElement, ReactNode} from 'react'
+import {ReactElement} from 'react'
 import {SessionProvider} from 'next-auth/react'
-const AuthProvider: React.FC<{
-  children: ReactNode
-}> = (
-  {children}: {children: ReactNode}
+import {ReactNodes} from '@/utilities/interfaces'
+const AuthProvider: React.FC<ReactNodes> = (
+  {children}: ReactNodes
 ): ReactElement => (
   <SessionProvider>
     {children}

@@ -3,20 +3,22 @@ import {useEffect, useState, ReactElement} from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {useSession} from 'next-auth/react'
-import {getUserProperties} from '@/utilities/requests'
+import {getUserProperties, deleteProperty} from '@/utilities/requests'
 import profileDefault from '@/assets/images/profile.png'
 import Spinner from '@/components/Spinner'
-import {deleteProperty} from '@/utilities/requests'
-import {SessionWithUserId, ListedProperty} from '@/utilities/interfaces'
+import {ListedProperty, SessionData} from '@/utilities/interfaces'
 const ProfilePage: React.FC = (): ReactElement => {
-  const {data: session}: {data: SessionWithUserId | null} = useSession<boolean>() as {data: SessionWithUserId | null}
+  const {data: session}: SessionData = useSession<boolean>() as SessionData
   const id: string | undefined = session?.user?.id
   const [properties, setProperties] = useState<ListedProperty[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   useEffect(
     (): void => {
-      if (id) setProperties(getUserProperties(id))
-      setLoading(false)
+      const fetchProperties: Function = async (id: string): Promise<void> => {
+        setProperties(await getUserProperties(id))
+        setLoading(false)
+      }
+      if (id) fetchProperties(id)
     },
     [id]
   )
@@ -82,7 +84,7 @@ const ProfilePage: React.FC = (): ReactElement => {
                         Edit
                       </Link>
                       <button
-                        onClick={() => setProperties(deleteProperty(property._id))}
+                        onClick={async (): Promise<void> => setProperties(await deleteProperty(property._id))}
                         className='bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600'
                         type='button'
                       >

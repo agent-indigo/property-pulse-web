@@ -1,14 +1,15 @@
 import {ReactElement} from 'react'
 import {FaBed, FaBath, FaRulerCombined, FaTimes, FaCheck, FaMapMarker} from 'react-icons/fa'
-import {ListedProperty} from '@/utilities/interfaces'
-const PropertyDetails: React.FC<ListedProperty> = (property: ListedProperty): ReactElement => (
+import {DestructuredProperty} from '@/utilities/interfaces'
+import PropertyMap from '@/components/PropertyMap'
+const PropertyDetails: React.FC<DestructuredProperty> = ({property}: DestructuredProperty): ReactElement => (
   <main>
     <div className='bg-white p-6 rounded-lg shadow-md text-center md:text-left'>
       <div className='text-gray-500 mb-4'>
         {property.type}
       </div>
       <h1 className='text-3xl font-bold mb-4'>
-        {property.type}
+        {property.name}
       </h1>
       <div className='text-gray-500 mb-4 flex align-middle justify-center md:justify-start'>
         <FaMapMarker className='text-lg text-orange-700 mr-2'/>
@@ -100,7 +101,7 @@ const PropertyDetails: React.FC<ListedProperty> = (property: ListedProperty): Re
       </ul>
     </div>
     <div className='bg-white p-6 rounded-lg shadow-md mt-6'>
-      <div id='map'/>
+      <PropertyMap property={property}/>
     </div>
   </main>
 )

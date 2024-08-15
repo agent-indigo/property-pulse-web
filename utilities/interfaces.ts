@@ -1,34 +1,17 @@
 import {ReactNode} from 'react'
-import {Date, Schema} from 'mongoose'
+import {Date, Document, Schema} from 'mongoose'
 import {Session} from 'next-auth'
 import {AdapterUser} from 'next-auth/adapters'
-export interface ButtonProps {
-  link: string
-  text: string
-  backgroundColor: string
-}
 export interface InfoBoxProps {
   heading: string
   backgroundColor?: string
   textColor?: string
-  buttonInfo: ButtonProps
+  buttonProps: {
+    link: string
+    text: string
+    backgroundColor: string
+  }
   children: ReactNode
-}
-export interface Location {
-  street: string
-  city: string
-  state: string
-  zipcode: string
-}
-export interface Rates {
-  nightly?: number
-  weekly?: number
-  monthly?: number
-}
-export interface SellerInfo {
-  name: string
-  email: string
-  phone: string
 }
 export interface ListedProperty {
   _id?: Schema.Types.ObjectId
@@ -36,21 +19,33 @@ export interface ListedProperty {
   name: string
   type: string
   description: string
-  location: Location
+  location: {
+    street: string
+    city: string
+    state: string
+    zipcode: string
+  }
   beds: number
   baths: number
   square_feet: number
   amenities: string[]
-  rates: Rates
-  seller_info: SellerInfo
+  rates: {
+    nightly?: number
+    weekly?: number
+    monthly?: number
+  }
+  seller_info: {
+    name: string
+    email: string
+    phone: string
+  }
   files?: File[]
   images?: string[]
   is_featured?: boolean
   createdAt?: string
   updatedAt?: string
 }
-export interface RegisteredUser {
-  _id: Schema.Types.ObjectId
+export interface RegisteredUser extends Document {
   email: string
   username: string
   image?: string
@@ -63,4 +58,52 @@ export interface AdapterUserWithId extends AdapterUser {
 }
 export interface SessionWithUserId extends Session {
   user: AdapterUserWithId
+}
+export interface GeocodeResponse {
+  results: Array<{
+    geometry: {
+      location: {
+        lat: number
+        lng: number
+      }
+    }
+  }>
+  status: string
+}
+export interface SpinnerProps {
+  loading: boolean
+}
+export interface ReactNodes {
+  children: ReactNode
+}
+export interface DestructuredProperty {
+  property: ListedProperty
+}
+export interface FormInput {
+  name: string
+  value: string
+}
+export interface FormCheck {
+  value: string
+  checked: boolean
+}
+export interface SessionData {
+  data: SessionWithUserId | null
+}
+export interface IdFromUrl {
+  id?: string
+}
+export interface HeaderProps {
+  image: string
+}
+export interface Images {
+  images: string[]
+}
+export interface ApiParams {
+  params: {
+    id: string
+  }
+}
+export interface PropertyIdFromRequest {
+  propertyId: string
 }

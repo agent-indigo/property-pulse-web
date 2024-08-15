@@ -7,7 +7,7 @@ const InfoBoxes: React.FC = (): ReactElement => (
         <InfoBox
           heading='For Renters'
           backgroundColor='bg-gray-100'
-          buttonInfo={{
+          buttonProps={{
             text: 'Browse Properties',
             link: '/properties',
             backgroundColor: 'bg-black'
@@ -19,7 +19,7 @@ const InfoBoxes: React.FC = (): ReactElement => (
         <InfoBox
           heading='For Property Owners'
           backgroundColor='bg-blue-100'
-          buttonInfo={{
+          buttonProps={{
             text: 'Add Property',
             link: '/properties/add',
             backgroundColor: 'bg-blue-500'

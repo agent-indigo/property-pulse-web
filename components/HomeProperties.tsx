@@ -21,7 +21,7 @@ const HomeProperties: React.FC = async (): Promise<ReactElement> => {
               properties.sort((): number => Math.random() - Math.random()).slice(0, 3).map((property: ListedProperty) => (
                 <PropertyCard
                   key={property._id?.toString()}
-                  {...property}
+                  property={property}
                 />
               ))
             )}

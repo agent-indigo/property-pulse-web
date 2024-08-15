@@ -7,11 +7,11 @@ import Link from 'next/link'
 import {usePathname} from 'next/navigation'
 import {signIn, signOut, useSession, getProviders} from 'next-auth/react'
 import {FaGoogle} from 'react-icons/fa'
-import {SessionWithUserId} from '@/utilities/interfaces'
+import {SessionData, SessionWithUserId} from '@/utilities/interfaces'
 import logo from '@/assets/images/logo-white.png'
 import profileDefault from '@/assets/images/profile.png'
 const Navbar: React.FC = (): ReactElement => {
-  const {data: session}: {data: SessionWithUserId | null} = useSession<boolean>() as {data: SessionWithUserId | null}
+  const {data: session}: SessionData = useSession<boolean>() as SessionData
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false)
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState<boolean>(false)
   const [providers, setProviders] = useState<Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null>(null)
@@ -37,7 +37,7 @@ const Navbar: React.FC = (): ReactElement => {
               aria-expanded='false'
               onClick={(): void => setIsMobileMenuOpen((previousValue: boolean) => !previousValue)}
             >
-              <span className='absolute -inset-0.5'></span>
+              <span className='absolute -inset-0.5'/>
               <span className='sr-only'>
                 Open main menu
               </span>
@@ -131,7 +131,7 @@ const Navbar: React.FC = (): ReactElement => {
                   type='button'
                   className='relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800'
                 >
-                  <span className='absolute -inset-1.5'></span>
+                  <span className='absolute -inset-1.5'/>
                   <span className='sr-only'>
                     View notifications
                   </span>
@@ -166,7 +166,7 @@ const Navbar: React.FC = (): ReactElement => {
                     aria-haspopup='true'
                     onClick={():void => setIsProfileMenuOpen((previousValue: boolean) => !previousValue)}
                   >
-                    <span className='absolute -inset-1.5'></span>
+                    <span className='absolute -inset-1.5'/>
                     <span className='sr-only'>
                       Open user menu
                     </span>
@@ -200,7 +200,7 @@ const Navbar: React.FC = (): ReactElement => {
                       Your Profile
                     </Link>
                     <Link
-                      href='/properties/bookmarked'
+                      href='/properties/bookmarks'
                       className='block px-4 py-2 text-sm text-gray-700'
                       role='menuitem'
                       tabIndex={-1}

@@ -20,7 +20,7 @@ const PropertiesPage: React.FC = async (): Promise<ReactElement> => {
             {properties.map((property: ListedProperty) => (
               <PropertyCard
                 key={property._id?.toString()}
-                {...property}
+                property={property}
               />
             ))}
           </div>

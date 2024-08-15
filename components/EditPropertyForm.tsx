@@ -1,18 +1,19 @@
 'use client'
 import {ChangeEvent, ChangeEventHandler, FormEvent, FormEventHandler, ReactElement, useEffect, useState} from 'react'
+import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
 import {useParams} from 'next/navigation'
-import {ListedProperty} from '@/utilities/interfaces'
+import {FormCheck, FormInput, IdFromUrl, ListedProperty} from '@/utilities/interfaces'
 import {getProperty, editProperty} from '@/utilities/requests'
 const EditPropertyForm: React.FC = (): ReactElement | null => {
-  const params = useParams<{id: string}>()
-  const {id}: {id: string | undefined} = params
+  const params: Params = useParams()
+  const {id}: IdFromUrl = params
   const [loading, setLoading] = useState<boolean>(true)
   const [mounted, setMounted] = useState<boolean>(false)
   const [fields, setFields] = useState<ListedProperty>({} as ListedProperty)
   const handleInput: ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement> = (
     event: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const {name, value}: {name: string, value: string} = event.target
+    const {name, value}: FormInput = event.target
     if (name.includes('.')) {
       const [outerKey, innerKey] = name.split('.')
       setFields((previousValues: ListedProperty) => ({
@@ -30,7 +31,7 @@ const EditPropertyForm: React.FC = (): ReactElement | null => {
     }
   }
   const handleCheckbox: ChangeEventHandler<HTMLInputElement> = (event: ChangeEvent<HTMLInputElement>) => {
-    const {value, checked}: {value: string, checked: boolean} = event.target
+    const {value, checked}: FormCheck = event.target
     const amenities: string[] = [...fields.amenities]
     if (checked) {
       amenities.push(value)
@@ -45,16 +46,19 @@ const EditPropertyForm: React.FC = (): ReactElement | null => {
   }
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
-    editProperty(
+    await editProperty(
       id,
       new FormData(event.currentTarget)
     )
   }
   useEffect(
     (): void => {
-      setMounted(true)
-      if (id) setFields(getProperty(id))
-      setLoading(false)
+      const populateFields: Function = async (): Promise<void> => {
+        setMounted(true)
+        setFields(await getProperty(id))
+        setLoading(false)
+      }
+      populateFields()
     },
     [id]
   )

@@ -1,4 +1,4 @@
-import {ReactElement, ReactNode} from 'react'
+import {ReactElement} from 'react'
 import type {Metadata} from 'next'
 import {Inter} from 'next/font/google'
 import {NextFont} from 'next/dist/compiled/@next/font'
@@ -6,6 +6,7 @@ import {ToastContainer} from 'react-toastify'
 import AuthProvider from '@/components/AuthProvider'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
+import {ReactNodes} from '@/utilities/interfaces'
 import 'react-toastify/dist/ReactToastify.css'
 import '@/assets/styles.css'
 const inter: NextFont = Inter({subsets: ['latin']})
@@ -17,8 +18,8 @@ export const metadata: Metadata = {
   description: 'Find the perfect rental property.',
   keywords: 'find, rental, property'
 }
-const RootLayout: React.FC<{children: ReactNode}> = (
-  {children}: {children: ReactNode}
+const RootLayout: React.FC<ReactNodes> = (
+  {children}: ReactNodes
 ): ReactElement => (
   <AuthProvider>
     <html lang='en'>
