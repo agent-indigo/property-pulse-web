@@ -237,3 +237,32 @@ export const getBookmarks: Function = async (): Promise<ListedProperty[]> => {
     }
   }
 }
+/**
+ * @name    getPropertySearchResults
+ * @desc    Get property search results
+ * @route   GET /api/properties/search/results
+ * @access  public
+ */
+export const getPropertySearchResults: Function = async (
+  location: string,
+  propertyType: string
+): Promise<ListedProperty[]> => {
+  action = 'fetching property search results'
+  if (api === '') {
+    toast.error(noApiMsg)
+    return []
+  } else {
+    try {
+      const response: Response = await fetch(`${api}/properties/search?location=${location}&type=${propertyType}`)
+      if (response.ok) {
+        return response.json()
+      } else {
+        toast.error(eMsg)
+        return []
+      }
+    } catch (error: any) {
+      toast.error(eMsgPlus(error))
+      return []
+    }
+  }
+}

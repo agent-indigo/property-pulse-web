@@ -10,6 +10,7 @@ import {ListedProperty, SessionData} from '@/utilities/interfaces'
 const ProfilePage: React.FC = (): ReactElement => {
   const {data: session}: SessionData = useSession<boolean>() as SessionData
   const id: string | undefined = session?.user?.id
+  const name: string | null | undefined = session?.user?.name
   const [properties, setProperties] = useState<ListedProperty[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   useEffect(
@@ -19,8 +20,9 @@ const ProfilePage: React.FC = (): ReactElement => {
         setLoading(false)
       }
       if (id) fetchProperties(id)
+      if (name) document.title = `${name} | PropertyPulse | Find the Perfect Rental`
     },
-    [id]
+    [id, name]
   )
   return (
     <section className='bg-blue-50'>

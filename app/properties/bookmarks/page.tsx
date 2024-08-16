@@ -12,6 +12,7 @@ const BookmarksPage: React.FC = (): ReactElement => {
       const setBookmarks: Function = async (): Promise<void> => setProperties(await getBookmarks())
       setBookmarks()
       setLoading(false)
+      document.title = 'Boormarked Properties | PropertyPulse | Find the Perfect Rental'
     },
     []
   )
