@@ -1,10 +1,11 @@
 import {toast} from 'react-toastify'
-import {ListedProperty} from '@/utilities/interfaces'
+import {LatLngLiteral} from '@googlemaps/google-maps-services-js'
+import {GeoCodingErrorResponse, InquiryMessage, ListedProperty} from '@/utilities/interfaces'
 const api: string = process.env.NEXT_PUBLIC_API_DOMAIN ?? ''
-const noApiMsg: string = 'NEXT_PUBLIC_API_DOMAIN MISSING from `.env`.'
-let action: string = ''
-const eMsg: string = `Error ${action}.`
-const eMsgPlus: Function = (error: any) => `Error ${action}:\n${error.toString()}`
+const noApiMsg: string = 'NEXT_PUBLIC_API_DOMAIN is MISSING from `.env`.'
+let activity: string = ''
+const eMsg: string = `Error ${activity}.`
+const eMsgPlus: Function = (error: any) => `Error ${activity}:\n${error}`
 /**
  * @name    getProperties
  * @desc    Get all properties
@@ -12,7 +13,7 @@ const eMsgPlus: Function = (error: any) => `Error ${action}:\n${error.toString()
  * @access  public
  */
 export const getProperties: Function = async (): Promise<ListedProperty[]> => {
-  action = 'fetching properties'
+  activity = 'retrieving properties'
   try {
     if (api === '') {
       toast.error(noApiMsg)
@@ -37,7 +38,7 @@ export const getProperties: Function = async (): Promise<ListedProperty[]> => {
  * @access  public
  */
 export const getProperty: Function = async (id: string): Promise<ListedProperty | undefined> => {
-  action = 'fetching property'
+  activity = 'retrieving property'
   try {
     if (api === '') {
       toast.error(noApiMsg)
@@ -63,7 +64,7 @@ export const getProperty: Function = async (id: string): Promise<ListedProperty 
  * @access  public
  */
 export const getUserProperties: Function = async (id: string): Promise<ListedProperty[]> => {
-  action = 'fetching user\'s properties'
+  activity = 'retrieving user\'s properties'
   try {
     if (api === '') {
       toast.error(noApiMsg)
@@ -89,7 +90,7 @@ export const getUserProperties: Function = async (id: string): Promise<ListedPro
  * @access  private
  */
 export const deleteProperty: Function = async (id: string): Promise<ListedProperty[]> => {
-  action = 'deleting property'
+  activity = 'deleting property'
   try {
     if (api === '') {
       toast.error(noApiMsg)
@@ -126,19 +127,17 @@ export const editProperty: Function = async (
   id: string,
   update: FormData
 ): Promise<void> => {
-  action = 'saving changes'
+  activity = 'saving changes'
   try {
     if (api === '') {
       toast.error(noApiMsg)
-      return
     } else {
-      const response: Response = await fetch(
+      (await fetch(
         `${api}/properties/${id}`, {
           method: 'PUT',
           body: update
         }
-      )
-      response.ok ? toast.success('Property updated.') : toast.error('Unauthorized.')
+      )).ok ? toast.success('Property updated.') : toast.error(eMsg)
     }
   } catch (error: any) {
     toast.error(eMsgPlus(error))
@@ -147,11 +146,11 @@ export const editProperty: Function = async (
 /**
  * @name    toggleBookmark
  * @desc    Add or remove a bookmark
- * @route   POST /api/properties/bookmarks
+ * @route   PATCH /api/properties/bookmarks
  * @access  private
  */
 export const toggleBookmark: Function = async ({id}: {id: string}): Promise<boolean | undefined> => {
-  action = 'adding/removing bookmark'
+  activity = 'adding/removing bookmark'
   try {
     if (api === '') {
       toast.error(noApiMsg)
@@ -159,7 +158,7 @@ export const toggleBookmark: Function = async ({id}: {id: string}): Promise<bool
     } else {
       const response: Response = await fetch(
         `${api}/properties/bookmarks`, {
-          method: 'POST',
+          method: 'PATCH',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({id})
         }
@@ -181,26 +180,19 @@ export const toggleBookmark: Function = async ({id}: {id: string}): Promise<bool
 /**
  * @name    getBookmarkStatus
  * @desc    Check if a property is bookmarked
- * @route   POST /api/properties/bookmarks/status
+ * @route   GET /api/properties/bookmarks/status/:id
  * @access  private
  */
 export const getBookmarkStatus: Function = async (id: string): Promise<boolean | undefined> => {
-  action = 'checking bookmark status'
+  activity = 'checking bookmark status'
   try {
     if (api === '') {
       toast.error(noApiMsg)
       return
     } else {
-      const response: Response = await fetch(
-        `${api}/properties/bookmarks/status`, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({id})
-        }
-      )
+      const response: Response = await fetch(`${api}/properties/bookmarks/status/${id}`)
       if (response.ok) {
-        const data = await response.json()
-        return data.bookmarked
+        return response.json()
       } else {
         toast.error(eMsg)
         return
@@ -218,12 +210,12 @@ export const getBookmarkStatus: Function = async (id: string): Promise<boolean |
  * @access  private
  */
 export const getBookmarks: Function = async (): Promise<ListedProperty[]> => {
-  action = 'fetching bookmarked properties'
-  if (api === '') {
-    toast.error(noApiMsg)
-    return []
-  } else {
-    try {
+  activity = 'retrieving bookmarked properties'
+  try {
+    if (api === '') {
+      toast.error(noApiMsg)
+      return []
+    } else {
       const response: Response = await fetch('/api/properties/bookmarks')
       if (response.ok) {
         return response.json()
@@ -231,28 +223,28 @@ export const getBookmarks: Function = async (): Promise<ListedProperty[]> => {
         toast.error(eMsg)
         return []
       }
-    } catch (error) {
-      toast.error(eMsgPlus(error))
-      return []
     }
+  } catch (error: any) {
+    toast.error(eMsgPlus(error))
+    return []
   }
 }
 /**
  * @name    getPropertySearchResults
  * @desc    Get property search results
- * @route   GET /api/properties/search/results
+ * @route   GET /api/properties/search?location&type
  * @access  public
  */
 export const getPropertySearchResults: Function = async (
   location: string,
   propertyType: string
 ): Promise<ListedProperty[]> => {
-  action = 'fetching property search results'
-  if (api === '') {
-    toast.error(noApiMsg)
-    return []
-  } else {
-    try {
+  activity = 'retrieving property search results'
+  try {
+    if (api === '') {
+      toast.error(noApiMsg)
+      return []
+    } else {
       const response: Response = await fetch(`${api}/properties/search?location=${location}&type=${propertyType}`)
       if (response.ok) {
         return response.json()
@@ -260,9 +252,144 @@ export const getPropertySearchResults: Function = async (
         toast.error(eMsg)
         return []
       }
-    } catch (error: any) {
-      toast.error(eMsgPlus(error))
-      return []
     }
+  } catch (error: any) {
+    toast.error(eMsgPlus(error))
+    return []
+  }
+}
+/**
+ * @name    getPropertyGeoCoordinates
+ * @desc    Get a property's geolocation coordinates
+ * @route   GET /api/properties/:id/coordinates
+ * @access  public
+ */
+export const getPropertyGeoCoordinates: Function = async (id: string): Promise<LatLngLiteral | GeoCodingErrorResponse> => {
+  activity = 'retrieving property geocoordinates'
+  const geoCodingError: GeoCodingErrorResponse = {lat: 'error', lng: 'error'}
+  try {
+    if (api === '') {
+      toast.error(noApiMsg)
+      return geoCodingError
+    } else {
+      const response: Response = await fetch(`${api}/properties/${id}/coordinates`)
+      if (response.ok) {
+        return response.json()
+      } else {
+        toast.error(eMsg)
+        return geoCodingError
+      }
+    }
+  } catch (error: any) {
+    toast.error(eMsgPlus(error))
+    return geoCodingError
+  }
+}
+/**
+ * @name    getMessages
+ * @desc    Get messages
+ * @route   GET /api/messages
+ * @access  private
+ */
+export const getMessages: Function = async (): Promise<InquiryMessage[]> => {
+  activity = 'retrieving messages'
+  try {
+    if (api === '') {
+      toast.error(noApiMsg)
+      return []
+    } else {
+      const response: Response = await fetch(`${api}/messages`)
+      if (response.ok) {
+        return response.json()
+      } else {
+        toast.error(eMsg)
+        return []
+      }
+    }
+  } catch (error: any) {
+    toast.error(eMsgPlus(error))
+    return []
+  }
+}
+/**
+ * @name    switchMessageReadStatus
+ * @desc    Mark a message as read or unread
+ * @route   PATCH /api/messages/:id
+ * @access  private
+ */
+export const switchMessageReadStatus: Function = async (id: string): Promise<boolean> => {
+  try {
+    if (api === '') {
+      toast.error(noApiMsg)
+      return false
+    } else {
+      const response: Response = await fetch(
+        `${api}/messages/${id}`, {
+          method: 'PATCH',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({id})
+        }
+      )
+      toast.success(response.json())
+      return response.ok
+    }
+  } catch (error: any) {
+    toast.error(eMsgPlus(error))
+    return false
+  }
+}
+/**
+ * @name    deleteMessage
+ * @desc    Delete a message
+ * @route   DELETE /api/messages/:id
+ * @access  private
+ */
+export const deleteMessage: Function = async (id: string): Promise<boolean> => {
+  activity = 'deleting bookmark'
+  try {
+    if (api === '') {
+      toast.error(noApiMsg)
+      return false
+    } else {
+      const response: Response = await fetch(
+        `${api}/messages/${id}`,
+        {method: 'DELETE'}
+      )
+      if (response.ok) {
+        toast.success('Message deleted.')
+        return true
+      } else {
+        toast.error(eMsg)
+        return false
+      }
+    }
+  } catch (error) {
+    toast.error(eMsgPlus(error))
+    return false
+  }
+}
+/**
+ * @name    getUnreadCount
+ * @desc    Get the number of unread messages
+ * @route   GET /api/messages/unreadCount
+ * @access  private
+ */
+export const getUnreadCount: Function = async (): Promise<number> => {
+  try {
+    if (api === '') {
+      toast.error(noApiMsg)
+      return 0
+    } else {
+      const response: Response = await fetch(`${api}/messages/unreadCount`)
+      if (response.ok) {
+        return response.json()
+      } else {
+        toast.error(eMsg)
+        return 0
+      }
+    }
+  } catch (error) {
+    toast.error(eMsgPlus(error))
+    return 0
   }
 }

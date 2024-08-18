@@ -1,10 +1,10 @@
 'use client'
-import {ChangeEvent, ChangeEventHandler, FormEvent, FormEventHandler, ReactElement, useEffect, useState} from 'react'
+import {ChangeEvent, ChangeEventHandler, FormEvent, FormEventHandler, FunctionComponent, ReactElement, useEffect, useState} from 'react'
 import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
 import {useParams} from 'next/navigation'
 import {FormCheck, FormInput, IdFromUrl, ListedProperty} from '@/utilities/interfaces'
 import {getProperty, editProperty} from '@/utilities/requests'
-const EditPropertyForm: React.FC = (): ReactElement | null => {
+const EditPropertyForm: FunctionComponent = (): ReactElement | null => {
   const params: Params = useParams()
   const {id}: IdFromUrl = params
   const [loading, setLoading] = useState<boolean>(true)
@@ -12,11 +12,11 @@ const EditPropertyForm: React.FC = (): ReactElement | null => {
   const [fields, setFields] = useState<ListedProperty>({} as ListedProperty)
   const handleInput: ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement> = (
     event: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  ): void => {
     const {name, value}: FormInput = event.target
     if (name.includes('.')) {
       const [outerKey, innerKey] = name.split('.')
-      setFields((previousValues: ListedProperty) => ({
+      setFields((previousValues: ListedProperty): ListedProperty => ({
         ...previousValues,
         [outerKey]: {
           ...previousValues[outerKey as keyof ListedProperty] as object,
@@ -24,13 +24,13 @@ const EditPropertyForm: React.FC = (): ReactElement | null => {
         }
       }))
     } else {
-      setFields((previousValues: ListedProperty) => ({
+      setFields((previousValues: ListedProperty): ListedProperty => ({
         ...previousValues,
         [name]: value
       }))
     }
   }
-  const handleCheckbox: ChangeEventHandler<HTMLInputElement> = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleCheckbox: ChangeEventHandler<HTMLInputElement> = (event: ChangeEvent<HTMLInputElement>): void => {
     const {value, checked}: FormCheck = event.target
     const amenities: string[] = [...fields.amenities]
     if (checked) {
@@ -39,7 +39,7 @@ const EditPropertyForm: React.FC = (): ReactElement | null => {
       const index: number = amenities.indexOf(value)
       if (index !== -1) amenities.splice(index, 1)
     }
-    setFields((previousValues: ListedProperty) => ({
+    setFields((previousValues: ListedProperty): ListedProperty => ({
       ...previousValues,
       amenities
     }))

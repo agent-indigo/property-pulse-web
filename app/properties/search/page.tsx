@@ -1,5 +1,5 @@
 'use client'
-import {ReactElement, useEffect, useState} from 'react'
+import {FunctionComponent, ReactElement, useEffect, useState} from 'react'
 import {ReadonlyURLSearchParams, useSearchParams} from 'next/navigation'
 import Link from 'next/link'
 import {FaArrowAltCircleLeft} from 'react-icons/fa'
@@ -8,7 +8,7 @@ import SearchPropertiesForm from '@/components/SearchPropertiesForm'
 import Spinner from '@/components/Spinner'
 import {ListedProperty} from '@/utilities/interfaces'
 import {getPropertySearchResults} from '@/utilities/requests'
-const SearchResultsPage: React.FC = (): ReactElement => {
+const SearchResultsPage: FunctionComponent = (): ReactElement => {
   const searchParams: ReadonlyURLSearchParams = useSearchParams()
   const location: string | null = searchParams.get('location')
   const propertyType: string | null = searchParams.get('location')

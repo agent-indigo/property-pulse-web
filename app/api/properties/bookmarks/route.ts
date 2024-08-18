@@ -1,12 +1,11 @@
 import {NextRequest, NextResponse} from 'next/server'
 import {Schema} from 'mongoose'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import userModel from '@/models/userModel'
 import getSessionUser from '@/utilities/getSessionUser'
 import {PropertyIdFromRequest, RegisteredUser} from '@/utilities/interfaces'
-import {e401response, e500response} from '@/utilities/apiResponses'
+import {e401, e500, s200} from '@/utilities/responses'
 import propertyModel from '@/models/propertyModel'
-export const dynamic: string = 'force-dynamic'
+export {dynamic} from '@/utilities/dynamic'
 /**
  * @name    GET
  * @desc    Get all bookmarked properties
@@ -15,83 +14,62 @@ export const dynamic: string = 'force-dynamic'
  */
 export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
-    await connectToMongoDB()
-    const sessionUser: RegisteredUser = await getSessionUser()
-    if (sessionUser) {
-      const userId: Schema.Types.ObjectId = sessionUser._id
+    const user: RegisteredUser | null = await getSessionUser()
+    if (user) {
+      const userId: Schema.Types.ObjectId = user._id
       if (userId) {
-        const registeredUser: RegisteredUser | null = await userModel.findById(userId)
-        if (registeredUser) {
-          return new NextResponse(
-            JSON.stringify(await propertyModel.find({_id: {$in: registeredUser.bookmarks}})),
-            {status: 200}
-          )
-        } else {
-          return e401response
-        }
+        await connectToMongoDB()
+        return s200(JSON.stringify(await propertyModel.find({_id: {$in: user.bookmarks}})))
       } else {
-        return e401response
+        return e401
       }
     } else {
-      return e401response
+      return e401
     }
   } catch (error) {
-    return e500response(
-      'fetching bookmars',
+    return e500(
+      'retrieving bookmars',
       error
     )
   }
 }
 /**
- * @name    POST
+ * @name    PATCH
  * @desc    Add or remove a bookmark
- * @route   POST /api/properties/bookmarks
+ * @route   PATCH /api/properties/bookmarks
  * @access  private
  */
-export const POST = async (request: NextRequest): Promise<NextResponse> => {
+export const PATCH = async (request: NextRequest): Promise<NextResponse> => {
   let action: string = 'adding/removing'
   try {
-    await connectToMongoDB()
     const {propertyId}: PropertyIdFromRequest = await request.json()
     const propertyOid: Schema.Types.ObjectId = new Schema.Types.ObjectId(propertyId)
-    const sessionUser: RegisteredUser = await getSessionUser()
-    if (sessionUser) {
-      const userId: Schema.Types.ObjectId = sessionUser._id
-      if (userId) {
-        const registeredUser: RegisteredUser | null = await userModel.findById(userId)
-        if (registeredUser) {
-          let bookmarked: boolean | undefined = registeredUser.bookmarks?.includes(propertyOid)
-          let message: string
-          if (bookmarked) {
-            registeredUser.bookmarks?.filter((bookmark: Schema.Types.ObjectId) => bookmark !== propertyOid)
-            message = 'Bookmark removed.'
-            bookmarked = false
-            action = 'removing'
-          } else {
-            registeredUser.bookmarks?.push(propertyOid)
-            message = 'Property bookmarked.'
-            bookmarked = true
-            action = 'adding'
-          }
-          await registeredUser.save()
-          return new NextResponse(
-            JSON.stringify({
-              message,
-              bookmarked
-            }),
-            {status: 200}
-          )
-        } else {
-          return e401response
-        }
+    const user: RegisteredUser | null = await getSessionUser()
+    if (user) {
+      let bookmarked: boolean | undefined = user.bookmarks?.includes(propertyOid)
+      let message: string
+      if (bookmarked) {
+        user.bookmarks?.filter((bookmark: Schema.Types.ObjectId) => bookmark !== propertyOid)
+        message = 'Bookmark removed.'
+        bookmarked = false
+        action = 'removing'
       } else {
-        return e401response
+        user.bookmarks?.push(propertyOid)
+        message = 'Property bookmarked.'
+        bookmarked = true
+        action = 'adding'
       }
+      await connectToMongoDB()
+      await user.save()
+      return s200(JSON.stringify({
+        message,
+        bookmarked
+      }))
     } else {
-      return e401response
+      return e401
     }
   } catch (error: any) {
-    return e500response(
+    return e500(
       `${action} bookmark`,
       error
     )

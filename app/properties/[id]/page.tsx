@@ -3,7 +3,7 @@ import Link from 'next/link'
 import {useParams, useRouter} from 'next/navigation'
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
-import {ReactElement, useEffect, useState} from 'react'
+import {FunctionComponent, ReactElement, useEffect, useState} from 'react'
 import {FaArrowLeft} from 'react-icons/fa'
 import {IdFromUrl, ListedProperty} from '@/utilities/interfaces'
 import {getProperty} from '@/utilities/requests'
@@ -14,7 +14,7 @@ import PropertyImages from '@/components/PropertyImages'
 import BookmarkButton from '@/components/BookmarkButton'
 import ShareButtons from '@/components/ShareButtons'
 import ContactForm from '@/components/ContactForm'
-const PropertyPage: React.FC = (): ReactElement | null => {
+const PropertyPage: FunctionComponent = (): ReactElement | null => {
   const router: AppRouterInstance = useRouter()
   const params: Params = useParams()
   const {id}: IdFromUrl = params

@@ -1,8 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import {ReactElement} from 'react'
+import {FunctionComponent, ReactElement} from 'react'
 import logo from '@/assets/images/logo.png'
-const Footer: React.FC = (): ReactElement =>  (
+const Footer: FunctionComponent = (): ReactElement =>  (
   <footer className='bg-gray-200 py-4 mt-24'>
     <div className='container mx-auto flex flex-col md:flex-row items-center justify-between px-4'>
       <div className='mb-4 md:mb-0'>

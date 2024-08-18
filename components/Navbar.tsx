@@ -1,7 +1,7 @@
 'use client'
 import {ClientSafeProvider, LiteralUnion, SignInResponse} from 'next-auth/react'
 import {BuiltInProviderType} from 'next-auth/providers/index'
-import {ReactElement, useEffect, useState} from 'react'
+import {FunctionComponent, ReactElement, useEffect, useState} from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {usePathname} from 'next/navigation'
@@ -10,7 +10,8 @@ import {FaGoogle} from 'react-icons/fa'
 import {SessionData, SessionWithUserId} from '@/utilities/interfaces'
 import logo from '@/assets/images/logo-white.png'
 import profileDefault from '@/assets/images/profile.png'
-const Navbar: React.FC = (): ReactElement => {
+import UnreadCount from '@/components/UnreadCount'
+const Navbar: FunctionComponent = (): ReactElement => {
   const {data: session}: SessionData = useSession<boolean>() as SessionData
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false)
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState<boolean>(false)
@@ -150,10 +151,7 @@ const Navbar: React.FC = (): ReactElement => {
                     />
                   </svg>
                 </button>
-                <span className='absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full'>
-                  2
-                  {/* replace with the actual number of notifications */}
-                </span>
+                <UnreadCount/>
               </Link>
               {/* profile dropdown button */}
               <div className='relative ml-3'>

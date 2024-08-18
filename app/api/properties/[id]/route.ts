@@ -1,10 +1,12 @@
+import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
 import {NextRequest, NextResponse} from 'next/server'
 import {Document, Schema} from 'mongoose'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
-import {ApiParams, ListedProperty, RegisteredUser} from '@/utilities/interfaces'
+import {ListedProperty, RegisteredUser} from '@/utilities/interfaces'
 import getSessionUser from '@/utilities/getSessionUser'
-import {e401response, e404response, e500response} from '@/utilities/apiResponses'
+import {e401, e404, e500, s200, redirect, s204} from '@/utilities/responses'
+export {dynamic} from '@/utilities/dynamic'
 /**
  * @name    GET
  * @desc    GET a single property
@@ -13,18 +15,15 @@ import {e401response, e404response, e500response} from '@/utilities/apiResponses
  */
 export const GET = async (
   request: NextRequest,
-  {params}: ApiParams
+  {params}: Params
 ): Promise<NextResponse> => {
   try {
     await connectToMongoDB()
     const property: ListedProperty | null = await propertyModel.findById(params.id)
-    return property ? new NextResponse(
-      JSON.stringify(property),
-      {status: 200}
-    ) : e404response('Property')
+    return property ? s200(JSON.stringify(property)) : e404('Property')
   } catch (error: any) {
-    return e500response(
-      'fetching property',
+    return e500(
+      'retrieving property',
       error
     )
   }
@@ -37,7 +36,7 @@ export const GET = async (
  */
 export const DELETE = async (
   request: NextRequest,
-  {params}: ApiParams
+  {params}: Params
 ): Promise<NextResponse> => {
   try {
     await connectToMongoDB()
@@ -47,21 +46,18 @@ export const DELETE = async (
       if (user) {
         if (property.owner === user._id) {
           await propertyModel.findByIdAndDelete(property._id)
-          return new NextResponse(
-            'Property deleted.',
-            {status: 204}
-          )
+          return s204('Property deleted.')
         } else {
-          return e401response
+          return e401
         }
       } else {
-        return e401response
+        return e401
       }
     } else {
-      return e404response('Property')
+      return e404('Property')
     }
   } catch (error: any) {
-    return e500response(
+    return e500(
       'deleting property',
       error
     )
@@ -75,56 +71,55 @@ export const DELETE = async (
  */
 export const PUT = async (
   request: NextRequest,
-  {params}: ApiParams
+  {params}: Params
 ): Promise<NextResponse> => {
   try {
     const user: RegisteredUser | null = await getSessionUser()
     if (user) {
-      const form: FormData = await request.formData()
       const id: string = params.id
       await connectToMongoDB()
       const property: ListedProperty | null = await propertyModel.findById(id)
-      const update: Document<unknown, {}, ListedProperty> & Required<{_id: Schema.Types.ObjectId}> = new propertyModel({
-        owner: user._id,
-        type: form.get('type')?.valueOf() as string,
-        name: form.get('name')?.valueOf() as string,
-        description: form.get('description')?.valueOf() as string,
-        location: {
-          street: form.get('location.street')?.valueOf() as string,
-          city: form.get('location.city')?.valueOf() as string,
-          state: form.get('location.state')?.valueOf() as string,
-          zipcode: form.get('location.zipcode')?.valueOf() as string
-        },
-        beds: Number.parseInt(form.get('beds')?.valueOf() as string),
-        baths: Number.parseFloat(form.get('baths')?.valueOf() as string),
-        square_feet: Number.parseFloat(form.get('square_feet')?.valueOf() as string),
-        amenities: form.getAll('amenities').map((amenity: FormDataEntryValue) => amenity.valueOf() as string),
-        rates: {
-          nightly: form.get('rates.nightly') ? Number.parseFloat(form.get('rates.nightly')?.valueOf() as string) : undefined,
-          weekly: form.get('rates.weekly') ? Number.parseFloat(form.get('rates.weekly')?.valueOf() as string) : undefined,
-          monthly: form.get('rates.monthly') ? Number.parseFloat(form.get('rates.monthly')?.valueOf() as string) : undefined
-        },
-        seller_info: {
-          name: form.get('seller_info.name')?.valueOf() as string,
-          email: form.get('seller_info.email')?.valueOf() as string,
-          phone: form.get('seller_info.phone')?.valueOf() as string
-        }
-      })
       if (property) {
         if (property.owner === user._id) {
+          const form: FormData = await request.formData()
+          const update: Document<unknown, {}, ListedProperty> & Required<{_id: Schema.Types.ObjectId}> = new propertyModel({
+            type: form.get('type')?.valueOf(),
+            name: form.get('name')?.valueOf(),
+            description: form.get('description')?.valueOf(),
+            location: {
+              street: form.get('location.street')?.valueOf(),
+              city: form.get('location.city')?.valueOf(),
+              state: form.get('location.state')?.valueOf(),
+              zipcode: form.get('location.zipcode')?.valueOf()
+            },
+            beds: form.get('beds')?.valueOf(),
+            baths: form.get('baths')?.valueOf(),
+            square_feet: form.get('square_feet')?.valueOf(),
+            amenities: form.getAll('amenities').map((amenity: FormDataEntryValue) => amenity.valueOf()),
+            rates: {
+              nightly: form.get('rates.nightly')?.valueOf(),
+              weekly: form.get('rates.weekly')?.valueOf(),
+              monthly: form.get('rates.monthly')?.valueOf()
+            },
+            seller_info: {
+              name: form.get('seller_info.name')?.valueOf(),
+              email: form.get('seller_info.email')?.valueOf(),
+              phone: form.get('seller_info.phone')?.valueOf()
+            }
+          })
           await propertyModel.findByIdAndUpdate(id, update)
-          return NextResponse.redirect(`${process.env.NEXTAUTH_URL}/properties/${id}`)
+          return redirect(`${process.env.NEXTAUTH_URL}/properties/${id}`)
         } else {
-          return e401response
+          return e401
         }
       } else {
-        return e404response('Property')
+        return e404('Property')
       }
     } else {
-      return e401response
+      return e401
     }
   } catch (error: any) {
-    return e500response(
+    return e500(
       'saving changes',
       error
     )

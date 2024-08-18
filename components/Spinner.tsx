@@ -1,8 +1,8 @@
-import {ReactElement} from 'react'
+import {FunctionComponent, ReactElement} from 'react'
 import {ClipLoader} from 'react-spinners'
 import {SpinnerProps} from '@/utilities/interfaces'
-const Spinner: React.FC<SpinnerProps> = (
-  {loading}: SpinnerProps
+const Spinner: FunctionComponent<SpinnerProps> = (
+  {loading}
 ): ReactElement => (
   <ClipLoader
     color='#3b82f6'

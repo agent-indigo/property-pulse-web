@@ -1,10 +1,10 @@
 'use client'
-import {ReactElement, useEffect, useState} from 'react'
+import {FunctionComponent, ReactElement, useEffect, useState} from 'react'
 import PropertyCard from '@/components/PropertyCard'
 import Spinner from '@/components/Spinner'
 import {ListedProperty} from '@/utilities/interfaces'
 import {getBookmarks} from '@/utilities/requests'
-const BookmarksPage: React.FC = (): ReactElement => {
+const BookmarksPage: FunctionComponent = (): ReactElement => {
   const [properties, setProperties] = useState<ListedProperty[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   useEffect(

@@ -1,16 +1,17 @@
 'use client'
-import {ChangeEvent, ChangeEventHandler, ReactElement, useEffect, useState} from 'react'
+import {ChangeEvent, ChangeEventHandler, FunctionComponent, ReactElement, SyntheticEvent, useEffect, useState} from 'react'
+import {toast} from 'react-toastify'
 import {FormCheck, FormInput, ListedProperty} from '@/utilities/interfaces'
-const AddPropertyForm: React.FC = (): ReactElement | null => {
+const AddPropertyForm: FunctionComponent = (): ReactElement | null => {
   const [mounted, setMounted] = useState<boolean>(false)
   const [fields, setFields] = useState<ListedProperty>({} as ListedProperty)
   const handleInput: ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement> = (
     event: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  ): void => {
     const {name, value}: FormInput = event.target
     if (name.includes('.')) {
       const [outerKey, innerKey] = name.split('.')
-      setFields((previousValues: ListedProperty) => ({
+      setFields((previousValues: ListedProperty): ListedProperty => ({
         ...previousValues,
         [outerKey]: {
           ...previousValues[outerKey as keyof ListedProperty] as object,
@@ -18,13 +19,13 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
         }
       }))
     } else {
-      setFields((previousValues: ListedProperty) => ({
+      setFields((previousValues: ListedProperty): ListedProperty => ({
         ...previousValues,
         [name]: value
       }))
     }
   }
-  const handleCheckbox: ChangeEventHandler<HTMLInputElement> = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleCheckbox: ChangeEventHandler<HTMLInputElement> = (event: ChangeEvent<HTMLInputElement>): void => {
     const {value, checked}: FormCheck = event.target
     const amenities: string[] = [...fields.amenities]
     if (checked) {
@@ -33,14 +34,14 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
       const index: number = amenities.indexOf(value)
       if (index !== -1) amenities.splice(index, 1)
     }
-    setFields((previousValues: ListedProperty) => ({
+    setFields((previousValues: ListedProperty): ListedProperty => ({
       ...previousValues,
       amenities
     }))
   }
-  const handleImageUpload: ChangeEventHandler<HTMLInputElement> = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload: ChangeEventHandler<HTMLInputElement> = (event: ChangeEvent<HTMLInputElement>): void => {
     const files: File[] = Array.from(event.target.files as FileList)
-    setFields((previousValues: ListedProperty) => ({
+    setFields((previousValues: ListedProperty): ListedProperty => ({
       ...previousValues,
       files
     }))
@@ -54,6 +55,7 @@ const AddPropertyForm: React.FC = (): ReactElement | null => {
       action='/api/properties'
       method='POST'
       encType='multipart/form-data'
+      onError={(event: SyntheticEvent<HTMLFormElement, Event>) => toast.error(event.currentTarget.textContent || 'Error sending message.')}
     >
       <h2 className='text-3xl text-center font-semibold mb-6'>
         Add Property

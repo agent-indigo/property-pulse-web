@@ -1,4 +1,4 @@
-import {ReactElement} from 'react'
+import {FunctionComponent, ReactElement} from 'react'
 import {
   FacebookShareButton,
   FacebookIcon,
@@ -13,9 +13,7 @@ import {
   EmailIcon
 } from 'react-share'
 import {DestructuredProperty} from '@/utilities/interfaces'
-const ShareButtons: React.FC<DestructuredProperty> = (
-  {property}: DestructuredProperty
-): ReactElement => {
+const ShareButtons: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
   const url: string = `${process.env.NEXT_PUBLIC_DOMAIN}/properties/${property._id}`
   return (
     <>
@@ -68,7 +66,7 @@ const ShareButtons: React.FC<DestructuredProperty> = (
         <EmailShareButton
           url={url}
           subject={`${property.name} for rent`}
-          body={`I thought you might be interested in thsi rental ad:\n${url}`}
+          body={`I thought you might be interested in this rental ad:\n${url}`}
         >
           <EmailIcon
             size={40}

@@ -1,9 +1,9 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import {ReactElement} from 'react'
+import {FunctionComponent, ReactElement} from 'react'
 import {FaBed, FaBath, FaRulerCombined, FaMoneyBill, FaMapMarker} from 'react-icons/fa'
 import {DestructuredProperty} from '@/utilities/interfaces'
-const PropertyCard: React.FC<DestructuredProperty> = ({property}: DestructuredProperty): ReactElement => {
+const PropertyCard: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
   const getRateDisplay = (): string | undefined => {
     if (property.rates.monthly) {
       return `${property.rates.monthly?.toLocaleString()}/mo`

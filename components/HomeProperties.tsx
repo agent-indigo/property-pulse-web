@@ -1,9 +1,9 @@
 import Link from 'next/link'
-import {ReactElement} from 'react'
+import {FunctionComponent, ReactElement} from 'react'
 import {getProperties} from '@/utilities/requests'
 import {ListedProperty} from '@/utilities/interfaces'
 import PropertyCard from '@/components/PropertyCard'
-const HomeProperties: React.FC = async (): Promise<ReactElement> => {
+const HomeProperties: FunctionComponent = async (): Promise<ReactElement> => {
   const properties: ListedProperty[] = await getProperties()
   return (
     <>
@@ -18,7 +18,10 @@ const HomeProperties: React.FC = async (): Promise<ReactElement> => {
                 None found...
               </p>
             ) : (
-              properties.sort((): number => Math.random() - Math.random()).slice(0, 3).map((property: ListedProperty) => (
+              properties.sort((): number => Math.random() - Math.random()).slice(
+                0,
+                3
+              ).map((property: ListedProperty) => (
                 <PropertyCard
                   key={property._id?.toString()}
                   property={property}

@@ -1,8 +1,8 @@
-import {ReactElement} from 'react'
+import {FunctionComponent, ReactElement} from 'react'
 import {FaBed, FaBath, FaRulerCombined, FaTimes, FaCheck, FaMapMarker} from 'react-icons/fa'
 import {DestructuredProperty} from '@/utilities/interfaces'
 import PropertyMap from '@/components/PropertyMap'
-const PropertyDetails: React.FC<DestructuredProperty> = ({property}: DestructuredProperty): ReactElement => (
+const PropertyDetails: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => (
   <main>
     <div className='bg-white p-6 rounded-lg shadow-md text-center md:text-left'>
       <div className='text-gray-500 mb-4'>

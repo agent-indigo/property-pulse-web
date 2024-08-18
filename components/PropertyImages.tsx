@@ -1,7 +1,7 @@
 import Image from 'next/image'
-import {ReactElement} from 'react'
+import {FunctionComponent, ReactElement} from 'react'
 import {Images} from '@/utilities/interfaces'
-const PropertyImages: React.FC<Images> = ({images}: Images): ReactElement => (
+const PropertyImages: FunctionComponent<Images> = ({images}): ReactElement => (
   <section className='bg-blue-50 p-4'>
     <div className='container mx-auto'>
       {images.length === 1 ? (

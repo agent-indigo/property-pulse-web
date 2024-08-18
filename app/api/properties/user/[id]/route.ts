@@ -1,9 +1,10 @@
+import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
 import {NextRequest, NextResponse} from 'next/server'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
 import userModel from '@/models/userModel'
-import {e404response, e500response} from '@/utilities/apiResponses'
-import {ApiParams, RegisteredUser} from '@/utilities/interfaces'
+import {e404, e500, s200} from '@/utilities/responses'
+export {dynamic} from '@/utilities/dynamic'
 /**
  * @name    GET
  * @desc    Get all properties listed by the given user
@@ -12,19 +13,15 @@ import {ApiParams, RegisteredUser} from '@/utilities/interfaces'
  */
 export const GET = async (
   request: NextRequest,
-  {params}: ApiParams
+  {params}: Params
 ): Promise<NextResponse> => {
   try {
     const id: string = params.id
     await connectToMongoDB()
-    const user: RegisteredUser | null = await userModel.findById(id)
-    return user ? new NextResponse(
-      JSON.stringify(await propertyModel.find({owner: id})),
-      {status: 200}
-    ) : e404response('User')
+    return await userModel.findById(id) ? s200(JSON.stringify(await propertyModel.find({owner: id}))) : e404('User')
   } catch (error: any) {
-    return e500response(
-      'fetching properties',
+    return e500(
+      'retrieving properties',
       error
     )
   }

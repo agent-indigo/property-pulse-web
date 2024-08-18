@@ -1,7 +1,7 @@
 import Link from 'next/link'
-import {ReactElement} from 'react'
+import {FunctionComponent, ReactElement} from 'react'
 import {InfoBoxProps} from '@/utilities/interfaces'
-const InfoBox: React.FC<InfoBoxProps> = ({
+const InfoBox: FunctionComponent<InfoBoxProps> = ({
   heading,
   backgroundColor = 'bg-gray-100',
   textColor = 'text-gray-800',

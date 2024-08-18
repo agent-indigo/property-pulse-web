@@ -1,5 +1,5 @@
 'use client'
-import {useEffect, useState, ReactElement} from 'react'
+import {useEffect, useState, ReactElement, FunctionComponent} from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {useSession} from 'next-auth/react'
@@ -7,7 +7,7 @@ import {getUserProperties, deleteProperty} from '@/utilities/requests'
 import profileDefault from '@/assets/images/profile.png'
 import Spinner from '@/components/Spinner'
 import {ListedProperty, SessionData} from '@/utilities/interfaces'
-const ProfilePage: React.FC = (): ReactElement => {
+const ProfilePage: FunctionComponent = (): ReactElement => {
   const {data: session}: SessionData = useSession<boolean>() as SessionData
   const id: string | undefined = session?.user?.id
   const name: string | null | undefined = session?.user?.name
@@ -20,7 +20,7 @@ const ProfilePage: React.FC = (): ReactElement => {
         setLoading(false)
       }
       if (id) fetchProperties(id)
-      if (name) document.title = `${name} | PropertyPulse | Find the Perfect Rental`
+      if (name) document.title = `Profile | ${name} | PropertyPulse | Find the Perfect Rental`
     },
     [id, name]
   )

@@ -1,8 +1,8 @@
 import Image from 'next/image'
-import {ReactElement} from 'react'
+import {FunctionComponent, ReactElement} from 'react'
 import {HeaderProps} from '@/utilities/interfaces'
-const PropertyHeaderImage: React.FC<HeaderProps> = (
-  {image}: HeaderProps
+const PropertyHeaderImage: FunctionComponent<HeaderProps> = (
+  {image}
 ): ReactElement => (
   <section>
     <div className='container-xl m-auto'>

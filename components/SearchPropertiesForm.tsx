@@ -1,18 +1,26 @@
 'use client'
-import {ChangeEvent, FormEvent, FormEventHandler, ReactElement, useState} from 'react'
-import {useRouter} from 'next/navigation'
+import {ChangeEvent, ChangeEventHandler, FunctionComponent, ReactElement, SyntheticEvent, useState} from 'react'
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
-const SearchPropertiesForm: React.FC = (): ReactElement => {
+import {useRouter} from 'next/navigation'
+import {toast} from 'react-toastify'
+import {FormInput, PropertySearchParams} from '@/utilities/interfaces'
+const SearchPropertiesForm: FunctionComponent = (): ReactElement => {
   const router: AppRouterInstance = useRouter()
-  const [location, setLocation] = useState<string>('')
-  const [propertyType, setPropertyType] = useState<string>('All')
-  const handleSubmit: FormEventHandler<HTMLFormElement> = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
-    event.preventDefault()
-    router.push(location === '' && propertyType === 'All' ? '/properties' : `/properties/search?location=${location}&type=${propertyType}`)
+  const [fields, setFields] = useState<PropertySearchParams>({type: 'All'})
+  const handleChange: ChangeEventHandler<HTMLInputElement | HTMLSelectElement> = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
+    const {name, value}: FormInput = event.target
+    setFields((previousValues: PropertySearchParams): PropertySearchParams => ({
+      ...previousValues,
+      [name]: value
+    }))
   }
   return (
     <form
-      onSubmit={handleSubmit}
+      action={`/api/properties/search?location=${fields.location}&type=${fields.type}`}
+      method='GET'
+      encType='multipart/form-data'
+      onSubmit={(): void => router.push(`/properties/search?location=${fields.location}&type=${fields.type}`)}
+      onError={(event: SyntheticEvent<HTMLFormElement, Event>) => toast.error(event.currentTarget.textContent || 'Error sending message.')}
       className='mt-3 mx-auto max-w-2xl w-full flex flex-col md:flex-row items-center'
     >
       <div className='w-full md:w-3/5 md:pr-2 mb-4 md:mb-0'>
@@ -26,8 +34,8 @@ const SearchPropertiesForm: React.FC = (): ReactElement => {
           type='text'
           id='location'
           placeholder='Enter keywords or location'
-          value={location}
-          onChange={(event: ChangeEvent<HTMLInputElement>): void => setLocation(event.target.value)}
+          value={fields.location}
+          onChange={handleChange}
           className='w-full px-4 py-3 rounded-lg bg-white text-gray-800 focus:outline-none focus:ring focus:ring-blue-500'
         />
       </div>
@@ -40,8 +48,8 @@ const SearchPropertiesForm: React.FC = (): ReactElement => {
         </label>
         <select
           id='property-type'
-          value={propertyType}
-          onChange={(event: ChangeEvent<HTMLSelectElement>): void => setPropertyType(event.target.value)}
+          value={fields.type}
+          onChange={handleChange}
           className='w-full px-4 py-3 rounded-lg bg-white text-gray-800 focus:outline-none focus:ring focus:ring-blue-500'
         >
           <option value='All'>

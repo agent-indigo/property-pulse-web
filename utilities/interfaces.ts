@@ -1,44 +1,49 @@
-import {ReactNode} from 'react'
-import {Date, Document, Schema} from 'mongoose'
+import {Dispatch, ReactNode, SetStateAction} from 'react'
+import {Date, Document, ObjectId} from 'mongoose'
 import {Session} from 'next-auth'
 import {AdapterUser} from 'next-auth/adapters'
+import {GoogleProfile} from 'next-auth/providers/google'
+export interface buttonProps {
+  link: string
+  text: string
+  backgroundColor: string
+}
 export interface InfoBoxProps {
   heading: string
   backgroundColor?: string
   textColor?: string
-  buttonProps: {
-    link: string
-    text: string
-    backgroundColor: string
-  }
+  buttonProps: buttonProps
   children: ReactNode
 }
+export interface Location {
+  street: string
+  city: string
+  state: string
+  zipcode: string
+}
+export interface Rates {
+  nightly?: number
+  weekly?: number
+  monthly?: number
+}
+export interface SellerInfo {
+  name: string
+  email: string
+  phone: string
+}
 export interface ListedProperty {
-  _id?: Schema.Types.ObjectId
-  owner?: Schema.Types.ObjectId
+  _id?: ObjectId
+  owner?: ObjectId
   name: string
   type: string
   description: string
-  location: {
-    street: string
-    city: string
-    state: string
-    zipcode: string
-  }
+  location: Location
   beds: number
   baths: number
   square_feet: number
   amenities: string[]
-  rates: {
-    nightly?: number
-    weekly?: number
-    monthly?: number
-  }
-  seller_info: {
-    name: string
-    email: string
-    phone: string
-  }
+  rates: Rates
+  seller_info: SellerInfo
   files?: File[]
   images?: string[]
   is_featured?: boolean
@@ -49,7 +54,7 @@ export interface RegisteredUser extends Document {
   email: string
   username: string
   image?: string
-  bookmarks?: Schema.Types.ObjectId[]
+  bookmarks?: ObjectId[]
   createdAt: Date
   updatedAt: Date
 }
@@ -58,17 +63,6 @@ export interface AdapterUserWithId extends AdapterUser {
 }
 export interface SessionWithUserId extends Session {
   user: AdapterUserWithId
-}
-export interface GeocodeResponse {
-  results: Array<{
-    geometry: {
-      location: {
-        lat: number
-        lng: number
-      }
-    }
-  }>
-  status: string
 }
 export interface SpinnerProps {
   loading: boolean
@@ -99,11 +93,6 @@ export interface HeaderProps {
 export interface Images {
   images: string[]
 }
-export interface ApiParams {
-  params: {
-    id: string
-  }
-}
 export interface PropertyIdFromRequest {
   propertyId: string
 }
@@ -117,4 +106,38 @@ export interface PropertySearchQuery {
     'location.zipcode'?: RegExp
   }>
   type?: RegExp
+}
+export interface InquiryMessage {
+  _id?: ObjectId
+  sender?: ObjectId | RegisteredUser
+  recipient: ObjectId | RegisteredUser
+  property: ObjectId | ListedProperty
+  name: string
+  email: string
+  phone?: string
+  body?: string
+  read?: boolean
+  createdAt?: Date
+}
+export interface PropertySearchParams {
+  location?: string
+  type?: string
+}
+export interface GoogleSignInParams {
+  profile: GoogleProfile
+}
+export interface GeoCodingErrorResponse {
+  lat: string
+  lng: string
+}
+export interface DestructuredMessage {
+  message: InquiryMessage
+}
+export interface GlobalState {
+  unreadCount: number
+  setUnreadCount?: Dispatch<SetStateAction<number>>
+}
+export interface ImportedGlobalState {
+  unreadCount?: number
+  setUnreadCount: Dispatch<SetStateAction<number>>
 }

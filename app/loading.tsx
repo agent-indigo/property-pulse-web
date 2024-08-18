@@ -1,13 +1,13 @@
 import type {Metadata} from 'next'
-import {ReactElement} from 'react'
+import {FunctionComponent, ReactElement} from 'react'
 import {ClipLoader} from 'react-spinners'
 export const metadata: Metadata = {
   title: 'Loading... | PropertyPulse | Find the Perfect Rental',
   description: 'Find the perfect rental property.',
   keywords: 'find, rental, property'
 }
-const LoadingPage: React.FC<boolean> = (
-  loading: boolean
+const LoadingPage: FunctionComponent<boolean> = (
+  loading
 ): ReactElement => (
   <ClipLoader
     color='#3b82f6'

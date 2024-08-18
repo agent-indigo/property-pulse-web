@@ -1,5 +1,5 @@
 import type {Metadata} from 'next'
-import {ReactElement} from 'react'
+import {FunctionComponent, ReactElement} from 'react'
 import {getProperties} from '@/utilities/requests'
 import {ListedProperty} from '@/utilities/interfaces'
 import PropertyCard from '@/components/PropertyCard'
@@ -7,7 +7,7 @@ import SearchPropertiesForm from '@/components/SearchPropertiesForm'
 export const metadata: Metadata = {
   title: 'Properties'
 }
-const PropertiesPage: React.FC = async (): Promise<ReactElement> => {
+const PropertiesPage: FunctionComponent = async (): Promise<ReactElement> => {
   const properties: ListedProperty[] = await getProperties()
   return (
     <>

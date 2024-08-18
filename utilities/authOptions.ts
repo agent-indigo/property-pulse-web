@@ -5,12 +5,17 @@ import {CredentialInput} from 'next-auth/providers/credentials'
 import Google, {GoogleProfile} from 'next-auth/providers/google'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import userModel from '@/models/userModel'
-import {AdapterUserWithId, RegisteredUser, SessionWithUserId} from '@/utilities/interfaces'
+import {
+  AdapterUserWithId,
+  GoogleSignInParams,
+  RegisteredUser,
+  SessionWithUserId
+} from '@/utilities/interfaces'
 const authOptions: AuthOptions = {
   providers: [
     Google<GoogleProfile>({
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      clientId: process.env.GOOGLE_CLIENT_ID ?? '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
       authorization: {
         params: {
           prompt: 'consent',
@@ -24,11 +29,11 @@ const authOptions: AuthOptions = {
     async signIn(params: {
       user?: User | AdapterUser
       account?: Account | null
-      profile?: Profile | GoogleProfile | undefined
+      profile?: Profile | GoogleProfile
       email?: {verificationRequest?: boolean}
       credentials?: Record<string, CredentialInput>
     }): Promise<boolean> {
-      const {profile}: {profile?: GoogleProfile} = params as {profile?: GoogleProfile}
+      const {profile}: GoogleSignInParams = params as GoogleSignInParams
       await connectToMongoDB()
       if (!await userModel.findOne({email: profile?.email})) await userModel.create({
         email: profile?.email,
@@ -53,7 +58,7 @@ const authOptions: AuthOptions = {
         ...session,
         user: {
           ...sessionUser,
-          id: (await userModel.findOne({email: sessionUser.email}) as RegisteredUser)._id.toString()
+          id: (await userModel.findOne({email: sessionUser.email}) as RegisteredUser)._id
         }
       }
     }
