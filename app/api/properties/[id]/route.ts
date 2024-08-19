@@ -1,6 +1,6 @@
 import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
 import {NextRequest, NextResponse} from 'next/server'
-import mongoose, {Document} from 'mongoose'
+import {Document, Schema} from 'mongoose'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
 import {ListedProperty, RegisteredUser} from '@/utilities/interfaces'
@@ -82,7 +82,7 @@ export const PUT = async (
       if (property) {
         if (property.owner === user._id) {
           const form: FormData = await request.formData()
-          const update: Document<unknown, {}, ListedProperty> & Required<{_id: mongoose.Types.ObjectId}> = new propertyModel({
+          const update: Document<unknown, {}, ListedProperty> & Required<{_id: Schema.Types.ObjectId}> = new propertyModel({
             type: form.get('type')?.valueOf(),
             name: form.get('name')?.valueOf(),
             description: form.get('description')?.valueOf(),
