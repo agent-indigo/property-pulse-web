@@ -9,12 +9,14 @@ const BookmarksPage: FunctionComponent = (): ReactElement => {
   const [loading, setLoading] = useState<boolean>(true)
   useEffect(
     (): void => {
-      const setBookmarks: Function = async (): Promise<void> => setProperties(await getBookmarks())
+      const setBookmarks: Function = async (): Promise<void> => {
+        setProperties(await getBookmarks())
+        setLoading(false)
+      }
+      document.title = `${loading ? 'Loading...' : 'Boormarked Properties'} | PropertyPulse | Find the Perfect Rental`
       setBookmarks()
-      setLoading(false)
-      document.title = 'Boormarked Properties | PropertyPulse | Find the Perfect Rental'
     },
-    []
+    [loading]
   )
   return loading ? <Spinner loading={loading}/> : (
     <section className='px-4 py-6'>

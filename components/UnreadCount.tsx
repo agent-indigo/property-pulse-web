@@ -10,9 +10,11 @@ const UnreadCount: FunctionComponent = (): ReactElement | null => {
   const [loading, setLoading] = useState<boolean>(true)
   useEffect(
     (): void => {
-      const getCount: Function = async (): Promise<void> => setUnreadCount(await getUnreadCount())
+      const getCount: Function = async (): Promise<void> => {
+        setUnreadCount(await getUnreadCount())
+        setLoading(false)
+      }
       if (session) getCount()
-      setLoading(false)
     },
     [session, setUnreadCount]
   )

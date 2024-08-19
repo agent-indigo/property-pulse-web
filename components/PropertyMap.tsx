@@ -18,9 +18,9 @@ const PropertyMap: FunctionComponent<DestructuredProperty> = ({property}): React
           setLng(lng)
           setGeocodingError(false)
         }
+        setLoading(false)
       }
       setCoordinates()
-      setLoading(false)
     },
     [property]
   )

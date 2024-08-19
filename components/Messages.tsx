@@ -9,9 +9,11 @@ const Messages: FunctionComponent = (): ReactElement => {
   const [loading, setLoading] = useState<boolean>(true)
   useEffect(
     (): void => {
-      const populate: Function = async (): Promise<void> => setMessages(await getMessages())
+      const populate: Function = async (): Promise<void> => {
+        setMessages(await getMessages())
+        setLoading(false)
+      }
       populate()
-      setLoading(false)
     },
     []
   )

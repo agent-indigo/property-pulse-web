@@ -16,17 +16,17 @@ const SearchResultsPage: FunctionComponent = (): ReactElement => {
   const [loading, setLoading] = useState<boolean>(true)
   useEffect(
     (): void => {
-      const getResults: Function = async (): Promise<void> => setProperties(await getPropertySearchResults(
-        location,
-        propertyType
-      ))
-      if (location && propertyType) {
-        getResults()
+      const getResults: Function = async (): Promise<void> => {
+        setProperties(await getPropertySearchResults(
+          location,
+          propertyType
+        ))
         setLoading(false)
-        document.title = 'Search Results | PropertyPulse | Find the Perfect Rental'
       }
+      document.title = `${loading ? 'Loading...' : 'Search Results'} | PropertyPulse | Find the Perfect Rental`
+      if (location && propertyType) getResults()
     },
-    [location, propertyType]
+    [location, propertyType, loading]
   )
   return (
     <>
