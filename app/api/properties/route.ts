@@ -20,8 +20,9 @@ export const GET = async (
 ): Promise<NextResponse> => {
   try {
     await connectToMongoDB()
+    const page: string | null = new URL(request.url).searchParams.get('page')
     return s200(JSON.stringify({
-      properties: await propertyModel.find().skip((params.page ?? 1) -1).limit(6),
+      properties: await propertyModel.find().skip(Number.parseInt(page && page !== '' ? page : '1') -1).limit(page && page !== '' ? 6 : 0),
       total: await propertyModel.countDocuments()
     }))
   } catch (error: any) {

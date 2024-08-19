@@ -1,7 +1,7 @@
 import {FunctionComponent, ReactElement} from 'react'
 import {ListedProperty} from '@/utilities/interfaces'
 import {getFeaturedProperties} from '@/utilities/requests'
-import FeaturedPropertyCard from './FeaturedPropertyCard'
+import FeaturedPropertyCard from '@/components/FeaturedPropertyCard'
 const FeaturedProperties: FunctionComponent = async (): Promise<ReactElement | null> => {
   const properties: ListedProperty[] = await getFeaturedProperties()
   return properties.length > 0 ? (

@@ -1,6 +1,6 @@
 'use client'
 import {useEffect, useState, ReactElement, FunctionComponent} from 'react'
-import Spinner from './Spinner'
+import Spinner from '@/components/Spinner'
 import {InquiryMessage} from '@/utilities/interfaces'
 import {getMessages} from '@/utilities/requests'
 import Message from '@/components/Message'

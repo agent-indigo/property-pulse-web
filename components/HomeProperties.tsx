@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import {FunctionComponent, ReactElement} from 'react'
 import {getProperties} from '@/utilities/requests'
-import {ListedProperty} from '@/utilities/interfaces'
+import {GetPropertiesResponse, ListedProperty} from '@/utilities/interfaces'
 import PropertyCard from '@/components/PropertyCard'
 const HomeProperties: FunctionComponent = async (): Promise<ReactElement> => {
-  const properties: ListedProperty[] = await getProperties()
+  const {properties}: GetPropertiesResponse = await getProperties()
   return (
     <>
       <section className='px-4 py-6'>

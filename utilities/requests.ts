@@ -12,10 +12,7 @@ const eMsgPlus: Function = (error: any) => `Error ${activity}:\n${error}`
  * @route   GET /api/properties
  * @access  public
  */
-export const getProperties: Function = async (
-  page: number,
-  size: number
-): Promise<GetPropertiesResponse> => {
+export const getProperties: Function = async (page: number): Promise<GetPropertiesResponse> => {
   activity = 'retrieving properties'
   const getPropertiesError: GetPropertiesResponse = {
     properties: [],
@@ -26,7 +23,7 @@ export const getProperties: Function = async (
       toast.error(noApiMsg)
       return getPropertiesError
     } else {
-      const response: Response = await fetch(`${api}/properties?page=${page}&size=${size}`)
+      const response: Response = await fetch(`${api}/properties?page=${page}`)
       if (response.ok) {
         return response.json()
       } else {
@@ -156,7 +153,7 @@ export const editProperty: Function = async (
  * @route   PATCH /api/properties/bookmarks
  * @access  private
  */
-export const toggleBookmark: Function = async ({id}: {id: string}): Promise<boolean | undefined> => {
+export const toggleBookmark: Function = async (id: string): Promise<boolean | undefined> => {
   activity = 'adding/removing bookmark'
   try {
     if (api === '') {
@@ -167,7 +164,7 @@ export const toggleBookmark: Function = async ({id}: {id: string}): Promise<bool
         `${api}/properties/bookmarks`, {
           method: 'PATCH',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({id})
+          body: JSON.stringify({propertyId: id})
         }
       )
       if (response.ok) {

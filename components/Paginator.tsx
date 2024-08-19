@@ -6,13 +6,13 @@ const Paginator: FunctionComponent<Pagination> = ({
   paginate
 }): ReactElement => {
   const pages: number = Math.ceil(total / 6)
-  const handleClick: Function = (to: number) => {
-    if (to > 0 && to < pages) paginate(to)
+  const handleClick: Function = (to: number): void => {
+    if (to > 0 && to <= pages) paginate(to)
   }
   return (
     <section className='container mx-auto flex justify-center items-center my-8'>
       <button
-        onClick={():void => handleClick(page--)}
+        onClick={():void => handleClick(page - 1)}
         disabled={page === 1}
         className='mr-2 px-2 py-1 border border-gray-300 rounded'
       >
@@ -22,7 +22,7 @@ const Paginator: FunctionComponent<Pagination> = ({
         Page {page} of {pages}
       </span>
       <button
-        onClick={():void => handleClick(page++)}
+        onClick={():void => handleClick(page + 1)}
         disabled={page === pages}
         className='ml-2 px-2 py-1 border border-gray-300 rounded'
       >

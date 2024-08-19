@@ -80,7 +80,7 @@ export const PUT = async (
       await connectToMongoDB()
       const property: ListedProperty | null = await propertyModel.findById(id)
       if (property) {
-        if (property.owner === user._id) {
+        if (property.owner?.toString() === user._id.toString()) {
           const form: FormData = await request.formData()
           const update: Document<unknown, {}, ListedProperty> & Required<{_id: Schema.Types.ObjectId}> = new propertyModel({
             type: form.get('type')?.valueOf(),
