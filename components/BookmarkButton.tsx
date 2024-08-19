@@ -34,8 +34,8 @@ const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): Re
           if (propertyId) {
             const result: boolean | undefined = await getBookmarkStatus(propertyId)
             if (result !== undefined) {
-              setBookmarked(result)
               setErrorOccured(false)
+              setBookmarked(result)
             }
           } else {
             toast.error('Error checking bookmark status.')
@@ -43,9 +43,9 @@ const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): Re
         } else {
           return
         }
+        setLoading(false)
       }
       getStatus()
-      setLoading(false)
     },
     [propertyId, userId]
   )
