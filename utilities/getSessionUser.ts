@@ -5,6 +5,6 @@ import userModel from '@/models/userModel'
 import {AdapterUserWithId, RegisteredUser} from '@/utilities/interfaces'
 const getSessionUser: Function = async (): Promise<RegisteredUser | null> => {
   await connectToMongoDB()
-  return await userModel.findById(((await getServerSession(authOptions))?.user as AdapterUserWithId).id)
+  return userModel.findById(((await getServerSession(authOptions))?.user as AdapterUserWithId).id)
 }
 export default getSessionUser

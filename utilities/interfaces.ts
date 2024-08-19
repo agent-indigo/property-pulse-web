@@ -1,5 +1,5 @@
 import {Dispatch, ReactNode, SetStateAction} from 'react'
-import {Date, Document, ObjectId} from 'mongoose'
+import mongoose, {Date, Document} from 'mongoose'
 import {Session} from 'next-auth'
 import {AdapterUser} from 'next-auth/adapters'
 import {GoogleProfile} from 'next-auth/providers/google'
@@ -32,8 +32,8 @@ export interface SellerInfo {
   phone: string
 }
 export interface ListedProperty {
-  _id?: ObjectId
-  owner?: ObjectId
+  _id?: mongoose.Types.ObjectId
+  owner?: mongoose.Types.ObjectId
   name: string
   type: string
   description: string
@@ -54,7 +54,7 @@ export interface RegisteredUser extends Document {
   email: string
   username: string
   image?: string
-  bookmarks?: ObjectId[]
+  bookmarks?: mongoose.Types.ObjectId[]
   createdAt: Date
   updatedAt: Date
 }
@@ -108,10 +108,10 @@ export interface PropertySearchQuery {
   type?: RegExp
 }
 export interface InquiryMessage {
-  _id?: ObjectId
-  sender?: ObjectId | RegisteredUser
-  recipient: ObjectId | RegisteredUser
-  property: ObjectId | ListedProperty
+  _id?: mongoose.Types.ObjectId
+  sender?: mongoose.Types.ObjectId | RegisteredUser
+  recipient: mongoose.Types.ObjectId | RegisteredUser
+  property: mongoose.Types.ObjectId | ListedProperty
   name: string
   email: string
   phone?: string
