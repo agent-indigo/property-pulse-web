@@ -141,3 +141,12 @@ export interface ImportedGlobalState {
   unreadCount?: number
   setUnreadCount: Dispatch<SetStateAction<number>>
 }
+export interface GetPropertiesResponse {
+  properties: ListedProperty[]
+  total: number
+}
+export interface Pagination {
+  page: number
+  total: number
+  paginate: Function
+}

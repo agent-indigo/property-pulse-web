@@ -1,30 +1,39 @@
 'use client'
-import {FunctionComponent, ReactElement, useEffect, useState} from 'react'
-import PropertyCard from '@/components/PropertyCard'
-import Spinner from '@/components/Spinner'
+import {
+  FunctionComponent,
+  ReactElement,
+  useEffect,
+  useState
+} from 'react'
 import {ListedProperty} from '@/utilities/interfaces'
-import {getBookmarks} from '@/utilities/requests'
-const BookmarksPage: FunctionComponent = (): ReactElement => {
+import PropertyCard from '@/components/PropertyCard'
+import {getProperties} from '@/utilities/requests'
+import Spinner from '@/components/Spinner'
+import Paginator from '@/components/Paginator'
+const Properties: FunctionComponent = (): ReactElement => {
   const [properties, setProperties] = useState<ListedProperty[]>([])
   const [loading, setLoading] = useState<boolean>(true)
+  const [page, setPage] = useState<number>(1)
+  const [total, setTotal] = useState<number>(0)
+  const paginate: Function = (to: number) => setPage(to)
   useEffect(
     (): void => {
-      const setBookmarks: Function = async (): Promise<void> => setProperties(await getBookmarks())
-      setBookmarks()
+      const populate: Function = async (): Promise<void> => {
+        const {properties, total} = getProperties(page)
+        setProperties(properties)
+        setTotal(total)
+      }
+      populate()
       setLoading(false)
-      document.title = 'Boormarked Properties | PropertyPulse | Find the Perfect Rental'
     },
-    []
+    [page]
   )
   return loading ? <Spinner loading={loading}/> : (
     <section className='px-4 py-6'>
-      <h1 className='text-2xl mb-4'>
-        Bookmarked properties
-      </h1>
       <div className='container-xl lg:container m-auto px-4 py-6'>
         {properties.length === 0 ? (
           <p>
-            No bookmarked properties.
+            No properties currently available.
           </p>
         ) : (
           <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
@@ -36,8 +45,14 @@ const BookmarksPage: FunctionComponent = (): ReactElement => {
             ))}
           </div>
         )}
+        <Paginator
+          page={page}
+          total={total}
+          paginate={paginate}
+        />
       </div>
     </section>
   )
 }
-export default BookmarksPage
+
+export default Properties

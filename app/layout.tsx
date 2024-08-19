@@ -9,6 +9,7 @@ import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import {ReactNodes} from '@/utilities/interfaces'
 import 'react-toastify/dist/ReactToastify.css'
+import 'photoswipe/dist/photoswipe.css'
 import '@/assets/styles.css'
 const inter: NextFont = Inter({subsets: ['latin']})
 export const metadata: Metadata = {

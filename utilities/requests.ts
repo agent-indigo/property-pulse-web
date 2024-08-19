@@ -1,6 +1,6 @@
 import {toast} from 'react-toastify'
 import {LatLngLiteral} from '@googlemaps/google-maps-services-js'
-import {GeoCodingErrorResponse, InquiryMessage, ListedProperty} from '@/utilities/interfaces'
+import {GeoCodingErrorResponse, GetPropertiesResponse, InquiryMessage, ListedProperty} from '@/utilities/interfaces'
 const api: string = process.env.NEXT_PUBLIC_API_DOMAIN ?? ''
 const noApiMsg: string = 'NEXT_PUBLIC_API_DOMAIN is MISSING from `.env`.'
 let activity: string = ''
@@ -12,23 +12,30 @@ const eMsgPlus: Function = (error: any) => `Error ${activity}:\n${error}`
  * @route   GET /api/properties
  * @access  public
  */
-export const getProperties: Function = async (): Promise<ListedProperty[]> => {
+export const getProperties: Function = async (
+  page: number,
+  size: number
+): Promise<GetPropertiesResponse> => {
   activity = 'retrieving properties'
+  const getPropertiesError: GetPropertiesResponse = {
+    properties: [],
+    total: 0
+  }
   try {
     if (api === '') {
       toast.error(noApiMsg)
-      return []
+      return getPropertiesError
     } else {
-      const response: Response = await fetch(`${api}/properties`)
+      const response: Response = await fetch(`${api}/properties?page=${page}&size=${size}`)
       if (response.ok) {
         return response.json()
       } else {
         toast.error(eMsg)
-        return []
+        return getPropertiesError
       }
     }
   } catch (error: any) {
-    return []
+    return getPropertiesError
   }
 }
 /**
@@ -266,7 +273,10 @@ export const getPropertySearchResults: Function = async (
  */
 export const getPropertyGeoCoordinates: Function = async (id: string): Promise<LatLngLiteral | GeoCodingErrorResponse> => {
   activity = 'retrieving property geocoordinates'
-  const geoCodingError: GeoCodingErrorResponse = {lat: 'error', lng: 'error'}
+  const geoCodingError: GeoCodingErrorResponse = {
+    lat: 'error',
+    lng: 'error'
+  }
   try {
     if (api === '') {
       toast.error(noApiMsg)
@@ -375,6 +385,7 @@ export const deleteMessage: Function = async (id: string): Promise<boolean> => {
  * @access  private
  */
 export const getUnreadCount: Function = async (): Promise<number> => {
+  activity = 'retrieving unread message count'
   try {
     if (api === '') {
       toast.error(noApiMsg)
@@ -391,5 +402,31 @@ export const getUnreadCount: Function = async (): Promise<number> => {
   } catch (error) {
     toast.error(eMsgPlus(error))
     return 0
+  }
+}
+/**
+ * @name    getFeaturedProperties
+ * @desc    Get featured properties
+ * @route   GET /api/properties/featured
+ * @access  public
+ */
+export const getFeaturedProperties: Function = async (): Promise<ListedProperty[]> => {
+  activity = 'retrieving featured properties'
+  try {
+    if (api === '') {
+      toast.error(noApiMsg)
+      return []
+    } else {
+      const response: Response = await fetch(`${api}/properties/featured`)
+      if (response.ok) {
+        return response.json()
+      } else {
+        toast.error(eMsg)
+        return []
+      }
+    }
+  } catch (error) {
+    toast.error(eMsgPlus(error))
+    return []
   }
 }

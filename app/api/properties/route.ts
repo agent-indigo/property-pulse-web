@@ -1,4 +1,5 @@
 import {NextRequest, NextResponse} from 'next/server'
+import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
 import {Document, Schema} from 'mongoose'
 import cloudinary from '@/utilities/cloudinary'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
@@ -13,10 +14,16 @@ export {dynamic} from '@/utilities/dynamic'
  * @route   GET /api/properties
  * @access  public
  */
-export const GET = async (request: NextRequest): Promise<NextResponse> => {
+export const GET = async (
+  request: NextRequest,
+  {params}: Params
+): Promise<NextResponse> => {
   try {
     await connectToMongoDB()
-    return s200(JSON.stringify(await propertyModel.find()))
+    return s200(JSON.stringify({
+      properties: await propertyModel.find().skip((params.page ?? 1) -1).limit(6),
+      total: await propertyModel.countDocuments()
+    }))
   } catch (error: any) {
     return e500(
       'retrieving properties',

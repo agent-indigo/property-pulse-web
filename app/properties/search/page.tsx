@@ -30,8 +30,8 @@ const SearchResultsPage: FunctionComponent = (): ReactElement => {
   )
   return (
     <>
-      <section className="bg-blue-700 py-4">
-        <div className="max-w-7xl mx-auto px-4 flex flex-col items-start sm:px-6 lg:px-8">
+      <section className='bg-blue-700 py-4'>
+        <div className='max-w-7xl mx-auto px-4 flex flex-col items-start sm:px-6 lg:px-8'>
           <SearchPropertiesForm/>
         </div>
       </section>
@@ -44,7 +44,7 @@ const SearchResultsPage: FunctionComponent = (): ReactElement => {
             >
               <FaArrowAltCircleLeft className='mr-2 mb-1'/> All Properties
             </Link>
-            <h1 className="text-2xl mb-4">
+            <h1 className='text-2xl mb-4'>
               Search Results
             </h1>
             {properties.length === 0 ? (
