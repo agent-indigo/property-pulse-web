@@ -2,7 +2,6 @@
 import {ChangeEvent, ChangeEventHandler, FormEvent, FunctionComponent, ReactElement, SyntheticEvent, useState} from 'react'
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import {useRouter} from 'next/navigation'
-// import {toast} from 'react-toastify'
 import {FormInput, PropertySearchParams} from '@/utilities/interfaces'
 const SearchPropertiesForm: FunctionComponent = (): ReactElement => {
   const router: AppRouterInstance = useRouter()
@@ -19,14 +18,10 @@ const SearchPropertiesForm: FunctionComponent = (): ReactElement => {
   }
   return (
     <form
-      // action={`/api/properties/search?location=${fields.location}&type=${fields.type}`}
-      // method='GET'
-      // encType='multipart/form-data'
       onSubmit={(event: FormEvent<HTMLFormElement>): void => {
         event.preventDefault()
         router.push(`/properties/search?location=${fields.location}&type=${fields.type}`)
       }}
-      // onError={(event: SyntheticEvent<HTMLFormElement, Event>) => toast.error(event.currentTarget.textContent || 'Error sending message.')}
       className='mt-3 mx-auto max-w-2xl w-full flex flex-col md:flex-row items-center'
     >
       <div className='w-full md:w-3/5 md:pr-2 mb-4 md:mb-0'>
