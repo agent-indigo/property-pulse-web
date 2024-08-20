@@ -505,7 +505,7 @@ const AddPropertyForm: FunctionComponent = (): ReactElement | null => {
               id='weekly_rate'
               name='rates.weekly'
               className='border rounded w-full py-2 px-3'
-              value={fields.rates.weekly}
+              value={fields.rates.weekly ?? ''}
               onChange={handleInput}
             />
           </div>
@@ -521,7 +521,7 @@ const AddPropertyForm: FunctionComponent = (): ReactElement | null => {
               id='monthly_rate'
               name='rates.monthly'
               className='border rounded w-full py-2 px-3'
-              value={fields.rates.monthly}
+              value={fields.rates.monthly ?? ''}
               onChange={handleInput}
             />
           </div>
@@ -537,7 +537,7 @@ const AddPropertyForm: FunctionComponent = (): ReactElement | null => {
               id='nightly_rate'
               name='rates.nightly'
               className='border rounded w-full py-2 px-3'
-              value={fields.rates.nightly}
+              value={fields.rates.nightly ?? ''}
               onChange={handleInput}
             />
           </div>

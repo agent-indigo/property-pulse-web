@@ -9,7 +9,28 @@ const EditPropertyForm: FunctionComponent = (): ReactElement | null => {
   const {id}: IdFromUrl = params
   const [loading, setLoading] = useState<boolean>(true)
   const [mounted, setMounted] = useState<boolean>(false)
-  const [fields, setFields] = useState<ListedProperty>({} as ListedProperty)
+  const [fields, setFields] = useState<ListedProperty>({
+    name: '',
+    type: '',
+    description: '',
+    location: {
+      street: '',
+      city: '',
+      state: '',
+      zipcode: ''
+    },
+    beds: 0,
+    baths: 0,
+    square_feet: 0,
+    amenities: [],
+    rates: {},
+    seller_info: {
+      name: '',
+      email: '',
+      phone: ''
+    },
+    files: []
+  })
   const handleInput: ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement> = (
     event: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>
   ): void => {
