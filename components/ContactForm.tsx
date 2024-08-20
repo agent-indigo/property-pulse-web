@@ -7,10 +7,13 @@ import {ObjectId} from 'mongoose'
 import {DestructuredProperty, FormInput, InquiryMessage, SessionData} from '@/utilities/interfaces'
 const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
   const {data: session}: SessionData = useSession<boolean>() as SessionData
+  const id: string | undefined = session?.user?.id
   const [fields, setFields] = useState<InquiryMessage>({
     recipient: property.owner as ObjectId,
-    property: property._id as ObjectId
-  } as InquiryMessage)
+    property: property._id as ObjectId,
+    name: '',
+    email: ''
+  })
   const [sent, setSent] = useState<boolean>(false)
   const handleChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -24,9 +27,9 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
   return (
     <div className='bg-white p-6 rounded-lg shadow-md'>
       <h3 className='text-xl font-bold mb-6'>
-        {session ? null : 'Log in to '}Contact Property Manager
+        {id ? null : 'Log in to '}Contact Property Manager
       </h3>
-      {session ? (
+      {id ? (
         sent ? (
           <p className='text-green-500 mb-4'>
             Your message has been sent.

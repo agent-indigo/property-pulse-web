@@ -11,7 +11,7 @@ const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): Re
   const userId: string | undefined = session?.user?.id
   const propertyId: string | undefined = property._id?.toString()
   const [bookmarked, setBookmarked] = useState<boolean>(false)
-  const [errorOccured, setErrorOccured] = useState<boolean>(true)
+  const [errorOccured, setErrorOccured] = useState<boolean>(false)
   const [loading, setLoading] = useState<boolean>(true)
   const buttonBg: string = bookmarked ? 'red' : 'blue'
   const handleClick: MouseEventHandler<HTMLButtonElement> = async (): Promise<void> => {
@@ -19,8 +19,6 @@ const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): Re
       if (propertyId) {
         const result: boolean | undefined = await toggleBookmark(propertyId)
         if (result) setBookmarked(result)
-      } else {
-        toast.error('Error adding/removing bookmark.')
       }
     } else {
       toast.error('You are not logged in.')
@@ -30,18 +28,11 @@ const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): Re
   useEffect(
     (): void => {
       const getStatus: Function = async (): Promise<void> => {
-        if (userId) {
+        if (userId && userId !== '') {
           if (propertyId) {
             const result: boolean | undefined = await getBookmarkStatus(propertyId)
-            if (result !== undefined) {
-              setErrorOccured(false)
-              setBookmarked(result)
-            }
-          } else {
-            toast.error('Error checking bookmark status.')
+            result !== undefined ? setBookmarked(result) : setErrorOccured(true)
           }
-        } else {
-          return
         }
         setLoading(false)
       }
