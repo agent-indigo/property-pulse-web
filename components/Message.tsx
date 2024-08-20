@@ -3,10 +3,10 @@ import {useState, ReactElement, MouseEventHandler, FunctionComponent} from 'reac
 import Link from 'next/link'
 import {ObjectId} from 'mongoose'
 import {useGlobalContext} from '@/components/GlobalContextProvider'
-import {DestructuredMessage, ImportedGlobalState, ListedProperty, RegisteredUser} from '@/utilities/interfaces'
+import {DestructuredMessage, GlobalState, ListedProperty, RegisteredUser} from '@/utilities/interfaces'
 import {deleteMessage, switchMessageReadStatus} from '@/utilities/requests'
 const Message: FunctionComponent<DestructuredMessage> = ({message}): ReactElement | null => {
-  const {setUnreadCount}: ImportedGlobalState = useGlobalContext()
+  const {setUnreadCount}: GlobalState = useGlobalContext()
   const [read, setRead] = useState<boolean>(message.read as boolean)
   const [success, setSuccess] = useState<boolean>(false)
   const [deleted, setDeleted] = useState<boolean>(false)

@@ -1,4 +1,4 @@
-import {Dispatch, ReactNode, SetStateAction} from 'react'
+import {ReactNode} from 'react'
 import {Date, Document, ObjectId} from 'mongoose'
 import {Session} from 'next-auth'
 import {AdapterUser} from 'next-auth/adapters'
@@ -55,8 +55,6 @@ export interface RegisteredUser extends Document {
   username: string
   image?: string
   bookmarks?: ObjectId[]
-  createdAt: Date
-  updatedAt: Date
 }
 export interface AdapterUserWithId extends AdapterUser {
   id: string
@@ -126,20 +124,16 @@ export interface PropertySearchParams {
 export interface GoogleSignInParams {
   profile: GoogleProfile
 }
-export interface GeoCodingErrorResponse {
-  lat: string
-  lng: string
+export interface GeoCodingResponse {
+  lat: number | string
+  lng: number | string
 }
 export interface DestructuredMessage {
   message: InquiryMessage
 }
 export interface GlobalState {
   unreadCount: number
-  setUnreadCount?: Dispatch<SetStateAction<number>>
-}
-export interface ImportedGlobalState {
-  unreadCount?: number
-  setUnreadCount: Dispatch<SetStateAction<number>>
+  setUnreadCount: any
 }
 export interface GetPropertiesResponse {
   properties: ListedProperty[]

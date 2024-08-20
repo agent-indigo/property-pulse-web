@@ -9,7 +9,10 @@ import {
   useState
 } from 'react'
 import {ReactNodes, GlobalState} from '@/utilities/interfaces'
-const GlobalContext: Context<GlobalState> = createContext({unreadCount: 0})
+const GlobalContext: Context<GlobalState> = createContext({
+  unreadCount: 0,
+  setUnreadCount: null
+})
 const GlobalContextProvider: FunctionComponent<ReactNodes> = ({children}): ReactElement => {
   const ExportedProvider: Provider<GlobalState> = GlobalContext.Provider
   const [unreadCount, setUnreadCount] = useState<number>(0)

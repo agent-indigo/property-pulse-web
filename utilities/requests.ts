@@ -1,6 +1,5 @@
 import {toast} from 'react-toastify'
-import {LatLngLiteral} from '@googlemaps/google-maps-services-js'
-import {GeoCodingErrorResponse, GetPropertiesResponse, InquiryMessage, ListedProperty} from '@/utilities/interfaces'
+import {GeoCodingResponse, GetPropertiesResponse, InquiryMessage, ListedProperty} from '@/utilities/interfaces'
 const api: string = process.env.NEXT_PUBLIC_API_DOMAIN ?? ''
 const noApiMsg: string = 'NEXT_PUBLIC_API_DOMAIN is MISSING from `.env`.'
 let activity: string = ''
@@ -268,9 +267,9 @@ export const getPropertySearchResults: Function = async (
  * @route   GET /api/properties/:id/coordinates
  * @access  public
  */
-export const getPropertyGeoCoordinates: Function = async (id: string): Promise<LatLngLiteral | GeoCodingErrorResponse> => {
+export const getPropertyGeoCoordinates: Function = async (id: string): Promise<GeoCodingResponse> => {
   activity = 'retrieving property geocoordinates'
-  const geoCodingError: GeoCodingErrorResponse = {
+  const geoCodingError: GeoCodingResponse = {
     lat: 'error',
     lng: 'error'
   }
