@@ -14,7 +14,7 @@ export {dynamic} from '@/utilities/dynamic'
  */
 export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
-    const user: RegisteredUser | null = await getSessionUser()
+    const user: RegisteredUser | undefined = await getSessionUser()
     if (user) {
       await connectToMongoDB()
       return s200(JSON.stringify(await propertyModel.find({_id: {$in: user.bookmarks}})))
@@ -39,7 +39,7 @@ export const PATCH = async (request: NextRequest): Promise<NextResponse> => {
   try {
     const {propertyId}: PropertyIdFromRequest = await request.json()
     const propertyOid: Schema.Types.ObjectId = new Schema.Types.ObjectId(propertyId)
-    const user: RegisteredUser | null = await getSessionUser()
+    const user: RegisteredUser | undefined = await getSessionUser()
     if (user && user.bookmarks) {
       await connectToMongoDB()
       const property: ListedProperty | null = await propertyModel.findById(propertyId)

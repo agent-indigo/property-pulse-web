@@ -40,7 +40,7 @@ export const GET = async (
  */
 export const POST = async (request: NextRequest): Promise<NextResponse> => {
   try {
-    const user: RegisteredUser | null = await getSessionUser()
+    const user: RegisteredUser | undefined = await getSessionUser()
     if (user) {
       const form: FormData = await request.formData()
       const property: Document<unknown, {}, ListedProperty> & Required<{_id: Schema.Types.ObjectId}> = new propertyModel({
@@ -75,7 +75,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
       })
       await connectToMongoDB()
       await property.save()
-      return redirect(`${process.env.NEXTAUTH_URL}/properties/${property._id}`)
+      return redirect(`${process.env.NEXTAUTH_URL ?? ''}/properties/${property._id}`)
     } else {
       return e401
     }

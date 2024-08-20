@@ -16,7 +16,7 @@ export const GET = async (
   {params}: Params
 ): Promise<NextResponse> => {
   try {
-    const user: RegisteredUser | null = await getSessionUser()
+    const user: RegisteredUser | undefined = await getSessionUser()
     if (user) {
       return s200(JSON.stringify(user.bookmarks?.includes(new Schema.Types.ObjectId(params.id))))
     } else {

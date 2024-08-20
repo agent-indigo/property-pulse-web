@@ -14,7 +14,7 @@ export {dynamic} from '@/utilities/dynamic'
  */
 export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
-    const user: RegisteredUser | null = await getSessionUser()
+    const user: RegisteredUser | undefined = await getSessionUser()
     await connectToMongoDB()
     return user ? s200(JSON.stringify(await messageModel.find({recipient: user._id}).populate(
       'sender',
@@ -41,7 +41,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
  */
 export const POST = async (request: NextRequest): Promise<NextResponse> => {
   try {
-    const user: RegisteredUser | null = await getSessionUser()
+    const user: RegisteredUser | undefined = await getSessionUser()
     if (user) {
       const sender: Types.ObjectId = user._id
       const form: FormData = await request.formData()

@@ -12,6 +12,8 @@ I made the following modifications:
 
 - Moved geocoding into an API route
 
+- Deleting a property now also deletes its images from Cloudinary
+
 - Installed `sharp`
 
 - Other minor modifications

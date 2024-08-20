@@ -14,7 +14,7 @@ import {
 } from 'react-share'
 import {DestructuredProperty} from '@/utilities/interfaces'
 const ShareButtons: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
-  const url: string = `${process.env.NEXT_PUBLIC_DOMAIN}/properties/${property._id}`
+  const url: string = `${process.env.NEXT_PUBLIC_DOMAIN ?? ''}/properties/${property._id}`
   return (
     <>
       <h3 className='text-xl font-bold text-center pt-2'>

@@ -43,7 +43,7 @@ export const DELETE = async (
     await connectToMongoDB()
     const property: ListedProperty | null = await propertyModel.findById(params.id)
     if (property) {
-      const user: RegisteredUser | null = await getSessionUser()
+      const user: RegisteredUser | undefined = await getSessionUser()
       if (user) {
         if (property.owner === user._id) {
           await propertyModel.findByIdAndDelete(property._id)
@@ -82,7 +82,7 @@ export const PUT = async (
   {params}: Params
 ): Promise<NextResponse> => {
   try {
-    const user: RegisteredUser | null = await getSessionUser()
+    const user: RegisteredUser | undefined = await getSessionUser()
     if (user) {
       const id: string = params.id
       await connectToMongoDB()

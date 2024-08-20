@@ -12,7 +12,7 @@ export {dynamic} from '@/utilities/dynamic'
  */
 export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
-    const user: RegisteredUser | null = await getSessionUser()
+    const user: RegisteredUser | undefined = await getSessionUser()
     if (user) {
       return s200(JSON.stringify(await messageModel.countDocuments({
         recipient: user._id,

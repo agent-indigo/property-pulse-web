@@ -19,7 +19,7 @@ export const PATCH = async (
 ): Promise<NextResponse> => {
   let status: string = 'read/unread'
   try {
-    const user: RegisteredUser | null = await getSessionUser()
+    const user: RegisteredUser | undefined = await getSessionUser()
     if (user) {
       const id = params.id
       await connectToMongoDB()
