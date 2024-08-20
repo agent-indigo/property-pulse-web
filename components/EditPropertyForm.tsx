@@ -1,10 +1,12 @@
 'use client'
 import {ChangeEvent, ChangeEventHandler, FormEvent, FormEventHandler, FunctionComponent, ReactElement, useEffect, useState} from 'react'
+import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
-import {useParams} from 'next/navigation'
+import {useParams, useRouter} from 'next/navigation'
 import {FormCheck, FormInput, IdFromUrl, ListedProperty} from '@/utilities/interfaces'
 import {getProperty, editProperty} from '@/utilities/requests'
 const EditPropertyForm: FunctionComponent = (): ReactElement | null => {
+  const router: AppRouterInstance = useRouter()
   const params: Params = useParams()
   const {id}: IdFromUrl = params
   const [loading, setLoading] = useState<boolean>(true)
@@ -71,6 +73,7 @@ const EditPropertyForm: FunctionComponent = (): ReactElement | null => {
       id,
       new FormData(event.currentTarget)
     )
+    router.push(`/properties/${id}`)
   }
   useEffect(
     (): void => {
