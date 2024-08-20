@@ -12,7 +12,7 @@ I made the following modifications:
 
 - Moved geocoding into an API route
 
-- Deleting a property now also deletes its images from Cloudinary
+- Added Featured Properties and Pagination to Search Results
 
 - Installed `sharp`
 

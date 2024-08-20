@@ -107,13 +107,8 @@ export const deleteProperty: Function = async (id: string): Promise<ListedProper
             `${api}/properties/${id}`,
             {method: 'DELETE'}
           )
-          if (response.ok) {
-            toast.success('Property deleted.')
-            return userProperties.filter((property: ListedProperty) => property._id?.toString() !== id)
-          } else {
-            toast.error(eMsg)
-            return userProperties
-          }
+          response.ok ? toast.success('Property deleted.') : toast.error(eMsg)
+          return userProperties
         } else {
           return userProperties
         }
