@@ -26,12 +26,12 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
   }
   return (
     <div className='bg-white p-6 rounded-lg shadow-md'>
-      <h3 className='text-xl font-bold mb-6'>
-        {id ? null : 'Log in to '}Contact Property Manager
+      <h3 className='text-xl text-center font-bold'>
+        {id ? null : 'Log in to '}Inquire
       </h3>
       {id ? (
         sent ? (
-          <p className='text-green-500 mb-4'>
+          <p className='text-green-500'>
             Your message has been sent.
           </p>
         ) : (
@@ -112,7 +112,7 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
                 className='bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline flex items-center justify-center'
                 type='submit'
               >
-                <FaPaperPlane className='mr-2'/> Send Message
+                <FaPaperPlane className='mr-2'/> Send
               </button>
             </div>
           </form>
