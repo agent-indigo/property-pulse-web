@@ -15,12 +15,10 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     const searchParams: URLSearchParams = new URL(request.url).searchParams
     const location: string | null = searchParams.get('location')
     const propertyType: string | null = searchParams.get('type')
+    const page: string | null = searchParams.get('page')
     const query: PropertySearchQuery = {}
     if (location && location !== '') {
-      const locationPattern: RegExp = new RegExp(
-        location,
-        'i'
-      )
+      const locationPattern: RegExp = new RegExp(location, 'i')
       query.$or = [
         {name: locationPattern},
         {description: locationPattern},
@@ -30,12 +28,13 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
         {'location.zipcode': locationPattern}
       ]
     }
-    if (propertyType && propertyType !== 'All') query.type = new RegExp(
-      propertyType,
-      'i'
-    )
+    if (propertyType && propertyType !== 'All') query.type = new RegExp(propertyType, 'i')
     await connectToMongoDB()
-    return s200(JSON.stringify(await propertyModel.find(query)))
+    return s200(JSON.stringify({
+      properties: await propertyModel.find(query).skip((Number.parseInt(page && page !== '' ? page : '1') - 1) * 6).limit(6),
+      total: (await propertyModel.find(query)).length
+    }
+    ))
   } catch (error: any) {
     return e500(
       'searching for matching properties',

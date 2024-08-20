@@ -5,6 +5,10 @@ const noApiMsg: string = 'NEXT_PUBLIC_API_DOMAIN is MISSING from `.env`.'
 let activity: string = ''
 const eMsg: string = `Error ${activity}.`
 const eMsgPlus: Function = (error: any) => `Error ${activity}:\n${error}`
+const getPropertiesError: GetPropertiesResponse = {
+  properties: [],
+  total: 0
+}
 /**
  * @name    getProperties
  * @desc    Get all properties
@@ -13,10 +17,6 @@ const eMsgPlus: Function = (error: any) => `Error ${activity}:\n${error}`
  */
 export const getProperties: Function = async (page: number): Promise<GetPropertiesResponse> => {
   activity = 'retrieving properties'
-  const getPropertiesError: GetPropertiesResponse = {
-    properties: [],
-    total: 0
-  }
   try {
     if (api === '') {
       toast.error(noApiMsg)
@@ -247,25 +247,26 @@ export const getBookmarks: Function = async (): Promise<ListedProperty[]> => {
  */
 export const getPropertySearchResults: Function = async (
   location: string,
-  propertyType: string
-): Promise<ListedProperty[]> => {
+  propertyType: string,
+  page: number
+): Promise<GetPropertiesResponse> => {
   activity = 'retrieving property search results'
   try {
     if (api === '') {
       toast.error(noApiMsg)
-      return []
+      return getPropertiesError
     } else {
-      const response: Response = await fetch(`${api}/properties/search?location=${location}&type=${propertyType}`)
+      const response: Response = await fetch(`${api}/properties/search?location=${location}&type=${propertyType}&page=${page}`)
       if (response.ok) {
         return response.json()
       } else {
         toast.error(eMsg)
-        return []
+        return getPropertiesError
       }
     }
   } catch (error: any) {
     toast.error(eMsgPlus(error))
-    return []
+    return getPropertiesError
   }
 }
 /**

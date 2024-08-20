@@ -7,9 +7,10 @@ import {FaArrowAltCircleLeft} from 'react-icons/fa'
 import PropertyCard from '@/components/PropertyCard'
 import SearchPropertiesForm from '@/components/SearchPropertiesForm'
 import Spinner from '@/components/Spinner'
-import {ListedProperty} from '@/utilities/interfaces'
+import {GetPropertiesResponse, ListedProperty} from '@/utilities/interfaces'
 import {getPropertySearchResults} from '@/utilities/requests'
 import FeaturedProperties from '@/components/FeaturedProperties'
+import Paginator from '@/components/Paginator'
 const SearchResultsPage: FunctionComponent = (): ReactElement => {
   const router: AppRouterInstance = useRouter()
   const searchParams: ReadonlyURLSearchParams = useSearchParams()
@@ -17,19 +18,24 @@ const SearchResultsPage: FunctionComponent = (): ReactElement => {
   const propertyType: string | null = searchParams.get('type')
   const [properties, setProperties] = useState<ListedProperty[]>([])
   const [loading, setLoading] = useState<boolean>(true)
+  const [page, setPage] = useState<number>(1)
+  const [total, setTotal] = useState<number>(properties.length)
   useEffect(
     (): void => {
       const getResults: Function = async (): Promise<void> => {
-        setProperties(await getPropertySearchResults(
+        const {properties, total}: GetPropertiesResponse = await getPropertySearchResults(
           location ?? '',
-          propertyType ?? 'All'
-        ))
+          propertyType ?? 'All',
+          page
+        )
+        setProperties(properties)
+        setTotal(total)
         setLoading(false)
       }
       document.title = `${loading ? 'Loading...' : 'Search Results'} | PropertyPulse | Find the Perfect Rental`
       location || propertyType ? getResults() : router.push('/properties')
     },
-    [location, propertyType, loading, router]
+    [location, propertyType, loading, router, page]
   )
   return (
     <>
@@ -65,6 +71,11 @@ const SearchResultsPage: FunctionComponent = (): ReactElement => {
                 ))}
               </div>
             )}
+            <Paginator
+              page={page}
+              total={total}
+              paginate={(to: number): void => setPage(to)}
+            />
           </div>
         </section>
       )}
