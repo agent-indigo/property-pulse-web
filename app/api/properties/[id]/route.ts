@@ -6,6 +6,7 @@ import propertyModel from '@/models/propertyModel'
 import {ListedProperty, RegisteredUser} from '@/utilities/interfaces'
 import getSessionUser from '@/utilities/getSessionUser'
 import {e401, e404, e500, s200, redirect, s204} from '@/utilities/responses'
+import cloudinary from '@/utilities/cloudinary'
 export {dynamic} from '@/utilities/dynamic'
 /**
  * @name    GET
@@ -46,6 +47,13 @@ export const DELETE = async (
       if (user) {
         if (property.owner === user._id) {
           await propertyModel.findByIdAndDelete(property._id)
+          property.images?.map(async (url: string) => {
+            const getId: Function = (url: string) => {
+              const match: RegExpMatchArray | null = url.match(/https:\/\/res\.cloudinary\.com\/[^\/]+\/image\/upload\/([^\/]+)(\.[a-zA-Z]{3,4})?/)
+              return match ? match[1] : ''
+            }
+            await cloudinary.uploader.destroy(getId(url))
+          })
           return s204('Property deleted.')
         } else {
           return e401
