@@ -20,14 +20,14 @@ const Message: FunctionComponent<DestructuredMessage> = ({message}): ReactElemen
     setSuccess(await switchMessageReadStatus(id))
     if (success) {
       setRead(!read)
-      setUnreadCount((previousValue: number) => read ? previousValue-- : previousValue++)
+      setUnreadCount((previousValue: number): number => read ? previousValue - 1 : previousValue + 1)
     }
   }
   const handleDelete: MouseEventHandler<HTMLButtonElement>  = async (): Promise<void> => {
     setSuccess(await deleteMessage(id))
     if (success) {
       setDeleted(true)
-      setUnreadCount((previousCount: number) => previousCount--)
+      setUnreadCount((previousCount: number): number => previousCount - 1)
     }
   }
   return deleted ? null : (

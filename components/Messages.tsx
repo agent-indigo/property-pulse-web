@@ -25,7 +25,7 @@ const Messages: FunctionComponent = (): ReactElement => {
             Your Messages
           </h1>
           <div className='space-y-4'>
-            {messages.length > 0 ? messages.map((message: InquiryMessage) => (
+            {messages.length > 0 ? messages.map((message: InquiryMessage): ReactElement => (
               <Message
                 key={message._id?.toString()}
                 message={message}

@@ -36,7 +36,7 @@ const Navbar: FunctionComponent = (): ReactElement => {
               className='relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white'
               aria-controls='mobile-menu'
               aria-expanded='false'
-              onClick={(): void => setIsMobileMenuOpen((previousValue: boolean) => !previousValue)}
+              onClick={(): void => setIsMobileMenuOpen((previousValue: boolean): boolean => !previousValue)}
             >
               <span className='absolute -inset-0.5'/>
               <span className='sr-only'>
@@ -106,7 +106,7 @@ const Navbar: FunctionComponent = (): ReactElement => {
                 {providers && Object.values(providers).map((
                   provider: ClientSafeProvider,
                   index: number
-                ) => (
+                ): ReactElement => (
                   <button
                     key={index}
                     onClick={(): Promise<SignInResponse> => signIn(provider.id) as Promise<SignInResponse>}
@@ -162,7 +162,7 @@ const Navbar: FunctionComponent = (): ReactElement => {
                     id='user-menu-button'
                     aria-expanded='false'
                     aria-haspopup='true'
-                    onClick={():void => setIsProfileMenuOpen((previousValue: boolean) => !previousValue)}
+                    onClick={():void => setIsProfileMenuOpen((previousValue: boolean): boolean => !previousValue)}
                   >
                     <span className='absolute -inset-1.5'/>
                     <span className='sr-only'>
@@ -254,7 +254,7 @@ const Navbar: FunctionComponent = (): ReactElement => {
             {!session && providers && Object.values(providers).map((
               provider: ClientSafeProvider,
               index: number
-            ) => (
+            ): ReactElement => (
               <button
                 key={index}
                 onClick={(): Promise<SignInResponse> => signIn(provider.id) as Promise<SignInResponse>}

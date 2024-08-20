@@ -11,7 +11,7 @@ const FeaturedProperties: FunctionComponent = async (): Promise<ReactElement | n
           Featured Properties
         </h2>
         <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-          {properties.map((property: ListedProperty) => (
+          {properties.map((property: ListedProperty): ReactElement => (
             <FeaturedPropertyCard
               key={property._id?.toString()}
               property={property}

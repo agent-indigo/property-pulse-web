@@ -37,7 +37,7 @@ const HomeProperties: FunctionComponent = (): ReactElement => {
               properties.sort((): number => Math.random() - Math.random()).slice(
                 0,
                 3
-              ).map((property: ListedProperty) => (
+              ).map((property: ListedProperty): ReactElement => (
                 <PropertyCard
                   key={property._id?.toString()}
                   property={property}

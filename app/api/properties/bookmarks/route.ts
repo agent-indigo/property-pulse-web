@@ -48,7 +48,7 @@ export const PATCH = async (request: NextRequest): Promise<NextResponse> => {
           let bookmarked: boolean = user.bookmarks.includes(propertyOid)
           let message: string
           if (bookmarked) {
-            user.bookmarks?.filter((bookmark: Schema.Types.ObjectId) => bookmark !== propertyOid)
+            user.bookmarks?.filter((bookmark: Schema.Types.ObjectId): boolean => bookmark !== propertyOid)
             message = 'Bookmark removed.'
             bookmarked = false
             action = 'removing'

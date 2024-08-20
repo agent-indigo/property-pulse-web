@@ -94,7 +94,7 @@ export const PUT = async (
             beds: form.get('beds')?.valueOf(),
             baths: form.get('baths')?.valueOf(),
             square_feet: form.get('square_feet')?.valueOf(),
-            amenities: form.getAll('amenities').map((amenity: FormDataEntryValue) => amenity.valueOf()),
+            amenities: form.getAll('amenities').map((amenity: FormDataEntryValue): string => amenity.valueOf().toString()),
             rates: {
               nightly: form.get('rates.nightly')?.valueOf(),
               weekly: form.get('rates.weekly')?.valueOf(),

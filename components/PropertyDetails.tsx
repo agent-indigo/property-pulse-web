@@ -92,7 +92,7 @@ const PropertyDetails: FunctionComponent<DestructuredProperty> = ({property}): R
         {property.amenities.map((
           amenity: string,
           index: number
-        ) => (
+        ): ReactElement => (
           <li key={index}>
             <FaCheck className='inline-block text-green-600 mr-2'/>
             {amenity}

@@ -39,7 +39,7 @@ const Properties: FunctionComponent = (): ReactElement => {
             </p>
           ) : (
             <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-              {properties.map((property: ListedProperty) => (
+              {properties.map((property: ListedProperty): ReactElement => (
                 <PropertyCard
                   key={property._id?.toString()}
                   property={property}

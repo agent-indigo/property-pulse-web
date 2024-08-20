@@ -51,7 +51,7 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
             method='POST'
             encType='multipart/form-data'
             onSubmit={(): void => setSent(true)}
-            onError={(event: SyntheticEvent<HTMLFormElement, Event>) => {
+            onError={(event: SyntheticEvent<HTMLFormElement, Event>): void => {
               setSent(false)
               setErrorOccured(true)
               toast.error(event.currentTarget.textContent || 'Error sending message.')

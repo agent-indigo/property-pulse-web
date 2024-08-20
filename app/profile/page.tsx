@@ -55,7 +55,7 @@ const ProfilePage: FunctionComponent = (): ReactElement => {
                 <p>You haven&apos;t listed any properties.</p>
               )}
               {loading ? (<Spinner loading={loading}/>) : (
-                properties.map((property: ListedProperty) => (
+                properties.map((property: ListedProperty): ReactElement => (
                   <div
                     key={property._id?.toString()}
                     className='mb-10'

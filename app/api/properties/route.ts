@@ -1,6 +1,6 @@
 import {NextRequest, NextResponse} from 'next/server'
 import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
-import {Document, Schema} from 'mongoose'
+import {Document, ObjectId} from 'mongoose'
 import cloudinary from '@/utilities/cloudinary'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import getSessionUser from '@/utilities/getSessionUser'
@@ -43,7 +43,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
     const user: RegisteredUser | undefined = await getSessionUser()
     if (user) {
       const form: FormData = await request.formData()
-      const property: Document<unknown, {}, ListedProperty> & Required<{_id: Schema.Types.ObjectId}> = new propertyModel({
+      const property: Document<unknown, {}, ListedProperty> & Required<{_id: ObjectId}> = new propertyModel({
         owner: user._id,
         type: form.get('type')?.valueOf(),
         name: form.get('name')?.valueOf(),
@@ -57,7 +57,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
         beds: form.get('beds')?.valueOf(),
         baths: form.get('baths')?.valueOf(),
         square_feet: form.get('square_feet')?.valueOf(),
-        amenities: form.getAll('amenities').map((amenity: FormDataEntryValue) => amenity.valueOf()),
+        amenities: form.getAll('amenities').map((amenity: FormDataEntryValue): string => amenity.valueOf().toString()),
         rates: {
           nightly: form.get('rates.nightly')?.valueOf(),
           weekly: form.get('rates.weekly')?.valueOf(),

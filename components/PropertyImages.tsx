@@ -15,7 +15,7 @@ const PropertyImages: FunctionComponent<Images> = ({images}): ReactElement => {
               width={1000}
               height={600}
             >
-              {({ref, open}) => (
+              {({ref, open}): ReactElement => (
                 <Image
                   ref={ref}
                   onClick={open}
@@ -30,7 +30,7 @@ const PropertyImages: FunctionComponent<Images> = ({images}): ReactElement => {
             </Item>
           ) : (
             <div className='grid grid-cols-2 gap-4'>
-              {images.map((image: string, index: number) => (
+              {images.map((image: string, index: number): ReactElement => (
                 <div
                   key={index}
                   className={images.length === 3 && index === 2 ? 'col-span-2' : 'col-span-1'}
@@ -41,7 +41,7 @@ const PropertyImages: FunctionComponent<Images> = ({images}): ReactElement => {
                     width={1000}
                     height={600}
                   >
-                    {({ref, open}) => (
+                    {({ref, open}): ReactElement => (
                       <Image
                         ref={ref}
                         onClick={open}
