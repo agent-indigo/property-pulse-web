@@ -99,25 +99,32 @@ export const deleteProperty: Function = async (id: string): Promise<ListedProper
       toast.error(noApiMsg)
       return []
     } else {
-      if (window.confirm('Are you sure you want to delete this property?')) {
-        const response: Response = await fetch(
-          `${api}/properties/${id}`,
-          {method: 'DELETE'}
-        )
-        if (response.ok) {
-          toast.success('Property deleted.')
-          return getProperties().filter((property: ListedProperty) => property._id?.toString() !== id)
+      const property: ListedProperty | undefined = await getProperty(id)
+      if (property) {
+        const userProperties: ListedProperty[] = await getUserProperties(property.owner)
+        if (window.confirm('Are you sure you want to delete this property?')) {
+          const response: Response = await fetch(
+            `${api}/properties/${id}`,
+            {method: 'DELETE'}
+          )
+          if (response.ok) {
+            toast.success('Property deleted.')
+            return userProperties.filter((property: ListedProperty) => property._id?.toString() !== id)
+          } else {
+            toast.error(eMsg)
+            return userProperties
+          }
         } else {
-          toast.error(eMsg)
-          return getProperties()
+          return userProperties
         }
       } else {
-        return getProperties()
+        toast.error(eMsg)
+        return []
       }
     }
   } catch (error: any) {
     toast.error(eMsgPlus(error))
-    return getProperties()
+    return []
   }
 }
 /**
