@@ -3,7 +3,7 @@ import {Document, Types, Schema} from 'mongoose'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import messageModel from '@/models/messageModel'
 import getSessionUser from '@/utilities/getSessionUser'
-import {e401, e500, s200} from '@/utilities/responses'
+import {e400, e401, e500, s200} from '@/utilities/responses'
 import {InquiryMessage, RegisteredUser} from '@/utilities/interfaces'
 export {dynamic} from '@/utilities/dynamic'
 /**
@@ -61,10 +61,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
         await message.save()
         return s200(JSON.stringify({message: 'Message sent'}))
       } else {
-        return new NextResponse(
-          'You can\'t send a message to yourself.',
-          {status: 400}
-        )
+        return e400('send a message to yourself')
       }
     } else {
       return e401

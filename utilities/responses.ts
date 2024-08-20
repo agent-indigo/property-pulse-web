@@ -7,7 +7,11 @@ export const s204: Function = (message: string) => new NextResponse(
   message,
   {status: 204}
 )
-export const e401 = new NextResponse(
+export const e400: Function = (action: string) => new NextResponse(
+  `You can't ${action}.`,
+  {status: 400}
+)
+export const e401: NextResponse = new NextResponse(
   'Unauthorized.',
   {status: 401}
 )

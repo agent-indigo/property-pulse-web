@@ -2,8 +2,8 @@ import {NextRequest, NextResponse} from 'next/server'
 import {Schema} from 'mongoose'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import getSessionUser from '@/utilities/getSessionUser'
-import {PropertyIdFromRequest, RegisteredUser} from '@/utilities/interfaces'
-import {e401, e500, s200} from '@/utilities/responses'
+import {ListedProperty, PropertyIdFromRequest, RegisteredUser} from '@/utilities/interfaces'
+import {e400, e401, e404, e500, s200} from '@/utilities/responses'
 import propertyModel from '@/models/propertyModel'
 export {dynamic} from '@/utilities/dynamic'
 /**
@@ -41,25 +41,34 @@ export const PATCH = async (request: NextRequest): Promise<NextResponse> => {
     const propertyOid: Schema.Types.ObjectId = new Schema.Types.ObjectId(propertyId)
     const user: RegisteredUser | null = await getSessionUser()
     if (user && user.bookmarks) {
-      let bookmarked: boolean = user.bookmarks.includes(propertyOid)
-      let message: string
-      if (bookmarked) {
-        user.bookmarks?.filter((bookmark: Schema.Types.ObjectId) => bookmark !== propertyOid)
-        message = 'Bookmark removed.'
-        bookmarked = false
-        action = 'removing'
-      } else {
-        user.bookmarks?.push(propertyOid)
-        message = 'Property bookmarked.'
-        bookmarked = true
-        action = 'adding'
-      }
       await connectToMongoDB()
-      await user.save()
-      return s200(JSON.stringify({
-        message,
-        bookmarked
-      }))
+      const property: ListedProperty | null = await propertyModel.findById(propertyId)
+      if (property) {
+        if (user._id !== property.owner) {
+          let bookmarked: boolean = user.bookmarks.includes(propertyOid)
+          let message: string
+          if (bookmarked) {
+            user.bookmarks?.filter((bookmark: Schema.Types.ObjectId) => bookmark !== propertyOid)
+            message = 'Bookmark removed.'
+            bookmarked = false
+            action = 'removing'
+          } else {
+            user.bookmarks?.push(propertyOid)
+            message = 'Property bookmarked.'
+            bookmarked = true
+            action = 'adding'
+          }
+          await user.save()
+          return s200(JSON.stringify({
+            message,
+            bookmarked
+          }))
+        } else {
+          return e400('bookmark your own property')
+        }
+      } else {
+        return e404('Property')
+      }
     } else {
       return e401
     }

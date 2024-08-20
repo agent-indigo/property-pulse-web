@@ -27,9 +27,9 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
   return (
     <div className='bg-white p-6 rounded-lg shadow-md'>
       <h3 className='text-xl text-center font-bold'>
-        {id ? null : 'Log in to '}Inquire
+        {id ? id === property.owner?.toString() ? 'This is one of your listings.' : 'Inquire' : 'Log in to Inquire'}
       </h3>
-      {id ? (
+      {id  && id !== property.owner?.toString() ? (
         sent ? (
           <p className='text-green-500'>
             Your message has been sent.
