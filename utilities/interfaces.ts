@@ -118,8 +118,8 @@ export interface InquiryMessage {
   createdAt?: Date
 }
 export interface PropertySearchParams {
-  location?: string
-  type?: string
+  location: string
+  type: string
 }
 export interface GoogleSignInParams {
   profile: GoogleProfile

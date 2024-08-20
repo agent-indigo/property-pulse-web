@@ -1,6 +1,7 @@
 'use client'
 import {FunctionComponent, ReactElement, useEffect, useState} from 'react'
-import {ReadonlyURLSearchParams, useSearchParams} from 'next/navigation'
+import {ReadonlyURLSearchParams, useRouter, useSearchParams} from 'next/navigation'
+import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import Link from 'next/link'
 import {FaArrowAltCircleLeft} from 'react-icons/fa'
 import PropertyCard from '@/components/PropertyCard'
@@ -8,25 +9,27 @@ import SearchPropertiesForm from '@/components/SearchPropertiesForm'
 import Spinner from '@/components/Spinner'
 import {ListedProperty} from '@/utilities/interfaces'
 import {getPropertySearchResults} from '@/utilities/requests'
+import FeaturedProperties from '@/components/FeaturedProperties'
 const SearchResultsPage: FunctionComponent = (): ReactElement => {
+  const router: AppRouterInstance = useRouter()
   const searchParams: ReadonlyURLSearchParams = useSearchParams()
   const location: string | null = searchParams.get('location')
-  const propertyType: string | null = searchParams.get('location')
+  const propertyType: string | null = searchParams.get('type')
   const [properties, setProperties] = useState<ListedProperty[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   useEffect(
     (): void => {
       const getResults: Function = async (): Promise<void> => {
         setProperties(await getPropertySearchResults(
-          location,
-          propertyType
+          location ?? '',
+          propertyType ?? 'All'
         ))
         setLoading(false)
       }
       document.title = `${loading ? 'Loading...' : 'Search Results'} | PropertyPulse | Find the Perfect Rental`
-      if (location && propertyType) getResults()
+      location || propertyType ? getResults() : router.push('/properties')
     },
-    [location, propertyType, loading]
+    [location, propertyType, loading, router]
   )
   return (
     <>
@@ -35,6 +38,7 @@ const SearchResultsPage: FunctionComponent = (): ReactElement => {
           <SearchPropertiesForm/>
         </div>
       </section>
+      <FeaturedProperties/>
       {loading ? <Spinner loading={loading}/> : (
         <section className='px-4 py-6'>
           <div className='container-xl lg:container m-auto px-4 py-6'>

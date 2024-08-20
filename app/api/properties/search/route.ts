@@ -16,7 +16,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     const location: string | null = searchParams.get('location')
     const propertyType: string | null = searchParams.get('type')
     const query: PropertySearchQuery = {}
-    if (location) {
+    if (location && location !== '') {
       const locationPattern: RegExp = new RegExp(
         location,
         'i'
