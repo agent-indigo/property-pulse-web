@@ -8,6 +8,7 @@ import {DestructuredProperty, FormInput, InquiryMessage, SessionData} from '@/ut
 const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
   const {data: session}: SessionData = useSession<boolean>() as SessionData
   const id: string | undefined = session?.user?.id
+  const isOwner: boolean = id !== undefined && id === property.owner?.toString()
   const [fields, setFields] = useState<InquiryMessage>({
     recipient: property.owner as ObjectId,
     property: property._id as ObjectId,
@@ -27,9 +28,9 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
   return (
     <div className='bg-white p-6 rounded-lg shadow-md'>
       <h3 className='text-xl text-center font-bold'>
-        {id ? id === property.owner?.toString() ? 'This is one of your listings.' : 'Inquire' : 'Log in to Inquire'}
+        {id ? isOwner ? 'This is one of your listings.' : 'Inquire' : 'Log in to Inquire'}
       </h3>
-      {id  && id !== property.owner?.toString() ? (
+      {!id  || isOwner ? null : (
         sent ? (
           <p className='text-green-500'>
             Your message has been sent.
@@ -117,7 +118,7 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
             </div>
           </form>
         )
-      ) : null}
+      )}
     </div>
   )
 }
