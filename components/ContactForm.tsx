@@ -9,11 +9,14 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
   const {data: session}: SessionData = useSession<boolean>() as SessionData
   const id: string | undefined = session?.user?.id
   const isOwner: boolean = id !== undefined && id === property.owner?.toString()
+  const [errorOccured, setErrorOccured] = useState<boolean>(false)
   const [fields, setFields] = useState<InquiryMessage>({
     recipient: property.owner as ObjectId,
     property: property._id as ObjectId,
     name: '',
-    email: ''
+    email: '',
+    phone: '',
+    body: ''
   })
   const [sent, setSent] = useState<boolean>(false)
   const handleChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (
@@ -27,9 +30,16 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
   }
   return (
     <div className='bg-white p-6 rounded-lg shadow-md'>
-      <h3 className='text-xl text-center font-bold'>
-        {id ? isOwner ? 'This is one of your listings.' : 'Inquire' : 'Log in to Inquire'}
-      </h3>
+      {!sent && (
+        <h3 className='text-xl text-center font-bold'>
+          {id ? isOwner ? 'This is one of your listings.' : 'Inquire' : 'Log in to Inquire'}
+        </h3>
+      )}
+      {errorOccured && (
+        <p className='text-red-500'>
+          Error sending message.
+        </p>
+      )}
       {!id  || isOwner ? null : (
         sent ? (
           <p className='text-green-500'>
@@ -41,7 +51,11 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
             method='POST'
             encType='multipart/form-data'
             onSubmit={(): void => setSent(true)}
-            onError={(event: SyntheticEvent<HTMLFormElement, Event>) => toast.error(event.currentTarget.textContent || 'Error sending message.')}
+            onError={(event: SyntheticEvent<HTMLFormElement, Event>) => {
+              setSent(false)
+              setErrorOccured(true)
+              toast.error(event.currentTarget.textContent || 'Error sending message.')
+            }}
           >
           <div className='mb-4'>
             <label
@@ -53,6 +67,7 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
             <input
               className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
               id='name'
+              name='name'
               type='text'
               placeholder='Enter your name'             
               required
@@ -70,6 +85,7 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
               <input
                 className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
                 id='email'
+                name='email'
                 type='email'
                 placeholder='Enter your email'
                 required
@@ -87,6 +103,7 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
               <input
                 className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
                 id='phone'
+                name='phone'
                 type='text'
                 placeholder='Enter your phone number'
                 value={fields.phone}
@@ -103,6 +120,7 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
               <textarea
                 className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 h-44 focus:outline-none focus:shadow-outline'
                 id='body'
+                name='body'
                 placeholder='Enter your message'
                 value={fields.body}
                 onChange={handleChange}
