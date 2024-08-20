@@ -1,12 +1,28 @@
+'use client'
 import Link from 'next/link'
-import {FunctionComponent, ReactElement} from 'react'
+import {FunctionComponent, ReactElement, useEffect, useState} from 'react'
 import {getProperties} from '@/utilities/requests'
 import {GetPropertiesResponse, ListedProperty} from '@/utilities/interfaces'
 import PropertyCard from '@/components/PropertyCard'
-const HomeProperties: FunctionComponent = async (): Promise<ReactElement> => {
-  const {properties}: GetPropertiesResponse = await getProperties()
-  return (
+import FeaturedProperties from '@/components/FeaturedProperties'
+import Spinner from './Spinner'
+const HomeProperties: FunctionComponent = (): ReactElement => {
+  const [properties, setProperties] = useState<ListedProperty[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
+  useEffect(
+    (): void => {
+      const populate: Function = async (): Promise<void> => {
+        const {properties}: GetPropertiesResponse = await getProperties()
+        setProperties(properties)
+        setLoading(false)
+      }
+      populate()
+    },
+    []
+  )
+  return loading ? <Spinner loading={loading}/> : (
     <>
+      <FeaturedProperties/>
       <section className='px-4 py-6'>
         <div className='container-xl lg:container m-auto'>
           <h2 className='text-3xl font-bold text-blue-500 mb-6 text-center'>
