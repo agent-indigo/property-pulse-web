@@ -147,3 +147,9 @@ export interface Pagination {
 export interface BookmarkStatusResponse {
   bookmarked: boolean
 }
+export interface UnreadCountResponse {
+  unread: number | string
+}
+export interface MarkMessageResponse {
+  message: string
+}

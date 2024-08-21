@@ -1,9 +1,9 @@
 import {NextRequest, NextResponse} from 'next/server'
-import {Document, Types, Schema} from 'mongoose'
+import {Document, Types, ObjectId} from 'mongoose'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import messageModel from '@/models/messageModel'
 import getSessionUser from '@/utilities/getSessionUser'
-import {e400, e401, e500, s200} from '@/utilities/responses'
+import {e401, e500, s200} from '@/utilities/responses'
 import {InquiryMessage, RegisteredUser} from '@/utilities/interfaces'
 export {dynamic} from '@/utilities/dynamic'
 /**
@@ -45,25 +45,19 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
     const user: RegisteredUser | undefined = await getSessionUser()
     if (user) {
       const sender: Types.ObjectId = user._id
-      const form: FormData = await request.formData()
-      const recipient: string | undefined = form.get('recipient')?.valueOf().toString()
-      // if (recipient && sender.toString() !== recipient) {
-        const message: Document<unknown, {}, InquiryMessage> & InquiryMessage & {_id: Schema.Types.ObjectId} = new messageModel({
+      const message: InquiryMessage = await request.json()
+      if (sender.toString() === message.recipient.toString()) {
+        const document: Document<unknown, {}, InquiryMessage> & InquiryMessage & {_id: ObjectId} = new messageModel({
           sender,
-          recipient,
-          property: form.get('property')?.valueOf(),
-          name: form.get('name')?.valueOf(),
-          email: form.get('email')?.valueOf(),
-          phone: form.get('phone')?.valueOf(),
-          body: form.get('body')?.valueOf(),
+          ...message,
           read: false
         })
         await connectToMongoDB()
-        await message.save()
-        return s200(JSON.stringify({message: 'Message sent'}))
-      // } else {
-      //   return e400('send a message to yourself')
-      // }
+        await document.save()
+        return s200(JSON.stringify({message: 'Message sent.'}))
+      } else {
+        return e401
+      }
     } else {
       return e401
     }

@@ -1,6 +1,6 @@
 import {NextRequest, NextResponse} from 'next/server'
 import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
-import {e401, e404, e500, s204} from '@/utilities/responses'
+import {e401, e404, e500, s200} from '@/utilities/responses'
 import {InquiryMessage, RegisteredUser} from '@/utilities/interfaces'
 import getSessionUser from '@/utilities/getSessionUser'
 import messageModel from '@/models/messageModel'
@@ -25,14 +25,29 @@ export const PATCH = async (
       const message: InquiryMessage | null = await messageModel.findById(id)
       if (message) {
         if (user._id.toString() === message.recipient.toString()) {
-          const read: boolean = message.read as boolean
+          const {
+            sender,
+            recipient,
+            property,
+            name,
+            email,
+            phone,
+            body,
+            read
+          }: InquiryMessage = message
           const update: InquiryMessage = {
-            ...message,
+            sender,
+            recipient,
+            property,
+            name,
+            email,
+            phone,
+            body,
             read: !read
           }
           status = read ? 'unread' : 'read'
           await messageModel.findByIdAndUpdate(id, update)
-          return s204(`Message marked as ${status}.`)
+          return s200(JSON.stringify({message: `Message marked as ${status}.`}))
         } else {
           return e401
         }
@@ -60,7 +75,7 @@ export const DELETE = async (
   {params}: Params
 ): Promise<NextResponse> => {
   try {
-    const user: RegisteredUser | null = getSessionUser()
+    const user: RegisteredUser | null = await getSessionUser()
     if (user) {
       const id: string = params.id
       await connectToMongoDB()
@@ -68,7 +83,7 @@ export const DELETE = async (
       if (message) {
         if (user._id.toString() === message.recipient.toString()) {
           await messageModel.findByIdAndDelete(id)
-          return s204('Message deleted.')
+          return s200(JSON.stringify({message: 'Message deleted.'}))
         } else {
           return e401
         }

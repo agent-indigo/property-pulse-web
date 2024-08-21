@@ -30,7 +30,7 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
   }
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
-    const success: boolean = await sendMessage(new FormData(event.currentTarget))
+    const success: boolean = await sendMessage(fields)
     setSent(success)
     setErrorOccured(!success)
   }
@@ -46,9 +46,9 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
           Error sending message.
         </p>
       )}
-      {!id ? null : (
+      {!id || isOwner ? null : (
         sent ? (
-          <p className='text-green-500'>
+          <p className='text-green-500 text-center'>
             Your message has been sent.
           </p>
         ) : (

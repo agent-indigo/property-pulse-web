@@ -1,5 +1,5 @@
 import {toast} from 'react-toastify'
-import {BookmarkStatusResponse, GeoCodingResponse, GetPropertiesResponse, InquiryMessage, ListedProperty} from '@/utilities/interfaces'
+import {BookmarkStatusResponse, GeoCodingResponse, GetPropertiesResponse, InquiryMessage, ListedProperty, MarkMessageResponse, UnreadCountResponse} from '@/utilities/interfaces'
 const api: string = process.env.NEXT_PUBLIC_API_DOMAIN ?? ''
 const noApiMsg: string = 'NEXT_PUBLIC_API_DOMAIN is MISSING from `.env`.'
 let activity: string = ''
@@ -327,6 +327,7 @@ export const getMessages: Function = async (): Promise<InquiryMessage[]> => {
  * @access  private
  */
 export const switchMessageReadStatus: Function = async (id: string): Promise<boolean> => {
+  activity = 'marking message as read/unread'
   try {
     if (api === '') {
       toast.error(noApiMsg)
@@ -339,11 +340,18 @@ export const switchMessageReadStatus: Function = async (id: string): Promise<boo
           body: JSON.stringify({id})
         }
       )
-      toast.success(response.json())
-      return response.ok
+      const {message}: MarkMessageResponse = await response.json()
+      if (response.ok) {
+        toast.success(message)
+        return true
+      } else {
+        toast.error(eMsg)
+        return false
+      }
     }
   } catch (error: any) {
     toast.error(eMsgPlus(error))
+    console.error(eMsgPlus(error))
     return false
   }
 }
@@ -354,7 +362,7 @@ export const switchMessageReadStatus: Function = async (id: string): Promise<boo
  * @access  private
  */
 export const deleteMessage: Function = async (id: string): Promise<boolean> => {
-  activity = 'deleting bookmark'
+  activity = 'deleting message'
   try {
     if (api === '') {
       toast.error(noApiMsg)
@@ -383,24 +391,25 @@ export const deleteMessage: Function = async (id: string): Promise<boolean> => {
  * @route   GET /api/messages/unreadCount
  * @access  private
  */
-export const getUnreadCount: Function = async (): Promise<number> => {
+export const getUnreadCount: Function = async (): Promise<UnreadCountResponse> => {
   activity = 'retrieving unread message count'
+  const errorResponse: UnreadCountResponse = {unread: 0}
   try {
     if (api === '') {
       toast.error(noApiMsg)
-      return 0
+      return errorResponse
     } else {
       const response: Response = await fetch(`${api}/messages/unreadCount`)
       if (response.ok) {
         return response.json()
       } else {
         toast.error(eMsg)
-        return 0
+        return errorResponse
       }
     }
   } catch (error) {
     toast.error(eMsgPlus(error))
-    return 0
+    return errorResponse
   }
 }
 /**
@@ -435,7 +444,7 @@ export const getFeaturedProperties: Function = async (): Promise<ListedProperty[
  * @route   POST /api/messages
  * @access  private
  */
-export const sendMessage: Function = async (message: FormData): Promise<boolean> => {
+export const sendMessage: Function = async (message: InquiryMessage): Promise<boolean> => {
   activity = 'sending message'
   try {
     if (api === '') {
@@ -445,7 +454,7 @@ export const sendMessage: Function = async (message: FormData): Promise<boolean>
       const response: Response = await fetch(
         `${api}/messages`, {
           method: 'POST',
-          body: message
+          body: JSON.stringify(message)
         }
       )
       if (response.ok) {

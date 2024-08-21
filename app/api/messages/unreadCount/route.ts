@@ -14,10 +14,10 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
     const user: RegisteredUser | undefined = await getSessionUser()
     if (user) {
-      return s200(JSON.stringify(await messageModel.countDocuments({
+      return s200(JSON.stringify({unread: await messageModel.countDocuments({
         recipient: user._id,
         read: false
-      })))
+      })}))
     } else {
       return e401
     }

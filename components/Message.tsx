@@ -8,7 +8,6 @@ import {deleteMessage, switchMessageReadStatus} from '@/utilities/requests'
 const Message: FunctionComponent<DestructuredMessage> = ({message}): ReactElement | null => {
   const {setUnreadCount}: GlobalState = useGlobalContext()
   const [read, setRead] = useState<boolean>(message.read as boolean)
-  const [success, setSuccess] = useState<boolean>(false)
   const [deleted, setDeleted] = useState<boolean>(false)
   const id: ObjectId | undefined = message._id
   const property: ListedProperty = message.property as ListedProperty
@@ -17,14 +16,15 @@ const Message: FunctionComponent<DestructuredMessage> = ({message}): ReactElemen
   const phone: string | undefined = message.phone
   const body: string | undefined = message.body
   const handleReadStatusSwitch: MouseEventHandler<HTMLButtonElement> = async (): Promise<void> => {
-    setSuccess(await switchMessageReadStatus(id))
-    if (success) {
-      setRead(!read)
-      setUnreadCount((previousValue: number): number => read ? previousValue - 1 : previousValue + 1)
-    }
+    const success: boolean = switchMessageReadStatus(id)
+    success && setRead((previousStatus: boolean): boolean => {
+      const read: boolean = !previousStatus
+      setUnreadCount((previousCount: number): number => read ? previousCount - 1 : previousCount + 1)
+      return read
+    })
   }
   const handleDelete: MouseEventHandler<HTMLButtonElement>  = async (): Promise<void> => {
-    setSuccess(await deleteMessage(id))
+    const success: boolean = await deleteMessage(id)
     if (success) {
       setDeleted(true)
       setUnreadCount((previousCount: number): number => previousCount - 1)
@@ -73,7 +73,7 @@ const Message: FunctionComponent<DestructuredMessage> = ({message}): ReactElemen
         )}
         <li>
           <strong>Received: </strong>
-          {message.createdAt?.toLocaleString()}
+          {new Date(message.createdAt as any).toLocaleString()}
         </li>
       </ul>
       <button

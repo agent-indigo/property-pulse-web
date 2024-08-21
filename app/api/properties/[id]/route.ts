@@ -107,7 +107,7 @@ export const PUT = async (
             }
           } as ListedProperty
           await propertyModel.findByIdAndUpdate(id, update)
-          return redirect(`${process.env.NEXTAUTH_URL}/properties/${id}`)
+          return redirect(`${process.env.NEXTAUTH_URL ?? ''}/properties/${id}`)
         } else {
           return e401
         }

@@ -9,7 +9,7 @@ import {
   useState
 } from 'react'
 import {ReactNodes, GlobalState} from '@/utilities/interfaces'
-const GlobalContext: Context<GlobalState> = createContext({
+const GlobalContext: Context<GlobalState> = createContext<GlobalState>({
   unreadCount: 0,
   setUnreadCount: null
 })

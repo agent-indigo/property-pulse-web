@@ -42,7 +42,7 @@ export const PATCH = async (request: NextRequest): Promise<NextResponse> => {
       await connectToMongoDB()
       const property: ListedProperty | null = await propertyModel.findById(propertyId)
       if (property) {
-        // if (user._id.toString() !== property.owner?.toString()) {
+        if (user._id.toString() !== property.owner?.toString()) {
           let bookmarked: boolean | undefined = user.bookmarks?.includes(propertyId)
           let message: string
           if (bookmarked) {
@@ -61,9 +61,9 @@ export const PATCH = async (request: NextRequest): Promise<NextResponse> => {
             message,
             bookmarked
           }))
-        // } else {
-        //   return e400('bookmark your own property')
-        // }
+        } else {
+          return e400('bookmark your own property')
+        }
       } else {
         return e404('Property')
       }
