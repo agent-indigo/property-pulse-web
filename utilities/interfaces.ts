@@ -54,7 +54,7 @@ export interface RegisteredUser extends Document {
   email: string
   username: string
   image?: string
-  bookmarks?: ObjectId[]
+  bookmarks?: string[]
 }
 export interface AdapterUserWithId extends AdapterUser {
   id: string
@@ -143,4 +143,7 @@ export interface Pagination {
   page: number
   total: number
   paginate: Function
+}
+export interface BookmarkStatusResponse {
+  bookmarked: boolean
 }

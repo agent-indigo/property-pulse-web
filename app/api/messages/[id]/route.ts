@@ -1,6 +1,6 @@
 import {NextRequest, NextResponse} from 'next/server'
 import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
-import {ObjectId, Schema, Document} from 'mongoose'
+import {ObjectId} from 'mongoose'
 import {e401, e404, e500, s204} from '@/utilities/responses'
 import {InquiryMessage, RegisteredUser} from '@/utilities/interfaces'
 import getSessionUser from '@/utilities/getSessionUser'
@@ -25,12 +25,12 @@ export const PATCH = async (
       await connectToMongoDB()
       const message: InquiryMessage | null = await messageModel.findById(id)
       if (message) {
-        if (user._id = message.recipient) {
+        if (user._id.toString() === message.recipient.toString()) {
           const read: boolean = message.read as boolean
-          const update: Document<unknown, {}, InquiryMessage> & InquiryMessage & Required<{_id: Schema.Types.ObjectId}> = new messageModel({
+          const update: InquiryMessage = {
             ...message,
             read: !read
-          })
+          }
           status = read ? 'unread' : 'read'
           await messageModel.findByIdAndUpdate(id, update)
           return s204(`Message marked as ${status}.`)
@@ -68,7 +68,9 @@ export const DELETE = async (
       const message: InquiryMessage | null = await messageModel.findById(id)
       if (message) {
         const userId: ObjectId = user._id
-        if (userId === message.recipient || userId === message.sender) {
+        if (userId.toString() === message.recipient.toString() ||
+            userId.toString() === message.sender?.toString()
+        ) {
           await messageModel.findByIdAndDelete(id)
           return s204('Message deleted.')
         } else {

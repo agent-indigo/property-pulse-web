@@ -1,6 +1,5 @@
 import {NextRequest, NextResponse} from 'next/server'
 import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
-import {Schema} from 'mongoose'
 import getSessionUser from '@/utilities/getSessionUser'
 import {RegisteredUser} from '@/utilities/interfaces'
 import {e401, e500, s200} from '@/utilities/responses'
@@ -18,7 +17,7 @@ export const GET = async (
   try {
     const user: RegisteredUser | undefined = await getSessionUser()
     if (user) {
-      return s200(JSON.stringify(user.bookmarks?.includes(new Schema.Types.ObjectId(params.id))))
+      return s200(JSON.stringify({bookmarked: user.bookmarks?.includes(params.id)}))
     } else {
       return e401
     }

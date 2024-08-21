@@ -2,7 +2,7 @@
 import {FunctionComponent, MouseEventHandler, ReactElement, useEffect, useState} from 'react'
 import {FaBookmark} from 'react-icons/fa'
 import {useSession} from 'next-auth/react'
-import {DestructuredProperty, SessionData} from '@/utilities/interfaces'
+import {BookmarkStatusResponse, DestructuredProperty, SessionData} from '@/utilities/interfaces'
 import {getBookmarkStatus, toggleBookmark} from '@/utilities/requests'
 import Spinner from '@/components/Spinner'
 const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): ReactElement | null=> {
@@ -19,23 +19,27 @@ const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): Re
   const handleClick: MouseEventHandler<HTMLButtonElement> = async (): Promise<void> => {
     if (propertyId) {
       const result: boolean | undefined = await toggleBookmark(propertyId)
-      if (result) setBookmarked(result)
+      if (result !== undefined) setBookmarked(result)
     }
   }
   useEffect(
     (): void => {
       const getStatus: Function = async (): Promise<void> => {
-        if (loggedIn && !isOwner) {
-          if (propertyId) {
-            const result: boolean | undefined = await getBookmarkStatus(propertyId)
-            result !== undefined ? setBookmarked(result) : setErrorOccured(true)
+        if (loggedIn) {
+          if (propertyId && !isOwner) {
+            try {
+              const {bookmarked}: BookmarkStatusResponse = await getBookmarkStatus(propertyId)
+              setBookmarked(bookmarked)
+            } catch (error) {
+              setErrorOccured(true)
+            }
           }
         }
         setLoading(false)
       }
       getStatus()
     },
-    [propertyId, userId, isOwner, loggedIn]
+    [propertyId, userId, loggedIn, isOwner]
   )
   return loading ? <Spinner loading={loading}/> : errorOccured ? (
     <h1 className='text-red-500 text-center font-bold'>

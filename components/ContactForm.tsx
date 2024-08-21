@@ -40,7 +40,7 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
           Error sending message.
         </p>
       )}
-      {!id  || isOwner ? null : (
+      {!id ? null : (
         sent ? (
           <p className='text-green-500'>
             Your message has been sent.

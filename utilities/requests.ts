@@ -1,5 +1,5 @@
 import {toast} from 'react-toastify'
-import {GeoCodingResponse, GetPropertiesResponse, InquiryMessage, ListedProperty} from '@/utilities/interfaces'
+import {BookmarkStatusResponse, GeoCodingResponse, GetPropertiesResponse, InquiryMessage, ListedProperty} from '@/utilities/interfaces'
 const api: string = process.env.NEXT_PUBLIC_API_DOMAIN ?? ''
 const noApiMsg: string = 'NEXT_PUBLIC_API_DOMAIN is MISSING from `.env`.'
 let activity: string = ''
@@ -188,7 +188,7 @@ export const toggleBookmark: Function = async (id: string): Promise<boolean | un
  * @route   GET /api/properties/bookmarks/status/:id
  * @access  private
  */
-export const getBookmarkStatus: Function = async (id: string): Promise<boolean | undefined> => {
+export const getBookmarkStatus: Function = async (id: string): Promise<BookmarkStatusResponse | undefined> => {
   activity = 'checking bookmark status'
   try {
     if (api === '') {

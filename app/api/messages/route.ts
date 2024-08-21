@@ -46,7 +46,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
       const sender: Types.ObjectId = user._id
       const form: FormData = await request.formData()
       const recipient: Types.ObjectId = new Types.ObjectId(form.get('recipient')?.valueOf().toString())
-      if (sender !== recipient) {
+      // if (sender.toString() !== recipient.toString()) {
         const message: Document<unknown, {}, InquiryMessage> & InquiryMessage & {_id: Schema.Types.ObjectId} = new messageModel({
           sender,
           recipient,
@@ -60,9 +60,9 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
         await connectToMongoDB()
         await message.save()
         return s200(JSON.stringify({message: 'Message sent'}))
-      } else {
-        return e400('send a message to yourself')
-      }
+      // } else {
+      //   return e400('send a message to yourself')
+      // }
     } else {
       return e401
     }

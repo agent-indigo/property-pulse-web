@@ -1,5 +1,4 @@
 import {NextRequest, NextResponse} from 'next/server'
-import {Schema} from 'mongoose'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import getSessionUser from '@/utilities/getSessionUser'
 import {ListedProperty, PropertyIdFromRequest, RegisteredUser} from '@/utilities/interfaces'
@@ -38,22 +37,21 @@ export const PATCH = async (request: NextRequest): Promise<NextResponse> => {
   let action: string = 'adding/removing'
   try {
     const {propertyId}: PropertyIdFromRequest = await request.json()
-    const propertyOid: Schema.Types.ObjectId = new Schema.Types.ObjectId(propertyId)
     const user: RegisteredUser | undefined = await getSessionUser()
-    if (user && user.bookmarks) {
+    if (user) {
       await connectToMongoDB()
       const property: ListedProperty | null = await propertyModel.findById(propertyId)
       if (property) {
-        if (user._id !== property.owner) {
-          let bookmarked: boolean = user.bookmarks.includes(propertyOid)
+        // if (user._id.toString() !== property.owner?.toString()) {
+          let bookmarked: boolean | undefined = user.bookmarks?.includes(propertyId)
           let message: string
           if (bookmarked) {
-            user.bookmarks?.filter((bookmark: Schema.Types.ObjectId): boolean => bookmark !== propertyOid)
+            user.bookmarks = user.bookmarks?.filter((bookmark: any): boolean => bookmark.toString() !== propertyId)
             message = 'Bookmark removed.'
             bookmarked = false
             action = 'removing'
           } else {
-            user.bookmarks?.push(propertyOid)
+            user.bookmarks?.push(propertyId)
             message = 'Property bookmarked.'
             bookmarked = true
             action = 'adding'
@@ -63,9 +61,9 @@ export const PATCH = async (request: NextRequest): Promise<NextResponse> => {
             message,
             bookmarked
           }))
-        } else {
-          return e400('bookmark your own property')
-        }
+        // } else {
+        //   return e400('bookmark your own property')
+        // }
       } else {
         return e404('Property')
       }
