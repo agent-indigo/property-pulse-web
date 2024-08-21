@@ -1,6 +1,5 @@
 import {NextRequest, NextResponse} from 'next/server'
 import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
-import {ObjectId} from 'mongoose'
 import {e401, e404, e500, s204} from '@/utilities/responses'
 import {InquiryMessage, RegisteredUser} from '@/utilities/interfaces'
 import getSessionUser from '@/utilities/getSessionUser'
@@ -67,10 +66,7 @@ export const DELETE = async (
       await connectToMongoDB()
       const message: InquiryMessage | null = await messageModel.findById(id)
       if (message) {
-        const userId: ObjectId = user._id
-        if (userId.toString() === message.recipient.toString() ||
-            userId.toString() === message.sender?.toString()
-        ) {
+        if (user._id.toString() === message.recipient.toString()) {
           await messageModel.findByIdAndDelete(id)
           return s204('Message deleted.')
         } else {

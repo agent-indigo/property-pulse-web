@@ -429,3 +429,35 @@ export const getFeaturedProperties: Function = async (): Promise<ListedProperty[
     return []
   }
 }
+/**
+ * @name    sendMessage
+ * @desc    Send a message
+ * @route   POST /api/messages
+ * @access  private
+ */
+export const sendMessage: Function = async (message: FormData): Promise<boolean> => {
+  activity = 'sending message'
+  try {
+    if (api === '') {
+      toast.error(noApiMsg)
+      return false
+    } else {
+      const response: Response = await fetch(
+        `${api}/messages`, {
+          method: 'POST',
+          body: message
+        }
+      )
+      if (response.ok) {
+        toast.success('Message sent.')
+        return true
+      } else {
+        toast.error(eMsg)
+        return false
+      }
+    }
+  } catch (error: any) {
+    toast.error(eMsgPlus(error))
+    return false
+  }
+}

@@ -40,13 +40,14 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
  * @access  private
  */
 export const POST = async (request: NextRequest): Promise<NextResponse> => {
+  const activity: string = 'sending message'
   try {
     const user: RegisteredUser | undefined = await getSessionUser()
     if (user) {
       const sender: Types.ObjectId = user._id
       const form: FormData = await request.formData()
-      const recipient: Types.ObjectId = new Types.ObjectId(form.get('recipient')?.valueOf().toString())
-      // if (sender.toString() !== recipient.toString()) {
+      const recipient: string | undefined = form.get('recipient')?.valueOf().toString()
+      // if (recipient && sender.toString() !== recipient) {
         const message: Document<unknown, {}, InquiryMessage> & InquiryMessage & {_id: Schema.Types.ObjectId} = new messageModel({
           sender,
           recipient,
@@ -68,7 +69,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
     }
   } catch (error: any) {
     return e500(
-      'sending message',
+      activity,
       error
     )
   }

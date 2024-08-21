@@ -1,6 +1,5 @@
 'use client'
-import {ChangeEvent, ChangeEventHandler, FunctionComponent, ReactElement, SyntheticEvent, useEffect, useState} from 'react'
-import {toast} from 'react-toastify'
+import {ChangeEvent, ChangeEventHandler, FunctionComponent, ReactElement, useEffect, useState} from 'react'
 import {FormCheck, FormInput, ListedProperty} from '@/utilities/interfaces'
 const AddPropertyForm: FunctionComponent = (): ReactElement | null => {
   const [mounted, setMounted] = useState<boolean>(false)
@@ -76,7 +75,6 @@ const AddPropertyForm: FunctionComponent = (): ReactElement | null => {
       action='/api/properties'
       method='POST'
       encType='multipart/form-data'
-      onError={(event: SyntheticEvent<HTMLFormElement, Event>) => toast.error(event.currentTarget.textContent || 'Error sending message.')}
     >
       <h2 className='text-3xl text-center font-semibold mb-6'>
         Add Property

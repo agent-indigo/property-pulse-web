@@ -1,15 +1,14 @@
 'use client'
-import {ChangeEvent, ChangeEventHandler, FunctionComponent, ReactElement, SyntheticEvent, useState} from 'react'
+import {ChangeEvent, ChangeEventHandler, FormEvent, FormEventHandler, FunctionComponent, ReactElement, useState} from 'react'
 import {FaPaperPlane} from 'react-icons/fa'
 import {useSession} from 'next-auth/react'
-import {toast} from 'react-toastify'
 import {ObjectId} from 'mongoose'
 import {DestructuredProperty, FormInput, InquiryMessage, SessionData} from '@/utilities/interfaces'
+import { sendMessage } from '@/utilities/requests'
 const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
   const {data: session}: SessionData = useSession<boolean>() as SessionData
   const id: string | undefined = session?.user?.id
   const isOwner: boolean = id !== undefined && id === property.owner?.toString()
-  const [errorOccured, setErrorOccured] = useState<boolean>(false)
   const [fields, setFields] = useState<InquiryMessage>({
     recipient: property.owner as ObjectId,
     property: property._id as ObjectId,
@@ -19,6 +18,7 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
     body: ''
   })
   const [sent, setSent] = useState<boolean>(false)
+  const [errorOccured, setErrorOccured] = useState<boolean>(false)
   const handleChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ): void => {
@@ -28,6 +28,12 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
       [name]: value
     }))
   }
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
+    event.preventDefault()
+    const success: boolean = await sendMessage(new FormData(event.currentTarget))
+    setSent(success)
+    setErrorOccured(!success)
+  }
   return (
     <div className='bg-white p-6 rounded-lg shadow-md'>
       {!sent && (
@@ -36,7 +42,7 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
         </h3>
       )}
       {errorOccured && (
-        <p className='text-red-500'>
+        <p className='text-red-500 text-center py-1'>
           Error sending message.
         </p>
       )}
@@ -46,35 +52,25 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
             Your message has been sent.
           </p>
         ) : (
-          <form
-            action='/api/messages'
-            method='POST'
-            encType='multipart/form-data'
-            onSubmit={(): void => setSent(true)}
-            onError={(event: SyntheticEvent<HTMLFormElement, Event>): void => {
-              setSent(false)
-              setErrorOccured(true)
-              toast.error(event.currentTarget.textContent || 'Error sending message.')
-            }}
-          >
-          <div className='mb-4'>
-            <label
-              className='block text-gray-700 text-sm font-bold mb-2'
-              htmlFor='name'
-            >
-              Name:
-            </label>
-            <input
-              className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
-              id='name'
-              name='name'
-              type='text'
-              placeholder='Enter your name'             
-              required
-              value={fields.name}
-              onChange={handleChange}
-            />
-          </div>
+          <form onSubmit={handleSubmit}>
+            <div className='mb-4'>
+              <label
+                className='block text-gray-700 text-sm font-bold mb-2'
+                htmlFor='name'
+              >
+                Name:
+              </label>
+              <input
+                className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                id='name'
+                name='name'
+                type='text'
+                placeholder='Enter your name'             
+                required
+                value={fields.name}
+                onChange={handleChange}
+              />
+            </div>
             <div className='mb-4'>
               <label
                 className='block text-gray-700 text-sm font-bold mb-2'
@@ -98,7 +94,7 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
                 className='block text-gray-700 text-sm font-bold mb-2'
                 htmlFor='phone'
               >
-                Phone:
+                Phone: (Optional)
               </label>
               <input
                 className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
