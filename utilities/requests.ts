@@ -1,11 +1,10 @@
 import {toast} from 'react-toastify'
 import {
-  BookmarkStatusResponse,
   GeoCodingResponse,
   GetPropertiesResponse,
   InquiryMessage,
   ListedProperty,
-  MarkMessageResponse,
+  ResourceStatusResponse,
   UnreadCountResponse
 } from '@/utilities/interfaces'
 const api: string = process.env.NEXT_PUBLIC_API_DOMAIN ?? ''
@@ -23,7 +22,7 @@ const getPropertiesError: GetPropertiesResponse = {
  * @route   GET /api/properties
  * @access  public
  */
-export const getProperties: Function = async (page: number): Promise<GetPropertiesResponse> => {
+export const getProperties: Function = async (page?: number): Promise<GetPropertiesResponse> => {
   activity = 'retrieving properties'
   try {
     if (api === '') {
@@ -205,7 +204,7 @@ export const toggleBookmark: Function = async (id: string): Promise<boolean | un
  * @route   GET /api/properties/bookmarks/status/:id
  * @access  private
  */
-export const getBookmarkStatus: Function = async (id: string): Promise<BookmarkStatusResponse | undefined> => {
+export const getBookmarkStatus: Function = async (id: string): Promise<ResourceStatusResponse | undefined> => {
   activity = 'checking bookmark status'
   try {
     if (api === '') {
@@ -258,9 +257,9 @@ export const getBookmarks: Function = async (): Promise<ListedProperty[]> => {
  * @access  public
  */
 export const getPropertySearchResults: Function = async (
-  location: string,
-  propertyType: string,
-  page: number
+  location?: string,
+  propertyType?: string,
+  page?: number
 ): Promise<GetPropertiesResponse> => {
   activity = 'retrieving property search results'
   try {
@@ -357,7 +356,7 @@ export const switchMessageReadStatus: Function = async (id: string): Promise<boo
           body: JSON.stringify({id})
         }
       )
-      const {message}: MarkMessageResponse = await response.json()
+      const {message}: ResourceStatusResponse = await response.json()
       if (response.ok) {
         toast.success(message)
         return true

@@ -119,8 +119,9 @@ export interface InquiryMessage {
   createdAt?: Date
 }
 export interface PropertySearchParams {
-  location: string
-  type: string
+  location?: string
+  type?: string
+  page?: number
 }
 export interface GoogleSignInParams {
   profile: GoogleProfile
@@ -145,18 +146,17 @@ export interface Pagination {
   total: number
   paginate: Function
 }
-export interface BookmarkStatusResponse {
-  bookmarked: boolean
-}
 export interface UnreadCountResponse {
   unread: number | string
-}
-export interface MarkMessageResponse {
-  message: string
 }
 export interface PageNumber {
   pageNumber: number
 }
 export interface UnreadMessagesCountState {
   unreadMessagesCount: number
+}
+export interface ResourceStatusResponse {
+  message?: string
+  success?: boolean
+  bookmarked?: boolean
 }

@@ -1,76 +1,83 @@
 import {PROPERTIES_URL} from '@/utilities/urls'
 import apiSlice from '@/slices/apiSlice'
-import {ListedProperty} from '@/utilities/interfaces'
+import {
+  GeoCodingResponse,
+  GetPropertiesResponse,
+  ListedProperty,
+  PropertySearchParams,
+  ResourceStatusResponse
+} from '@/utilities/interfaces'
 const propertiesApiSlice = apiSlice.injectEndpoints({
-  endpoints: (builder: any) => ({
-    getProperties: builder.query({
-      query: (page: number) => ({
+  endpoints: builder => ({
+    getProperties: builder.query<GetPropertiesResponse, number | undefined>({
+      query: (page?: number) => ({
         url: `${PROPERTIES_URL}?page=${page}`,
         method: 'GET'
       }),
       providesTags: ['property']
     }),
-    getFeaturedProperties: builder.query({
+    getFeaturedProperties: builder.query<ListedProperty[], void>({
       query: () => ({
         url: `${PROPERTIES_URL}/featured`,
         method: 'GET'
       }),
       providesTags: ['property']
     }),
-    getUserProperties: builder.query({
+    getUserProperties: builder.query<ListedProperty[], string>({
       query: (id: string) => ({
         url: `${PROPERTIES_URL}/user/${id}`,
         method: 'GET'
       }),
       providesTags: ['property']
     }),
-    getPropertySearchResults: builder.query({
-      query: (
-        location: string,
-        type: string,
-        page: number
-      ) => ({
+    getPropertySearchResults: builder.query<GetPropertiesResponse, PropertySearchParams>({
+      query: ({
+        location,
+        type,
+        page
+      }) => ({
         url: `${PROPERTIES_URL}/search?location=${location}&type=${type}&page=${page}`,
         method: 'GET'
       }),
       providesTags: ['property']
     }),
-    getBookmarkedProperties: builder.query({
+    getBookmarkedProperties: builder.query<ListedProperty[], void>({
       query: () => ({
         url: `${PROPERTIES_URL}/bookmarks`,
         method: 'GET'
       }),
       providesTags: ['property']
     }),
-    getProperty: builder.query({
+    getProperty: builder.query<ListedProperty, string>({
       query: (id: string) => ({
         url: `${PROPERTIES_URL}/${id}`,
         method: 'GET'
       }),
       providesTags: ['property']
     }),
-    getPropertyGeoCoordinates: builder.query({
+    getPropertyGeoCoordinates: builder.query<GeoCodingResponse, string>({
       query: (id: string) => ({
         url: `${PROPERTIES_URL}/${id}/coordinates`,
         method: 'GET'
       })
     }),
-    getPropertyBookmarkedStatus: builder.query({
+    getPropertyBookmarkedStatus: builder.query<ResourceStatusResponse, string>({
       query: (id: string) => ({
         url: `${PROPERTIES_URL}/bookmarks/status/${id}`,
         method: 'GET'
       })
     }),
-    togglePropertyBookmarkedStatus: builder.mutation({
-      query: (id: string) => ({
+    togglePropertyBookmarkedStatus: builder.mutation<ResourceStatusResponse, string>({
+      query: (propertyId: string) => ({
         url: `${PROPERTIES_URL}/bookmarks`,
-        method: 'PATCH'
+        method: 'PATCH',
+        body: JSON.stringify({propertyId})
       })
     }),
-    editProperty: builder.mutation({
+    editProperty: builder.mutation<ResourceStatusResponse, any>({
       query: (
-        id: string,
-        update: ListedProperty
+        id?: string,
+        update?: ListedProperty
       ) => ({
         url: `${PROPERTIES_URL}/${id}`,
         method: 'PATCH',
@@ -78,14 +85,14 @@ const propertiesApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['property']
     }),
-    deleteProperty: builder.mutation({
+    deleteProperty: builder.mutation<ListedProperty[], string>({
       query: (id: string) => ({
         url: `${PROPERTIES_URL}/${id}`,
         method: 'DELETE'
       }),
       invalidatesTags: ['property']
     }),
-    addProperty: builder.mutation({
+    addProperty: builder.mutation<void, FormData>({
       query: (property: FormData) => ({
         url: PROPERTIES_URL,
         method: 'POST',
