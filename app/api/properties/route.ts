@@ -1,6 +1,7 @@
 import {NextRequest, NextResponse} from 'next/server'
 import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
 import {Document, ObjectId} from 'mongoose'
+import {UploadApiResponse} from 'cloudinary'
 import cloudinary from '@/utilities/cloudinary'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import getSessionUser from '@/utilities/getSessionUser'
@@ -43,6 +44,16 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
     const user: RegisteredUser | undefined = await getSessionUser()
     if (user) {
       const form: FormData = await request.formData()
+      const images: string[] = []
+      const imageIds: string[] = []
+      await Promise.all(form.getAll('files').map(async (image: FormDataEntryValue): Promise<void> => {
+        const {secure_url, public_id}: UploadApiResponse = await cloudinary.uploader.upload(
+          `data:image/png;base64,${Buffer.from(new Uint8Array(await (image as File).arrayBuffer())).toString('base64')}`,
+          {folder: process.env.CLOUDINARY_FOLDER_NAME ?? ''}
+        )
+        images.push(secure_url)
+        imageIds.push(public_id)
+      }))
       const property: Document<unknown, {}, ListedProperty> & Required<{_id: ObjectId}> = new propertyModel({
         owner: user._id,
         type: form.get('type')?.valueOf(),
@@ -68,10 +79,8 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
           email: form.get('seller_info.email')?.valueOf(),
           phone: form.get('seller_info.phone')?.valueOf()
         },
-        images: await Promise.all(form.getAll('files').map(async (image: FormDataEntryValue): Promise<string> => (await cloudinary.uploader.upload(
-          `data:image/png;base64,${Buffer.from(new Uint8Array(await (image as File).arrayBuffer())).toString('base64')}`,
-          {folder: process.env.CLOUDINARY_FOLDER_NAME ?? ''}
-        )).secure_url))
+        images,
+        imageIds
       })
       await connectToMongoDB()
       await property.save()

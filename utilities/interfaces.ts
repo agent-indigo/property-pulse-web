@@ -46,6 +46,7 @@ export interface ListedProperty {
   seller_info: SellerInfo
   files?: File[]
   images?: string[]
+  imageIds?: string[]
   is_featured?: boolean
   createdAt?: string
   updatedAt?: string

@@ -597,7 +597,7 @@ const AddPropertyForm: FunctionComponent = (): ReactElement | null => {
           htmlFor='images'
           className='block text-gray-700 font-bold mb-2'
         >
-          Images (Only the first 4 will be displayed.)
+          Images
         </label>
         <input
           type='file'

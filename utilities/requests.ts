@@ -148,7 +148,7 @@ export const editProperty: Function = async (
     } else {
       const response: Response = await fetch(
         `${api}/properties/${id}`, {
-          method: 'PUT',
+          method: 'PATCH',
           body: JSON.stringify(update)
         }
       )

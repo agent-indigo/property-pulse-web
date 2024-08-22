@@ -5,6 +5,7 @@ import propertyModel from '@/models/propertyModel'
 import {ListedProperty, RegisteredUser} from '@/utilities/interfaces'
 import getSessionUser from '@/utilities/getSessionUser'
 import {e401, e404, e500, s200, redirect} from '@/utilities/responses'
+import cloudinary from '@/utilities/cloudinary'
 export {dynamic} from '@/utilities/dynamic'
 /**
  * @name    GET
@@ -44,6 +45,7 @@ export const DELETE = async (
       const user: RegisteredUser | undefined = await getSessionUser()
       if (user) {
         if (property.owner?.toString() === user._id.toString()) {
+          property.imageIds?.map(async (id: string): Promise<void> => await cloudinary.uploader.destroy(id))
           await propertyModel.findByIdAndDelete(property._id)
           return s200('Property deleted.')
         } else {
@@ -63,12 +65,12 @@ export const DELETE = async (
   }
 }
 /**
- * @name    PUT
+ * @name    PATCH
  * @desc    Edit a property
- * @route   PUT /api/properties/:id
+ * @route   PATCH /api/properties/:id
  * @access  private
  */
-export const PUT = async (
+export const PATCH = async (
   request: NextRequest,
   {params}: Params
 ): Promise<NextResponse> => {
