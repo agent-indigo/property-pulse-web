@@ -2,7 +2,7 @@
 import {FunctionComponent, MouseEventHandler, ReactElement, useEffect, useState} from 'react'
 import {FaBookmark} from 'react-icons/fa'
 import {useSession} from 'next-auth/react'
-import {BookmarkStatusResponse, DestructuredProperty, SessionData} from '@/utilities/interfaces'
+import {ResourceStatusResponse, DestructuredProperty, SessionData} from '@/utilities/interfaces'
 import {getBookmarkStatus, toggleBookmark} from '@/utilities/requests'
 import Spinner from '@/components/Spinner'
 const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): ReactElement | null=> {
@@ -28,8 +28,8 @@ const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): Re
         if (loggedIn) {
           if (propertyId && !isOwner) {
             try {
-              const {bookmarked}: BookmarkStatusResponse = await getBookmarkStatus(propertyId)
-              setBookmarked(bookmarked)
+              const {bookmarked}: ResourceStatusResponse = await getBookmarkStatus(propertyId)
+              bookmarked !== undefined && setBookmarked(bookmarked)
             } catch (error) {
               setErrorOccured(true)
             }
