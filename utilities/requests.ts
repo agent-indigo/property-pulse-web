@@ -1,5 +1,13 @@
 import {toast} from 'react-toastify'
-import {BookmarkStatusResponse, GeoCodingResponse, GetPropertiesResponse, InquiryMessage, ListedProperty, MarkMessageResponse, UnreadCountResponse} from '@/utilities/interfaces'
+import {
+  BookmarkStatusResponse,
+  GeoCodingResponse,
+  GetPropertiesResponse,
+  InquiryMessage,
+  ListedProperty,
+  MarkMessageResponse,
+  UnreadCountResponse
+} from '@/utilities/interfaces'
 const api: string = process.env.NEXT_PUBLIC_API_DOMAIN ?? ''
 const noApiMsg: string = 'NEXT_PUBLIC_API_DOMAIN is MISSING from `.env`.'
 let activity: string = ''
@@ -130,22 +138,31 @@ export const deleteProperty: Function = async (id: string): Promise<ListedProper
  */
 export const editProperty: Function = async (
   id: string,
-  update: FormData
-): Promise<void> => {
+  update: ListedProperty
+): Promise<boolean> => {
   activity = 'saving changes'
   try {
     if (api === '') {
       toast.error(noApiMsg)
+      return false
     } else {
-      (await fetch(
+      const response: Response = await fetch(
         `${api}/properties/${id}`, {
           method: 'PUT',
-          body: update
+          body: JSON.stringify(update)
         }
-      )).ok ? toast.success('Property updated.') : toast.error(eMsg)
+      )
+      if (response.ok) {
+        toast.success('Property updated.')
+        return true
+      } else {
+        toast.error(eMsg)
+        return false
+      }
     }
   } catch (error: any) {
     toast.error(eMsgPlus(error))
+    return false
   }
 }
 /**

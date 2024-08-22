@@ -30,8 +30,7 @@ const EditPropertyForm: FunctionComponent = (): ReactElement | null => {
       name: '',
       email: '',
       phone: ''
-    },
-    files: []
+    }
   })
   const handleInput: ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement> = (
     event: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>
@@ -69,17 +68,14 @@ const EditPropertyForm: FunctionComponent = (): ReactElement | null => {
   }
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
-    await editProperty(
-      id,
-      new FormData(event.currentTarget)
-    )
-    router.push(`/properties/${id}`)
+    const success: boolean = await editProperty(id, fields)
+    success && router.push(`/properties/${id}`)
   }
   useEffect(
     (): void => {
       const populateFields: Function = async (): Promise<void> => {
-        setMounted(true)
         setFields(await getProperty(id))
+        setMounted(true)
         setLoading(false)
       }
       populateFields()

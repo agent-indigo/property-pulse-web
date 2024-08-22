@@ -18,7 +18,7 @@ const SearchResultsPage: FunctionComponent = (): ReactElement => {
   const propertyType: string | null = searchParams.get('type')
   const [properties, setProperties] = useState<ListedProperty[]>([])
   const [loading, setLoading] = useState<boolean>(true)
-  const [page, setPage] = useState<number>(1)
+  const [page, setPage] = useState<number>(Number.parseInt(searchParams.get('page') ?? '1'))
   const [total, setTotal] = useState<number>(properties.length)
   useEffect(
     (): void => {

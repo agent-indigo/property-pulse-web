@@ -16,7 +16,7 @@ const UnreadCount: FunctionComponent = (): ReactElement | null => {
         setUnreadCount(unread)
         setLoading(false)
       }
-      if (id && id !== '') getCount()
+      id && id !== '' && getCount()
     },
     [id, setUnreadCount]
   )

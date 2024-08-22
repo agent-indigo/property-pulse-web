@@ -18,11 +18,17 @@ const MessageSchema = new Schema<InquiryMessage>({
   },
   name: {
     type: String,
-    required: [true, 'Please provide your name.']
+    required: [
+      true,
+      'Please provide your name.'
+    ]
   },
   email: {
     type: String,
-    required: [true, 'Please provide your email address.']
+    required: [
+      true,
+      'Please provide your email address.'
+    ]
   },
   phone: {
     type: String

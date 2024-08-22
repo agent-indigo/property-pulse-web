@@ -91,9 +91,15 @@ const PropertySchema = new Schema<ListedProperty>({
     }
   ],
   rates: {
-    nightly: {type: Number},
-    weekly: {type: Number},
-    monthly: {type: Number}
+    nightly: {
+      type: Number
+    },
+    weekly: {
+      type: Number
+    },
+    monthly: {
+      type: Number
+    }
   },
   seller_info: {
     name: {

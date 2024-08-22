@@ -19,7 +19,7 @@ const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): Re
   const handleClick: MouseEventHandler<HTMLButtonElement> = async (): Promise<void> => {
     if (propertyId) {
       const result: boolean | undefined = await toggleBookmark(propertyId)
-      if (result !== undefined) setBookmarked(result)
+      result !== undefined && setBookmarked(result)
     }
   }
   useEffect(

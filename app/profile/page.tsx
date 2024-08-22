@@ -19,7 +19,7 @@ const ProfilePage: FunctionComponent = (): ReactElement => {
         setProperties(await getUserProperties(id))
         setLoading(false)
       }
-      if (id) fetchProperties(id)
+      id && fetchProperties(id)
       if (name) document.title = `Profile | ${name} | PropertyPulse | Find the Perfect Rental`
     },
     [id, name]

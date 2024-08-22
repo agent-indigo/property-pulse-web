@@ -3,10 +3,6 @@ export const s200: Function = (content: string) => new NextResponse(
   content,
   {status: 200}
 )
-export const s204: Function = (message: string) => new NextResponse(
-  message,
-  {status: 204}
-)
 export const e400: Function = (action: string) => new NextResponse(
   `You can't ${action}.`,
   {status: 400}

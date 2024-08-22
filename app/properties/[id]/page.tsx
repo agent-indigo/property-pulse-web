@@ -32,7 +32,7 @@ const PropertyPage: FunctionComponent = (): ReactElement | null => {
         }
         setLoading(false)
       }
-      if (!property) loading ? getPropertyData() : router.push('/not-found')
+      !property && loading ? getPropertyData() : router.push('/not-found')
     },
     [params, property, loading, router, id]
   )

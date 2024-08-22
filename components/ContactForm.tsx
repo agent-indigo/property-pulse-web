@@ -4,7 +4,7 @@ import {FaPaperPlane} from 'react-icons/fa'
 import {useSession} from 'next-auth/react'
 import {ObjectId} from 'mongoose'
 import {DestructuredProperty, FormInput, InquiryMessage, SessionData} from '@/utilities/interfaces'
-import { sendMessage } from '@/utilities/requests'
+import {sendMessage} from '@/utilities/requests'
 const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
   const {data: session}: SessionData = useSession<boolean>() as SessionData
   const id: string | undefined = session?.user?.id
@@ -13,9 +13,7 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
     recipient: property.owner as ObjectId,
     property: property._id as ObjectId,
     name: '',
-    email: '',
-    phone: '',
-    body: ''
+    email: ''
   })
   const [sent, setSent] = useState<boolean>(false)
   const [errorOccured, setErrorOccured] = useState<boolean>(false)

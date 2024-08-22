@@ -22,8 +22,7 @@ const AddPropertyForm: FunctionComponent = (): ReactElement | null => {
       name: '',
       email: '',
       phone: ''
-    },
-    files: []
+    }
   })
   const handleInput: ChangeEventHandler<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement> = (
     event: ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>

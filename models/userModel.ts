@@ -16,7 +16,9 @@ const UserSchema = new Schema<RegisteredUser>({
       'Please provide a user name.'
     ]
   },
-  image: {type: String},
+  image: {
+    type: String
+  },
   bookmarks: [
     {
       type: Schema.Types.ObjectId,

@@ -4,7 +4,7 @@ import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
 import {ListedProperty, RegisteredUser} from '@/utilities/interfaces'
 import getSessionUser from '@/utilities/getSessionUser'
-import {e401, e404, e500, s200, redirect, s204} from '@/utilities/responses'
+import {e401, e404, e500, s200, redirect} from '@/utilities/responses'
 export {dynamic} from '@/utilities/dynamic'
 /**
  * @name    GET
@@ -45,7 +45,7 @@ export const DELETE = async (
       if (user) {
         if (property.owner?.toString() === user._id.toString()) {
           await propertyModel.findByIdAndDelete(property._id)
-          return s204('Property deleted.')
+          return s200('Property deleted.')
         } else {
           return e401
         }
@@ -80,33 +80,7 @@ export const PUT = async (
       const property: ListedProperty | null = await propertyModel.findById(id)
       if (property) {
         if (property.owner?.toString() === user._id.toString()) {
-          const form: FormData = await request.formData()
-          const update: ListedProperty = {
-            type: form.get('type')?.valueOf(),
-            name: form.get('name')?.valueOf(),
-            description: form.get('description')?.valueOf(),
-            location: {
-              street: form.get('location.street')?.valueOf(),
-              city: form.get('location.city')?.valueOf(),
-              state: form.get('location.state')?.valueOf(),
-              zipcode: form.get('location.zipcode')?.valueOf()
-            },
-            beds: form.get('beds')?.valueOf(),
-            baths: form.get('baths')?.valueOf(),
-            square_feet: form.get('square_feet')?.valueOf(),
-            amenities: form.getAll('amenities').map((amenity: FormDataEntryValue): string => amenity.valueOf().toString()),
-            rates: {
-              nightly: form.get('rates.nightly')?.valueOf(),
-              weekly: form.get('rates.weekly')?.valueOf(),
-              monthly: form.get('rates.monthly')?.valueOf()
-            },
-            seller_info: {
-              name: form.get('seller_info.name')?.valueOf(),
-              email: form.get('seller_info.email')?.valueOf(),
-              phone: form.get('seller_info.phone')?.valueOf()
-            }
-          } as ListedProperty
-          await propertyModel.findByIdAndUpdate(id, update)
+          await propertyModel.findByIdAndUpdate(id, await request.json())
           return redirect(`${process.env.NEXTAUTH_URL ?? ''}/properties/${id}`)
         } else {
           return e401

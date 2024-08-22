@@ -4,5 +4,7 @@ import {FunctionComponent, ReactElement} from 'react'
 export const metadata: Metadata = {
   title: 'Messages'
 }
-const MessagesPage: FunctionComponent = (): ReactElement => <Messages/>
+const MessagesPage: FunctionComponent = (): ReactElement => (
+  <Messages/>
+)
 export default MessagesPage

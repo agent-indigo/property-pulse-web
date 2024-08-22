@@ -22,7 +22,7 @@ export const GET = async (
     await connectToMongoDB()
     const page: string | null = new URL(request.url).searchParams.get('page')
     return s200(JSON.stringify({
-      properties: await propertyModel.find().skip((Number.parseInt(page && page !== '' ? page : '1') - 1) * 6).limit(6),
+      properties: page && page !== '' ? await propertyModel.find().skip(Number.parseInt(page) - 1).limit(6) : await propertyModel.find(),
       total: await propertyModel.countDocuments()
     }))
   } catch (error: any) {

@@ -84,7 +84,7 @@ const Navbar: FunctionComponent = (): ReactElement => {
                 </Link>
                 <Link
                   href='/properties'
-                  className={`${pathname === '/properties' ? 'bg-black' : ''} text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2`}
+                  className={`${pathname === '/properties?page=1' ? 'bg-black' : ''} text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2`}
                 >
                   Properties
                 </Link>

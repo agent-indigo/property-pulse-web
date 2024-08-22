@@ -1,5 +1,5 @@
 'use client'
-import {ChangeEvent, ChangeEventHandler, FormEvent, FunctionComponent, ReactElement, SyntheticEvent, useState} from 'react'
+import {ChangeEvent, ChangeEventHandler, FormEvent, FormEventHandler, FunctionComponent, ReactElement, useState} from 'react'
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import {useRouter} from 'next/navigation'
 import {FormInput, PropertySearchParams} from '@/utilities/interfaces'
@@ -16,12 +16,13 @@ const SearchPropertiesForm: FunctionComponent = (): ReactElement => {
       [name]: value
     }))
   }
+  const handleSubmit: FormEventHandler<HTMLFormElement> = (event: FormEvent<HTMLFormElement>): void => {
+    event.preventDefault()
+    router.push(`/properties/search?location=${fields.location}&type=${fields.type}&page=1`)
+  }
   return (
     <form
-      onSubmit={(event: FormEvent<HTMLFormElement>): void => {
-        event.preventDefault()
-        router.push(`/properties/search?location=${fields.location}&type=${fields.type}`)
-      }}
+      onSubmit={handleSubmit}
       className='mt-3 mx-auto max-w-2xl w-full flex flex-col md:flex-row items-center'
     >
       <div className='w-full md:w-3/5 md:pr-2 mb-4 md:mb-0'>
