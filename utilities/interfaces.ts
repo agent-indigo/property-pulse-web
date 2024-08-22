@@ -157,3 +157,6 @@ export interface MarkMessageResponse {
 export interface PageNumber {
   pageNumber: number
 }
+export interface UnreadMessagesCountState {
+  unreadMessagesCount: number
+}

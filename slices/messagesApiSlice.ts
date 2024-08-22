@@ -1,0 +1,48 @@
+import {MESSAGES_URL} from '@/utilities/urls'
+import apiSlice from '@/slices/apiSlice'
+import {InquiryMessage} from '@/utilities/interfaces'
+const messagesApiSlice = apiSlice.injectEndpoints({
+  endpoints: builder => ({
+    getMessages: builder.query({
+      query: () => ({
+        url: MESSAGES_URL,
+        method: 'GET'
+      }),
+      providesTags: ['message']
+    }),
+    getUnreadMessagesCount: builder.query({
+      query: () => ({
+        url: `${MESSAGES_URL}/unreadCount`,
+        method: 'GET'
+      })
+    }),
+    toggleMessageReadStatus: builder.mutation({
+      query: (id: string) => ({
+        url: `${MESSAGES_URL}/${id}`,
+        method: 'PATCH'
+      }),
+      invalidatesTags: ['message']
+    }),
+    deleteMessage: builder.mutation({
+      query: (id: string) => ({
+        url: `${MESSAGES_URL}/${id}`,
+        method: 'DELETE'
+      }),
+      invalidatesTags: ['message']
+    }),
+    sendMessage: builder.mutation({
+      query: (message: InquiryMessage) => ({
+        url: MESSAGES_URL,
+        method: 'POST',
+        body: JSON.stringify(message)
+      })
+    })
+  })
+})
+export const {
+  useGetMessagesQuery,
+  useGetUnreadMessagesCountQuery,
+  useToggleMessageReadStatusMutation,
+  useDeleteMessageMutation,
+  useSendMessageMutation
+} = messagesApiSlice
