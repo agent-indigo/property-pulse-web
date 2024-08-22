@@ -5,16 +5,16 @@ import {
   useEffect,
   useState
 } from 'react'
-import {GetPropertiesResponse, ListedProperty} from '@/utilities/interfaces'
+import {GetPropertiesResponse, ListedProperty, PageNumber} from '@/utilities/interfaces'
 import PropertyCard from '@/components/PropertyCard'
 import {getProperties} from '@/utilities/requests'
 import Spinner from '@/components/Spinner'
 import Paginator from '@/components/Paginator'
 import FeaturedProperties from '@/components/FeaturedProperties'
-const Properties: FunctionComponent = (): ReactElement => {
+const Properties: FunctionComponent<PageNumber> = ({pageNumber}): ReactElement => {
   const [properties, setProperties] = useState<ListedProperty[]>([])
   const [loading, setLoading] = useState<boolean>(true)
-  const [page, setPage] = useState<number>(1)
+  const [page, setPage] = useState<number>(pageNumber)
   const [total, setTotal] = useState<number>(0)
   useEffect(
     (): void => {

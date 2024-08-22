@@ -83,8 +83,8 @@ const Navbar: FunctionComponent = (): ReactElement => {
                   Home
                 </Link>
                 <Link
-                  href='/properties'
-                  className={`${pathname === '/properties?page=1' ? 'bg-black' : ''} text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2`}
+                  href='/properties?page=1'
+                  className={`${pathname === '/properties' ? 'bg-black' : ''} text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2`}
                 >
                   Properties
                 </Link>
@@ -238,7 +238,7 @@ const Navbar: FunctionComponent = (): ReactElement => {
               Home
             </Link>
             <Link
-              href='/properties'
+              href='/properties?page=1'
               className={`${pathname === '/properties' ? 'bg-black' : ''} text-white block rounded-md px-3 py-2 text-base font-medium`}
             >
               Properties

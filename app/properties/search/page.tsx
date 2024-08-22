@@ -33,7 +33,7 @@ const SearchResultsPage: FunctionComponent = (): ReactElement => {
         setLoading(false)
       }
       document.title = `${loading ? 'Loading...' : 'Search Results'} | PropertyPulse | Find the Perfect Rental`
-      location || propertyType ? getResults() : router.push('/properties')
+      location || propertyType ? getResults() : router.push('/properties?page=1')
     },
     [location, propertyType, loading, router, page]
   )
@@ -49,7 +49,7 @@ const SearchResultsPage: FunctionComponent = (): ReactElement => {
         <section className='px-4 py-6'>
           <div className='container-xl lg:container m-auto px-4 py-6'>
             <Link
-              href='/properties'
+              href='/properties?page=1'
               className='flex items-center text-blue-500 hover:underline mb-3'
             >
               <FaArrowAltCircleLeft className='mr-2 mb-1'/> All Properties

@@ -153,3 +153,6 @@ export interface UnreadCountResponse {
 export interface MarkMessageResponse {
   message: string
 }
+export interface PageNumber {
+  pageNumber: number
+}
