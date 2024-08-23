@@ -49,6 +49,7 @@ const Message: FunctionComponent<DestructuredMessage> = ({message}): ReactElemen
         toast.error(`Error deleting message:\n${JSON.stringify(deleteError)}`)
       } else {
         setDeleted(true)
+        dispatch(decrementUnreadMessagesCount())
         toast.success('Message deleted.')
       }
     }
