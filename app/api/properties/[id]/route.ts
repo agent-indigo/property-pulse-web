@@ -4,7 +4,7 @@ import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
 import {ListedProperty, RegisteredUser} from '@/utilities/interfaces'
 import getSessionUser from '@/utilities/getSessionUser'
-import {e401, e404, e500, s200, redirect} from '@/utilities/responses'
+import {e401, e404, e500, s200, redirect, s204} from '@/utilities/responses'
 import cloudinary from '@/utilities/cloudinary'
 export {dynamic} from '@/utilities/dynamic'
 /**
@@ -47,7 +47,7 @@ export const DELETE = async (
         if (property.owner?.toString() === user._id.toString()) {
           property.imageIds?.map(async (id: string): Promise<void> => await cloudinary.uploader.destroy(id))
           await propertyModel.findByIdAndDelete(property._id)
-          return s200('Property deleted.')
+          return s204('Property deleted.')
         } else {
           return e401
         }

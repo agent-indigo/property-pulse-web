@@ -8,9 +8,13 @@ I made the following modifications:
 
 - Added TypeScript
 
+- Refactored the entire app to use Redux Toolkit and React Helmet
+
 - Replaced `mapbox-gl` and `react-geocode` with Google Maps
 
 - Moved geocoding into an API route
+
+- Added the Bookmark Button to the Bookmarks Page
 
 - Added Featured Properties and Pagination to Search Results
 

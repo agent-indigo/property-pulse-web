@@ -3,10 +3,12 @@ import Link from 'next/link'
 import {useParams, useRouter} from 'next/navigation'
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
-import {FunctionComponent, ReactElement, useEffect, useState} from 'react'
+import {FunctionComponent, ReactElement, useEffect} from 'react'
 import {FaArrowLeft} from 'react-icons/fa'
-import {IdFromUrl, ListedProperty} from '@/utilities/interfaces'
-import {getProperty} from '@/utilities/requests'
+import {Helmet} from 'react-helmet'
+import {toast} from 'react-toastify'
+import {IdFromUrl} from '@/utilities/interfaces'
+import {useGetPropertyQuery} from '@/slices/propertiesApiSlice'
 import Spinner from '@/components/Spinner'
 import PropertyHeaderImage from '@/components/PropertyHeaderImage'
 import PropertyDetails from '@/components/PropertyDetails'
@@ -18,26 +20,35 @@ const PropertyPage: FunctionComponent = (): ReactElement | null => {
   const router: AppRouterInstance = useRouter()
   const params: Params = useParams()
   const {id}: IdFromUrl = params
-  const [property, setProperty] = useState<ListedProperty | null>(null)
-  const [headerImage, setHeaderImage] = useState<string>('')
-  const [loading, setLoading] = useState<boolean>(true)
+  const {data: property, isLoading, isError, error} = useGetPropertyQuery(id ?? '')
+  const headerImage: string = property?.images?.[0] ?? ''
   useEffect(
     (): void => {
-      const getPropertyData: Function = async (): Promise<void> => {
-        const property: ListedProperty | undefined = await getProperty(id)
-        if (property) {
-          document.title = `${property.name} | PropertyPulse | Find the Perfect Rental`
-          setProperty(property)
-          setHeaderImage(property.images?.[0] ?? '')
+      if (isLoading) {
+        if (isError) {
+          toast.error(`Error retrieving property:\n${JSON.stringify(error)}`)
+          router.push('/error')
         }
-        setLoading(false)
       }
-      if (!property) loading ? getPropertyData() : router.push('/not-found')
     },
-    [params, property, loading, router, id]
+    [isError, error, router, isLoading]
   )
-  return loading ? <Spinner loading={loading}/> : property && (
+  return isLoading ? (
     <>
+      <Helmet>
+        <title>
+          Loading... | PropertyPulse | Find the Perfect Rental
+        </title>
+      </Helmet>
+      <Spinner loading={isLoading}/>
+    </>
+  ) : property ? (
+    <>
+      <Helmet>
+        <title>
+          {property.name} | PropertyPulse | Find the Perfect Rental
+        </title>
+      </Helmet>
       <PropertyHeaderImage image={headerImage}/>
       <section>
         <div className='container m-auto py-6 px-6'>
@@ -64,6 +75,6 @@ const PropertyPage: FunctionComponent = (): ReactElement | null => {
       </section>
       <PropertyImages images={property?.images as string[]}/>
     </>
-  )
+  ) : null
 }
 export default PropertyPage

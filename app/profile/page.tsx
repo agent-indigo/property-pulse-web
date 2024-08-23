@@ -1,61 +1,80 @@
 'use client'
-import {useEffect, useState, ReactElement, FunctionComponent} from 'react'
+import {useEffect, ReactElement, FunctionComponent} from 'react'
+import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
+import {useRouter} from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import {useSession} from 'next-auth/react'
-import {getUserProperties, deleteProperty} from '@/utilities/requests'
+import {Helmet} from 'react-helmet'
+import {toast} from 'react-toastify'
 import profileDefault from '@/assets/images/profile.png'
 import Spinner from '@/components/Spinner'
 import {ListedProperty, SessionData} from '@/utilities/interfaces'
+import {useGetUserPropertiesQuery, useDeletePropertyMutation} from '@/slices/propertiesApiSlice'
 const ProfilePage: FunctionComponent = (): ReactElement => {
+  const router: AppRouterInstance = useRouter()
   const {data: session}: SessionData = useSession<boolean>() as SessionData
-  const id: string | undefined = session?.user?.id
-  const name: string | null | undefined = session?.user?.name
-  const [properties, setProperties] = useState<ListedProperty[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
+  const id: string = session?.user?.id ?? ''
+  const {data: properties, isLoading, isError, error, refetch} = useGetUserPropertiesQuery(id)
+  const [deleteProperty, {isLoading: deleting, isError: deleteFailed, error: deleteError}] = useDeletePropertyMutation()
   useEffect(
     (): void => {
-      const fetchProperties: Function = async (id: string): Promise<void> => {
-        setProperties(await getUserProperties(id))
-        setLoading(false)
+      if (!isLoading) {
+        if (isError) {
+          toast.error(`Error retrieving profile:\n${JSON.stringify(error)}`)
+          router.push('/error')
+        }
       }
-      id && fetchProperties(id)
-      if (name) document.title = `Profile | ${name} | PropertyPulse | Find the Perfect Rental`
     },
-    [id, name]
+    [isError, error, router, isLoading]
   )
+  const handleDelete: Function = async (id: string): Promise<void> => {
+    await deleteProperty(id)
+    if (!deleting) {
+      if (deleteFailed) {
+        toast.error(`Error deleting property:\n${JSON.stringify(deleteError)}`)
+      } else {
+        toast.success('Propety deleted.')
+        refetch()
+      }
+    }
+  }
   return (
-    <section className='bg-blue-50'>
-      <div className='container m-auto py-24'>
-        <div className='bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0'>
-          <h1 className='text-3xl font-bold mb-4'>
-            Your Profile
-          </h1>
-          <div className='flex flex-col md:flex-row'>
-            <div className='md:w-1/4 mx-20 mt-10'>
-              <div className='mb-4'>
-                <Image
-                  className='h-32 w-32 md:h-48 md:w-48 rounded-full mx-auto md:mx-0'
-                  src={session?.user?.image || profileDefault}
-                  width={200}
-                  height={200}
-                  alt='User'
-                />
+    <>
+      <Helmet>
+        <title>
+          {deleting ? 'Processing...' : isLoading ? 'Loading...' : `Profle | ${session?.user.id}`} | PropertyPulse | Find the Perfect Rental
+        </title>
+      </Helmet>
+      <section className='bg-blue-50'>
+        <div className='container m-auto py-24'>
+          <div className='bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0'>
+            <h1 className='text-3xl font-bold mb-4'>
+              Your Profile
+            </h1>
+            <div className='flex flex-col md:flex-row'>
+              <div className='md:w-1/4 mx-20 mt-10'>
+                <div className='mb-4'>
+                  <Image
+                    className='h-32 w-32 md:h-48 md:w-48 rounded-full mx-auto md:mx-0'
+                    src={session?.user?.image ?? profileDefault}
+                    width={200}
+                    height={200}
+                    alt='User'
+                  />
+                </div>
+                <h2 className='text-2xl mb-4'>
+                  {session?.user?.name}
+                </h2>
+                <h2 className='text-2xl'>
+                  {session?.user?.email}
+                </h2>
               </div>
-              <h2 className='text-2xl mb-4'>
-                {session?.user?.name}
-              </h2>
-              <h2 className='text-2xl'>
-                {session?.user?.email}
-              </h2>
-            </div>
-            <div className='md:w-3/4 md:pl-4'>
-              <h2 className='text-xl font-semibold mb-4'>Your Listings</h2>
-              {!loading && properties.length === 0 && (
-                <p>You haven&apos;t listed any properties.</p>
-              )}
-              {loading ? (<Spinner loading={loading}/>) : (
-                properties.map((property: ListedProperty): ReactElement => (
+              <div className='md:w-3/4 md:pl-4'>
+                <h2 className='text-xl font-semibold mb-4'>Your Listings</h2>
+                {isLoading ? <Spinner loading={isLoading}/> : properties && (properties.length === 0 ? (
+                  <p>You haven&apos;t listed any properties.</p>
+                ) : (properties.map((property: ListedProperty): ReactElement => (
                   <div
                     key={property._id?.toString()}
                     className='mb-10'
@@ -86,7 +105,7 @@ const ProfilePage: FunctionComponent = (): ReactElement => {
                         Edit
                       </Link>
                       <button
-                        onClick={async (): Promise<void> => setProperties(await deleteProperty(property._id))}
+                      onClick={(): void => handleDelete(property._id?.toString() ?? '')}
                         className='bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600'
                         type='button'
                       >
@@ -94,13 +113,13 @@ const ProfilePage: FunctionComponent = (): ReactElement => {
                       </button>
                     </div>
                   </div>
-                ))
-              )}
+                ))))}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   )
 }
 export default ProfilePage

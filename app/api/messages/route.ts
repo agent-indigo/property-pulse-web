@@ -3,7 +3,7 @@ import {Document, Types, ObjectId} from 'mongoose'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import messageModel from '@/models/messageModel'
 import getSessionUser from '@/utilities/getSessionUser'
-import {e401, e500, s200} from '@/utilities/responses'
+import {e400, e401, e500, s200, s204} from '@/utilities/responses'
 import {InquiryMessage, RegisteredUser} from '@/utilities/interfaces'
 export {dynamic} from '@/utilities/dynamic'
 /**
@@ -46,7 +46,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
     if (user) {
       const sender: Types.ObjectId = user._id
       const message: InquiryMessage = await request.json()
-      if (sender.toString() === message.recipient.toString()) {
+      if (sender.toString() !== message.recipient.toString()) {
         const document: Document<unknown, {}, InquiryMessage> & InquiryMessage & {_id: ObjectId} = new messageModel({
           sender,
           ...message,
@@ -54,12 +54,12 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
         })
         await connectToMongoDB()
         await document.save()
-        return s200(JSON.stringify({message: 'Message sent.'}))
+        return s204(JSON.stringify({message: 'Message sent.'}))
       } else {
         return e401
       }
     } else {
-      return e401
+      return e400('send yourself a message')
     }
   } catch (error: any) {
     return e500(

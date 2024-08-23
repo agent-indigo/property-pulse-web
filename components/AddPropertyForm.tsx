@@ -51,7 +51,7 @@ const AddPropertyForm: FunctionComponent = (): ReactElement | null => {
       amenities.push(value)
     } else {
       const index: number = amenities.indexOf(value)
-      if (index !== -1) amenities.splice(index, 1)
+      index !== -1 && amenities.splice(index, 1)
     }
     setFields((previousValues: ListedProperty): ListedProperty => ({
       ...previousValues,
@@ -59,7 +59,7 @@ const AddPropertyForm: FunctionComponent = (): ReactElement | null => {
     }))
   }
   const handleImageUpload: ChangeEventHandler<HTMLInputElement> = (event: ChangeEvent<HTMLInputElement>): void => {
-    const files: File[] = Array.from(event.target.files as FileList)
+    const files: File[] = Array.from(event.target.files ?? [])
     setFields((previousValues: ListedProperty): ListedProperty => ({
       ...previousValues,
       files

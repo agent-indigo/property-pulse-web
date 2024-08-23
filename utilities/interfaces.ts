@@ -127,8 +127,8 @@ export interface GoogleSignInParams {
   profile: GoogleProfile
 }
 export interface GeoCodingResponse {
-  lat: number | string
-  lng: number | string
+  lat: number
+  lng: number
 }
 export interface DestructuredMessage {
   message: InquiryMessage
@@ -147,7 +147,7 @@ export interface Pagination {
   paginate: Function
 }
 export interface UnreadCountResponse {
-  unread: number | string
+  unread: number
 }
 export interface PageNumber {
   pageNumber: number
@@ -159,4 +159,9 @@ export interface ResourceStatusResponse {
   message?: string
   success?: boolean
   bookmarked?: boolean
+  read?: boolean
+}
+export interface EditPropertyRequest {
+  id: string,
+  fields: ListedProperty
 }

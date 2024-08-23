@@ -1,6 +1,6 @@
 import {NextRequest, NextResponse} from 'next/server'
 import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
-import {e401, e404, e500, s200} from '@/utilities/responses'
+import {e401, e404, e500, s200, s204} from '@/utilities/responses'
 import {InquiryMessage, RegisteredUser} from '@/utilities/interfaces'
 import getSessionUser from '@/utilities/getSessionUser'
 import messageModel from '@/models/messageModel'
@@ -47,7 +47,10 @@ export const PATCH = async (
           }
           status = read ? 'unread' : 'read'
           await messageModel.findByIdAndUpdate(id, update)
-          return s200(JSON.stringify({message: `Message marked as ${status}.`}))
+          return s200(JSON.stringify({
+            message: `Message marked as ${status}.`,
+            read: !read
+          }))
         } else {
           return e401
         }
@@ -83,7 +86,7 @@ export const DELETE = async (
       if (message) {
         if (user._id.toString() === message.recipient.toString()) {
           await messageModel.findByIdAndDelete(id)
-          return s200(JSON.stringify({message: 'Message deleted.'}))
+          return s204(JSON.stringify({message: 'Message deleted.'}))
         } else {
           return e401
         }

@@ -1,26 +1,30 @@
 'use client'
 import Link from 'next/link'
-import {FunctionComponent, ReactElement, useEffect, useState} from 'react'
-import {getProperties} from '@/utilities/requests'
-import {GetPropertiesResponse, ListedProperty} from '@/utilities/interfaces'
+import {FunctionComponent, ReactElement, useEffect} from 'react'
+import {toast} from 'react-toastify'
+import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
+import {useRouter} from 'next/navigation'
+import {ListedProperty} from '@/utilities/interfaces'
 import PropertyCard from '@/components/PropertyCard'
+import {useGetPropertiesQuery} from '@/slices/propertiesApiSlice'
 import FeaturedProperties from '@/components/FeaturedProperties'
-import Spinner from './Spinner'
+import Spinner from '@/components/Spinner'
 const HomeProperties: FunctionComponent = (): ReactElement => {
-  const [properties, setProperties] = useState<ListedProperty[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
+  const {data: response, isLoading, isError, error} = useGetPropertiesQuery(undefined)
+  const properties: ListedProperty[] = response?.properties ?? []
+  const router: AppRouterInstance = useRouter()
   useEffect(
     (): void => {
-      const populate: Function = async (): Promise<void> => {
-        const {properties}: GetPropertiesResponse = await getProperties()
-        setProperties(properties)
-        setLoading(false)
+      if (isLoading) {
+        if (isError) {
+          toast.error(`Error retrieving properties:\n${JSON.stringify(error)}`)
+          router.push('/error')
+        }
       }
-      populate()
     },
-    []
+    [isError, error, router, isLoading]
   )
-  return loading ? <Spinner loading={loading}/> : (
+  return isLoading ? <Spinner loading={isLoading}/> : (
     <>
       <FeaturedProperties/>
       <section className='px-4 py-6'>
@@ -29,12 +33,12 @@ const HomeProperties: FunctionComponent = (): ReactElement => {
             Recent Properties
           </h2>
           <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-            {properties.length === 0 ? (
+            {[...properties].length === 0 ? (
               <p>
-                None found...
+                No current listings.
               </p>
             ) : (
-              properties.sort((): number => Math.random() - Math.random()).slice(
+              [...properties].sort((): number => Math.random() - Math.random()).slice(
                 0,
                 3
               ).map((property: ListedProperty): ReactElement => (

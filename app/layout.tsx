@@ -3,7 +3,7 @@ import type {Metadata} from 'next'
 import {Inter} from 'next/font/google'
 import {NextFont} from 'next/dist/compiled/@next/font'
 import {ToastContainer} from 'react-toastify'
-import GlobalContextProvider from '@/components/GlobalContextProvider'
+import StateProvider from '@/components/StateProvider'
 import AuthProvider from '@/components/AuthProvider'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 const RootLayout: FunctionComponent<ReactNodes> = (
   {children}
 ): ReactElement => (
-  <GlobalContextProvider>
+  <StateProvider>
     <AuthProvider>
       <html lang='en'>
         <body className={inter.className}>
@@ -36,6 +36,6 @@ const RootLayout: FunctionComponent<ReactNodes> = (
         </body>
       </html>
     </AuthProvider>
-  </GlobalContextProvider>
+  </StateProvider>
 )
 export default RootLayout

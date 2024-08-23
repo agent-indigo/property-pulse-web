@@ -15,6 +15,8 @@ import {
 import {DestructuredProperty} from '@/utilities/interfaces'
 const ShareButtons: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
   const url: string = `${process.env.NEXT_PUBLIC_DOMAIN ?? ''}/properties/${property._id}`
+  const name: string = property.name
+  const type: string = property.type
   return (
     <>
       <h3 className='text-xl font-bold text-center pt-2'>
@@ -23,8 +25,8 @@ const ShareButtons: FunctionComponent<DestructuredProperty> = ({property}): Reac
       <div className='flex gap-3 justify-center pb-5'>
         <FacebookShareButton
           url={url}
-          title={property.name}
-          hashtag={`${property.type.replace(/\s/g, '')}ForRent`}
+          title={name}
+          hashtag={`${type.replace(/\s/g, '')}ForRent`}
         >
           <FacebookIcon
             size={40}
@@ -35,7 +37,7 @@ const ShareButtons: FunctionComponent<DestructuredProperty> = ({property}): Reac
         </FacebookShareButton>
         <FacebookMessengerShareButton
           url={url}
-          title={property.name}
+          title={name}
           appId={process.env.FACEBOOK_MESSENGER_APP_ID ?? ''}
         >
           <FacebookMessengerIcon
@@ -45,7 +47,7 @@ const ShareButtons: FunctionComponent<DestructuredProperty> = ({property}): Reac
         </FacebookMessengerShareButton>
         <WhatsappShareButton
           url={url}
-          title={property.name}
+          title={name}
           separator=':: '
         >
           <WhatsappIcon
@@ -55,8 +57,8 @@ const ShareButtons: FunctionComponent<DestructuredProperty> = ({property}): Reac
         </WhatsappShareButton>
         <TwitterShareButton
           url={url}
-          title={property.name}
-          hashtags={[`${property.type.replace(/\s/g, '')}ForRent`]}
+          title={name}
+          hashtags={[`${type.replace(/\s/g, '')}ForRent`]}
         >
           <XIcon
             size={40}
@@ -65,8 +67,8 @@ const ShareButtons: FunctionComponent<DestructuredProperty> = ({property}): Reac
         </TwitterShareButton>
         <EmailShareButton
           url={url}
-          subject={`${property.name} for rent`}
-          body={`I thought you might be interested in this rental ad:\n${url}`}
+          subject={`${name} for rent`}
+          body={`I thought this ${type} might meet your needs:\n${name}\n${url}`}
         >
           <EmailIcon
             size={40}

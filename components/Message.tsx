@@ -1,33 +1,56 @@
 'use client'
 import {useState, ReactElement, MouseEventHandler, FunctionComponent} from 'react'
 import Link from 'next/link'
-import {ObjectId} from 'mongoose'
-import {useGlobalContext} from '@/components/GlobalContextProvider'
-import {DestructuredMessage, GlobalState, ListedProperty, RegisteredUser} from '@/utilities/interfaces'
-import {deleteMessage, switchMessageReadStatus} from '@/utilities/requests'
+import {useDispatch} from 'react-redux'
+import {toast} from 'react-toastify'
+import {DestructuredMessage, ListedProperty, RegisteredUser, ResourceStatusResponse} from '@/utilities/interfaces'
+import {useDeleteMessageMutation, useToggleMessageReadStatusMutation} from '@/slices/messagesApiSlice'
+import { decrementUnreadMessagesCount, incrementUnreadMessagesCount } from '@/slices/unreadMessagesCountSlice'
 const Message: FunctionComponent<DestructuredMessage> = ({message}): ReactElement | null => {
-  const {setUnreadCount}: GlobalState = useGlobalContext()
+  const dispatch = useDispatch()
+  const [deleteMessage, {
+    isLoading: deleting,
+    isError: deleteFailed,
+    error: deleteError
+  }] = useDeleteMessageMutation()
+  const [togggleMessageReadStatus, {
+    isLoading: toggling,
+    isError: toggleFailed,
+    error: toggleError
+  }] = useToggleMessageReadStatusMutation()
   const [read, setRead] = useState<boolean>(message.read as boolean)
   const [deleted, setDeleted] = useState<boolean>(false)
-  const id: ObjectId | undefined = message._id
+  const id: string = message._id?.toString() ?? ''
   const property: ListedProperty = message.property as ListedProperty
   const sender: RegisteredUser = message.sender as RegisteredUser
   const email: string = message.email
   const phone: string | undefined = message.phone
   const body: string | undefined = message.body
   const handleReadStatusSwitch: MouseEventHandler<HTMLButtonElement> = async (): Promise<void> => {
-    const success: boolean = switchMessageReadStatus(id)
-    success && setRead((previousStatus: boolean): boolean => {
-      const read: boolean = !previousStatus
-      setUnreadCount((previousCount: number): number => read ? previousCount - 1 : previousCount + 1)
-      return read
-    })
+    const {read}: ResourceStatusResponse =  await togggleMessageReadStatus(id).unwrap()
+    if (!toggling) {
+      if (toggleFailed) {
+        toast.error(`Error marking message as read/unread:\n${JSON.stringify(toggleError)}`)
+      } else {
+        if (read !== undefined) {
+          setRead(read)
+          read ? dispatch(decrementUnreadMessagesCount()) : dispatch(incrementUnreadMessagesCount())
+          toast.success(`Message marked as ${read ? 'read' : 'unread'}.`)
+        } else {
+          toast.error('Error marking message as read/unread.')
+        }
+      }
+    }
   }
   const handleDelete: MouseEventHandler<HTMLButtonElement>  = async (): Promise<void> => {
-    const success: boolean = await deleteMessage(id)
-    if (success) {
-      setDeleted(true)
-      setUnreadCount((previousCount: number): number => previousCount - 1)
+    await deleteMessage(id)
+    if (!deleting) {
+      if (deleteFailed) {
+        toast.error(`Error deleting message:\n${JSON.stringify(deleteError)}`)
+      } else {
+        setDeleted(true)
+        toast.success('Message deleted.')
+      }
     }
   }
   return deleted ? null : (

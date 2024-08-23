@@ -1,6 +1,7 @@
 import {PROPERTIES_URL} from '@/utilities/urls'
 import apiSlice from '@/slices/apiSlice'
 import {
+  EditPropertyRequest,
   GeoCodingResponse,
   GetPropertiesResponse,
   ListedProperty,
@@ -72,16 +73,17 @@ const propertiesApiSlice = apiSlice.injectEndpoints({
         url: `${PROPERTIES_URL}/bookmarks`,
         method: 'PATCH',
         body: JSON.stringify({propertyId})
-      })
+      }),
+      invalidatesTags: ['property']
     }),
-    editProperty: builder.mutation<ResourceStatusResponse, any>({
-      query: (
-        id?: string,
-        update?: ListedProperty
-      ) => ({
+    editProperty: builder.mutation<ResourceStatusResponse, EditPropertyRequest>({
+      query: ({
+        id,
+        fields
+      }) => ({
         url: `${PROPERTIES_URL}/${id}`,
         method: 'PATCH',
-        body: JSON.stringify(update)
+        body: fields
       }),
       invalidatesTags: ['property']
     }),

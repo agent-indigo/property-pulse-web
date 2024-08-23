@@ -3,49 +3,54 @@ import {FunctionComponent, ReactElement, useEffect, useState} from 'react'
 import {ReadonlyURLSearchParams, useRouter, useSearchParams} from 'next/navigation'
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import Link from 'next/link'
+import {toast} from 'react-toastify'
+import {Helmet} from 'react-helmet'
 import {FaArrowAltCircleLeft} from 'react-icons/fa'
 import PropertyCard from '@/components/PropertyCard'
 import SearchPropertiesForm from '@/components/SearchPropertiesForm'
 import Spinner from '@/components/Spinner'
-import {GetPropertiesResponse, ListedProperty} from '@/utilities/interfaces'
-import {getPropertySearchResults} from '@/utilities/requests'
+import {ListedProperty} from '@/utilities/interfaces'
 import FeaturedProperties from '@/components/FeaturedProperties'
 import Paginator from '@/components/Paginator'
+import {useGetPropertySearchResultsQuery} from '@/slices/propertiesApiSlice'
 const SearchResultsPage: FunctionComponent = (): ReactElement => {
   const router: AppRouterInstance = useRouter()
   const searchParams: ReadonlyURLSearchParams = useSearchParams()
-  const location: string | null = searchParams.get('location')
-  const propertyType: string | null = searchParams.get('type')
-  const [properties, setProperties] = useState<ListedProperty[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
+  const location: string = searchParams.get('location') ?? ''
+  const type: string = searchParams.get('type') ?? ''
   const [page, setPage] = useState<number>(Number.parseInt(searchParams.get('page') ?? '1'))
-  const [total, setTotal] = useState<number>(properties.length)
+  const {data: response, isLoading, isError, error} = useGetPropertySearchResultsQuery({
+    location,
+    type,
+    page
+  })
+  const properties: ListedProperty[] = response?.properties ?? []
+  const total: number = response?.total ?? 0
   useEffect(
     (): void => {
-      const getResults: Function = async (): Promise<void> => {
-        const {properties, total}: GetPropertiesResponse = await getPropertySearchResults(
-          location ?? '',
-          propertyType ?? 'All',
-          page
-        )
-        setProperties(properties)
-        setTotal(total)
-        setLoading(false)
+      if (!isLoading) {
+        if (isError) {
+          toast.error(`Error retrieving search results:\n${JSON.stringify(error)}`)
+          router.push('/error')
+        }
       }
-      document.title = `${loading ? 'Loading...' : 'Search Results'} | PropertyPulse | Find the Perfect Rental`
-      location || propertyType ? getResults() : router.push('/properties?page=1')
     },
-    [location, propertyType, loading, router, page]
+    [isError, error, router, isLoading]
   )
   return (
     <>
+      <Helmet>
+        <title>
+          {isLoading ? 'Loading...' : 'Search Results'} | PropertyPulse | Find the Perfect Rental
+        </title>
+      </Helmet>
       <section className='bg-blue-700 py-4'>
         <div className='max-w-7xl mx-auto px-4 flex flex-col items-start sm:px-6 lg:px-8'>
           <SearchPropertiesForm/>
         </div>
       </section>
       <FeaturedProperties/>
-      {loading ? <Spinner loading={loading}/> : (
+      {isLoading ? <Spinner loading={isLoading}/> : (
         <section className='px-4 py-6'>
           <div className='container-xl lg:container m-auto px-4 py-6'>
             <Link

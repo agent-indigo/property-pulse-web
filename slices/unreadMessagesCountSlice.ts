@@ -7,13 +7,13 @@ const unreadMessagesCountSlice = createSlice({
   name: 'unreadMessagesCount',
   initialState,
   reducers: {
-    increment: (state: UnreadMessagesCountState): void => {
+    incrementUnreadMessagesCount: (state: UnreadMessagesCountState): void => {
       state.unreadMessagesCount++
     },
-    decrement: (state: UnreadMessagesCountState): void => {
+    decrementUnreadMessagesCount: (state: UnreadMessagesCountState): void => {
       state.unreadMessagesCount--
     },
-    set: (
+    setUnreadMessagesCount: (
       state: UnreadMessagesCountState,
       action: PayloadAction<number>
     ): void => {
@@ -22,7 +22,8 @@ const unreadMessagesCountSlice = createSlice({
   }
 })
 export const {
-  increment,
-  decrement
+  incrementUnreadMessagesCount,
+  decrementUnreadMessagesCount,
+  setUnreadMessagesCount
 } = unreadMessagesCountSlice.actions
 export default unreadMessagesCountSlice.reducer

@@ -38,7 +38,7 @@ const messagesApiSlice = apiSlice.injectEndpoints({
       query: (message: InquiryMessage) => ({
         url: MESSAGES_URL,
         method: 'POST',
-        body: JSON.stringify(message)
+        body: message
       })
     })
   })

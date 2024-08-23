@@ -1,30 +1,25 @@
 'use client'
-import {useEffect, useState, ReactElement, FunctionComponent} from 'react'
+import {useEffect, ReactElement, FunctionComponent} from 'react'
+import {toast} from 'react-toastify'
 import {GoogleMap, LoadScript, Marker} from '@react-google-maps/api'
 import Spinner from '@/components/Spinner'
-import {DestructuredProperty} from '@/utilities/interfaces'
-import {getPropertyGeoCoordinates} from '@/utilities/requests'
+import {DestructuredProperty, GeoCodingResponse} from '@/utilities/interfaces'
+import {useGetPropertyGeoCoordinatesQuery} from '@/slices/propertiesApiSlice'
 const PropertyMap: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
-  const [lat, setLat] = useState<number>(0)
-  const [lng, setLng] = useState<number>(0)
-  const [loading, setLoading] = useState<boolean>(true)
-  const [geocodingError, setGeocodingError] = useState<boolean>(true)
+  const {
+    data: response,
+    isLoading,
+    isError,
+    error
+  } = useGetPropertyGeoCoordinatesQuery(property._id?.toString() ?? '')
+  const {lat, lng}: GeoCodingResponse = response ?? {lat: 0, lng: 0}
   useEffect(
     (): void => {
-      const setCoordinates: Function = async (): Promise<void> => {
-        const {lat, lng} = await getPropertyGeoCoordinates(property._id)
-        if (!isNaN(lat) && !isNaN(lng)) {
-          setLat(lat)
-          setLng(lng)
-          setGeocodingError(false)
-        }
-        setLoading(false)
-      }
-      setCoordinates()
+      if (isLoading) isError && toast.error(`Error geolocating property:\n${JSON.stringify(error)}`)
     },
-    [property]
+    [isError, error, isLoading]
   )
-  return loading ? <Spinner loading={loading}/> : geocodingError ? (
+  return isLoading ? <Spinner loading={isLoading}/> : isError ? (
     <h1 className='text-red-500 text-center font-bold'>
       Geocoding Error
     </h1>

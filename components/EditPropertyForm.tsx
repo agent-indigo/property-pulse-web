@@ -3,13 +3,17 @@ import {ChangeEvent, ChangeEventHandler, FormEvent, FormEventHandler, FunctionCo
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
 import {useParams, useRouter} from 'next/navigation'
-import {FormCheck, FormInput, IdFromUrl, ListedProperty} from '@/utilities/interfaces'
-import {getProperty, editProperty} from '@/utilities/requests'
+import {toast} from 'react-toastify'
+import {Helmet} from 'react-helmet'
+import {useGetPropertyQuery, useEditPropertyMutation} from '@/slices/propertiesApiSlice'
+import {FormCheck, FormInput, ListedProperty} from '@/utilities/interfaces'
+import Spinner from '@/components/Spinner'
 const EditPropertyForm: FunctionComponent = (): ReactElement | null => {
   const router: AppRouterInstance = useRouter()
   const params: Params = useParams()
-  const {id}: IdFromUrl = params
-  const [loading, setLoading] = useState<boolean>(true)
+  const id: string = params.id
+  const {data: property, isLoading, isError, error} = useGetPropertyQuery(id ?? '')
+  const [editProperty, {isLoading: editing, isError: editFailed, error: editingError}] = useEditPropertyMutation()
   const [mounted, setMounted] = useState<boolean>(false)
   const [fields, setFields] = useState<ListedProperty>({
     name: '',
@@ -59,7 +63,7 @@ const EditPropertyForm: FunctionComponent = (): ReactElement | null => {
       amenities.push(value)
     } else {
       const index: number = amenities.indexOf(value)
-      if (index !== -1) amenities.splice(index, 1)
+      index !== -1 && amenities.splice(index, 1)
     }
     setFields((previousValues: ListedProperty): ListedProperty => ({
       ...previousValues,
@@ -68,21 +72,42 @@ const EditPropertyForm: FunctionComponent = (): ReactElement | null => {
   }
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault()
-    const success: boolean = await editProperty(id, fields)
-    success && router.push(`/properties/${id}`)
+    await editProperty({id, fields})
+    if (!editing) {
+      if (editFailed) {
+        toast.error(`Error editing property:\n${JSON.stringify(editingError)}`)
+      } else {
+        toast.success('Property updated.')
+        router.push(`/properties/${id}`)
+      }
+    }
   }
   useEffect(
     (): void => {
-      const populateFields: Function = async (): Promise<void> => {
-        setFields(await getProperty(id))
-        setMounted(true)
-        setLoading(false)
+      if (!isLoading) {
+        if (isError) {
+          toast.error(`Error editing property:\n${JSON.stringify(error)}`)
+          router.push('/error')
+        } else {
+          if (property) {
+            setFields(property)
+            setMounted(true)
+          }
+        }
       }
-      populateFields()
     },
-    [id]
+    [isError, error, router, property, isLoading]
   )
-  return mounted && !loading ? (
+  return isLoading || editing ? (
+    <>
+      <Helmet>
+        <title>
+          {isLoading ? 'Loading...' : 'Processing...'} | PropertyPulse | Find the Perfect Rental
+        </title>
+      </Helmet>
+      <Spinner loading={isLoading ? isLoading : editing}/>
+    </>
+  ) : mounted ? (
     <form onSubmit={handleSubmit}>
       <h2 className='text-3xl text-center font-semibold mb-6'>
         Edit Property
