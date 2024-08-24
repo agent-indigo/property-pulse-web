@@ -29,7 +29,7 @@ const ProfilePage: FunctionComponent = (): ReactElement => {
     [isError, error, router, isLoading]
   )
   const handleDelete: Function = async (id: string): Promise<void> => {
-    await deleteProperty(id)
+    window.confirm('Are you sure you want to delete this property?') && await deleteProperty(id)
     if (!deleting) {
       if (deleteFailed) {
         toast.error(`Error deleting property:\n${JSON.stringify(deleteError)}`)
