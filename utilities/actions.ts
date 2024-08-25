@@ -134,7 +134,7 @@ export const toggleBookmark: Function = async (propertyId: string): Promise<Acti
           let bookmarked: boolean | undefined = user.bookmarks?.includes(propertyId)
           let message: string
           if (bookmarked) {
-            user.bookmarks = user.bookmarks?.filter((bookmark: any): boolean => bookmark.toString() !== propertyId)
+            user.bookmarks = user.bookmarks?.filter((bookmark: string): boolean => bookmark !== propertyId)
             message = 'Bookmark removed.'
             bookmarked = false
             action = 'removing'

@@ -44,9 +44,9 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
   try {
     const user: RegisteredUser | undefined = await getSessionUser()
     if (user) {
-      const sender: Types.ObjectId = user._id
+      const sender: string = user.id
       const message: InquiryMessage = await request.json()
-      if (sender.toString() !== message.recipient.toString()) {
+      if (sender !== message.recipient.toString()) {
         const document: Document<unknown, {}, InquiryMessage> & InquiryMessage & {_id: ObjectId} = new messageModel({
           sender,
           ...message,

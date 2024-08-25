@@ -1,5 +1,4 @@
 import {NextRequest, NextResponse} from 'next/server'
-import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
 import {Document, ObjectId} from 'mongoose'
 import {UploadApiResponse} from 'cloudinary'
 import cloudinary from '@/utilities/cloudinary'
@@ -16,8 +15,7 @@ export {dynamic} from '@/utilities/dynamic'
  * @access  public
  */
 export const GET = async (
-  request: NextRequest,
-  {params}: Params
+  request: NextRequest
 ): Promise<NextResponse> => {
   try {
     await connectToMongoDB()

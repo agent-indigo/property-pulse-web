@@ -42,11 +42,11 @@ export const PATCH = async (request: NextRequest): Promise<NextResponse> => {
       await connectToMongoDB()
       const property: ListedProperty | null = await propertyModel.findById(propertyId)
       if (property) {
-        if (user._id.toString() !== property.owner?.toString()) {
+        if (user.id !== property.owner?.toString()) {
           let bookmarked: boolean | undefined = user.bookmarks?.includes(propertyId)
           let message: string
           if (bookmarked) {
-            user.bookmarks = user.bookmarks?.filter((bookmark: any): boolean => bookmark.toString() !== propertyId)
+            user.bookmarks = user.bookmarks?.filter((bookmark: string): boolean => bookmark !== propertyId)
             message = 'Bookmark removed.'
             bookmarked = false
             action = 'removing'

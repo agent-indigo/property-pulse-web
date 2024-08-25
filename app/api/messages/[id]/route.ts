@@ -24,7 +24,7 @@ export const PATCH = async (
       await connectToMongoDB()
       const message: InquiryMessage | null = await messageModel.findById(id)
       if (message) {
-        if (user._id.toString() === message.recipient.toString()) {
+        if (user.id === message.recipient.toString()) {
           const {
             sender,
             recipient,
@@ -84,7 +84,7 @@ export const DELETE = async (
       await connectToMongoDB()
       const message: InquiryMessage | null = await messageModel.findById(id)
       if (message) {
-        if (user._id.toString() === message.recipient.toString()) {
+        if (user.id === message.recipient.toString()) {
           await messageModel.findByIdAndDelete(id)
           return s204(JSON.stringify({message: 'Message deleted.'}))
         } else {

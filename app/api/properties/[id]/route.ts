@@ -44,7 +44,7 @@ export const DELETE = async (
     if (property) {
       const user: RegisteredUser | undefined = await getSessionUser()
       if (user) {
-        if (property.owner?.toString() === user._id.toString()) {
+        if (property.owner?.toString() === user.id) {
           property.imageIds?.map(async (id: string): Promise<void> => await cloudinary.uploader.destroy(id))
           await propertyModel.findByIdAndDelete(property._id)
           return s204('Property deleted.')
@@ -81,7 +81,7 @@ export const PATCH = async (
       await connectToMongoDB()
       const property: ListedProperty | null = await propertyModel.findById(id)
       if (property) {
-        if (property.owner?.toString() === user._id.toString()) {
+        if (property.owner?.toString() === user.id) {
           await propertyModel.findByIdAndUpdate(id, await request.json())
           return redirect(`${process.env.NEXTAUTH_URL ?? ''}/properties/${id}`)
         } else {
