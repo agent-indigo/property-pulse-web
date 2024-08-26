@@ -6,7 +6,7 @@ import {Document, ObjectId} from 'mongoose'
 import {Client, GeocodeResponse, LatLngLiteral} from '@googlemaps/google-maps-services-js'
 import messageModel from '@/models/messageModel'
 import getSessionUser from '@/utilities/getSessionUser'
-import {ActionResponse, DocumentId, InquiryMessage, ListedProperty, Location, RegisteredUser} from '@/utilities/interfaces'
+import {ActionResponse, DocumentId, InquiryMessage, ListedProperty, Location, RegisteredUser, SerializedProperty} from '@/utilities/interfaces'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import cloudinary from '@/utilities/cloudinary'
 import propertyModel from '@/models/propertyModel'
@@ -21,7 +21,7 @@ export const sendMessage = async (
       const recipient: string = form.get('recipient')?.valueOf().toString() ?? ''
         if (sender !== '' && recipient !== '') {
           if (sender !== recipient) {
-            const message: Document<unknown, {}, InquiryMessage> & InquiryMessage & Required<DocumentId> = new messageModel({
+            const message: Document<unknown, {}, InquiryMessage> & Required<DocumentId> = new messageModel({
               sender,
               recipient,
               property: form.get('property'),
@@ -77,7 +77,7 @@ export const addProperty = async (form: FormData): Promise<ActionResponse> => {
         images.push(secure_url)
         imageIds.push(public_id)
       }))
-      const property: Document<unknown, {}, ListedProperty> & ListedProperty & Required<{_id: ObjectId}> = new propertyModel({
+      const property: Document<unknown, {}, ListedProperty> & Required<DocumentId> = new propertyModel({
         owner: user._id,
         type: form.get('type')?.valueOf(),
         name: form.get('name')?.valueOf(),
@@ -358,7 +358,7 @@ export const toggleMessageReadStatus: Function = async (messageId: string): Prom
 }
 export const editProperty: Function = async (
   propertyId: string,
-  update: ListedProperty
+  update: SerializedProperty
 ): Promise<ActionResponse> => {
   try {
     const user: RegisteredUser | undefined = await getSessionUser()

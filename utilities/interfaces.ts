@@ -210,3 +210,6 @@ export interface UrlSearchParams {
     type?: string
   }
 }
+export interface DocumentId {
+  _id: ObjectId
+}
