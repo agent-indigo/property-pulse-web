@@ -1,11 +1,11 @@
 import {NextRequest, NextResponse} from 'next/server'
-import {Document, ObjectId} from 'mongoose'
+import {Document} from 'mongoose'
 import {UploadApiResponse} from 'cloudinary'
 import cloudinary from '@/utilities/cloudinary'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import getSessionUser from '@/utilities/getSessionUser'
 import propertyModel from '@/models/propertyModel'
-import {ListedProperty, RegisteredUser} from '@/utilities/interfaces'
+import {DocumentId, ListedProperty, RegisteredUser} from '@/utilities/interfaces'
 import {e401, e500, redirect, s200} from '@/utilities/responses'
 export {dynamic} from '@/utilities/dynamic'
 /**
@@ -52,7 +52,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
         images.push(secure_url)
         imageIds.push(public_id)
       }))
-      const property: Document<unknown, {}, ListedProperty> & Required<{_id: ObjectId}> = new propertyModel({
+      const property: Document<unknown, {}, ListedProperty> & Required<DocumentId> = new propertyModel({
         owner: user._id,
         type: form.get('type')?.valueOf(),
         name: form.get('name')?.valueOf(),

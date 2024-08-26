@@ -1,24 +1,42 @@
-'use client'
 import {FunctionComponent, ReactElement} from 'react'
-import {Helmet} from 'react-helmet'
-import {ReadonlyURLSearchParams, useSearchParams} from 'next/navigation'
+import {Metadata} from 'next'
+import {FlattenMaps} from 'mongoose'
 import SearchPropertiesForm from '@/components/SearchPropertiesForm'
 import Properties from '@/components/Properties'
-const PropertiesPage: FunctionComponent = (): ReactElement => {
-  const searchParams: ReadonlyURLSearchParams = useSearchParams()
+import propertyModel from '@/models/propertyModel'
+import connectToMongoDB from '@/utilities/connectToMongoDB'
+import serialize from '@/utilities/serialize'
+import {LeanDocumentId, ListedProperty, SerializedProperty, UrlSearchParams} from '@/utilities/interfaces'
+export const metadata: Metadata = {
+  title: 'Properties'
+}
+const PropertiesPage: FunctionComponent<UrlSearchParams> = async ({searchParams: {
+  page = 1,
+  size = 6
+}}): Promise<ReactElement> => {
+  await connectToMongoDB()
+  const properties: SerializedProperty[] = (
+    await propertyModel
+    .find()
+    .skip((page - 1) * size)
+    .limit(size)
+    .lean())
+    .map((
+      property: FlattenMaps<ListedProperty> & Required<LeanDocumentId>
+    ) => serialize(property))
   return (
     <>
-      <Helmet>
-        <title>
-          Properties | PropertyPulse | Find the Perfect Rental
-        </title>
-      </Helmet>
       <section className='bg-blue-700 py-4'>
         <div className='max-w-7xl mx-auto px-4 flex flex-col items-start sm:px-6 lg:px-8'>
           <SearchPropertiesForm/>
         </div>
       </section>
-      <Properties pageNumber={Number.parseInt(searchParams.get('page') ?? '1')}/>
+      <Properties
+        properties={properties}
+        total={await propertyModel.countDocuments()}
+        page={page}
+        size={size}
+      />
     </>
   )
 }

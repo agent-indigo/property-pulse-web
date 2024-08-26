@@ -23,7 +23,7 @@ export const e500: Function = (
   error: any,
   action: string
 ) => new NextResponse(JSON.stringify({
-  message: `Error ${action}:\n${error}`,
+  message: `Error ${action}:\n${error.toString()}`,
   status: 500
 }))
 export const redirect: Function = (url: string) => NextResponse.redirect(url)

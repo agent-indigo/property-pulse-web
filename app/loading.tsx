@@ -1,4 +1,4 @@
-import type {Metadata} from 'next'
+import {Metadata} from 'next'
 import {FunctionComponent, ReactElement} from 'react'
 import {ClipLoader} from 'react-spinners'
 export const metadata: Metadata = {

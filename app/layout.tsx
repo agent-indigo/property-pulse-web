@@ -1,9 +1,9 @@
 import {FunctionComponent, ReactElement} from 'react'
-import type {Metadata} from 'next'
+import {Metadata} from 'next'
 import {Inter} from 'next/font/google'
 import {NextFont} from 'next/dist/compiled/@next/font'
 import {ToastContainer} from 'react-toastify'
-import StateProvider from '@/components/StateProvider'
+import GlobalContextProvider from '@/components/GlobalContextProvider'
 import AuthProvider from '@/components/AuthProvider'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
@@ -23,8 +23,8 @@ export const metadata: Metadata = {
 const RootLayout: FunctionComponent<ReactNodes> = (
   {children}
 ): ReactElement => (
-  <StateProvider>
-    <AuthProvider>
+  <AuthProvider>
+    <GlobalContextProvider>
       <html lang='en'>
         <body className={inter.className}>
           <Navbar/>
@@ -35,7 +35,7 @@ const RootLayout: FunctionComponent<ReactNodes> = (
           <ToastContainer/>
         </body>
       </html>
-    </AuthProvider>
-  </StateProvider>
+    </GlobalContextProvider>
+  </AuthProvider>
 )
 export default RootLayout

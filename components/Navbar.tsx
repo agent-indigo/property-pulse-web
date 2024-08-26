@@ -10,7 +10,7 @@ import {FaGoogle} from 'react-icons/fa'
 import {SessionData, SessionWithUserId} from '@/utilities/interfaces'
 import logo from '@/assets/images/logo-white.png'
 import profileDefault from '@/assets/images/profile.png'
-import UnreadCount from '@/components/UnreadCount'
+import UnreadMessagesCount from '@/components/UnreadMessagesCount'
 const Navbar: FunctionComponent = (): ReactElement => {
   const {data: session}: SessionData = useSession<boolean>() as SessionData
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false)
@@ -151,7 +151,7 @@ const Navbar: FunctionComponent = (): ReactElement => {
                     />
                   </svg>
                 </button>
-                <UnreadCount/>
+                <UnreadMessagesCount/>
               </Link>
               {/* profile dropdown button */}
               <div className='relative ml-3'>

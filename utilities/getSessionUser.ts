@@ -26,7 +26,7 @@ const getSessionUser: Function = async (): Promise<RegisteredUser | undefined> =
       return
     }
   } catch (error: any) {
-    console.error(`Error identifying user:\n${error}`)
+    console.error(`Error identifying user:\n${error.toString()}`)
     return
   }
 }

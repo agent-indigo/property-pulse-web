@@ -1,31 +1,33 @@
 import {FunctionComponent, ReactElement} from 'react'
+import Link from 'next/link'
 import {Pagination} from '@/utilities/interfaces'
 const Paginator: FunctionComponent<Pagination> = ({
   page,
   total,
-  paginate
+  size
 }): ReactElement => {
-  const pages: number = Math.ceil(total / 6)
-  const handleClick: Function = (to: number): void => to > 0 && to <= pages && paginate(to)
+  const pages: number = Math.ceil(total / size)
   return (
     <section className='container mx-auto flex justify-center items-center my-8'>
-      <button
-        onClick={():void => handleClick(page - 1)}
-        disabled={page === 1}
-        className='mr-2 px-2 py-1 border border-gray-300 rounded'
-      >
-        Previous
-      </button>
+      {page > 1 && (
+        <Link
+          href={`/properties/page=${page - 1}`}
+          className='mr-2 px-2 py-1 border border-gray-300 rounded'
+        >
+          Previous
+        </Link>
+      )}
       <span className='mx-2'>
         Page {page} of {pages}
       </span>
-      <button
-        onClick={():void => handleClick(page + 1)}
-        disabled={page === pages}
-        className='ml-2 px-2 py-1 border border-gray-300 rounded'
-      >
-        Next
-      </button>
+      {page < pages && (
+        <Link
+          href={`/properties/page=${page + 1}`}
+          className='ml-2 px-2 py-1 border border-gray-300 rounded'
+        >
+          Next
+        </Link>
+      )}
     </section>
   )
 }

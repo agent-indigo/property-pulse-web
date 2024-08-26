@@ -1,43 +1,55 @@
 'use client'
-import {FunctionComponent, MouseEventHandler, ReactElement, useEffect} from 'react'
-import {toast} from 'react-toastify'
+import {FunctionComponent, MouseEventHandler, ReactElement, useEffect, useState} from 'react'
 import {FaBookmark} from 'react-icons/fa'
-import {useSession} from 'next-auth/react'
-import {DestructuredProperty, SessionData} from '@/utilities/interfaces'
-import {useGetPropertyBookmarkedStatusQuery, useTogglePropertyBookmarkedStatusMutation} from '@/slices/propertiesApiSlice'
+import {toast} from 'react-toastify'
+import getSessionUser from '@/utilities/getSessionUser'
+import {getBookmarkStatus, toggleBookmark} from '@/utilities/actions'
+import {ActionResponse, DestructuredSerializedProperty, RegisteredUser} from '@/utilities/interfaces'
 import Spinner from '@/components/Spinner'
-const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): ReactElement | null => {
-  const {data: session}: SessionData = useSession<boolean>() as SessionData
-  const userId: string = session?.user?.id ?? ''
-  const propertyId: string = property._id?.toString() ?? ''
-  const owner: string = property.owner?.toString() ?? ''
-  const loggedIn: boolean = userId !== ''
-  const isOwner: boolean = loggedIn && owner === userId
-  const {data: response, isLoading, isError, error, refetch} = useGetPropertyBookmarkedStatusQuery(propertyId)
-  const [toggleBookmark, {isLoading: toggling, isError: toggleFailed, error: toggleError}] = useTogglePropertyBookmarkedStatusMutation()
-  const bookmarked: boolean = loggedIn ? response?.bookmarked ?? false : false
+const BookmarkButton: FunctionComponent<DestructuredSerializedProperty> = ({property}): ReactElement | null => {
+  const user: RegisteredUser | undefined = getSessionUser()
+  const propertyId: string = property._id
+  const [bookmarked, setBookmarked] = useState<boolean>(false)
   const buttonBg: string = bookmarked ? 'red' : 'blue'
+  const [loading, setLoading] = useState<boolean>(true)
+  const [errorOccured, setErrorOccured] = useState<boolean>(false)
   useEffect(
     (): void => {
-      if (!isLoading) isError && toast.error(`Error retrieving bookmark status:\n${JSON.stringify(error)}`)
+      const getStatus: Function = async (propertyId: string): Promise<void> => {
+        const {bookmarked, error, success}: ActionResponse = await getBookmarkStatus(propertyId)
+        if (success && bookmarked !== undefined) {
+          setBookmarked(bookmarked)
+        } else {
+          setErrorOccured(true)
+          toast.error(error)
+        }
+        setLoading(false)
+      }
+      getStatus(propertyId)
     },
-    [isError, error, isLoading]
+    [propertyId]
   )
   const handleClick: MouseEventHandler<HTMLButtonElement> = async (): Promise<void> => {
-    await toggleBookmark(propertyId)
-    if (!toggling) toggleFailed ? toast.error(`Error adding/removing bookmark:\n${JSON.stringify(toggleError)}`) : refetch()
+    const {bookmarked, error, message, success}: ActionResponse = await toggleBookmark(propertyId)
+    if (success && bookmarked !== undefined) {
+      setBookmarked(bookmarked)
+      toast.success(message)
+    } else {
+      toast.error(error)
+    }
   }
-  return isLoading ? <Spinner loading={isLoading}/> : isError ? (
+  return loading ? <Spinner loading={loading}/> : errorOccured ? (
     <h1 className='text-red-500 text-center font-bold'>
       Error checking bookmark status.
     </h1>
-  ) : isOwner ? null : (
+  ) : user?.id === property.owner ? null : (
     <button
+      disabled={!user}
       onClick={handleClick}
-      disabled={!loggedIn}
       className={`bg-${buttonBg}-500 hover:bg-${buttonBg}-600 text-white font-bold w-full py-2 px-4 rounded-full flex items-center justify-center`}
     >
-      <FaBookmark className='mr-2'/> {loggedIn ? null : 'Log in to '}{bookmarked ? 'Remove Bookmark' : 'Bookmark'}
+      <FaBookmark className='mr-2'/>
+      {user ? null : 'Log in to '}{bookmarked ? 'Remove Bookmark' : 'Bookmark'}
     </button>
   )
 }

@@ -1,90 +1,84 @@
-'use client'
-import {FunctionComponent, ReactElement, useEffect, useState} from 'react'
-import {ReadonlyURLSearchParams, useRouter, useSearchParams} from 'next/navigation'
-import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
+import {FunctionComponent, ReactElement} from 'react'
+import {Metadata} from 'next'
 import Link from 'next/link'
-import {toast} from 'react-toastify'
-import {Helmet} from 'react-helmet'
-import {FaArrowAltCircleLeft} from 'react-icons/fa'
-import PropertyCard from '@/components/PropertyCard'
+import {FlattenMaps} from 'mongoose'
+import {FaArrowCircleLeft} from 'react-icons/fa'
+import connectToMongoDB from '@/utilities/connectToMongoDB'
+import {
+  LeanDocumentId,
+  ListedProperty,
+  PropertySearchQuery,
+  SerializedProperty,
+  UrlSearchParams
+} from '@/utilities/interfaces'
+import propertyModel from '@/models/propertyModel'
+import serialize from '@/utilities/serialize'
 import SearchPropertiesForm from '@/components/SearchPropertiesForm'
-import Spinner from '@/components/Spinner'
-import {ListedProperty} from '@/utilities/interfaces'
+import PropertyCard from '@/components/PropertyCard'
 import FeaturedProperties from '@/components/FeaturedProperties'
-import Paginator from '@/components/Paginator'
-import {useGetPropertySearchResultsQuery} from '@/slices/propertiesApiSlice'
-const SearchResultsPage: FunctionComponent = (): ReactElement => {
-  const router: AppRouterInstance = useRouter()
-  const searchParams: ReadonlyURLSearchParams = useSearchParams()
-  const location: string = searchParams.get('location') ?? ''
-  const type: string = searchParams.get('type') ?? ''
-  const [page, setPage] = useState<number>(Number.parseInt(searchParams.get('page') ?? '1'))
-  const {data: response, isLoading, isError, error} = useGetPropertySearchResultsQuery({
-    location,
-    type,
-    page
-  })
-  const properties: ListedProperty[] = response?.properties ?? []
-  const total: number = response?.total ?? 0
-  useEffect(
-    (): void => {
-      if (!isLoading) {
-        if (isError) {
-          toast.error(`Error retrieving search results:\n${JSON.stringify(error)}`)
-          router.push('/error')
-        }
-      }
-    },
-    [isError, error, router, isLoading]
-  )
+export const metadata: Metadata = {
+  title: 'Search Results'
+}
+const ResultsPage: FunctionComponent<UrlSearchParams> = async ({searchParams: {
+  location = '',
+  type = 'All'
+}}): Promise<ReactElement> => {
+  await connectToMongoDB()
+  const query: PropertySearchQuery = {}
+  if (location !== '') {
+    const locationPattern: RegExp = new RegExp(location, 'i')
+    query.$or = [
+      {name: locationPattern},
+      {description: locationPattern},
+      {'location.street': locationPattern},
+      {'location.city': locationPattern},
+      {'location.state': locationPattern},
+      {'location.zipcode': locationPattern}
+    ]
+  }
+  if (type !== 'All') query.type = new RegExp(type, 'i')
+  const properties: SerializedProperty[] = (
+    await propertyModel
+    .find(query)
+    .lean())
+    .map((
+      property: FlattenMaps<ListedProperty> & Required<LeanDocumentId>
+    ) => serialize(property))
   return (
     <>
-      <Helmet>
-        <title>
-          {isLoading ? 'Loading...' : 'Search Results'} | PropertyPulse | Find the Perfect Rental
-        </title>
-      </Helmet>
       <section className='bg-blue-700 py-4'>
         <div className='max-w-7xl mx-auto px-4 flex flex-col items-start sm:px-6 lg:px-8'>
           <SearchPropertiesForm/>
         </div>
       </section>
       <FeaturedProperties/>
-      {isLoading ? <Spinner loading={isLoading}/> : (
-        <section className='px-4 py-6'>
-          <div className='container-xl lg:container m-auto px-4 py-6'>
-            <Link
-              href='/properties?page=1'
-              className='flex items-center text-blue-500 hover:underline mb-3'
-            >
-              <FaArrowAltCircleLeft className='mr-2 mb-1'/> All Properties
-            </Link>
-            <h1 className='text-2xl mb-4'>
-              Search Results
-            </h1>
-            {properties.length === 0 ? (
-              <p>
-                No currently available properties match your search criteria.
-              </p>
-            ) : (
-              <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-                {properties.map((property: ListedProperty): ReactElement => (
-                  <PropertyCard
-                    key={property._id?.toString()}
-                    property={property}
-                  />
-                ))}
-              </div>
-            )}
-            <Paginator
-              page={page}
-              total={total}
-              paginate={(to: number): void => setPage(to)}
-            />
-          </div>
-        </section>
-      )}
+      <section className='px-4 py-6'>
+        <div className='container-xl lg:container m-auto px-4 py-6'>
+          <Link
+            href='/properties'
+            className='flex items-center text-blue-500 hover:underline mb-3'
+          >
+            <FaArrowCircleLeft className='mr-2 mb-1'/>
+            Back to all Properties
+          </Link>
+          <h1 className='text-2xl mb-4'>
+            Search Results
+          </h1>
+          {properties.length === 0 ? (
+            <p>No results.</p>
+          ) : (
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
+              {properties.map((property: SerializedProperty) => (
+                <PropertyCard
+                  key={property._id}
+                  property={property}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
     </>
   )
 }
-export default SearchResultsPage
+export default ResultsPage

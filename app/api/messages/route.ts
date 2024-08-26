@@ -1,10 +1,10 @@
 import {NextRequest, NextResponse} from 'next/server'
-import {Document, Types, ObjectId} from 'mongoose'
+import {Document} from 'mongoose'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import messageModel from '@/models/messageModel'
 import getSessionUser from '@/utilities/getSessionUser'
 import {e400, e401, e500, s200, s204} from '@/utilities/responses'
-import {InquiryMessage, RegisteredUser} from '@/utilities/interfaces'
+import {DocumentId, InquiryMessage, RegisteredUser} from '@/utilities/interfaces'
 export {dynamic} from '@/utilities/dynamic'
 /**
  * @name    GET
@@ -47,7 +47,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
       const sender: string = user.id
       const message: InquiryMessage = await request.json()
       if (sender !== message.recipient.toString()) {
-        const document: Document<unknown, {}, InquiryMessage> & InquiryMessage & {_id: ObjectId} = new messageModel({
+        const document: Document<unknown, {}, InquiryMessage> & Required<DocumentId> = new messageModel({
           sender,
           ...message,
           read: false

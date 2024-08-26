@@ -1,19 +1,19 @@
 'use server'
 import {revalidatePath} from 'next/cache'
-import {ActionResult} from 'next/dist/server/app-render/types'
 import {redirect} from 'next/navigation'
 import {UploadApiResponse} from 'cloudinary'
 import {Document, ObjectId} from 'mongoose'
+import {Client, GeocodeResponse, LatLngLiteral} from '@googlemaps/google-maps-services-js'
 import messageModel from '@/models/messageModel'
 import getSessionUser from '@/utilities/getSessionUser'
-import {InquiryMessage, ListedProperty, RegisteredUser} from '@/utilities/interfaces'
+import {ActionResponse, DocumentId, InquiryMessage, ListedProperty, Location, RegisteredUser} from '@/utilities/interfaces'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import cloudinary from '@/utilities/cloudinary'
 import propertyModel from '@/models/propertyModel'
-export const sendMessage: Function = async (
-  previousState: FormData,
+export const sendMessage = async (
+  state: ActionResponse,
   form: FormData
-): Promise<ActionResult> => {
+): Promise<ActionResponse> => {
   try {
     const user: RegisteredUser | undefined = await getSessionUser()
     if (user) {
@@ -21,7 +21,7 @@ export const sendMessage: Function = async (
       const recipient: string = form.get('recipient')?.valueOf().toString() ?? ''
         if (sender !== '' && recipient !== '') {
           if (sender !== recipient) {
-            const message: Document<unknown, {}, InquiryMessage> & InquiryMessage & Required<{_id: ObjectId;}> = new messageModel({
+            const message: Document<unknown, {}, InquiryMessage> & InquiryMessage & Required<DocumentId> = new messageModel({
               sender,
               recipient,
               property: form.get('property'),
@@ -63,7 +63,7 @@ export const sendMessage: Function = async (
     }
   }
 }
-export const addProperty: Function = async (form: FormData): Promise<ActionResult> => {
+export const addProperty = async (form: FormData): Promise<ActionResponse> => {
   try {
     const user: RegisteredUser | undefined = await getSessionUser()
     if (user) {
@@ -122,7 +122,7 @@ export const addProperty: Function = async (form: FormData): Promise<ActionResul
     }
   }
 }
-export const toggleBookmark: Function = async (propertyId: string): Promise<ActionResult> => {
+export const toggleBookmark: Function = async (propertyId: string): Promise<ActionResponse> => {
   try {
     const user: RegisteredUser | undefined = await getSessionUser()
     if (user) {
@@ -175,7 +175,7 @@ export const toggleBookmark: Function = async (propertyId: string): Promise<Acti
     }
   }
 }
-export const getBookmarkStatus: Function = async (propertyId: string): Promise<ActionResult> => {
+export const getBookmarkStatus: Function = async (propertyId: string): Promise<ActionResponse> => {
   try {
     const user: RegisteredUser | undefined = await getSessionUser()
     return user ? {
@@ -192,7 +192,7 @@ export const getBookmarkStatus: Function = async (propertyId: string): Promise<A
     }
   }
 }
-export const deleteMessage: Function = async (messageId: string): Promise<ActionResult> => {
+export const deleteMessage: Function = async (messageId: string): Promise<ActionResponse> => {
   try {
     const user: RegisteredUser | undefined = await getSessionUser()
     if (user) {
@@ -231,7 +231,7 @@ export const deleteMessage: Function = async (messageId: string): Promise<Action
     }
   }
 }
-export const deleteProperty: Function = async (propertyId: string): Promise<ActionResult> => {
+export const deleteProperty: Function = async (propertyId: string): Promise<ActionResponse> => {
   try {
     const user: RegisteredUser | undefined = await getSessionUser()
     if (user) {
@@ -271,7 +271,7 @@ export const deleteProperty: Function = async (propertyId: string): Promise<Acti
     }
   }
 }
-export const getUnreadMessagesCount: Function = async (): Promise<ActionResult> => {
+export const getUnreadMessagesCount: Function = async (): Promise<ActionResponse> => {
   try {
     const user: RegisteredUser | undefined = await getSessionUser()
     if (user) {
@@ -296,7 +296,7 @@ export const getUnreadMessagesCount: Function = async (): Promise<ActionResult> 
     }
   }
 }
-export const toggleMessageReadStatus: Function = async (messageId: string): Promise<ActionResult> => {
+export const toggleMessageReadStatus: Function = async (messageId: string): Promise<ActionResponse> => {
   try {
     const user: RegisteredUser | undefined = await getSessionUser()
     if (user) {
@@ -359,7 +359,7 @@ export const toggleMessageReadStatus: Function = async (messageId: string): Prom
 export const editProperty: Function = async (
   propertyId: string,
   update: ListedProperty
-): Promise<ActionResult> => {
+): Promise<ActionResponse> => {
   try {
     const user: RegisteredUser | undefined = await getSessionUser()
     if (user) {
@@ -385,6 +385,33 @@ export const editProperty: Function = async (
     } else {
       return {
         error: '401: Unauthorized',
+        success: false
+      }
+    }
+  } catch (error: any) {
+    return {
+      error,
+      success: false
+    }
+  }
+}
+export const geoLocateProperty: Function = async (location: Location): Promise<ActionResponse> => {
+  try {
+    const geoLocator: Client = new Client()
+    const response: GeocodeResponse = await geoLocator.geocode({params: {
+      address: `${location.street} ${location.city} ${location.state} ${location.zipcode} USA`,
+      key: process.env.PRIVATE_GOOGLE_MAPS_GEOCODING_API_KEY ?? ''
+    }})
+    if (response.status === 200) {
+      const {lat, lng}: LatLngLiteral = response.data.results[0].geometry.location
+      return {
+        lat,
+        lng,
+        success: true
+      }
+    } else {
+      return {
+        error: '500: Internal Server Error.',
         success: false
       }
     }

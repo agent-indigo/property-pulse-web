@@ -1,4 +1,8 @@
+const VERCEL_URL = process.env.VERCEL_URL ?? ''
 const nextConfig = {
+  env: {
+    NEXTAUTH_URL: VERCEL_URL === '' ? 'http://localhost:3000' : `https://${VERCEL_URL}`
+  },
   images: {
     remotePatterns: [
       {

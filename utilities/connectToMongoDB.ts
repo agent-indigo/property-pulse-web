@@ -10,7 +10,7 @@ const connectToMongoDB: Function = async (): Promise<void> => {
       connected = true
       console.log(`MongoDB connection successful:\n${connection.connection.host}`)
     } catch (error: any) {
-      console.error(`Error connecting to MongoDB:\n${error}`)
+      console.error(`Error connecting to MongoDB:\n${error.toString()}`)
     }
   }
 }

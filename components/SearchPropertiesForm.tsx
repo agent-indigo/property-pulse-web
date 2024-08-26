@@ -5,10 +5,7 @@ import {useRouter} from 'next/navigation'
 import {FormInput, PropertySearchParams} from '@/utilities/interfaces'
 const SearchPropertiesForm: FunctionComponent = (): ReactElement => {
   const router: AppRouterInstance = useRouter()
-  const [fields, setFields] = useState<PropertySearchParams>({
-    location: '',
-    type: 'All'
-  })
+  const [fields, setFields] = useState<PropertySearchParams>({type: 'All'})
   const handleChange: ChangeEventHandler<HTMLInputElement | HTMLSelectElement> = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
     const {name, value}: FormInput = event.target
     setFields((previousValues: PropertySearchParams): PropertySearchParams => ({

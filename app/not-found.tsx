@@ -1,7 +1,7 @@
+import {FunctionComponent, ReactElement} from 'react'
+import {Metadata} from 'next'
 import Link from 'next/link'
 import {FaExclamationTriangle} from 'react-icons/fa'
-import type {Metadata} from 'next'
-import {FunctionComponent, ReactElement} from 'react'
 export const metadata: Metadata = {
   title: 'Not Found | PropertyPulse | Find the Perfect Rental',
   description: 'Find the perfect rental property.',
