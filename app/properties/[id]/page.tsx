@@ -1,4 +1,5 @@
 import {FunctionComponent, ReactElement} from 'react'
+import {Metadata} from 'next'
 import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
 import Link from 'next/link'
 import {FaArrowLeft} from 'react-icons/fa'
@@ -12,6 +13,9 @@ import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
 import serialize from '@/utilities/serialize'
 import {SerializedProperty} from '@/utilities/interfaces'
+export const metadata: Metadata = {
+  title: 'Property Details'
+}
 const PropertyPage: FunctionComponent<Params> = async ({params}): Promise<ReactElement> => {
   const VERCEL_URL: string = process.env.VERCEL_URL ?? ''
   await connectToMongoDB()
