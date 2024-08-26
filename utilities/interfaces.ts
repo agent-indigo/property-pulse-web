@@ -3,7 +3,7 @@ import {Date, Document, FlattenMaps, ObjectId} from 'mongoose'
 import {Session} from 'next-auth'
 import {AdapterUser} from 'next-auth/adapters'
 import {GoogleProfile} from 'next-auth/providers/google'
-export interface buttonProps {
+export interface ButtonProps {
   link: string
   text: string
   backgroundColor: string
@@ -12,7 +12,7 @@ export interface InfoBoxProps {
   heading: string
   backgroundColor?: string
   textColor?: string
-  buttonProps: buttonProps
+  buttonProps: ButtonProps
   children: ReactNode
 }
 export interface Location {

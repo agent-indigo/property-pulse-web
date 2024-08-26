@@ -16,12 +16,15 @@ import serialize from '@/utilities/serialize'
 import SearchPropertiesForm from '@/components/SearchPropertiesForm'
 import PropertyCard from '@/components/PropertyCard'
 import FeaturedProperties from '@/components/FeaturedProperties'
+import Paginator from '@/components/Paginator'
 export const metadata: Metadata = {
   title: 'Search Results'
 }
 const ResultsPage: FunctionComponent<UrlSearchParams> = async ({searchParams: {
   location = '',
-  type = 'All'
+  type = 'All',
+  page = 1,
+  size = 6
 }}): Promise<ReactElement> => {
   await connectToMongoDB()
   const query: PropertySearchQuery = {}
@@ -76,6 +79,11 @@ const ResultsPage: FunctionComponent<UrlSearchParams> = async ({searchParams: {
               ))}
             </div>
           )}
+          <Paginator
+            page={page}
+            size={size}
+            total={properties.length}
+          />
         </div>
       </section>
     </>

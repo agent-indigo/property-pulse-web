@@ -7,6 +7,7 @@ import propertyModel from '@/models/propertyModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import serialize from '@/utilities/serialize'
 import {LeanDocumentId, ListedProperty, SerializedProperty, UrlSearchParams} from '@/utilities/interfaces'
+import FeaturedProperties from '@/components/FeaturedProperties'
 export const metadata: Metadata = {
   title: 'Properties'
 }
@@ -31,6 +32,7 @@ const PropertiesPage: FunctionComponent<UrlSearchParams> = async ({searchParams:
           <SearchPropertiesForm/>
         </div>
       </section>
+      <FeaturedProperties/>
       <Properties
         properties={properties}
         total={await propertyModel.countDocuments()}
