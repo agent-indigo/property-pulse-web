@@ -15,8 +15,11 @@ export const metadata: Metadata = {
 const ProfilePage: FunctionComponent =  async (): Promise<ReactElement> => {
   const user: RegisteredUser | undefined = await getSessionUser()
   await connectToMongoDB()
-  const documents: (FlattenMaps<ListedProperty> & Required<LeanDocumentId>)[] = await propertyModel.find({owner: user?._id}).lean()
-  const properties: SerializedProperty[] = documents.map((property: FlattenMaps<ListedProperty> & Required<LeanDocumentId>) => serialize(property))
+  const properties: SerializedProperty[] = (
+    await propertyModel
+    .find({owner: user?._id})
+    .lean())
+    .map((property: FlattenMaps<ListedProperty> & Required<LeanDocumentId>) => serialize(property))
   return (
     <section className='bg-blue-50'>
       <div className='container m-auto py-24'>

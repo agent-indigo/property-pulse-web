@@ -49,7 +49,7 @@ const BookmarkButton: FunctionComponent<DestructuredSerializedProperty> = ({prop
       className={`bg-${buttonBg}-500 hover:bg-${buttonBg}-600 text-white font-bold w-full py-2 px-4 rounded-full flex items-center justify-center`}
     >
       <FaBookmark className='mr-2'/>
-      {user ? null : 'Log in to '}{bookmarked ? 'Remove Bookmark' : 'Bookmark'}
+      {!user && 'Log in to '}{bookmarked ? 'Remove Bookmark' : 'Bookmark'}
     </button>
   )
 }

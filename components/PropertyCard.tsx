@@ -65,8 +65,7 @@ const PropertyCard: FunctionComponent<DestructuredSerializedProperty> = ({proper
           <div className='flex align-middle gap-2 mb-4 lg:mb-0'>
             <FaMapMarker className='text-orange-700 mt-1'/>
             <span className='text-orange-700'>
-              {location.city},
-              {location.state}
+              {location.city}, {location.state}
             </span>
           </div>
           <Link

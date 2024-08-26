@@ -2,9 +2,9 @@ import {FunctionComponent, ReactElement} from 'react'
 import Link from 'next/link'
 import {Pagination} from '@/utilities/interfaces'
 const Paginator: FunctionComponent<Pagination> = ({
-  page,
+  page = 1,
   total,
-  size
+  size = 6
 }): ReactElement => {
   const pages: number = Math.ceil(total / size)
   return (

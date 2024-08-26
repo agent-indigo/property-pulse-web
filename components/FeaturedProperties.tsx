@@ -20,7 +20,7 @@ const FeaturedProperties: FunctionComponent = async (): Promise<ReactElement | n
         <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
           {featuredProperties.map((property: SerializedProperty) => (
             <FeaturedPropertyCard
-              key={property._id.toString()}
+              key={property._id}
               property={property}
             />
           ))}

@@ -437,15 +437,15 @@ const AddPropertyForm: FunctionComponent = (): ReactElement => (
     </div>
     <div className='mb-4'>
       <label
-        htmlFor='images'
+        htmlFor='files'
         className='block text-gray-700 font-bold mb-2'
       >
         Images
       </label>
       <input
         type='file'
-        id='images'
-        name='images'
+        id='files'
+        name='files'
         className='border rounded w-full py-2 px-3'
         accept='image/*'
         multiple

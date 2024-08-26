@@ -17,10 +17,7 @@ const PropertyDetails: FunctionComponent<DestructuredSerializedProperty> = ({pro
         <div className='text-gray-500 mb-4 flex align-middle justify-center md:justify-start'>
           <FaMapMarker className='text-lg text-orange-700 mr-2'/>
           <p className='text-orange-700'>
-            {location.street},
-            {location.city},
-            {location.state},
-            {location.zipcode}
+            {location.street}, {location.city}, {location.state}, {location.zipcode}
           </p>
         </div>
         <h3 className='text-lg font-bold my-6 bg-gray-800 text-white p-2'>

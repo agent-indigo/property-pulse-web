@@ -16,18 +16,22 @@ const ErrorPage: FunctionComponent<any> = ({error, reset}): ReactElement => (
           <h2 className='text-2xl font-bold my-2 text-red-400'>
             {error.message}
           </h2>
-          <button
-            onClick={(): void => reset()}
-            className='bg-yellow-500 hover:bg-yellow-600 font-bold py-4 px-6 rounded'
-          >
-            Retry
-          </button>
-          <Link
-            href='/'
-            className='bg-blue-700 hover:bg-blue-800 text-white font-bold py-4 px-6 rounded inline-block'
-          >
-            Home
-          </Link>
+          <div>
+            <button
+              onClick={(): void => reset()}
+              className='bg-yellow-500 hover:bg-yellow-600 font-bold py-4 px-6 rounded'
+            >
+              Retry
+            </button>
+          </div>
+          <div>
+            <Link
+              href='/'
+              className='bg-blue-700 hover:bg-blue-800 text-white font-bold py-4 px-6 rounded inline-block'
+            >
+              Home
+            </Link>
+          </div>
         </div>
       </div>
       <div className='flex-grow'/>

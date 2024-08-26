@@ -24,7 +24,7 @@ const HomeProperties: FunctionComponent = async (): Promise<ReactElement> => {
               </p>
             ) : (properties.map((property: SerializedProperty) => (
               <PropertyCard
-                key={property._id.toString()}
+                key={property._id}
                 property={property}
               />
             )))}

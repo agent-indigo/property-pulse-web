@@ -36,10 +36,7 @@ const ProfileProperties: FunctionComponent<SerializedProperties> = ({properties:
               {property.name}
             </p>
             <p className='text-gray-600'>
-              Address:
-              {property.location.street}
-              {property.location.city}
-              {property.location.state}
+              Address: {property.location.street} {property.location.city} {property.location.state}
             </p>
           </div>
           <div className='mt-2'>
