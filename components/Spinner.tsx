@@ -1,6 +1,6 @@
 import {FunctionComponent, ReactElement} from 'react'
 import {ClipLoader} from 'react-spinners'
-import {SpinnerProps} from '@/utilities/interfaces'
+import SpinnerProps from '@/interfaces/SpinnerProps'
 const Spinner: FunctionComponent<SpinnerProps> = (
   {loading}
 ): ReactElement => (

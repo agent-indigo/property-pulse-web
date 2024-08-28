@@ -5,12 +5,10 @@ import {CredentialInput} from 'next-auth/providers/credentials'
 import Google, {GoogleProfile} from 'next-auth/providers/google'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import userModel from '@/models/userModel'
-import {
-  AdapterUserWithId,
-  GoogleSignInParams,
-  RegisteredUser,
-  SessionWithUserId
-} from '@/utilities/interfaces'
+import UserDocument from '@/interfaces/UserDocument'
+import GoogleSignInParams from '@/interfaces/GoogleSignInParams'
+import AdapterUserWithId from '@/interfaces/AdapterUserWithId'
+import SessionWithUserId from '@/interfaces/SessionWithUserId'
 const authOptions: AuthOptions = {
   providers: [
     Google<GoogleProfile>({
@@ -58,7 +56,7 @@ const authOptions: AuthOptions = {
         ...session,
         user: {
           ...sessionUser,
-          id: (await userModel.findOne({email: sessionUser.email}) as RegisteredUser)._id
+          id: (await userModel.findOne({email: sessionUser.email}) as UserDocument)._id
         }
       }
     }

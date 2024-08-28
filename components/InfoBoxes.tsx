@@ -6,11 +6,11 @@ const InfoBoxes: FunctionComponent = (): ReactElement => (
       <div className='grid grid-cols-1 md:grid-cols-2 gap-4 p-4 rounded-lg'>
         <InfoBox
           heading='For Renters'
-          backgroundColor='bg-gray-100'
+          bgColor='bg-gray-100'
           buttonProps={{
             text: 'Browse Properties',
-            link: '/properties',
-            backgroundColor: 'bg-black'
+            url: '/properties',
+            bgColor: 'bg-black'
           }}
         >
           Find your dream rental property.
@@ -18,11 +18,11 @@ const InfoBoxes: FunctionComponent = (): ReactElement => (
         </InfoBox>
         <InfoBox
           heading='For Property Owners'
-          backgroundColor='bg-blue-100'
+          bgColor='bg-blue-100'
           buttonProps={{
             text: 'Add Property',
-            link: '/properties/add',
-            backgroundColor: 'bg-blue-500'
+            url: '/properties/add',
+            bgColor: 'bg-blue-500'
           }}
         >
           List your properties and reach potential renters.

@@ -1,6 +1,6 @@
-import {Rates} from '@/utilities/interfaces'
+import PropertyRates from "@/interfaces/PropertyRates"
 const getRateDisplay: Function = (
-  rates: Rates
+  rates: PropertyRates
 ): string | undefined => {
   if (rates.monthly) {
     return `${rates.monthly?.toLocaleString()}/mo`

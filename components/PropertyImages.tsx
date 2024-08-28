@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import {FunctionComponent, ReactElement} from 'react'
 import {Gallery, Item} from 'react-photoswipe-gallery'
-import {Images} from '@/utilities/interfaces'
+import Images from '@/interfaces/Images'
 const PropertyImages: FunctionComponent<Images> = ({images}): ReactElement => {
   const image: string = images[0]
   return (
@@ -30,10 +30,17 @@ const PropertyImages: FunctionComponent<Images> = ({images}): ReactElement => {
             </Item>
           ) : (
             <div className='grid grid-cols-2 gap-4'>
-              {images.map((image: string, index: number): ReactElement => (
+              {images.map((
+                image: string,
+                index: number
+              ): ReactElement => (
                 <div
                   key={index}
-                  className={images.length === 3 && index === 2 ? 'col-span-2' : 'col-span-1'}
+                  className={
+                    images.length === 3 && index === 2
+                    ? 'col-span-2'
+                    : 'col-span-1'
+                  }
                 >
                   <Item
                     original={image}

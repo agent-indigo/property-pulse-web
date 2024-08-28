@@ -12,11 +12,14 @@ import {
   EmailShareButton,
   EmailIcon
 } from 'react-share'
-import {ShareButtonsProps} from '@/utilities/interfaces'
-const ShareButtons: FunctionComponent<ShareButtonsProps> = ({property, PUBLIC_DOMAIN}): ReactElement => {
-  const url: string = `${PUBLIC_DOMAIN}/properties/${property._id}`
-  const name: string = property.name
-  const type: string = property.type
+import ShareButtonsProps from '@/interfaces/ShareButtonsProps'
+const ShareButtons: FunctionComponent<ShareButtonsProps> = ({
+  property,
+  PUBLIC_DOMAIN
+}): ReactElement => {
+  const url: string = `${PUBLIC_DOMAIN}/properties/${property?._id}`
+  const name: string | undefined = property?.name
+  const type: string | undefined = property?.type
   return (
     <>
       <h3 className='text-xl font-bold text-center pt-2'>
@@ -26,7 +29,7 @@ const ShareButtons: FunctionComponent<ShareButtonsProps> = ({property, PUBLIC_DO
         <FacebookShareButton
           url={url}
           title={name}
-          hashtag={`${type.replace(/\s/g, '')}ForRent`}
+          hashtag={`${type?.replace(/\s/g, '')}ForRent`}
         >
           <FacebookIcon
             size={40}
@@ -58,7 +61,7 @@ const ShareButtons: FunctionComponent<ShareButtonsProps> = ({property, PUBLIC_DO
         <TwitterShareButton
           url={url}
           title={name}
-          hashtags={[`${type.replace(/\s/g, '')}ForRent`]}
+          hashtags={[`${type?.replace(/\s/g, '')}ForRent`]}
         >
           <XIcon
             size={40}

@@ -3,20 +3,24 @@ import {FunctionComponent, ReactElement, useState} from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {toast} from 'react-toastify'
-import {deleteProperty} from '@/utilities/actions'
-import {SerializedProperties, SerializedProperty} from '@/utilities/interfaces'
-const ProfileProperties: FunctionComponent<SerializedProperties> = ({properties: received}): ReactElement => {
-  const [properties, setProperties] = useState<SerializedProperty[]>(received)
+import {FlattenMaps} from 'mongoose'
+import deleteProperty from '@/serverActions/deleteProperty'
+import LeanProperties from '@/interfaces/LeanProperties'
+import PropertyDocument from '@/interfaces/PropertyDocument'
+const ProfileProperties: FunctionComponent<LeanProperties> = ({properties: received}): ReactElement => {
+  const [properties, setProperties] = useState<FlattenMaps<PropertyDocument>[]>(received)
   const handleDelete: Function = async (propertyId: string): Promise<void> => {
     if (window.confirm('Are you sure you want to delete this proerty?')) {
       const {message, success} = await deleteProperty(propertyId)
-      setProperties(properties.filter((property: SerializedProperty) => property._id !== propertyId))
+      setProperties(properties.filter((
+        property: FlattenMaps<PropertyDocument>
+      ): boolean => property._id !== propertyId))
       success ? toast.success(message) : toast.error(message)
     }
   }
   return (
     <>
-      {properties.map((property: SerializedProperty) => (
+      {properties.map((property: FlattenMaps<PropertyDocument>) => (
         <div
           key={property._id}
           className='mb-10'
@@ -24,7 +28,7 @@ const ProfileProperties: FunctionComponent<SerializedProperties> = ({properties:
           <Link href={`/properties/${property._id}`}>
             <Image
               className='h-32 w-full rounded-md object-cover'
-              src={property.images[0]}
+              src={property.images?.[0] ?? ''}
               alt=''
               width={500}
               height={100}

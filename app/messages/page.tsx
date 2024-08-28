@@ -1,38 +1,39 @@
 import {FunctionComponent, ReactElement} from 'react'
 import {Metadata} from 'next'
-import {FlattenMaps} from 'mongoose'
+import {toast} from 'react-toastify'
 import MessageCard from '@/components/MessageCard'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import messageModel from '@/models/messageModel'
-import serialize from '@/utilities/serialize'
-import getSessionUser from '@/utilities/getSessionUser'
-import {InquiryMessage, LeanDocumentId, SerializedMessage} from '@/utilities/interfaces'
+import ServerActionResponse from '@/interfaces/ServerActionResponse'
+import getSessionUser from '@/serverActions/getSessionUser'
+import LeanMessage from '@/interfaces/LeanMessage'
 export const metadata: Metadata = {
   title: 'Messages'
 }
 const MessagesPage: FunctionComponent = async (): Promise<ReactElement> => {
-  const getMessages: Function = async (read: boolean): Promise<any[]> => {
-    await connectToMongoDB()
-    return await messageModel.find({
-      recipient: (await getSessionUser())?._id,
-      read
-    }).sort({createdAt: -1}).populate(
-      'sender',
-      'username'
-    ).populate(
-      'property',
-      'name'
-    ).lean()
+  const {error, sessionUser, success}: ServerActionResponse = await getSessionUser()
+  const getMessages: Function = async (read: boolean): Promise<LeanMessage[]> => {
+    if (success && sessionUser) {
+      await connectToMongoDB()
+      return await messageModel.find({
+        recipient: sessionUser._id,
+        read
+      }).sort({createdAt: -1}).populate(
+        'sender',
+        'username'
+      ).populate(
+        'property',
+        'name'
+      ).lean()
+    } else {
+      toast.error(error)
+      return []
+    }
   }
-  const messages: SerializedMessage[] = [
+  const messages: LeanMessage[] = [
     ...await getMessages(false),
     ...await getMessages(true)
-  ].map((message: FlattenMaps<InquiryMessage> & Required<LeanDocumentId>) => {
-    const serializedMessage: SerializedMessage = serialize(message)
-    serializedMessage.sender = serialize(serializedMessage.sender)
-    serializedMessage.property = serialize(serializedMessage.property)
-    return serializedMessage
-  })
+  ]
   return (
     <section className='bg-blue-50'>
       <div className='container m-auto py-24 max-w-6xl'>
@@ -45,7 +46,7 @@ const MessagesPage: FunctionComponent = async (): Promise<ReactElement> => {
               <p>
                 You have no messages.
               </p>
-            ) : (messages.map((message: SerializedMessage) => (
+            ) : (messages.map((message: LeanMessage): ReactElement => (
               <MessageCard
                 key={message._id}
                 message={message}

@@ -4,12 +4,15 @@ import Link from 'next/link'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
 import PropertyCard from '@/components/PropertyCard'
-import {LeanDocumentId, ListedProperty, SerializedProperty} from '@/utilities/interfaces'
-import serialize from '@/utilities/serialize'
+import PropertyDocument from '@/interfaces/PropertyDocument'
 const HomeProperties: FunctionComponent = async (): Promise<ReactElement> => {
   await connectToMongoDB()
-  const recents: (FlattenMaps<ListedProperty> & Required<LeanDocumentId>)[] = await propertyModel.find().sort({createdAt: -1}).limit(3).lean()
-  const properties: SerializedProperty[] = recents.map((property: FlattenMaps<ListedProperty> & Required<LeanDocumentId>) => serialize(property))
+  const properties: FlattenMaps<PropertyDocument>[] = (
+    await propertyModel
+    .find()
+    .sort({createdAt: -1})
+    .limit(3)
+    .lean())
   return (
     <>
       <section className='px-4 py-6'>
@@ -22,7 +25,7 @@ const HomeProperties: FunctionComponent = async (): Promise<ReactElement> => {
               <p>
                 No current properties.
               </p>
-            ) : (properties.map((property: SerializedProperty) => (
+            ) : (properties.map((property: FlattenMaps<PropertyDocument>): ReactElement => (
               <PropertyCard
                 key={property._id}
                 property={property}

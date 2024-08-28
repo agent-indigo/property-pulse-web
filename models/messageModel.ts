@@ -1,6 +1,6 @@
 import {Model, Schema, model, models} from 'mongoose'
-import {InquiryMessage} from '@/utilities/interfaces'
-const MessageSchema = new Schema<InquiryMessage>({
+import MessageDocument from '@/interfaces/MessageDocument'
+const MessageSchema = new Schema<MessageDocument>({
   sender: {
     type: Schema.Types.ObjectId,
     ref: 'User',
@@ -44,7 +44,7 @@ const MessageSchema = new Schema<InquiryMessage>({
 }, {
   timestamps: true
 })
-const messageModel: Model<InquiryMessage> = models.Message || model<InquiryMessage>(
+const messageModel: Model<MessageDocument> = models.Message || model<MessageDocument>(
   'Message', 
   MessageSchema
 )

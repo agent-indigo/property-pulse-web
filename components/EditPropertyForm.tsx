@@ -1,9 +1,9 @@
 import {FunctionComponent, ReactElement} from 'react'
-import {editProperty} from '@/utilities/actions'
+import editProperty from '@/serverActions/editProperty'
 import SubmitButton from '@/components/SubmitButton'
-import {DestructuredSerializedProperty} from '@/utilities/interfaces'
-const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({property}): ReactElement => (
-  <form action={editProperty.bind(null, property._id)}>
+import LeanProperty from '@/interfaces/LeanProperty'
+const EditPropertyForm: FunctionComponent<LeanProperty> = ({property}): ReactElement => (
+  <form action={editProperty.bind(null, property?.id)}>
     <h2 className='text-3xl text-center font-semibold mb-6'>
       Edit Property
     </h2>
@@ -19,7 +19,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
         name='type'
         className='border rounded w-full py-2 px-3'
         required
-        defaultValue={property.type}
+        defaultValue={property?.type}
       >
         <option defaultValue='Apartment'>
           Apartment
@@ -55,7 +55,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
         className='border rounded w-full py-2 px-3 mb-2'
         placeholder='eg. Beautiful Apartment In Miami'
         required
-        defaultValue={property.name}
+        defaultValue={property?.name}
       />
     </div>
     <div className='mb-4'>
@@ -71,7 +71,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
         className='border rounded w-full py-2 px-3'
         rows={4}
         placeholder='Add an optional description of your property'
-        defaultValue={property.description}
+        defaultValue={property?.description}
       />
     </div>
     <div className='mb-4 bg-blue-50 p-4'>
@@ -84,7 +84,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
         name='location.street'
         className='border rounded w-full py-2 px-3 mb-2'
         placeholder='Street'
-        defaultValue={property.location.street}
+        defaultValue={property?.location.street}
       />
       <input
         type='text'
@@ -93,7 +93,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
         className='border rounded w-full py-2 px-3 mb-2'
         placeholder='City'
         required
-        defaultValue={property.location.city}
+        defaultValue={property?.location.city}
       />
       <input
         type='text'
@@ -102,7 +102,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
         className='border rounded w-full py-2 px-3 mb-2'
         placeholder='State'
         required
-        defaultValue={property.location.state}
+        defaultValue={property?.location.state}
       />
       <input
         type='text'
@@ -110,7 +110,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
         name='location.zipcode'
         className='border rounded w-full py-2 px-3 mb-2'
         placeholder='Zipcode'
-        defaultValue={property.location.zipcode}
+        defaultValue={property?.location.zipcode}
       />
     </div>
     <div className='mb-4 flex flex-wrap'>
@@ -127,7 +127,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
           name='beds'
           className='border rounded w-full py-2 px-3'
           required
-          defaultValue={property.beds}
+          defaultValue={property?.beds}
         />
       </div>
       <div className='w-full sm:w-1/3 px-2'>
@@ -143,7 +143,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
           name='baths'
           className='border rounded w-full py-2 px-3'
           required
-          defaultValue={property.baths}
+          defaultValue={property?.baths}
         />
       </div>
       <div className='w-full sm:w-1/3 pl-2'>
@@ -159,7 +159,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
           name='square_feet'
           className='border rounded w-full py-2 px-3'
           required
-          defaultValue={property.square_feet}
+          defaultValue={property?.square_feet}
         />
       </div>
     </div>
@@ -175,7 +175,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
             name='amenities'
             defaultValue='Wifi'
             className='mr-2'
-            defaultChecked={property.amenities.includes('Wifi')}
+            defaultChecked={property?.amenities.includes('Wifi')}
           />
           <label htmlFor='amenity_wifi'>
             Wifi
@@ -188,7 +188,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
             name='amenities'
             defaultValue='Full Kitchen'
             className='mr-2'
-            defaultChecked={property.amenities.includes('Full Kitchen')}
+            defaultChecked={property?.amenities.includes('Full Kitchen')}
           />
           <label htmlFor='amenity_kitchen'>
             Full kitchen
@@ -201,7 +201,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
             name='amenities'
             defaultValue='Washer & Dryer'
             className='mr-2'
-            defaultChecked={property.amenities.includes('Washer & Dryer')}
+            defaultChecked={property?.amenities.includes('Washer & Dryer')}
           />
           <label htmlFor='amenity_washer_dryer'>
             Washer & Dryer
@@ -214,7 +214,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
             name='amenities'
             defaultValue='Free Parking'
             className='mr-2'
-            defaultChecked={property.amenities.includes('Free Parking')}
+            defaultChecked={property?.amenities.includes('Free Parking')}
           />
           <label htmlFor='amenity_free_parking'>
             Free Parking
@@ -227,7 +227,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
             name='amenities'
             defaultValue='Swimming Pool'
             className='mr-2'
-            defaultChecked={property.amenities.includes('Swimming Pool')}
+            defaultChecked={property?.amenities.includes('Swimming Pool')}
           />
           <label htmlFor='amenity_pool'>
             Swimming Pool
@@ -240,7 +240,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
             name='amenities'
             defaultValue='Hot Tub'
             className='mr-2'
-            defaultChecked={property.amenities.includes('Hot Tub')}
+            defaultChecked={property?.amenities.includes('Hot Tub')}
           />
           <label htmlFor='amenity_hot_tub'>
             Hot Tub
@@ -253,7 +253,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
             name='amenities'
             defaultValue='24/7 Security'
             className='mr-2'
-            defaultChecked={property.amenities.includes('24/7 Security')}
+            defaultChecked={property?.amenities.includes('24/7 Security')}
           />
           <label htmlFor='amenity_24_7_security'>
             24/7 Security
@@ -266,7 +266,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
             name='amenities'
             defaultValue='Wheelchair Accessible'
             className='mr-2'
-            defaultChecked={property.amenities.includes('Wheelchair Accessible')}
+            defaultChecked={property?.amenities.includes('Wheelchair Accessible')}
           />
           <label htmlFor='amenity_wheelchair_accessible'>
             Wheelchair Accessible
@@ -279,7 +279,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
             name='amenities'
             defaultValue='Elevator Access'
             className='mr-2'
-            defaultChecked={property.amenities.includes('Elevator Access')}
+            defaultChecked={property?.amenities.includes('Elevator Access')}
           />
           <label htmlFor='amenity_elevator_access'>
             Elevator Access
@@ -292,7 +292,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
             name='amenities'
             defaultValue='Dishwasher'
             className='mr-2'
-            defaultChecked={property.amenities.includes('Dishwasher')}
+            defaultChecked={property?.amenities.includes('Dishwasher')}
           />
           <label htmlFor='amenity_dishwasher'>
             Dishwasher
@@ -305,7 +305,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
             name='amenities'
             defaultValue='Gym/Fitness Center'
             className='mr-2'
-            defaultChecked={property.amenities.includes('Gym/Fitness Center')}
+            defaultChecked={property?.amenities.includes('Gym/Fitness Center')}
           />
           <label htmlFor='amenity_gym_fitness_center'>
             Gym/Fitness Center
@@ -318,7 +318,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
             name='amenities'
             defaultValue='Air Conditioning'
             className='mr-2'
-            defaultChecked={property.amenities.includes('Air Conditioning')}
+            defaultChecked={property?.amenities.includes('Air Conditioning')}
           />
           <label htmlFor='amenity_air_conditioning'>
             Air Conditioning
@@ -331,7 +331,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
             name='amenities'
             defaultValue='Balcony/Patio'
             className='mr-2'
-            defaultChecked={property.amenities.includes('Balcony/Patio')}
+            defaultChecked={property?.amenities.includes('Balcony/Patio')}
           />
           <label htmlFor='amenity_balcony_patio'>
             Balcony/Patio
@@ -344,7 +344,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
             name='amenities'
             defaultValue='Smart TV'
             className='mr-2'
-            defaultChecked={property.amenities.includes('Smart TV')}
+            defaultChecked={property?.amenities.includes('Smart TV')}
           />
           <label htmlFor='amenity_smart_tv'>
             Smart TV
@@ -357,7 +357,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
             name='amenities'
             defaultValue='Coffee Maker'
             className='mr-2'
-            defaultChecked={property.amenities.includes('Coffee Maker')}
+            defaultChecked={property?.amenities.includes('Coffee Maker')}
           />
           <label htmlFor='amenity_coffee_maker'>
             Coffee Maker
@@ -382,7 +382,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
             id='weekly_rate'
             name='rates.weekly'
             className='border rounded w-full py-2 px-3'
-            defaultValue={property.rates.weekly}
+            defaultValue={property?.rates.weekly}
           />
         </div>
         <div className='flex items-center'>
@@ -397,7 +397,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
             id='monthly_rate'
             name='rates.monthly'
             className='border rounded w-full py-2 px-3'
-            defaultValue={property.rates.monthly}
+            defaultValue={property?.rates.monthly}
           />
         </div>
         <div className='flex items-center'>
@@ -412,7 +412,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
             id='nightly_rate'
             name='rates.nightly'
             className='border rounded w-full py-2 px-3'
-            defaultValue={property.rates.nightly}
+            defaultValue={property?.rates.nightly}
           />
         </div>
       </div>
@@ -430,7 +430,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
         name='seller_info.name'
         className='border rounded w-full py-2 px-3'
         placeholder='Name'
-        defaultValue={property.seller_info.name}
+        defaultValue={property?.seller_info.name}
       />
     </div>
     <div className='mb-4'>
@@ -447,7 +447,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
         className='border rounded w-full py-2 px-3'
         placeholder='Email address'
         required
-        defaultValue={property.seller_info.email}
+        defaultValue={property?.seller_info.email}
       />
     </div>
     <div className='mb-4'>
@@ -463,7 +463,7 @@ const EditPropertyForm: FunctionComponent<DestructuredSerializedProperty> = ({pr
         name='seller_info.phone'
         className='border rounded w-full py-2 px-3'
         placeholder='Phone'
-        defaultValue={property.seller_info.phone}
+        defaultValue={property?.seller_info.phone}
       />
     </div>
     <div>

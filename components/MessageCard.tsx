@@ -2,31 +2,41 @@
 import {FunctionComponent, MouseEventHandler, ReactElement, useState} from 'react'
 import {toast} from 'react-toastify'
 import {useGlobalContext} from '@/components/GlobalContextProvider'
-import {deleteMessage, toggleMessageReadStatus} from '@/utilities/actions'
-import {ActionResponse, DestructuredSerializedMessage, GlobalState} from '@/utilities/interfaces'
-const MessageCard: FunctionComponent<DestructuredSerializedMessage> = ({message}): ReactElement | null => {
+import deleteMessage from '@/serverActions/deleteMessage'
+import toggleMessageRead from '@/serverActions/toggleMessageRead'
+import State from '@/interfaces/State'
+import ServerActionResponse from '@/interfaces/ServerActionResponse'
+import DestructuredMessage from '@/interfaces/DestructuredMessage'
+const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactElement | null => {
   const messageId: string = message._id
   const email: string = message.email
-  const phone: string = message.phone
-  const [read, setRead] = useState<boolean>(message.read)
-  const {setUnreadMessagesCount}: GlobalState = useGlobalContext()
+  const phone: string | undefined = message.phone
+  const [read, setRead] = useState<boolean | undefined>(message.read)
+  const {setUnreadMessagesCount}: State = useGlobalContext()
   const handleToggle: MouseEventHandler<HTMLButtonElement> = async (): Promise<void> => {
-    const {error, message, read, success}: ActionResponse = await toggleMessageReadStatus(messageId)
+    const {
+      error,
+      message,
+      read,
+      success
+    }: ServerActionResponse = await toggleMessageRead(messageId)
     if (success && read !== undefined) {
       setRead(read)
-      setUnreadMessagesCount((previousValue: number) => read ? previousValue - 1 : previousValue + 1)
+      setUnreadMessagesCount((
+        previousValue: number
+      ): number => read ? previousValue - 1 : previousValue + 1)
       toast.success(message)
     } else {
-      toast.error(`Error marking message as read/unread:\n${error.toString()}`)
+      toast.error(`Error marking message as read/unread:\n${error}`)
     }
   }
   const handleDelete: MouseEventHandler<HTMLButtonElement> = async (): Promise<void> => {
-    const {error, message, success}: ActionResponse = await deleteMessage(messageId)
+    const {error, message, success}: ServerActionResponse = await deleteMessage(messageId)
     if (success) {
-      setUnreadMessagesCount((previousValue: number) => previousValue - 1)
+      setUnreadMessagesCount((previousValue: number): number => previousValue - 1)
       toast.success(message)
     } else {
-      toast.error(`Error deleting message:\n${error.toString()}`)
+      toast.error(`Error deleting message:\n${error}`)
     }
   }
   return (
@@ -47,7 +57,7 @@ const MessageCard: FunctionComponent<DestructuredSerializedMessage> = ({message}
       </p>
       <ul className='mt-4'>
         <li>
-          {message.sender.username}
+          {message.sender?.username}
         </li>
         <li>
           <a
@@ -71,7 +81,11 @@ const MessageCard: FunctionComponent<DestructuredSerializedMessage> = ({message}
       </ul>
       <button
         onClick={handleToggle}
-        className={`mt-4 mr-3 ${read ? 'bg-gray-300' : 'bg-blue-500 text-white'} py-1 px-3 rounded-md`}
+        className={`mt-4 mr-3 ${
+          read
+          ? 'bg-gray-300'
+          : 'bg-blue-500 text-white'} py-1 px-3 rounded-md`
+        }
       >
         `Mark as {read ? 'unread' : 'read'}`
       </button>

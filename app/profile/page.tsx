@@ -5,21 +5,20 @@ import {FlattenMaps} from 'mongoose'
 import profileDefault from '@/assets/images/profile.png'
 import ProfileProperties from '@/components/ProfileProperties'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import getSessionUser from '@/utilities/getSessionUser'
-import serialize from '@/utilities/serialize'
+import getSessionUser from '@/serverActions/getSessionUser'
 import propertyModel from '@/models/propertyModel'
-import {LeanDocumentId, ListedProperty, RegisteredUser, SerializedProperty} from '@/utilities/interfaces'
+import ServerActionResponse from '@/interfaces/ServerActionResponse'
+import PropertyDocument from '@/interfaces/PropertyDocument'
 export const metadata: Metadata = {
   title: 'Profile'
 }
 const ProfilePage: FunctionComponent =  async (): Promise<ReactElement> => {
-  const user: RegisteredUser | undefined = await getSessionUser()
+  const {sessionUser}: ServerActionResponse = await getSessionUser()
   await connectToMongoDB()
-  const properties: SerializedProperty[] = (
+  const properties: FlattenMaps<PropertyDocument>[] = (
     await propertyModel
-    .find({owner: user?._id})
+    .find({owner: sessionUser?._id})
     .lean())
-    .map((property: FlattenMaps<ListedProperty> & Required<LeanDocumentId>) => serialize(property))
   return (
     <section className='bg-blue-50'>
       <div className='container m-auto py-24'>
@@ -32,17 +31,17 @@ const ProfilePage: FunctionComponent =  async (): Promise<ReactElement> => {
               <div className='mb-4'>
                 <Image
                   className='h-32 w-32 md:h-48 md:w-48 rounded-full mx-auto md:mx-0'
-                  src={user?.image ?? profileDefault}
+                  src={sessionUser?.image ?? profileDefault}
                   width={200}
                   height={200}
                   alt='User'
                 />
               </div>
               <h2 className='text-2xl mb-4'>
-                {user?.username}
+                {sessionUser?.username}
               </h2>
               <h2 className='text-2xl mb-4'>
-                {user?.email}
+                {sessionUser?.email}
               </h2>
             </div>
             <div className='md:w-3/4 md:pl-4'>

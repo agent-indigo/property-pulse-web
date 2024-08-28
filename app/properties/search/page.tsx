@@ -4,19 +4,14 @@ import Link from 'next/link'
 import {FlattenMaps} from 'mongoose'
 import {FaArrowCircleLeft} from 'react-icons/fa'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import {
-  LeanDocumentId,
-  ListedProperty,
-  PropertySearchQuery,
-  SerializedProperty,
-  UrlSearchParams
-} from '@/utilities/interfaces'
+import UrlSearchParams from '@/interfaces/UrlSearchParams'
+import PropertySearchQuery from '@/interfaces/PropertySearchQuery'
 import propertyModel from '@/models/propertyModel'
-import serialize from '@/utilities/serialize'
 import SearchPropertiesForm from '@/components/SearchPropertiesForm'
 import PropertyCard from '@/components/PropertyCard'
 import FeaturedProperties from '@/components/FeaturedProperties'
 import Paginator from '@/components/Paginator'
+import PropertyDocument from '@/interfaces/PropertyDocument'
 export const metadata: Metadata = {
   title: 'Search Results'
 }
@@ -40,13 +35,10 @@ const ResultsPage: FunctionComponent<UrlSearchParams> = async ({searchParams: {
     ]
   }
   if (type !== 'All') query.type = new RegExp(type, 'i')
-  const properties: SerializedProperty[] = (
+  const properties: FlattenMaps<PropertyDocument>[] = (
     await propertyModel
     .find(query)
     .lean())
-    .map((
-      property: FlattenMaps<ListedProperty> & Required<LeanDocumentId>
-    ) => serialize(property))
   return (
     <>
       <section className='bg-blue-700 py-4'>
@@ -71,7 +63,7 @@ const ResultsPage: FunctionComponent<UrlSearchParams> = async ({searchParams: {
             <p>No results.</p>
           ) : (
             <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-              {properties.map((property: SerializedProperty) => (
+              {properties.map((property: FlattenMaps<PropertyDocument>): ReactElement => (
                 <PropertyCard
                   key={property._id}
                   property={property}

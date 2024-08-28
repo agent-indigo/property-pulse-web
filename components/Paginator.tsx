@@ -1,7 +1,7 @@
 import {FunctionComponent, ReactElement} from 'react'
 import Link from 'next/link'
-import {Pagination} from '@/utilities/interfaces'
-const Paginator: FunctionComponent<Pagination> = ({
+import PaginatorProps from '@/interfaces/PaginatorProps'
+const Paginator: FunctionComponent<PaginatorProps> = ({
   page = 1,
   total,
   size = 6

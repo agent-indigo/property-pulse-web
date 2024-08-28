@@ -2,7 +2,8 @@
 import {ChangeEvent, ChangeEventHandler, FormEvent, FormEventHandler, FunctionComponent, ReactElement, useState} from 'react'
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import {useRouter} from 'next/navigation'
-import {FormInput, PropertySearchParams} from '@/utilities/interfaces'
+import PropertySearchParams from '@/interfaces/PropertySearchParams'
+import FormInput from '@/interfaces/FormInput'
 const SearchPropertiesForm: FunctionComponent = (): ReactElement => {
   const router: AppRouterInstance = useRouter()
   const [fields, setFields] = useState<PropertySearchParams>({type: 'All'})

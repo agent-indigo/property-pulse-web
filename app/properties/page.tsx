@@ -5,9 +5,9 @@ import SearchPropertiesForm from '@/components/SearchPropertiesForm'
 import Properties from '@/components/Properties'
 import propertyModel from '@/models/propertyModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import serialize from '@/utilities/serialize'
-import {LeanDocumentId, ListedProperty, SerializedProperty, UrlSearchParams} from '@/utilities/interfaces'
+import UrlSearchParams from '@/interfaces/UrlSearchParams'
 import FeaturedProperties from '@/components/FeaturedProperties'
+import PropertyDocument from '@/interfaces/PropertyDocument'
 export const metadata: Metadata = {
   title: 'Properties'
 }
@@ -16,15 +16,12 @@ const PropertiesPage: FunctionComponent<UrlSearchParams> = async ({searchParams:
   size = 6
 }}): Promise<ReactElement> => {
   await connectToMongoDB()
-  const properties: SerializedProperty[] = (
+  const properties: FlattenMaps<PropertyDocument>[] = (
     await propertyModel
     .find()
     .skip((page - 1) * size)
     .limit(size)
     .lean())
-    .map((
-      property: FlattenMaps<ListedProperty> & Required<LeanDocumentId>
-    ) => serialize(property))
   return (
     <>
       <section className='bg-blue-700 py-4'>

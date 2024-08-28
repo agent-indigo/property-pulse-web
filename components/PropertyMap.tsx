@@ -3,10 +3,12 @@ import {FunctionComponent, ReactElement, useEffect, useState} from 'react'
 import {toast} from 'react-toastify'
 import {GoogleMap, LoadScript, Marker} from '@react-google-maps/api'
 import Spinner from '@/components/Spinner'
-import {ActionResponse, DestructuredSerializedProperty, Location} from '@/utilities/interfaces'
-import {geoLocateProperty} from '@/utilities/actions'
-const PropertyMap: FunctionComponent<DestructuredSerializedProperty> = ({property}): ReactElement => {
-  const location: Location = property.location
+import geoLocateProperty from '@/serverActions/geoLocateProperty'
+import LeanProperty from '@/interfaces/LeanProperty'
+import PropertyLocation from '@/interfaces/PropertyLocation'
+import ServerActionResponse from '@/interfaces/ServerActionResponse'
+const PropertyMap: FunctionComponent<LeanProperty> = ({property}): ReactElement => {
+  const location: PropertyLocation | undefined = property?.location
   const [lat, setLat] = useState<number>(0)
   const [lng, setLng] = useState<number>(0)
   const [loading, setLoading] = useState<boolean>(true)
@@ -14,12 +16,17 @@ const PropertyMap: FunctionComponent<DestructuredSerializedProperty> = ({propert
   useEffect(
     (): void => {
       const geoLocate: Function = async (): Promise<void> => {
-        const {error, lat, lng, success}: ActionResponse = await geoLocateProperty(location)
-        if (success && lat && lng) {
+        const {
+          error,
+          lat,
+          lng,
+          success
+        }: ServerActionResponse = await geoLocateProperty(location)
+        if (success && lat !== undefined && lng !== undefined) {
           setLat(lat)
           setLng(lng)
         } else {
-          toast.error(`Error geolocating property:\n${error.toString()}`)
+          toast.error(`Error geolocating property:\n${error}`)
           setErrorOccured(true)
         }
         setLoading(false)

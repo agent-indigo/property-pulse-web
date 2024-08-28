@@ -1,10 +1,12 @@
 import {FunctionComponent, ReactElement} from 'react'
 import {FaBed, FaBath, FaRulerCombined, FaTimes, FaCheck, FaMapMarker} from 'react-icons/fa'
-import {DestructuredSerializedProperty, Location, Rates} from '@/utilities/interfaces'
 import PropertyMap from '@/components/PropertyMap'
-const PropertyDetails: FunctionComponent<DestructuredSerializedProperty> = ({property}): ReactElement => {
-  const location: Location = property.location
-  const rates: Rates = property.rates
+import LeanProperty from '@/interfaces/LeanProperty'
+import PropertyLocation from '@/interfaces/PropertyLocation'
+import PropertyRates from '@/interfaces/PropertyRates'
+const PropertyDetails: FunctionComponent<LeanProperty> = ({property}): ReactElement => {
+  const location: PropertyLocation = property.location
+  const rates: PropertyRates = property.rates
   return (
     <main>
       <div className='bg-white p-6 rounded-lg shadow-md text-center md:text-left'>

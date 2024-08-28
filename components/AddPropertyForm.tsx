@@ -1,6 +1,6 @@
 'use client'
 import {FunctionComponent, ReactElement} from 'react'
-import {addProperty} from '@/utilities/actions'
+import addProperty from '@/serverActions/addProperty'
 import SubmitButton from '@/components/SubmitButton'
 const AddPropertyForm: FunctionComponent = (): ReactElement => (
   <form action={addProperty}>

@@ -1,14 +1,14 @@
 import Link from 'next/link'
 import {FunctionComponent, ReactElement} from 'react'
-import {InfoBoxProps} from '@/utilities/interfaces'
+import InfoBoxProps from '@/interfaces/InfoBoxProps'
 const InfoBox: FunctionComponent<InfoBoxProps> = ({
   heading,
-  backgroundColor = 'bg-gray-100',
+  bgColor = 'bg-gray-100',
   textColor = 'text-gray-800',
   buttonProps,
   children
 }): ReactElement => (
-  <div className={`${backgroundColor} p-6 rounded-lg shadow-md`}>
+  <div className={`${bgColor} p-6 rounded-lg shadow-md`}>
     <h2 className={`${textColor} text-2xl font-bold`}>
       {heading}
     </h2>
@@ -16,8 +16,8 @@ const InfoBox: FunctionComponent<InfoBoxProps> = ({
       {children}
     </p>
     <Link
-      href={buttonProps.link}
-      className={`inline-block ${buttonProps.backgroundColor} text-white rounded-lg px-4 py-2 hover:opacity-80`}
+      href={buttonProps.url}
+      className={`inline-block ${buttonProps.bgColor} text-white rounded-lg px-4 py-2 hover:opacity-80`}
     >
       {buttonProps.text}
     </Link>

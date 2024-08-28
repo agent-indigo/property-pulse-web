@@ -1,6 +1,6 @@
 import {Model, Schema, model, models} from 'mongoose'
-import {RegisteredUser} from '@/utilities/interfaces'
-const UserSchema = new Schema<RegisteredUser>({
+import UserDocument from '@/interfaces/UserDocument'
+const UserSchema = new Schema<UserDocument>({
   email: {
     type: String,
     unique: true,
@@ -28,7 +28,7 @@ const UserSchema = new Schema<RegisteredUser>({
 }, {
   timestamps: true
 })
-const userModel: Model<RegisteredUser> = models.User || model<RegisteredUser>(
+const userModel: Model<UserDocument> = models.User || model<UserDocument>(
   'User',
   UserSchema
 )

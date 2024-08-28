@@ -1,7 +1,7 @@
 'use client'
 import {FunctionComponent, ReactElement} from 'react'
 import {useFormStatus} from 'react-dom'
-import {SubmitButtonProps} from '@/utilities/interfaces'
+import SubmitButtonProps from '@/interfaces/SubmitButtonProps'
 const SubmitButton: FunctionComponent<SubmitButtonProps> = ({message, action}): ReactElement => {
   const pending: boolean = useFormStatus().pending
   return (

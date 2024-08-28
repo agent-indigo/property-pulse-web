@@ -1,6 +1,6 @@
 import {Model, Schema, model, models} from 'mongoose'
-import {ListedProperty} from '@/utilities/interfaces'
-const PropertySchema = new Schema<ListedProperty>({
+import PropertyDocument from '@/interfaces/PropertyDocument'
+const PropertySchema = new Schema<PropertyDocument>({
   owner : {
     type: Schema.Types.ObjectId,
     ref: 'User',
@@ -141,7 +141,7 @@ const PropertySchema = new Schema<ListedProperty>({
 }, {
   timestamps: true
 })
-const propertyModel: Model<ListedProperty> = models.Property || model<ListedProperty>(
+const propertyModel: Model<PropertyDocument> = models.Property || model<PropertyDocument>(
   'Property',
   PropertySchema
 )

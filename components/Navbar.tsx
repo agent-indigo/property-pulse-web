@@ -5,14 +5,15 @@ import {FunctionComponent, ReactElement, useEffect, useState} from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {usePathname} from 'next/navigation'
-import {signIn, signOut, useSession, getProviders} from 'next-auth/react'
+import {signIn, signOut, getProviders} from 'next-auth/react'
 import {FaGoogle} from 'react-icons/fa'
-import {SessionData, SessionWithUserId} from '@/utilities/interfaces'
 import logo from '@/assets/images/logo-white.png'
 import profileDefault from '@/assets/images/profile.png'
 import UnreadMessagesCount from '@/components/UnreadMessagesCount'
+import State from '@/interfaces/State'
+import {useGlobalContext} from '@/components/GlobalContextProvider'
 const Navbar: FunctionComponent = (): ReactElement => {
-  const {data: session}: SessionData = useSession<boolean>() as SessionData
+  const {user}: State = useGlobalContext()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false)
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState<boolean>(false)
   const [providers, setProviders] = useState<Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null>(null)
@@ -88,7 +89,7 @@ const Navbar: FunctionComponent = (): ReactElement => {
                 >
                   Properties
                 </Link>
-                {session && (
+                {user && (
                   <Link
                     href='/properties/add'
                     className={`${pathname === '/properties/add' ? 'bg-black' : ''} text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2`}
@@ -100,7 +101,7 @@ const Navbar: FunctionComponent = (): ReactElement => {
             </div>
           </div>
           {/* user menu (logged out) */}
-          {!session && (
+          {!user && (
             <div className='hidden md:block md:ml-6'>
               <div className='flex items-center'>
                 {providers && Object.values(providers).map((
@@ -109,7 +110,7 @@ const Navbar: FunctionComponent = (): ReactElement => {
                 ): ReactElement => (
                   <button
                     key={index}
-                    onClick={(): Promise<SignInResponse> => signIn(provider.id) as Promise<SignInResponse>}
+                    onClick={(): Promise<SignInResponse | undefined> => signIn(provider.id)}
                     className='flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2'
                   >
                     <FaGoogle className='text-white mr-2'/>
@@ -122,7 +123,7 @@ const Navbar: FunctionComponent = (): ReactElement => {
             </div>
           )}
           {/* user menu (logged in) */}
-          {session && (
+          {user && (
             <div className='absolute inset-y-0 right-0 flex items-center pr-2 md:static md:inset-auto md:ml-6 md:pr-0'>
               <Link
                 href='/messages'
@@ -170,7 +171,7 @@ const Navbar: FunctionComponent = (): ReactElement => {
                     </span>
                     <Image
                       className='h-8 w-8 rounded-full'
-                      src={session?.user?.image || profileDefault}
+                      src={user.image || profileDefault}
                       alt=''
                       width={40}
                       height={40}
@@ -243,7 +244,7 @@ const Navbar: FunctionComponent = (): ReactElement => {
             >
               Properties
             </Link>
-            {session as SessionWithUserId && (
+            {user && (
               <Link
                 href='/properties/add'
                 className={`${pathname === '/properties/add' ? 'bg-black' : ''} text-white block rounded-md px-3 py-2 text-base font-medium`}
@@ -251,13 +252,13 @@ const Navbar: FunctionComponent = (): ReactElement => {
                 Add Property
               </Link>
             )}
-            {!session && providers && Object.values(providers).map((
+            {!user && providers && Object.values(providers).map((
               provider: ClientSafeProvider,
               index: number
             ): ReactElement => (
               <button
                 key={index}
-                onClick={(): Promise<SignInResponse> => signIn(provider.id) as Promise<SignInResponse>}
+                onClick={(): Promise<SignInResponse | undefined> => signIn(provider.id)}
                 className='flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2'
               >
                 <FaGoogle className='text-white mr-2'/>

@@ -3,6 +3,7 @@ import {Metadata} from 'next'
 import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
 import Link from 'next/link'
 import {FaArrowLeft} from 'react-icons/fa'
+import {FlattenMaps} from 'mongoose'
 import PropertyHeaderImage from '@/components/PropertyHeaderImage'
 import PropertyDetails from '@/components/PropertyDetails'
 import PropertyImages from '@/components/PropertyImages'
@@ -11,22 +12,20 @@ import ContactForm from '@/components/ContactForm'
 import ShareButtons from '@/components/ShareButtons'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
-import serialize from '@/utilities/serialize'
-import {SerializedProperty} from '@/utilities/interfaces'
+import PropertyDocument from '@/interfaces/PropertyDocument'
 export const metadata: Metadata = {
   title: 'Property Details'
 }
 const PropertyPage: FunctionComponent<Params> = async ({params}): Promise<ReactElement> => {
   const VERCEL_URL: string = process.env.VERCEL_URL ?? ''
   await connectToMongoDB()
-  const property: SerializedProperty = serialize((
+  const property: FlattenMaps<PropertyDocument> | null = (
     await propertyModel
     .findById(params.id)
     .lean())
-  )
   return (
     <>
-      <PropertyHeaderImage image={property.images[0]}/>
+      <PropertyHeaderImage image={property?.images?.[0] ?? ''}/>
       <section>
         <div className='container m-auto py-6 px-6'>
           <Link
@@ -46,14 +45,18 @@ const PropertyPage: FunctionComponent<Params> = async ({params}): Promise<ReactE
               <BookmarkButton property={property}/>
               <ShareButtons
                 property={property}
-                PUBLIC_DOMAIN={VERCEL_URL === '' ? 'http://localhost:3000' : `https://${VERCEL_URL}`}
+                PUBLIC_DOMAIN={
+                  VERCEL_URL === ''
+                  ? 'http://localhost:3000'
+                  : `https://${VERCEL_URL}`
+                }
               />
               <ContactForm property={property}/>
             </aside>
           </div>
         </div>
       </section>
-      <PropertyImages images={property.images}/>
+      <PropertyImages images={property?.images ?? []}/>
     </>
   )
 }

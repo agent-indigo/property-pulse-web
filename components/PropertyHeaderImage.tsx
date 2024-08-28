@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import {FunctionComponent, ReactElement} from 'react'
-import {HeaderProps} from '@/utilities/interfaces'
+import HeaderProps from '@/interfaces/HeaderProps'
 const PropertyHeaderImage: FunctionComponent<HeaderProps> = (
   {image}
 ): ReactElement => (
