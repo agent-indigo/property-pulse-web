@@ -26,8 +26,8 @@ const Properties: FunctionComponent<PropertiesCompomentProps> = ({
         </div>
       )}
       <Paginator
-        page={page}
-        size={size}
+        page={page ?? 1}
+        size={size ?? 6}
         total={total}
         fromSearch={false}
       />
