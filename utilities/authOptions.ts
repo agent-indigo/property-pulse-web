@@ -6,7 +6,6 @@ import UserDocument from '@/interfaces/UserDocument'
 import GoogleSignInParams from '@/interfaces/GoogleSignInParams'
 import AdapterUserWithId from '@/interfaces/AdapterUserWithId'
 import SessionWithUserId from '@/interfaces/SessionWithUserId'
-import NewSession from '@/interfaces/NewSession'
 import SessionParams from '@/interfaces/SessionParams'
 import SignInParams from '@/interfaces/SignInParams'
 const authOptions: AuthOptions = {
@@ -40,7 +39,7 @@ const authOptions: AuthOptions = {
       }
       return true
     },
-    async session(params: SessionParams & NewSession): Promise<SessionWithUserId> {
+    async session(params: SessionParams): Promise<SessionWithUserId> {
       const {session} = params
       const sessionUser: AdapterUserWithId = session.user as AdapterUserWithId
       return {
