@@ -5,8 +5,8 @@ import PropertiesCompomentProps from '@/interfaces/PropertiesComponentProps'
 import PlainProperty from '@/interfaces/PlainProperty'
 const Properties: FunctionComponent<PropertiesCompomentProps> = ({
   properties,
-  page,
-  size,
+  page = 1,
+  size = 6,
   total
 }): ReactElement => (
   <section className='px-4 py-6'>
@@ -26,8 +26,8 @@ const Properties: FunctionComponent<PropertiesCompomentProps> = ({
         </div>
       )}
       <Paginator
-        page={page ?? 1}
-        size={size ?? 6}
+        page={page}
+        size={size}
         total={total}
         fromSearch={false}
       />
