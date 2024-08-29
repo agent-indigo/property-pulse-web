@@ -3,24 +3,23 @@ import {FunctionComponent, ReactElement, useState} from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {toast} from 'react-toastify'
-import {FlattenMaps} from 'mongoose'
 import deleteProperty from '@/serverActions/deleteProperty'
-import LeanProperties from '@/interfaces/LeanProperties'
-import PropertyDocument from '@/interfaces/PropertyDocument'
-const ProfileProperties: FunctionComponent<LeanProperties> = ({properties: received}): ReactElement => {
-  const [properties, setProperties] = useState<FlattenMaps<PropertyDocument>[]>(received)
+import Properties from '@/interfaces/Properties'
+import PlainProperty from '@/interfaces/PlainProperty'
+const ProfileProperties: FunctionComponent<Properties> = ({properties: received}): ReactElement => {
+  const [properties, setProperties] = useState<PlainProperty[]>(received)
   const handleDelete: Function = async (propertyId: string): Promise<void> => {
     if (window.confirm('Are you sure you want to delete this proerty?')) {
       const {message, success} = await deleteProperty(propertyId)
       setProperties(properties.filter((
-        property: FlattenMaps<PropertyDocument>
+        property: PlainProperty
       ): boolean => property._id !== propertyId))
       success ? toast.success(message) : toast.error(message)
     }
   }
   return (
     <>
-      {properties.map((property: FlattenMaps<PropertyDocument>) => (
+      {properties.map((property: PlainProperty) => (
         <div
           key={property._id}
           className='mb-10'

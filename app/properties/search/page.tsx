@@ -12,6 +12,8 @@ import PropertyCard from '@/components/PropertyCard'
 import FeaturedProperties from '@/components/FeaturedProperties'
 import Paginator from '@/components/Paginator'
 import PropertyDocument from '@/interfaces/PropertyDocument'
+import PlainProperty from '@/interfaces/PlainProperty'
+import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 export const metadata: Metadata = {
   title: 'Search Results'
 }
@@ -35,10 +37,11 @@ const ResultsPage: FunctionComponent<UrlSearchParams> = async ({searchParams: {
     ]
   }
   if (type !== 'All') query.type = new RegExp(type, 'i')
-  const properties: FlattenMaps<PropertyDocument>[] = (
+  const properties: PlainProperty[] = (
     await propertyModel
     .find(query)
     .lean())
+    .map((property: FlattenMaps<PropertyDocument>): PlainProperty => convertToPlainDocument(property))
   return (
     <>
       <section className='bg-blue-700 py-4'>
@@ -63,7 +66,7 @@ const ResultsPage: FunctionComponent<UrlSearchParams> = async ({searchParams: {
             <p>No results.</p>
           ) : (
             <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-              {properties.map((property: FlattenMaps<PropertyDocument>): ReactElement => (
+              {properties.map((property: PlainProperty): ReactElement => (
                 <PropertyCard
                   key={property._id}
                   property={property}

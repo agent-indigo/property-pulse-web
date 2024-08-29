@@ -3,16 +3,16 @@ import Link from 'next/link'
 import {FunctionComponent, ReactElement} from 'react'
 import {FaBath, FaBed, FaMapMarker, FaMoneyBill, FaRulerCombined} from 'react-icons/fa'
 import getRateDisplay from '@/utilities/getRateDisplay'
-import LeanProperty from '@/interfaces/LeanProperty'
 import PropertyLocation from '@/interfaces/PropertyLocation'
 import PropertyRates from '@/interfaces/PropertyRates'
-const FeaturedPropertyCard: FunctionComponent<LeanProperty> = ({property}): ReactElement => {
-  const location: PropertyLocation | undefined = property?.location
-  const rates: PropertyRates | undefined = property?.rates
+import DestructuredProperty from '@/interfaces/DestructuredProperty'
+const FeaturedPropertyCard: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
+  const location: PropertyLocation = property.location
+  const rates: PropertyRates = property.rates
   return (
     <div className='bg-white rounded-xl shadow-md relative flex flex-col md:flex-row'>
       <Image
-        src={property?.images?.[0] ?? ''}
+        src={property.images?.[0] ?? ''}
         alt=''
         width={0}
         height={0}
@@ -21,32 +21,32 @@ const FeaturedPropertyCard: FunctionComponent<LeanProperty> = ({property}): Reac
       />
       <div className='p-6'>
         <h3 className='text-xl font-bold'>
-          {property?.name}
+          {property.name}
         </h3>
         <div className='text-gray-600 mb-4'>
-          {property?.type}
+          {property.type}
         </div>
         <h3 className='absolute top-[10px] left-[10px] bg-white px-4 py-2 rounded-lg text-blue-500 font-bold text-right md:text-center lg:text-right'>
-          ${getRateDisplay(property?.rates)}
+          ${getRateDisplay(property.rates)}
         </h3>
         <div className='flex justify-center gap-4 text-gray-500 mb-4'>
           <p>
             <FaBed className='inline-block mr-2'/>
-            {property?.beds}
+            {property.beds}
             <span className='md:hidden lg:inline'>
               Beds
             </span>
           </p>
           <p>
             <FaBath className='inline-block mr-2'/>
-            {property?.baths}
+            {property.baths}
             <span className='md:hidden lg:inline'>
               Baths
             </span>
           </p>
           <p>
             <FaRulerCombined className='inline-block mr-2'/>
-            {property?.square_feet}
+            {property.square_feet}
             <span className='md:hidden lg:inline'>
               sqft
             </span>
@@ -69,7 +69,7 @@ const FeaturedPropertyCard: FunctionComponent<LeanProperty> = ({property}): Reac
             </span>
           </div>
           <Link
-            href={`/properties/${property?._id}`}
+            href={`/properties/${property._id}`}
             className='h-[36px] bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-center text-sm'
           >
             Details

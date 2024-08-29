@@ -1,8 +1,7 @@
 'use server'
-import {FlattenMaps, ObjectId} from 'mongoose'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import getSessionUser from '@/serverActions/getSessionUser'
-const getPropertyBookmarked: Function = async (propertyId: FlattenMaps<ObjectId>): Promise<ServerActionResponse> => {
+const getPropertyBookmarked: Function = async (propertyId: string): Promise<ServerActionResponse> => {
   try {
     const {error, success, sessionUser}: ServerActionResponse = await getSessionUser()
     return success && sessionUser ? {

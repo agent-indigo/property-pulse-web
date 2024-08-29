@@ -1,14 +1,16 @@
 import {FunctionComponent, ReactElement} from 'react'
-import {FlattenMaps} from 'mongoose'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
 import FeaturedPropertyCard from '@/components/FeaturedPropertyCard'
-import PropertyDocument from '@/interfaces/PropertyDocument'
+import PlainProperty from '@/interfaces/PlainProperty'
+import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 const FeaturedProperties: FunctionComponent = async (): Promise<ReactElement | null> => {
   await connectToMongoDB()
-  const featuredProperties: FlattenMaps<PropertyDocument>[] = await propertyModel.find({
-    is_featured: true
-  }).lean()
+  const featuredProperties: PlainProperty[] = convertToPlainDocument(
+    await propertyModel
+    .find({is_featured: true})
+    .lean()
+  )
   return featuredProperties.length > 0 ? (
     <section className='bg-blue-50 px-4 pt-6 pb-10'>
       <div className='container-xl lg:container m-auto'>
@@ -16,7 +18,7 @@ const FeaturedProperties: FunctionComponent = async (): Promise<ReactElement | n
           Featured Properties
         </h2>
         <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-          {featuredProperties.map((property: FlattenMaps<PropertyDocument>): ReactElement => (
+          {featuredProperties.map((property: PlainProperty): ReactElement => (
             <FeaturedPropertyCard
               key={property._id}
               property={property}

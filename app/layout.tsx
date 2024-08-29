@@ -7,10 +7,10 @@ import GlobalContextProvider from '@/components/GlobalContextProvider'
 import AuthProvider from '@/components/AuthProvider'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
-import {ReactNodes} from '@/utilities/interfaces'
 import 'react-toastify/dist/ReactToastify.css'
 import 'photoswipe/dist/photoswipe.css'
 import '@/assets/styles.css'
+import DestructuredReactNode from '@/interfaces/DestructuredReactNode'
 const inter: NextFont = Inter({subsets: ['latin']})
 export const metadata: Metadata = {
   title: {
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   description: 'Find the perfect rental property.',
   keywords: 'find, rental, property'
 }
-const RootLayout: FunctionComponent<ReactNodes> = (
+const RootLayout: FunctionComponent<DestructuredReactNode> = (
   {children}
 ): ReactElement => (
   <AuthProvider>

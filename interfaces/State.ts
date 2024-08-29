@@ -1,8 +1,8 @@
-import {FlattenMaps} from 'mongoose'
-import UserDocument from '@/interfaces/UserDocument'
+import {Dispatch, SetStateAction} from 'react'
+import PlainUser from '@/interfaces/PlainUser'
 interface State {
   unreadMessagesCount: number
-  setUnreadMessagesCount: any
-  user?: FlattenMaps<UserDocument>
+  setUnreadMessagesCount: Dispatch<SetStateAction<number>>
+  user?: PlainUser
 }
 export default State

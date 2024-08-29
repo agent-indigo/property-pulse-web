@@ -5,4 +5,4 @@ interface UserDocument extends Document {
   image?: string
   bookmarks: ObjectId[]
 }
-export default  UserDocument
+export default UserDocument

@@ -8,6 +8,8 @@ import connectToMongoDB from '@/utilities/connectToMongoDB'
 import UrlSearchParams from '@/interfaces/UrlSearchParams'
 import FeaturedProperties from '@/components/FeaturedProperties'
 import PropertyDocument from '@/interfaces/PropertyDocument'
+import PlainProperty from '@/interfaces/PlainProperty'
+import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 export const metadata: Metadata = {
   title: 'Properties'
 }
@@ -16,12 +18,13 @@ const PropertiesPage: FunctionComponent<UrlSearchParams> = async ({searchParams:
   size = 6
 }}): Promise<ReactElement> => {
   await connectToMongoDB()
-  const properties: FlattenMaps<PropertyDocument>[] = (
+  const properties: PlainProperty[] = (
     await propertyModel
     .find()
     .skip((page - 1) * size)
     .limit(size)
     .lean())
+    .map((property: FlattenMaps<PropertyDocument>): PlainProperty => convertToPlainDocument(property))
   return (
     <>
       <section className='bg-blue-700 py-4'>

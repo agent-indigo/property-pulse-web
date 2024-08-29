@@ -1,5 +1,5 @@
 import PropertySearchParams from '@/interfaces/PropertySearchParams'
-import LeanProperties from '@/interfaces/LeanProperties'
 import PaginatorProps from './PaginatorProps'
-interface PropertiesCompomentProps extends PropertySearchParams, PaginatorProps, LeanProperties {}
+import Properties from './Properties'
+interface PropertiesCompomentProps extends PropertySearchParams, PaginatorProps, Properties {}
 export default PropertiesCompomentProps

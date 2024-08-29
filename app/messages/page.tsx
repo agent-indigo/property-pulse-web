@@ -1,36 +1,47 @@
 import {FunctionComponent, ReactElement} from 'react'
 import {Metadata} from 'next'
 import {toast} from 'react-toastify'
+import {FlattenMaps} from 'mongoose'
 import MessageCard from '@/components/MessageCard'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import messageModel from '@/models/messageModel'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import getSessionUser from '@/serverActions/getSessionUser'
-import LeanMessage from '@/interfaces/LeanMessage'
+import PlainMessage from '@/interfaces/PlainMessage'
+import MessageDocument from '@/interfaces/MessageDocument'
+import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 export const metadata: Metadata = {
   title: 'Messages'
 }
 const MessagesPage: FunctionComponent = async (): Promise<ReactElement> => {
   const {error, sessionUser, success}: ServerActionResponse = await getSessionUser()
-  const getMessages: Function = async (read: boolean): Promise<LeanMessage[]> => {
+  const getMessages: Function = async (read: boolean): Promise<PlainMessage[]> => {
     if (success && sessionUser) {
       await connectToMongoDB()
-      return await messageModel.find({
-        recipient: sessionUser._id,
-        read
-      }).sort({createdAt: -1}).populate(
-        'sender',
-        'username'
-      ).populate(
-        'property',
-        'name'
-      ).lean()
+      return (
+        await messageModel
+        .find({
+          recipient: sessionUser._id,
+          read
+        })
+        .sort({createdAt: -1})
+        .populate(
+          'sender',
+          'username'
+        )
+        .populate(
+          'property',
+          'name'
+        )
+        .lean())
+        .map((message: FlattenMaps<MessageDocument>): PlainMessage => convertToPlainDocument(message)
+      )
     } else {
       toast.error(error)
       return []
     }
   }
-  const messages: LeanMessage[] = [
+  const messages: PlainMessage[] = [
     ...await getMessages(false),
     ...await getMessages(true)
   ]
@@ -46,7 +57,7 @@ const MessagesPage: FunctionComponent = async (): Promise<ReactElement> => {
               <p>
                 You have no messages.
               </p>
-            ) : (messages.map((message: LeanMessage): ReactElement => (
+            ) : (messages.map((message: PlainMessage): ReactElement => (
               <MessageCard
                 key={message._id}
                 message={message}

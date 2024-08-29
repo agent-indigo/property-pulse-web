@@ -9,6 +9,7 @@ import UserDocument from '@/interfaces/UserDocument'
 import GoogleSignInParams from '@/interfaces/GoogleSignInParams'
 import AdapterUserWithId from '@/interfaces/AdapterUserWithId'
 import SessionWithUserId from '@/interfaces/SessionWithUserId'
+import SignInSession from '@/interfaces/SignInSession'
 const authOptions: AuthOptions = {
   providers: [
     Google<GoogleProfile>({
@@ -33,11 +34,17 @@ const authOptions: AuthOptions = {
     }): Promise<boolean> {
       const {profile}: GoogleSignInParams = params as GoogleSignInParams
       await connectToMongoDB()
-      if (!await userModel.findOne({email: profile?.email})) await userModel.create({
-        email: profile?.email,
-        username: profile?.name,
-        image: profile?.picture
-      })
+      const user: UserDocument | null = await userModel.findOne({email: profile?.email})
+      if (user) {
+        user.image = profile.picture
+        await user.save()
+      } else {
+        await userModel.create({
+          email: profile.email,
+          username: profile.name,
+          image: profile.picture
+        })
+      }
       return true
     },
     async session(
@@ -50,13 +57,13 @@ const authOptions: AuthOptions = {
         trigger: 'update'
       }
     ): Promise<SessionWithUserId> {
-      const {session}: {session: Session} = params
+      const {session}: SignInSession = params
       const sessionUser: AdapterUserWithId = session.user as AdapterUserWithId
       return {
         ...session,
         user: {
           ...sessionUser,
-          id: (await userModel.findOne({email: sessionUser.email}) as UserDocument)._id
+          id: (await userModel.findOne({email: sessionUser.email}))?._id
         }
       }
     }

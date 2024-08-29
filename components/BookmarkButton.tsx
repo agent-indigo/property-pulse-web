@@ -5,13 +5,13 @@ import {toast} from 'react-toastify'
 import Spinner from '@/components/Spinner'
 import getPropertyBookmarked from '@/serverActions/getPropertyBookmarked'
 import togglePropertyBookmarked from '@/serverActions/togglePropertyBookmarked'
-import LeanProperty from '@/interfaces/LeanProperty'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import State from '@/interfaces/State'
 import {useGlobalContext} from '@/components/GlobalContextProvider'
-const BookmarkButton: FunctionComponent<LeanProperty> = ({property}): ReactElement | null => {
+import DestructuredProperty from '@/interfaces/DestructuredProperty'
+const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): ReactElement | null => {
   const {user}: State = useGlobalContext()
-  const propertyId: string = property?.id
+  const propertyId: string = property._id
   const [bookmarked, setBookmarked] = useState<boolean>(false)
   const buttonBg: string = bookmarked ? 'red' : 'blue'
   const [loading, setLoading] = useState<boolean>(true)
@@ -45,7 +45,7 @@ const BookmarkButton: FunctionComponent<LeanProperty> = ({property}): ReactEleme
     <h1 className='text-red-500 text-center font-bold'>
       Error checking bookmark status.
     </h1>
-  ) : !user || user.id === property?.owner?.toString() ? null : (
+  ) : !user || user._id === property.owner?.toString() ? null : (
     <button
       disabled={!user}
       onClick={handleClick}

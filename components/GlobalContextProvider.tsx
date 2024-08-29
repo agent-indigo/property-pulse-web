@@ -9,20 +9,19 @@ import {
   useState
 } from 'react'
 import {toast} from 'react-toastify'
-import {FlattenMaps} from 'mongoose'
 import getUnreadMessagesCount from '@/serverActions/getUnreadMessagesCount'
 import State from '@/interfaces/State'
 import DestructuredReactNode from '@/interfaces/DestructuredReactNode'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import getSessionUser from '@/serverActions/getSessionUser'
-import UserDocument from '@/interfaces/UserDocument'
+import PlainUser from '@/interfaces/PlainUser'
 const GlobalContext: Context<State> = createContext<State>({
   unreadMessagesCount: 0,
-  setUnreadMessagesCount: null
+  setUnreadMessagesCount: (): void => {}
 })
 const GlobalContextProvider: FunctionComponent<DestructuredReactNode> = ({children}): ReactElement => {
   const [unreadMessagesCount, setUnreadMessagesCount] = useState<number>(0)
-  const [user, setUser] = useState<FlattenMaps<UserDocument> | undefined>(undefined)
+  const [user, setUser] = useState<PlainUser | undefined>(undefined)
   useEffect(
     (): void => {
       const getUser: Function = async (): Promise<void> => {
@@ -49,7 +48,8 @@ const GlobalContextProvider: FunctionComponent<DestructuredReactNode> = ({childr
   return (
     <GlobalContext.Provider value={{
       unreadMessagesCount,
-      setUnreadMessagesCount
+      setUnreadMessagesCount,
+      user
     }}>
       {children}
     </GlobalContext.Provider>

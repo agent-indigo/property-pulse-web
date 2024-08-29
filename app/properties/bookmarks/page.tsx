@@ -1,23 +1,23 @@
 import {FunctionComponent, ReactElement} from 'react'
 import {Metadata} from 'next'
-import {FlattenMaps, ObjectId} from 'mongoose'
 import PropertyCard from '@/components/PropertyCard'
 import getSessionUser from '@/serverActions/getSessionUser'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
 import BookmarkButton from '@/components/BookmarkButton'
-import PropertyDocument from '@/interfaces/PropertyDocument'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
+import PlainProperty from '@/interfaces/PlainProperty'
+import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 export const metadata: Metadata = {
   title: 'Bookmarks'
 }
 const BookmarksPage: FunctionComponent = async (): Promise<ReactElement> => {
   await connectToMongoDB()
   const {sessionUser}: ServerActionResponse = await getSessionUser()
-  const bookmarks: FlattenMaps<PropertyDocument>[] = []
-  sessionUser && await Promise.all(sessionUser.bookmarks.map(async (bookmark: ObjectId): Promise<void> => {
-    const property: FlattenMaps<PropertyDocument> | null = await propertyModel.findById(bookmark).lean()
-    property && bookmarks.push(property)
+  const bookmarks: PlainProperty[] = []
+  sessionUser && await Promise.all(sessionUser.bookmarks.map(async (bookmark: string): Promise<void> => {
+    const property: PlainProperty = convertToPlainDocument(await propertyModel.findById(bookmark).lean())
+    bookmarks.push(property)
   }))
   return (
     <section className='px-4 py-6'>
@@ -30,7 +30,7 @@ const BookmarksPage: FunctionComponent = async (): Promise<ReactElement> => {
         ) : (
           <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
             {bookmarks.map((
-              property: FlattenMaps<PropertyDocument>
+              property: PlainProperty
             ): ReactElement => (
               <div key={property._id}>
                 <PropertyCard property={property}/>

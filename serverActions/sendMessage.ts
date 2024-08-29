@@ -16,7 +16,7 @@ const sendMessage = async (
       sessionUser
     }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
-      const sender: string = sessionUser.id
+      const sender: string = sessionUser._id
       const recipient: string | undefined = form
         .get('recipient')
         ?.valueOf()

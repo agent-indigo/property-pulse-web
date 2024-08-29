@@ -1,9 +1,8 @@
 import {FunctionComponent, ReactElement} from 'react'
-import {FlattenMaps} from 'mongoose'
 import PropertyCard from '@/components/PropertyCard'
 import Paginator from '@/components/Paginator'
 import PropertiesCompomentProps from '@/interfaces/PropertiesComponentProps'
-import PropertyDocument from '@/interfaces/PropertyDocument'
+import PlainProperty from '@/interfaces/PlainProperty'
 const Properties: FunctionComponent<PropertiesCompomentProps> = ({
   properties,
   page,
@@ -17,7 +16,7 @@ const Properties: FunctionComponent<PropertiesCompomentProps> = ({
       ) : (
         <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
           {properties.map((
-            property: FlattenMaps<PropertyDocument>
+            property: PlainProperty
           ): ReactElement => (
             <PropertyCard
               key={property._id}

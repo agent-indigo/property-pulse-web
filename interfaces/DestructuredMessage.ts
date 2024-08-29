@@ -1,5 +1,5 @@
-import LeanMessage from '@/interfaces/LeanMessage'
+import PlainMessage from '@/interfaces/PlainMessage'
 interface DestructuredMessage {
-  message: LeanMessage
+  message: PlainMessage
 }
 export default DestructuredMessage

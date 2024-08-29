@@ -1,5 +1,4 @@
-import {FlattenMaps} from 'mongoose'
-import UserDocument from '@/interfaces/UserDocument'
+import PlainUser from '@/interfaces/PlainUser'
 interface ServerActionResponse {
   bookmarked?: boolean
   error?: any
@@ -9,6 +8,6 @@ interface ServerActionResponse {
   read?: boolean
   success: boolean
   unreadMessagesCount?: number
-  sessionUser?: FlattenMaps<UserDocument>
+  sessionUser?: PlainUser
 }
 export default ServerActionResponse

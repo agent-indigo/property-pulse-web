@@ -12,7 +12,7 @@ const toggleMessageRead: Function = async (messageId: string): Promise<ServerAct
       await connectToMongoDB()
       const message: MessageDocument | null = await messageModel.findById(messageId)
       if (message) {
-        if (sessionUser._id === message.recipient) {
+        if (sessionUser._id === message.recipient.toString()) {
           message.read = !message.read
           await message.save()
           revalidatePath('/messages', 'page')

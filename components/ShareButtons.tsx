@@ -17,9 +17,9 @@ const ShareButtons: FunctionComponent<ShareButtonsProps> = ({
   property,
   PUBLIC_DOMAIN
 }): ReactElement => {
-  const url: string = `${PUBLIC_DOMAIN}/properties/${property?._id}`
-  const name: string | undefined = property?.name
-  const type: string | undefined = property?.type
+  const url: string = `${PUBLIC_DOMAIN}/properties/${property._id}`
+  const name: string = property.name
+  const type: string = property.type
   return (
     <>
       <h3 className='text-xl font-bold text-center pt-2'>

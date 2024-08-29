@@ -10,6 +10,5 @@ interface MessageDocument extends Document {
   phone?: string
   body?: string
   read?: boolean
-  createdAt: Date
 }
 export default MessageDocument

@@ -9,16 +9,19 @@ import getSessionUser from '@/serverActions/getSessionUser'
 import propertyModel from '@/models/propertyModel'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import PropertyDocument from '@/interfaces/PropertyDocument'
+import PlainProperty from '@/interfaces/PlainProperty'
+import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 export const metadata: Metadata = {
   title: 'Profile'
 }
 const ProfilePage: FunctionComponent =  async (): Promise<ReactElement> => {
   const {sessionUser}: ServerActionResponse = await getSessionUser()
   await connectToMongoDB()
-  const properties: FlattenMaps<PropertyDocument>[] = (
+  const properties: PlainProperty[] = (
     await propertyModel
     .find({owner: sessionUser?._id})
     .lean())
+    .map((property: FlattenMaps<PropertyDocument>): PlainProperty => convertToPlainDocument(property))
   return (
     <section className='bg-blue-50'>
       <div className='container m-auto py-24'>

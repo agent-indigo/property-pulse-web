@@ -4,12 +4,12 @@ import {useFormState} from 'react-dom'
 import {toast} from 'react-toastify'
 import SubmitButton from '@/components/SubmitButton'
 import sendMessage from '@/serverActions/sendMessage'
-import LeanProperty from '@/interfaces/LeanProperty'
 import State from '@/interfaces/State'
 import {useGlobalContext} from '@/components/GlobalContextProvider'
-const ContactForm: FunctionComponent<LeanProperty> = ({property}): ReactElement => {
+import DestructuredProperty from '@/interfaces/DestructuredProperty'
+const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
   const {user}: State = useGlobalContext()
-  const isOwner: boolean = user?.id === property?.owner
+  const isOwner: boolean = user?._id === property.owner
   const [submitState, formAction] = useFormState(sendMessage, {success: false})
   const success: boolean = submitState.success
   const error: any = submitState.error
@@ -18,7 +18,7 @@ const ContactForm: FunctionComponent<LeanProperty> = ({property}): ReactElement 
     (): void => {
       success ? toast.success(submitState.message) : toast.error(error)
     },
-    [submitState, success]
+    [submitState, success, error]
   )
   return (
     <div className='bg-white p-6 rounded-lg shadow-md'>
@@ -33,7 +33,7 @@ const ContactForm: FunctionComponent<LeanProperty> = ({property}): ReactElement 
             name='property'
             required
             readOnly
-            defaultValue={property?.id}
+            defaultValue={property._id}
           />
           <input
             type='hidden'
@@ -41,7 +41,7 @@ const ContactForm: FunctionComponent<LeanProperty> = ({property}): ReactElement 
             name='recipient'
             required
             readOnly
-            defaultValue={property?.owner?.toString()}
+            defaultValue={property.owner?.toString()}
           />
           <div className='mb-4'>
             <label

@@ -1,12 +1,12 @@
 'use server'
 import {getServerSession} from 'next-auth'
-import {FlattenMaps} from 'mongoose'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import SessionWithUserId from '@/interfaces/SessionWithUserId'
-import UserDocument from '@/interfaces/UserDocument'
 import userModel from '@/models/userModel'
 import authOptions from '@/utilities/authOptions'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
+import PlainUser from '@/interfaces/PlainUser'
+import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 const getSessionUser: Function = async (): Promise<ServerActionResponse> => {
   try {
     const session: SessionWithUserId | null = await getServerSession(authOptions)
@@ -14,7 +14,7 @@ const getSessionUser: Function = async (): Promise<ServerActionResponse> => {
       const id: string = session.user.id
       if (id !== '') {
         await connectToMongoDB()
-        const user: FlattenMaps<UserDocument> | null = await userModel.findById(id).lean()
+        const user: PlainUser | null = convertToPlainDocument(await userModel.findById(id).lean())
         if (user) {
           return {
             sessionUser: user,

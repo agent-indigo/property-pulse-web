@@ -4,11 +4,11 @@ import {toast} from 'react-toastify'
 import {GoogleMap, LoadScript, Marker} from '@react-google-maps/api'
 import Spinner from '@/components/Spinner'
 import geoLocateProperty from '@/serverActions/geoLocateProperty'
-import LeanProperty from '@/interfaces/LeanProperty'
 import PropertyLocation from '@/interfaces/PropertyLocation'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
-const PropertyMap: FunctionComponent<LeanProperty> = ({property}): ReactElement => {
-  const location: PropertyLocation | undefined = property?.location
+import DestructuredProperty from '@/interfaces/DestructuredProperty'
+const PropertyMap: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
+  const location: PropertyLocation = property.location
   const [lat, setLat] = useState<number>(0)
   const [lng, setLng] = useState<number>(0)
   const [loading, setLoading] = useState<boolean>(true)
