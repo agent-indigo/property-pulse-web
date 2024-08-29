@@ -4,8 +4,6 @@ const convertToPlainDocument: Function = (leanDocument: LeanDocument): PlainDocu
   for (const key of Object.keys(leanDocument)) {
     if (leanDocument[key].toJSON && leanDocument[key].toString) {
       leanDocument[key] = leanDocument[key].toString()
-    } else {
-      convertToPlainDocument(leanDocument[key])
     }
   }
   return leanDocument

@@ -34,7 +34,12 @@ const MessagesPage: FunctionComponent = async (): Promise<ReactElement> => {
           'name'
         )
         .lean())
-        .map((message: FlattenMaps<MessageDocument>): PlainMessage => convertToPlainDocument(message)
+        .map((message: FlattenMaps<MessageDocument>): PlainMessage => {
+          const plainMessage: PlainMessage = convertToPlainDocument(message)
+          plainMessage.sender = convertToPlainDocument(plainMessage.sender)
+          plainMessage.property = convertToPlainDocument(plainMessage.property)
+          return plainMessage
+        }
       )
     } else {
       toast.error(error)
