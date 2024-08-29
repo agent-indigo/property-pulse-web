@@ -1,7 +1,4 @@
-import {Account, AuthOptions, Profile, Session, User} from 'next-auth'
-import {JWT} from 'next-auth/jwt'
-import {AdapterUser} from 'next-auth/adapters'
-import {CredentialInput} from 'next-auth/providers/credentials'
+import {AuthOptions} from 'next-auth'
 import Google, {GoogleProfile} from 'next-auth/providers/google'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import userModel from '@/models/userModel'
@@ -9,7 +6,9 @@ import UserDocument from '@/interfaces/UserDocument'
 import GoogleSignInParams from '@/interfaces/GoogleSignInParams'
 import AdapterUserWithId from '@/interfaces/AdapterUserWithId'
 import SessionWithUserId from '@/interfaces/SessionWithUserId'
-import SignInSession from '@/interfaces/SignInSession'
+import NewSession from '@/interfaces/NewSession'
+import SessionParams from '@/interfaces/SessionParams'
+import SignInParams from '@/interfaces/SignInParams'
 const authOptions: AuthOptions = {
   providers: [
     Google<GoogleProfile>({
@@ -25,13 +24,7 @@ const authOptions: AuthOptions = {
     })
   ],
   callbacks: {
-    async signIn(params: {
-      user?: User | AdapterUser
-      account?: Account | null
-      profile?: Profile | GoogleProfile
-      email?: {verificationRequest?: boolean}
-      credentials?: Record<string, CredentialInput>
-    }): Promise<boolean> {
+    async signIn(params: SignInParams): Promise<boolean> {
       const {profile}: GoogleSignInParams = params as GoogleSignInParams
       await connectToMongoDB()
       const user: UserDocument | null = await userModel.findOne({email: profile?.email})
@@ -47,17 +40,8 @@ const authOptions: AuthOptions = {
       }
       return true
     },
-    async session(
-      params: {
-        session: Session
-        token?: JWT
-        user?: AdapterUser
-      } & {
-        newSession: SessionWithUserId
-        trigger: 'update'
-      }
-    ): Promise<SessionWithUserId> {
-      const {session}: SignInSession = params
+    async session(params: SessionParams & NewSession): Promise<SessionWithUserId> {
+      const {session} = params
       const sessionUser: AdapterUserWithId = session.user as AdapterUserWithId
       return {
         ...session,
