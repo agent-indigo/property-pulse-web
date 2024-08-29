@@ -25,7 +25,7 @@ const PropertyPage: FunctionComponent<Params> = async ({params}): Promise<ReactE
   )
   return (
     <>
-      <PropertyHeaderImage image={property.images?.[0] ?? ''}/>
+      <PropertyHeaderImage image={property.images[0]}/>
       <section>
         <div className='container m-auto py-6 px-6'>
           <Link
@@ -49,7 +49,7 @@ const PropertyPage: FunctionComponent<Params> = async ({params}): Promise<ReactE
           </div>
         </div>
       </section>
-      <PropertyImages images={property.images ?? []}/>
+      <PropertyImages images={property.images}/>
     </>
   )
 }
