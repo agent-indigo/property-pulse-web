@@ -5,26 +5,17 @@ import SessionWithUserId from '@/interfaces/SessionWithUserId'
 import userModel from '@/models/userModel'
 import authOptions from '@/utilities/authOptions'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import PlainUser from '@/interfaces/PlainUser'
 import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 const getSessionUser: Function = async (): Promise<ServerActionResponse> => {
   try {
     const session: SessionWithUserId | null = await getServerSession(authOptions)
     if (session) {
       const id: string = session.user.id
-      if (id !== '') {
+      if (id && id !== '') {
         await connectToMongoDB()
-        const user: PlainUser | null = convertToPlainDocument(await userModel.findById(id).lean())
-        if (user) {
-          return {
-            sessionUser: user,
-            success: true
-          }
-        } else {
-          return {
-            error: '401: Unauthorized',
-            success: false
-          }
+        return {
+          sessionUser: convertToPlainDocument(await userModel.findById(id).lean()),
+          success: true
         }
       } else {
         return {
