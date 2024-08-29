@@ -81,15 +81,13 @@ const PropertySchema = new Schema<PropertyDocument>({
       'Please provide the size in square feet.'
     ]
   },
-  amenities: [
-    {
-      type: String,
-      required: [
-        true,
-        'Please list the available amenities.'
-      ]
-    }
-  ],
+  amenities: [{
+    type: String,
+    required: [
+      true,
+      'Please list the available amenities.'
+    ]
+  }],
   rates: {
     nightly: {
       type: Number
@@ -124,15 +122,20 @@ const PropertySchema = new Schema<PropertyDocument>({
       ]
     }
   },
-  images: [
-    {
-      type: String,
-      required: [
-        true,
-        'Please upload some photos of the property.'
-      ]
-    }
-  ],
+  images: [{
+    type: String,
+    required: [
+      true,
+      'Please upload some photos of the property.'
+    ]
+  }],
+  imageIds: [{
+    type: String,
+    required: [
+      true,
+      'Please upload some photos of the property.'
+    ]
+  }],
   is_featured: {
     type: Boolean,
     default: false,
