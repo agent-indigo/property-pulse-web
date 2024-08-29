@@ -1,9 +1,5 @@
+import PropertySearchParams from '@/interfaces/PropertySearchParams'
 interface UrlSearchParams {
-  searchParams: {
-    page?: number
-    size?: number
-    location?: string
-    type?: string
-  }
+  searchParams: PropertySearchParams
 }
 export default UrlSearchParams

@@ -12,12 +12,9 @@ import {
   EmailShareButton,
   EmailIcon
 } from 'react-share'
-import ShareButtonsProps from '@/interfaces/ShareButtonsProps'
-const ShareButtons: FunctionComponent<ShareButtonsProps> = ({
-  property,
-  PUBLIC_DOMAIN
-}): ReactElement => {
-  const url: string = `${PUBLIC_DOMAIN}/properties/${property._id}`
+import DestructuredProperty from '@/interfaces/DestructuredProperty'
+const ShareButtons: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
+  const url: string = `${process.env.NEXT_PUBLIC_DOMAIN}/properties/${property._id}`
   const name: string = property.name
   const type: string = property.type
   return (

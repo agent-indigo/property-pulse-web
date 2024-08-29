@@ -55,9 +55,9 @@ const FeaturedPropertyCard: FunctionComponent<DestructuredProperty> = ({property
         <div className='flex justify-center gap-4 text-green-900 text-sm mb-4'>
           <p>
             <FaMoneyBill className='inline-block mr-2'/>
-            {rates?.nightly && ' Nightly'}
-            {rates?.weekly && ' Weekly'}
-            {rates?.monthly && ' Monthly'}
+            {rates.nightly && ' Nightly'}
+            {rates.weekly && ' Weekly'}
+            {rates.monthly && ' Monthly'}
           </p>
         </div>
         <div className='border border-gray-200 mb-5'/>
@@ -65,7 +65,7 @@ const FeaturedPropertyCard: FunctionComponent<DestructuredProperty> = ({property
           <div className='flex align-middle gap-2 mb-4 lg:mb-0'>
             <FaMapMarker className='text-lg text-orange-700'/>
             <span className='text-orange-700'>
-              {location?.city}, {location?.state}
+              {location.city}, {location.state}
             </span>
           </div>
           <Link

@@ -12,7 +12,7 @@ const PropertyCard: FunctionComponent<DestructuredProperty> = ({property}): Reac
   return (
     <div className='rounded-xl shadow-md relative'>
       <Image
-        src={property.images?.[0] ?? ''}
+        src={property.images[0]}
         alt=''
         height={0}
         width={0}
@@ -57,9 +57,9 @@ const PropertyCard: FunctionComponent<DestructuredProperty> = ({property}): Reac
         <div className='flex justify-center gap-4 text-green-900 text-sm mb-4'>
             <p>
               <FaMoneyBill className='inline mr-2'/>
-              {rates?.nightly && ' Nightly'}
-              {rates?.weekly && ' Weekly'}
-              {rates?.monthly && ' Monthly'}
+              {rates.nightly && ' Nightly'}
+              {rates.weekly && ' Weekly'}
+              {rates.monthly && ' Monthly'}
             </p>
         </div>
         <div className='border border-gray-100 mb-5'/>
@@ -67,7 +67,7 @@ const PropertyCard: FunctionComponent<DestructuredProperty> = ({property}): Reac
           <div className='flex align-middle gap-2 mb-4 lg:mb-0'>
             <FaMapMarker className='text-orange-700 mt-1'/>
             <span className='text-orange-700'>
-              {location?.city}, {location?.state}
+              {location.city}, {location.state}
             </span>
           </div>
           <Link

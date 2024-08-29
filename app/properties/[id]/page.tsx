@@ -17,7 +17,6 @@ export const metadata: Metadata = {
   title: 'Property Details'
 }
 const PropertyPage: FunctionComponent<Params> = async ({params}): Promise<ReactElement> => {
-  const VERCEL_URL: string = process.env.VERCEL_URL ?? ''
   await connectToMongoDB()
   const property: PlainProperty = convertToPlainDocument(
     await propertyModel
@@ -44,14 +43,7 @@ const PropertyPage: FunctionComponent<Params> = async ({params}): Promise<ReactE
             <PropertyDetails property={property}/>
             <aside className='space-y-4'>
               <BookmarkButton property={property}/>
-              <ShareButtons
-                property={property}
-                PUBLIC_DOMAIN={
-                  VERCEL_URL === ''
-                  ? 'http://localhost:3000'
-                  : `https://${VERCEL_URL}`
-                }
-              />
+              <ShareButtons property={property}/>
               <ContactForm property={property}/>
             </aside>
           </div>

@@ -78,6 +78,7 @@ const ResultsPage: FunctionComponent<UrlSearchParams> = async ({searchParams: {
             page={page}
             size={size}
             total={properties.length}
+            fromSearch={true}
           />
         </div>
       </section>

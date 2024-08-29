@@ -27,7 +27,7 @@ const ProfileProperties: FunctionComponent<Properties> = ({properties: received}
           <Link href={`/properties/${property._id}`}>
             <Image
               className='h-32 w-full rounded-md object-cover'
-              src={property.images?.[0] ?? ''}
+              src={property.images[0]}
               alt=''
               width={500}
               height={100}

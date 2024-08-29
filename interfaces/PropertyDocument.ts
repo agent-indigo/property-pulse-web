@@ -3,7 +3,7 @@ import PropertyLocation from '@/interfaces/PropertyLocation'
 import PropertyRates from '@/interfaces/PropertyRates'
 import PropertyContact from '@/interfaces/PropertyContact'
 interface PropertyDocument extends Document {
-  owner?: ObjectId
+  owner: ObjectId
   name: string
   type: string
   description: string
@@ -14,9 +14,8 @@ interface PropertyDocument extends Document {
   amenities: string[]
   rates: PropertyRates
   seller_info: PropertyContact
-  files?: File[]
-  images?: string[]
-  imageIds?: string[]
-  is_featured?: boolean
+  images: string[]
+  imageIds: string[]
+  is_featured: boolean
 }
 export default PropertyDocument

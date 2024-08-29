@@ -29,6 +29,7 @@ const Properties: FunctionComponent<PropertiesCompomentProps> = ({
         page={page}
         size={size}
         total={total}
+        fromSearch={false}
       />
     </div>
   </section>

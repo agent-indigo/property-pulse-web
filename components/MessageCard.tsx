@@ -9,6 +9,7 @@ import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import DestructuredMessage from '@/interfaces/DestructuredMessage'
 const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactElement | null => {
   const messageId: string = message._id
+  const body: string | undefined = message.body
   const email: string = message.email
   const phone: string | undefined = message.phone
   const [read, setRead] = useState<boolean | undefined>(message.read)
@@ -52,12 +53,14 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactEl
         </span>
         {message.property.name}
       </h2>
-      <p className='text-gray-700'>
-        {message.body}
-      </p>
+      {body && (
+        <p className='text-gray-700'>
+          {body}
+        </p>
+      )}
       <ul className='mt-4'>
         <li>
-          {message.sender?.username}
+          {message.sender.username}
         </li>
         <li>
           <a
@@ -67,14 +70,16 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactEl
             {email}
           </a>
         </li>
-        <li>
-          <a
-            href={`tel:${phone}`}
-            className='text-blue-500'
-          >
-            {phone}
-          </a>
-        </li>
+        {phone && (
+          <li>
+            <a
+              href={`tel:${phone}`}
+              className='text-blue-500'
+            >
+              {phone}
+            </a>
+          </li>
+        )}
         <li>
           {new Date(message.createdAt).toLocaleString()}
         </li>

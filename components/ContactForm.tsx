@@ -23,7 +23,7 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
   return (
     <div className='bg-white p-6 rounded-lg shadow-md'>
       <h3 className={`text-xl text-center font-bold py-1 ${success || error && `text-${messageColor}`}-500`}>
-        {success ? 'Message sent.' : error ? 'Error sending message' : user ? isOwner ? 'This is one of your properties.' : 'Inquire' : 'Log in to Inquire'}
+        {success ? 'Message sent.' : error ? 'Error sending message.' : user ? isOwner ? 'This is one of your properties.' : 'Inquire' : 'Log in to Inquire'}
       </h3>
       {user && !isOwner && (
         <form action={formAction}>
@@ -41,7 +41,7 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
             name='recipient'
             required
             readOnly
-            defaultValue={property.owner?.toString()}
+            defaultValue={property.owner}
           />
           <div className='mb-4'>
             <label
