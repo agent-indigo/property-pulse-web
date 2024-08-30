@@ -13,12 +13,13 @@ const toggleMessageRead: Function = async (messageId: string): Promise<ServerAct
       const message: MessageDocument | null = await messageModel.findById(messageId)
       if (message) {
         if (sessionUser._id === message.recipient.toString()) {
-          message.read = !message.read
+          const read: boolean = message.read
+          message.read = !read
           await message.save()
           revalidatePath('/messages', 'page')
           return {
-            message: `Message marked as ${message.read ? 'read' : 'unread'}.`,
-            read: message.read,
+            message: `Message marked as ${read ? 'unread' : 'read'}.`,
+            read: !read,
             success: true
           }
         } else {

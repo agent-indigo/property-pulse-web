@@ -13,8 +13,8 @@ const deleteProperty: Function = async (propertyId: string): Promise<ServerActio
       await connectToMongoDB()
       const property: PropertyDocument | null = await propertyModel.findById(propertyId)
       if (property) {
-        if (sessionUser._id === property.owner?.toString()) {
-          property.imageIds?.map(async (
+        if (sessionUser._id === property.owner.toString()) {
+          property.imageIds.map(async (
             imageId: string
           ): Promise<void> => await cloudinary.uploader.destroy(imageId))
           await propertyModel.findByIdAndDelete(propertyId)

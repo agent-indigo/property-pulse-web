@@ -1,6 +1,5 @@
 import {FunctionComponent, ReactElement} from 'react'
 import {Metadata} from 'next'
-import {toast} from 'react-toastify'
 import {FlattenMaps} from 'mongoose'
 import MessageCard from '@/components/MessageCard'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
@@ -14,42 +13,16 @@ export const metadata: Metadata = {
   title: 'Messages'
 }
 const MessagesPage: FunctionComponent = async (): Promise<ReactElement> => {
-  const {error, sessionUser, success}: ServerActionResponse = await getSessionUser()
-  const getMessages: Function = async (read: boolean): Promise<PlainMessage[]> => {
-    if (success && sessionUser) {
-      await connectToMongoDB()
-      return (
-        await messageModel
-        .find({
-          recipient: sessionUser._id,
-          read
-        })
-        .sort({createdAt: -1})
-        .populate(
-          'sender',
-          'username'
-        )
-        .populate(
-          'property',
-          'name'
-        )
-        .lean())
-        .map((message: FlattenMaps<MessageDocument>): PlainMessage => {
-          const plainMessage: PlainMessage = convertToPlainDocument(message)
-          plainMessage.sender = convertToPlainDocument(plainMessage.sender)
-          plainMessage.property = convertToPlainDocument(plainMessage.property)
-          return plainMessage
-        }
-      )
-    } else {
-      toast.error(error)
-      return []
-    }
-  }
-  const messages: PlainMessage[] = [
-    ...await getMessages(false),
-    ...await getMessages(true)
-  ]
+  const {sessionUser}: ServerActionResponse = await getSessionUser()
+  await connectToMongoDB()
+  const messages: PlainMessage[] = (await messageModel
+    .find({recipient: sessionUser?._id})
+    .populate('sender', 'username')
+    .populate('recipient', 'username')
+    .populate('property', 'id name')
+    .sort({read: 1, createdAt: -1})
+    .lean()
+  ).map((message: FlattenMaps<MessageDocument>): PlainMessage => convertToPlainDocument(message))
   return (
     <section className='bg-blue-50'>
       <div className='container m-auto py-24 max-w-6xl'>

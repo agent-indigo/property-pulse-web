@@ -16,7 +16,7 @@ const editProperty: Function = async (
       await connectToMongoDB()
       const property: PropertyDocument | null = await propertyModel.findById(propertyId)
       if (property) {
-        if (sessionUser._id === property.owner?.toString()) {
+        if (sessionUser._id === property.owner.toString()) {
           property.type = form.get('type')?.valueOf().toString() ?? ''
           property.name = form.get('name')?.valueOf().toString()?? ''
           property.description = form.get('description')?.valueOf().toString() ?? ''

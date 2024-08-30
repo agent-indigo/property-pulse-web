@@ -1,21 +1,57 @@
-'use server'
-import {revalidatePath} from 'next/cache'
-import {redirect} from 'next/navigation'
 import {UploadApiResponse} from 'cloudinary'
+import {NextRequest, NextResponse} from 'next/server'
+import {FlattenMaps} from 'mongoose'
+import PropertyDocument from '@/interfaces/PropertyDocument'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
+import propertyModel from '@/models/propertyModel'
 import getSessionUser from '@/serverActions/getSessionUser'
 import cloudinary from '@/utilities/cloudinary'
-import PropertyDocument from '@/interfaces/PropertyDocument'
-import propertyModel from '@/models/propertyModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-const addProperty = async (form: FormData): Promise<ServerActionResponse> => {
+import {e401, e500, redirect, s200} from '@/utilities/responses'
+import PlainProperty from '@/interfaces/PlainProperty'
+import convertToPlainDocument from '@/utilities/convertToPlainDocument'
+export {dynamic} from '@/utilities/dynamic'
+/**
+ * @name    GET
+ * @desc    GET all properties
+ * @route   GET /api/properties
+ * @access  public
+ */
+export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
-    const {
-      error,
-      success,
-      sessionUser
-    }: ServerActionResponse = await getSessionUser()
+    const page: string = new URL(request.url).searchParams.get('page') ?? ''
+    await connectToMongoDB()
+    return s200(JSON.stringify({
+      properties: (page !== ''
+        ? await propertyModel
+        .find()
+        .skip((parseInt(page) - 1) * 6)
+        .limit(6)
+        .lean()
+        : await propertyModel
+        .find()
+        .lean()
+      ).map((property: FlattenMaps<PropertyDocument>): PlainProperty => convertToPlainDocument(property)),
+      total: await propertyModel.countDocuments()
+    }))
+  } catch (error: any) {
+    return e500(
+      'retrieving properties',
+      error
+    )
+  }
+}
+/**
+ * @name    POST
+ * @desc    Add a property
+ * @route   POST /api/properties
+ * @access  private
+ */
+export const POST = async (request: NextRequest): Promise<NextResponse> => {
+  try {
+    const {sessionUser, success}: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
+      const form: FormData = await request.formData()
       const images: string[] = []
       const imageIds: string[] = []
       await Promise.all(form
@@ -43,16 +79,16 @@ const addProperty = async (form: FormData): Promise<ServerActionResponse> => {
         description: form.get('description')?.valueOf(),
         location: {
           street: form.get('location.street')?.valueOf(),
-          city: form.get('city')?.valueOf(),
-          state: form.get('state')?.valueOf(),
-          zipcode: form.get('zipcode')?.valueOf()
+          city: form.get('location.city')?.valueOf(),
+          state: form.get('location.state')?.valueOf(),
+          zipcode: form.get('location.zipcode')?.valueOf()
         },
         beds: form.get('beds')?.valueOf(),
         baths: form.get('baths')?.valueOf(),
         square_feet: form.get('square_feet')?.valueOf(),
-        amenities: form.getAll('amenities').map((
-          amenity: FormDataEntryValue
-        ): string => amenity
+        amenities: form
+          .getAll('amenities')
+          .map((amenity: FormDataEntryValue): string => amenity
           .valueOf()
           .toString()
         ),
@@ -71,19 +107,14 @@ const addProperty = async (form: FormData): Promise<ServerActionResponse> => {
       })
       await connectToMongoDB()
       await property.save()
-      revalidatePath('/', 'layout')
-      redirect(`/properties/${property.id}`)
+      return redirect(`${process.env.NEXT_PUBLIC_DOMAIN}/properties/${property.id}`)
     } else {
-      return {
-        error,
-        success: false
-      }
+      return e401
     }
   } catch (error: any) {
-    return {
-      error: `500: Internal Server Error:\n${error.toString()}`,
-      success: false
-    }
+    return e500(
+      'adding property',
+      error
+    )
   }
 }
-export default addProperty

@@ -18,13 +18,12 @@ const PropertiesPage: FunctionComponent<UrlSearchParams> = async ({searchParams:
   size = 6
 }}): Promise<ReactElement> => {
   await connectToMongoDB()
-  const properties: PlainProperty[] = (
-    await propertyModel
+  const properties: PlainProperty[] = (await propertyModel
     .find()
     .skip((page - 1) * size)
     .limit(size)
-    .lean())
-    .map((property: FlattenMaps<PropertyDocument>): PlainProperty => convertToPlainDocument(property))
+    .lean()
+  ).map((property: FlattenMaps<PropertyDocument>): PlainProperty => convertToPlainDocument(property))
   return (
     <>
       <section className='bg-blue-700 py-4'>

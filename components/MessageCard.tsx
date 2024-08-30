@@ -1,6 +1,7 @@
 'use client'
 import {FunctionComponent, MouseEventHandler, ReactElement, useState} from 'react'
 import {toast} from 'react-toastify'
+import Link from 'next/link'
 import {useGlobalContext} from '@/components/GlobalContextProvider'
 import deleteMessage from '@/serverActions/deleteMessage'
 import toggleMessageRead from '@/serverActions/toggleMessageRead'
@@ -48,10 +49,9 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactEl
         </div>
       )}
       <h2 className='text-xl mb-4'>
-        <span className='font-bold'>
-          Inquiry:
-        </span>
-        {message.property.name}
+        <Link href={`/properties/${message.property.id}`}>
+          {message.property.name}
+        </Link>
       </h2>
       {body && (
         <p className='text-gray-700'>
@@ -60,7 +60,7 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactEl
       )}
       <ul className='mt-4'>
         <li>
-          {message.sender.username}
+          {message.sender}
         </li>
         <li>
           <a

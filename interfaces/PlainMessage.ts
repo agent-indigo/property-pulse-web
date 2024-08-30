@@ -1,10 +1,11 @@
 import PlainDocument from '@/interfaces/PlainDocument'
-import PlainProperty from '@/interfaces/PlainProperty'
-import PlainUser from '@/interfaces/PlainUser'
 interface PlainMessage extends PlainDocument {
-  sender: PlainUser
-  recipient: PlainUser
-  property: PlainProperty
+  sender: string
+  recipient: string
+  property: {
+    id: string
+    name: string
+  }
   name: string
   email: string
   phone?: string

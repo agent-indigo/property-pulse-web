@@ -17,11 +17,10 @@ export const metadata: Metadata = {
 const ProfilePage: FunctionComponent =  async (): Promise<ReactElement> => {
   const {sessionUser}: ServerActionResponse = await getSessionUser()
   await connectToMongoDB()
-  const properties: PlainProperty[] = (
-    await propertyModel
+  const properties: PlainProperty[] = (await propertyModel
     .find({owner: sessionUser?._id})
-    .lean())
-    .map((property: FlattenMaps<PropertyDocument>): PlainProperty => convertToPlainDocument(property))
+    .lean()
+  ).map((property: FlattenMaps<PropertyDocument>): PlainProperty => convertToPlainDocument(property))
   return (
     <section className='bg-blue-50'>
       <div className='container m-auto py-24'>

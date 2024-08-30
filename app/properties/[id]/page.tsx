@@ -18,8 +18,7 @@ export const metadata: Metadata = {
 }
 const PropertyPage: FunctionComponent<Params> = async ({params}): Promise<ReactElement> => {
   await connectToMongoDB()
-  const property: PlainProperty = convertToPlainDocument(
-    await propertyModel
+  const property: PlainProperty = convertToPlainDocument(await propertyModel
     .findById(params.id)
     .lean()
   )

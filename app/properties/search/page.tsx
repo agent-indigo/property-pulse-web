@@ -37,11 +37,10 @@ const ResultsPage: FunctionComponent<UrlSearchParams> = async ({searchParams: {
     ]
   }
   if (type !== 'All') query.type = new RegExp(type, 'i')
-  const properties: PlainProperty[] = (
-    await propertyModel
+  const properties: PlainProperty[] = (await propertyModel
     .find(query)
-    .lean())
-    .map((property: FlattenMaps<PropertyDocument>): PlainProperty => convertToPlainDocument(property))
+    .lean()
+  ).map((property: FlattenMaps<PropertyDocument>): PlainProperty => convertToPlainDocument(property))
   return (
     <>
       <section className='bg-blue-700 py-4'>

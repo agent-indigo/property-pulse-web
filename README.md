@@ -10,7 +10,13 @@ I made the following modifications:
 
 - Replaced `mapbox-gl` and `react-geocode` with Google Maps
 
-- Moved geocoding into a Server Action
+- Kept the RESTful API even though it's currently unused
+
+- Moved `NEXT_PUBLIC_DOMAIN` and `NEXT_PUBLIC_API_DOMAIN` into `next.config.mjs`
+
+- Moved geocoding into a Server Action and an API route
+
+- Added a link to the property inquired about in the Message Card
 
 - Added the Bookmark Button to the Bookmarks Page
 
