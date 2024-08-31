@@ -25,7 +25,7 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
       <h3 className={`text-xl text-center font-bold py-1 ${success || error && `text-${messageColor}`}-500`}>
         {success ? 'Message sent.' : error ? 'Error sending message.' : user ? isOwner ? 'This is one of your properties.' : 'Inquire' : 'Log in to Inquire'}
       </h3>
-      {user && !isOwner && (
+      {!success && user && !isOwner && (
         <form action={formAction}>
           <input
             type='hidden'
