@@ -44,7 +44,10 @@ const AddPropertyForm: FunctionComponent = (): ReactElement => (
       </select>
     </div>
     <div className='mb-4'>
-      <label className='block text-gray-700 font-bold mb-2'>
+      <label
+        htmlFor='name'
+        className='block text-gray-700 font-bold mb-2'
+      >
         Listing Name
       </label>
       <input
@@ -72,7 +75,10 @@ const AddPropertyForm: FunctionComponent = (): ReactElement => (
       />
     </div>
     <div className='mb-4 bg-blue-50 p-4'>
-      <label className='block text-gray-700 font-bold mb-2'>
+      <label
+        htmlFor='location'
+        className='block text-gray-700 font-bold mb-2'
+      >
         Location
       </label>
       <input
@@ -154,7 +160,10 @@ const AddPropertyForm: FunctionComponent = (): ReactElement => (
       </div>
     </div>
     <div className='mb-4'>
-      <label className='block text-gray-700 font-bold mb-2'>
+      <label
+        htmlFor='amenities'
+        className='block text-gray-700 font-bold mb-2'
+      >
         Amenities
       </label>
       <div className='grid grid-cols-2 md:grid-cols-3 gap-2'>
@@ -341,7 +350,10 @@ const AddPropertyForm: FunctionComponent = (): ReactElement => (
       </div>
     </div>
     <div className='mb-4 bg-blue-50 p-4'>
-      <label className='block text-gray-700 font-bold mb-2'>
+      <label
+        htmlFor='rates'
+        className='block text-gray-700 font-bold mb-2'
+      >
         Rates (Leave blank if not applicable)
       </label>
       <div className='flex flex-col space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4'>

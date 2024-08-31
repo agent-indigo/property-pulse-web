@@ -42,13 +42,13 @@ const SearchPropertiesForm: FunctionComponent = (): ReactElement => {
       </div>
       <div className='w-full md:w-2/5 md:pl-2'>
         <label
-          htmlFor='property-type'
+          htmlFor='type'
           className='sr-only'
         >
           Property Type
         </label>
         <select
-          id='property-type'
+          id='type'
           name='type'
           value={fields.type}
           onChange={handleChange}

@@ -20,7 +20,7 @@ const PropertiesPage: FunctionComponent<UrlSearchParams> = async ({searchParams:
   await connectToMongoDB()
   const properties: PlainProperty[] = (await propertyModel
     .find()
-    .skip((page - 1) * size)
+    .skip((parseInt(page.toString() ?? '1') - 1) * size)
     .limit(size)
     .lean()
   ).map((property: FlattenMaps<PropertyDocument>): PlainProperty => convertToPlainDocument(property))

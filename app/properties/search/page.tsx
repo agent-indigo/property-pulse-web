@@ -39,6 +39,8 @@ const ResultsPage: FunctionComponent<UrlSearchParams> = async ({searchParams: {
   if (type !== 'All') query.type = new RegExp(type, 'i')
   const properties: PlainProperty[] = (await propertyModel
     .find(query)
+    .skip((parseInt(page.toString() ?? '1') - 1) * size)
+    .limit(size)
     .lean()
   ).map((property: FlattenMaps<PropertyDocument>): PlainProperty => convertToPlainDocument(property))
   return (
@@ -62,7 +64,9 @@ const ResultsPage: FunctionComponent<UrlSearchParams> = async ({searchParams: {
             Search Results
           </h1>
           {properties.length === 0 ? (
-            <p>No results.</p>
+            <p>
+              No results.
+            </p>
           ) : (
             <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
               {properties.map((property: PlainProperty): ReactElement => (

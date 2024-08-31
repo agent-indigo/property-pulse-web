@@ -27,12 +27,12 @@ const BookmarksPage: FunctionComponent = async (): Promise<ReactElement> => {
           Bookmarked Properties
         </h1>
         {bookmarks.length === 0 ? (
-          <p>You have not bookmarked any properties.</p>
+          <p>
+            You have not bookmarked any properties.
+          </p>
         ) : (
           <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
-            {bookmarks.map((
-              property: PlainProperty
-            ): ReactElement => (
+            {bookmarks.map((property: PlainProperty): ReactElement => (
               <div key={property._id}>
                 <PropertyCard property={property}/>
                 <BookmarkButton property={property}/>

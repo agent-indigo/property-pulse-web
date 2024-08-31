@@ -171,7 +171,7 @@ const Navbar: FunctionComponent = (): ReactElement => {
                     </span>
                     <Image
                       className='h-8 w-8 rounded-full'
-                      src={user.image || profileDefault}
+                      src={user.image ?? profileDefault}
                       alt=''
                       width={40}
                       height={40}

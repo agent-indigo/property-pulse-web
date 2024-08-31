@@ -144,7 +144,7 @@ const PropertySchema = new Schema<PropertyDocument>({
 }, {
   timestamps: true
 })
-const propertyModel: Model<PropertyDocument> = models.Property || model<PropertyDocument>(
+const propertyModel: Model<PropertyDocument> = models.Property ?? model<PropertyDocument>(
   'Property',
   PropertySchema
 )

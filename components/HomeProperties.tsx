@@ -9,13 +9,12 @@ import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 import PropertyDocument from '@/interfaces/PropertyDocument'
 const HomeProperties: FunctionComponent = async (): Promise<ReactElement> => {
   await connectToMongoDB()
-  const properties: PlainProperty[] =(
-    await propertyModel
+  const properties: PlainProperty[] = (await propertyModel
     .find()
     .sort({createdAt: -1})
     .limit(3)
-    .lean())
-    .map((property: FlattenMaps<PropertyDocument>): PlainProperty => convertToPlainDocument(property))
+    .lean()
+  ).map((property: FlattenMaps<PropertyDocument>): PlainProperty => convertToPlainDocument(property))
   return (
     <>
       <section className='px-4 py-6'>
@@ -26,7 +25,7 @@ const HomeProperties: FunctionComponent = async (): Promise<ReactElement> => {
           <div className='grid grid-cols-1 md:grid-cols-3 gap-6'>
             {properties.length === 0 ? (
               <p>
-                No current properties.
+                No properties currently available.
               </p>
             ) : (properties.map((property: PlainProperty): ReactElement => (
               <PropertyCard

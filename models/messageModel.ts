@@ -44,7 +44,7 @@ const MessageSchema = new Schema<MessageDocument>({
 }, {
   timestamps: true
 })
-const messageModel: Model<MessageDocument> = models.Message || model<MessageDocument>(
+const messageModel: Model<MessageDocument> = models.Message ?? model<MessageDocument>(
   'Message', 
   MessageSchema
 )

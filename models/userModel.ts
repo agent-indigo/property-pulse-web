@@ -26,7 +26,7 @@ const UserSchema = new Schema<UserDocument>({
 }, {
   timestamps: true
 })
-const userModel: Model<UserDocument> = models.User || model<UserDocument>(
+const userModel: Model<UserDocument> = models.User ?? model<UserDocument>(
   'User',
   UserSchema
 )
