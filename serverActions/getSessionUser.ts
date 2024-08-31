@@ -10,18 +10,10 @@ const getSessionUser: Function = async (): Promise<ServerActionResponse> => {
   try {
     const session: SessionWithUserId | null = await getServerSession(authOptions)
     if (session) {
-      const id: string = session.user.id
-      if (id && id !== '') {
-        await connectToMongoDB()
-        return {
-          sessionUser: convertToPlainDocument(await userModel.findById(id).lean()),
-          success: true
-        }
-      } else {
-        return {
-          error: '401: Unauthorized',
-          success: false
-        }
+      await connectToMongoDB()
+      return {
+        sessionUser: convertToPlainDocument(await userModel.findById(session.user.id).lean()),
+        success: true
       }
     } else {
       return {
