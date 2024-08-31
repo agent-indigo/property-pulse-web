@@ -1,5 +1,5 @@
 'use server'
-import {FlattenMaps, ObjectId} from 'mongoose'
+import {ObjectId} from 'mongoose'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import getSessionUser from '@/serverActions/getSessionUser'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
@@ -7,7 +7,8 @@ import PropertyDocument from '@/interfaces/PropertyDocument'
 import propertyModel from '@/models/propertyModel'
 import UserDocument from '@/interfaces/UserDocument'
 import userModel from '@/models/userModel'
-const togglePropertyBookmarked: Function = async (propertyId: FlattenMaps<ObjectId>): Promise<ServerActionResponse> => {
+import { revalidatePath } from 'next/cache'
+const togglePropertyBookmarked: Function = async (propertyId: ObjectId): Promise<ServerActionResponse> => {
   try {
     const {error, success, sessionUser}: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
@@ -15,11 +16,11 @@ const togglePropertyBookmarked: Function = async (propertyId: FlattenMaps<Object
       const user: UserDocument | null = await userModel.findById(sessionUser._id)
       const property: PropertyDocument | null = await propertyModel.findById(propertyId)
       if (user && property) {
-        if (user._id !== property.owner?.toString()) {
+        if (user.id !== property.owner.toString()) {
           let bookmarked: boolean = user.bookmarks.includes(propertyId)
           let message: string
           if (bookmarked) {
-            user.bookmarks = user.bookmarks.filter((bookmark: ObjectId): boolean => bookmark !== propertyId)
+            user.bookmarks = user.bookmarks.filter((bookmark: ObjectId): boolean => bookmark.toString() !== propertyId.toString())
             bookmarked = false
             message = 'Bookmark removed.'
           } else {
@@ -28,6 +29,7 @@ const togglePropertyBookmarked: Function = async (propertyId: FlattenMaps<Object
             message = 'Property bookmarked.'
           }
           await user.save()
+          revalidatePath('/', 'layout')
           return {
             bookmarked,
             message,

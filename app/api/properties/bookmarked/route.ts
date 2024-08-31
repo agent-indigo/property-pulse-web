@@ -54,11 +54,11 @@ export const PATCH = async (request: NextRequest): Promise<NextResponse> => {
         const {propertyId}: PropertyId = await request.json()
         const property: PropertyDocument | null = await propertyModel.findById(propertyId)
         if (property) {
-          if (user._id !== property.owner) {
+          if (user.id !== property.owner.toString()) {
             let bookmarked: boolean = user.bookmarks.includes(propertyId)
             let message: string
             if (bookmarked) {
-              user.bookmarks = user.bookmarks.filter((bookmark: ObjectId): boolean => bookmark !== propertyId)
+              user.bookmarks = user.bookmarks.filter((bookmark: ObjectId): boolean => bookmark.toString() !== propertyId.toString())
               message = 'Bookmark removed.'
               bookmarked = false
               action = 'removing'

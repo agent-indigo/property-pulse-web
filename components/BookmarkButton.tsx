@@ -45,7 +45,7 @@ const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): Re
     <h1 className='text-red-500 text-center font-bold'>
       Error checking bookmark status.
     </h1>
-  ) : user && user._id === property.owner?.toString() ? null : (
+  ) : user && user._id === property.owner ? null : (
     <button
       disabled={!user}
       onClick={handleClick}
