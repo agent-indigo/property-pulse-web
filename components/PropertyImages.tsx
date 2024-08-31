@@ -1,3 +1,4 @@
+'use client'
 import Image from 'next/image'
 import {FunctionComponent, ReactElement} from 'react'
 import {Gallery, Item} from 'react-photoswipe-gallery'
