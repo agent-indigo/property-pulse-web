@@ -35,6 +35,7 @@ const BookmarksPage: FunctionComponent = async (): Promise<ReactElement> => {
             {bookmarks.map((property: PlainProperty): ReactElement => (
               <div key={property._id}>
                 <PropertyCard property={property}/>
+                <div className='my-2'/>
                 <BookmarkButton property={property}/>
               </div>
             ))}
