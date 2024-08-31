@@ -1,10 +1,8 @@
 import {Document, ObjectId} from 'mongoose'
-import UserDocument from '@/interfaces/UserDocument'
-import PropertyDocument from '@/interfaces/PropertyDocument'
 interface MessageDocument extends Document {
-  sender: ObjectId | UserDocument
-  recipient: ObjectId | UserDocument
-  property: ObjectId | PropertyDocument
+  sender: ObjectId
+  recipient: ObjectId
+  property: ObjectId
   name: string
   email: string
   phone?: string

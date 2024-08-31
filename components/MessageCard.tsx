@@ -49,7 +49,10 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactEl
         </div>
       )}
       <h2 className='text-xl mb-4'>
-        <Link href={`/properties/${message.property.id}`}>
+        <Link
+          href={`/properties/${message.property.id}`}
+          className='text-blue-500'
+        >
           {message.property.name}
         </Link>
       </h2>
@@ -60,7 +63,7 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactEl
       )}
       <ul className='mt-4'>
         <li>
-          {message.sender}
+          {message.sender.username}
         </li>
         <li>
           <a
@@ -92,7 +95,7 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactEl
           : 'bg-blue-500 text-white'
         } py-1 px-3 rounded-md`}
       >
-        `Mark as {read ? 'unread' : 'read'}`
+        Mark as {read ? 'unread' : 'read'}
       </button>
       <button
         onClick={handleDelete}

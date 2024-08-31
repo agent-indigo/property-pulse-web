@@ -23,11 +23,15 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
       return s200(JSON.stringify((await messageModel
         .find({recipient: sessionUser._id})
         .populate('sender', 'username')
-        .populate('recipient', 'username')
         .populate('property', 'id name')
         .sort({read: 1, createdAt: -1})
         .lean())
-        .map((message: FlattenMaps<MessageDocument>): PlainMessage => convertToPlainDocument(message))
+        .map((message: FlattenMaps<MessageDocument>): PlainMessage => {
+          const plainMessage: PlainMessage = convertToPlainDocument(message)
+          plainMessage.sender = convertToPlainDocument(plainMessage.sender)
+          plainMessage.property = convertToPlainDocument(plainMessage.property)
+          return plainMessage
+        })
       ))
     } else {
       return e401
