@@ -18,7 +18,7 @@ const ProfileProperties: FunctionComponent<Properties> = ({properties: received}
     }
   }
   return (
-    <>
+    <section>
       {properties.map((property: PlainProperty) => (
         <div
           key={property._id}
@@ -59,7 +59,7 @@ const ProfileProperties: FunctionComponent<Properties> = ({properties: received}
           </div>
         </div>
       ))}
-    </>
+    </section>
   )
 }
 export default ProfileProperties

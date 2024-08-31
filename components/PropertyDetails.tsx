@@ -8,7 +8,7 @@ const PropertyDetails: FunctionComponent<DestructuredProperty> = ({property}): R
   const location: PropertyLocation = property.location
   const rates: PropertyRates = property.rates
   return (
-    <main>
+    <section>
       <div className='bg-white p-6 rounded-lg shadow-md text-center md:text-left'>
         <div className='text-gray-500 mb-4'>
           {property.type}
@@ -114,7 +114,7 @@ const PropertyDetails: FunctionComponent<DestructuredProperty> = ({property}): R
       <div className='bg-white p-6 rounded-lg shadow-md mt-6'>
         <PropertyMap property={property}/>
       </div>
-    </main>
+    </section>
   )
 }
 export default PropertyDetails
