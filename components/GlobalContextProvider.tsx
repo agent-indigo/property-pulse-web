@@ -29,19 +29,17 @@ const GlobalContextProvider: FunctionComponent<DestructuredReactNode> = ({childr
         success && sessionUser && setUser(sessionUser)
       }
       const getCount: Function = async (): Promise<void> => {
-        if (user) {
-          const {
-            error,
-            success,
-            unreadMessagesCount
-          }: ServerActionResponse = await getUnreadMessagesCount()
-          success && unreadMessagesCount !== undefined
-          ? setUnreadMessagesCount(unreadMessagesCount)
-          : toast.error(`Error retrieving unread messages count:\n${error.toString()}`)
-        }
+        const {
+          error,
+          success,
+          unreadMessagesCount
+        }: ServerActionResponse = await getUnreadMessagesCount()
+        success && unreadMessagesCount !== undefined
+        ? setUnreadMessagesCount(unreadMessagesCount)
+        : toast.error(`Error retrieving unread messages count:\n${error.toString()}`)
       }
       getUser()
-      getCount()
+      user && getCount()
     },
     [user]
   )
