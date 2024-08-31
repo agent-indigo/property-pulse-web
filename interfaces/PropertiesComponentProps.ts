@@ -1,5 +1,4 @@
-import PropertySearchParams from '@/interfaces/PropertySearchParams'
-import PaginatorProps from './PaginatorProps'
-import Properties from './Properties'
-interface PropertiesComponentProps extends PropertySearchParams, PaginatorProps, Properties {}
+import Pagination from '@/interfaces/Pagination'
+import Properties from '@/interfaces/Properties'
+interface PropertiesComponentProps extends Pagination, Properties {}
 export default PropertiesComponentProps

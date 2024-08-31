@@ -3,8 +3,8 @@ import Link from 'next/link'
 import PaginatorProps from '@/interfaces/PaginatorProps'
 const Paginator: FunctionComponent<PaginatorProps> = ({
   page = 1,
-  total,
   size = 6,
+  total = 0,
   fromSearch = false
 }): ReactElement => {
   const current: number = parseInt(page.toString())

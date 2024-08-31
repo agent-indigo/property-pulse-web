@@ -37,7 +37,6 @@ const PropertiesPage: FunctionComponent<UrlSearchParams> = async ({searchParams:
         total={await propertyModel.countDocuments()}
         page={page}
         size={size}
-        fromSearch={false}
       />
     </>
   )
