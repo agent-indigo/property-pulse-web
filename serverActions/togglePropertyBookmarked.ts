@@ -29,7 +29,7 @@ const togglePropertyBookmarked: Function = async (propertyId: ObjectId): Promise
             message = 'Property bookmarked.'
           }
           await user.save()
-          revalidatePath('/', 'layout')
+          revalidatePath('/messages/bookmarks', 'page')
           return {
             bookmarked,
             message,
