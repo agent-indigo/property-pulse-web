@@ -84,7 +84,7 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactEl
           </li>
         )}
         <li>
-          {new Date(message.createdAt).toLocaleString()}
+          {message.createdAt}
         </li>
       </ul>
       <button

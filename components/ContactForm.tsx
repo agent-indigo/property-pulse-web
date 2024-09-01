@@ -1,5 +1,5 @@
 'use client'
-import {FunctionComponent, ReactElement, useEffect} from 'react'
+import {FunctionComponent, ReactElement, useEffect, useState} from 'react'
 import {useFormState} from 'react-dom'
 import {toast} from 'react-toastify'
 import SubmitButton from '@/components/SubmitButton'
@@ -11,21 +11,19 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
   const {user}: State = useGlobalContext()
   const isOwner: boolean = user?._id === property.owner
   const [submitState, formAction] = useFormState(sendMessage, {success: false})
-  const success: boolean = submitState.success
-  const error: any = submitState.error
-  const messageColor: string = success ? 'green' : 'red'
   useEffect(
     (): void => {
-      success ? toast.success(submitState.message) : toast.error(error)
+      submitState.success && toast.success(submitState.message)
+      submitState.error && toast.error(submitState.error)
     },
-    [submitState, success, error]
+    [submitState]
   )
   return (
     <div className='bg-white p-6 rounded-lg shadow-md'>
-      <h3 className={`text-xl text-center font-bold py-1 ${success || error && `text-${messageColor}`}-500`}>
-        {success ? 'Message sent.' : error ? 'Error sending message.' : user ? isOwner ? 'This is one of your properties.' : 'Inquire' : 'Log in to Inquire'}
+      <h3 className={`text-xl text-center font-bold py-1${submitState.success ? ' text-green-500' : submitState.error ? ' text-red-500' : ''}`}>
+        {submitState.success ? 'Message sent.' : submitState.error ? 'Error sending message.' : user ? isOwner ? 'This is one of your properties.' : 'Inquire' : 'Log in to Inquire'}
       </h3>
-      {!success && user && !isOwner && (
+      {!submitState.success && !submitState.error && user && !isOwner && (
         <form action={formAction}>
           <input
             type='hidden'
