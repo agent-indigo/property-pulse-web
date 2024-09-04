@@ -1,25 +1,25 @@
+'use client'
 import {FunctionComponent, ReactElement} from 'react'
-import {redirect} from 'next/navigation'
+import {useRouter} from 'next/navigation'
+import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import {toast} from 'react-toastify'
 import editProperty from '@/serverActions/editProperty'
 import SubmitButton from '@/components/SubmitButton'
 import DestructuredProperty from '@/interfaces/DestructuredProperty'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
-  const handleSubmit: Function = async (
-    propertyId: string,
-    form: FormData
-  ): Promise<void> => {
-    const {error, message, success}: ServerActionResponse = await editProperty(propertyId, form)
+  const router: AppRouterInstance = useRouter()
+  const handleSubmit: Function = async (form: FormData): Promise<void> => {
+    const {error, message, success}: ServerActionResponse = await editProperty(property._id, form)
     if (success) {
       toast.success(message)
-      redirect(`/properties/${property._id}`)
+      router.push(`/properties/${property._id}`)
     } else {
       toast.error(`Error saving changes:\n${error}`)
     }
   }
   return (
-    <form action={handleSubmit.bind(null, property._id)}>
+    <form action={handleSubmit.bind(null)}>
       <h2 className='text-3xl text-center font-semibold mb-6'>
         Edit Property
       </h2>

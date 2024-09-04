@@ -48,7 +48,7 @@ const editProperty: Function = async (
           })
           revalidatePath('/', 'layout')
           return {
-            message: 'Changes saved. Await redirect...',
+            message: 'Changes saved.',
             success: true
           }
         } else {
