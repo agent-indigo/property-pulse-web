@@ -74,30 +74,7 @@ export const PATCH = async (request: NextRequest, {params}: Params): Promise<Nex
       const property: PropertyDocument | null = await propertyModel.findById(params.id)
       if (property) {
         if (sessionUser._id === property.owner.toString()) {
-          const form: FormData = await request.formData()
-          property.type = form.get('type')?.valueOf().toString() ?? ''
-          property.name = form.get('name')?.valueOf().toString()?? ''
-          property.description = form.get('description')?.valueOf().toString() ?? ''
-          property.location.street = form.get('location.street')?.valueOf().toString() ?? ''
-          property.location.city = form.get('location.city')?.valueOf().toString() ?? ''
-          property.location.state = form.get('location.state')?.valueOf().toString() ?? ''
-          property.location.zipcode = form.get('location.zipcode')?.valueOf().toString() ?? ''
-          property.beds = parseInt(form.get('beds')?.valueOf().toString() ?? '')
-          property.baths = parseInt(form.get('baths')?.valueOf().toString() ?? '')
-          property.square_feet = parseFloat(form.get('square_feet')?.valueOf().toString() ?? '')
-          property.amenities = form.getAll('amenities').map((
-            amenity: FormDataEntryValue
-          ): string => amenity
-            .valueOf()
-            .toString()
-          )
-          property.rates.nightly = parseFloat(form.get('rates.nightly')?.valueOf().toString() ?? '')
-          property.rates.weekly = parseFloat(form.get('rates.weekly')?.valueOf().toString() ?? '')
-          property.rates.monthly = parseFloat(form.get('rates.monthly')?.valueOf().toString() ?? '')
-          property.seller_info.name = form.get('seller_info.name')?.valueOf().toString() ?? ''
-          property.seller_info.email = form.get('seller_info.email')?.valueOf().toString() ?? ''
-          property.seller_info.phone = form.get('seller_info.phone')?.valueOf().toString() ?? ''
-          await property.save()
+          await propertyModel.findByIdAndUpdate(property._id, await request.json())
           return redirect(`${process.env.NEXT_PUBLIC_DOMAIN}/properties/${property.id}`)
         } else {
           return e401
