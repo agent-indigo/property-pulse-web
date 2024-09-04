@@ -35,23 +35,17 @@ const PropertyCard: FunctionComponent<DestructuredProperty> = ({property}): Reac
           <p>
             <FaBed className='inline mr-2'/>
             {property.beds}
-            <span className='md:hidden lg:inline'>
-              Beds
-            </span>
+            <span className='md:hidden lg:inline'> Beds</span>
           </p>
           <p>
             <FaBath className='inline mr-2'/>
             {property.baths}
-            <span className='md:hidden lg:inline'>
-              Baths
-            </span>
+            <span className='md:hidden lg:inline'> Baths</span>
           </p>
           <p>
             <FaRulerCombined className='inline mr-2'/>
             {property.square_feet}
-            <span className='md:hidden lg:inline'>
-              sqft
-            </span>
+            <span className='md:hidden lg:inline'> sqft</span>
           </p>
         </div>
         <div className='flex justify-center gap-4 text-green-900 text-sm mb-4'>

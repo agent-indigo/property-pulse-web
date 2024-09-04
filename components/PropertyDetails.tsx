@@ -72,23 +72,17 @@ const PropertyDetails: FunctionComponent<DestructuredProperty> = ({property}): R
           <p>
             <FaBed className='inline-block mr-2'/>
             {property.beds}
-            <span className='hidden sm:inline'>
-              Beds
-            </span>
+            <span className='hidden sm:inline'> Beds</span>
           </p>
           <p>
             <FaBath className='inline-block mr-2'/>
             {property.baths}
-            <span className='hidden sm:inline'>
-              Baths
-            </span>
+            <span className='hidden sm:inline'> Baths</span>
           </p>
           <p>
             <FaRulerCombined className='inline-block mr-2'/>
             {property.square_feet}
-            <span className='hidden sm:inline'>
-              sqft
-            </span>
+            <span className='hidden sm:inline'> sqft</span>
           </p>
         </div>
         <p className='text-gray-500 mb-4'>
