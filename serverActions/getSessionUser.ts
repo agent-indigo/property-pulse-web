@@ -22,10 +22,11 @@ const getSessionUser: Function = async (): Promise<ServerActionResponse> => {
           sessionUser,
           success: true
         }
-      }
-      return {
-        sessionUser: convertToPlainDocument(await userModel.findById(session.user.id).lean()),
-        success: true
+      } else {
+        return {
+          error: '401: Unauthorized',
+          success: false
+        }
       }
     } else {
       return {

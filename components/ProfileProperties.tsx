@@ -10,11 +10,11 @@ const ProfileProperties: FunctionComponent<Properties> = ({properties: received}
   const [properties, setProperties] = useState<PlainProperty[]>(received)
   const handleDelete: Function = async (propertyId: string): Promise<void> => {
     if (window.confirm('Are you sure you want to delete this proerty?')) {
-      const {message, success} = await deleteProperty(propertyId)
+      const {error, message, success} = await deleteProperty(propertyId)
       setProperties(properties.filter((
         property: PlainProperty
       ): boolean => property._id !== propertyId))
-      success ? toast.success(message) : toast.error(message)
+      success ? toast.success(message) : toast.error(`Error deleting property:\n${error}`)
     }
   }
   return (

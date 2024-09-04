@@ -19,16 +19,18 @@ const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): Re
   useEffect(
     (): void => {
       const getStatus: Function = async (): Promise<void> => {
-        const {bookmarked, error, success}: ServerActionResponse = await getPropertyBookmarked(propertyId)
-        if (success && bookmarked !== undefined) {
-          setBookmarked(bookmarked)
-        } else {
-          setErrorOccured(true)
-          toast.error(error)
+        if (user) {
+          const {bookmarked, error, success}: ServerActionResponse = await getPropertyBookmarked(propertyId)
+          if (success && bookmarked !== undefined) {
+            setBookmarked(bookmarked)
+          } else {
+            setErrorOccured(true)
+            toast.error(error)
+          }
         }
+        setLoading(false)
       }
-      user && getStatus(propertyId)
-      setLoading(false)
+      getStatus()
     },
     [propertyId, user]
   )
