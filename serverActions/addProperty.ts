@@ -1,6 +1,5 @@
 'use server'
 import {revalidatePath} from 'next/cache'
-import {redirect} from 'next/navigation'
 import {UploadApiResponse} from 'cloudinary'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import getSessionUser from '@/serverActions/getSessionUser'
@@ -8,7 +7,7 @@ import cloudinary from '@/utilities/cloudinary'
 import PropertyDocument from '@/interfaces/PropertyDocument'
 import propertyModel from '@/models/propertyModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-const addProperty = async (form: FormData): Promise<ServerActionResponse> => {
+const addProperty: Function = async (form: FormData): Promise<ServerActionResponse> => {
   try {
     const {
       error,
@@ -43,9 +42,9 @@ const addProperty = async (form: FormData): Promise<ServerActionResponse> => {
         description: form.get('description')?.valueOf(),
         location: {
           street: form.get('location.street')?.valueOf(),
-          city: form.get('city')?.valueOf(),
-          state: form.get('state')?.valueOf(),
-          zipcode: form.get('zipcode')?.valueOf()
+          city: form.get('location.city')?.valueOf(),
+          state: form.get('location.state')?.valueOf(),
+          zipcode: form.get('location.zipcode')?.valueOf()
         },
         beds: form.get('beds')?.valueOf(),
         baths: form.get('baths')?.valueOf(),
@@ -72,7 +71,11 @@ const addProperty = async (form: FormData): Promise<ServerActionResponse> => {
       await connectToMongoDB()
       await property.save()
       revalidatePath('/', 'layout')
-      redirect(`/properties/${property.id}`)
+      return {
+        message: 'Property added.',
+        propertyId: property.id,
+        success: true
+      }
     } else {
       return {
         error,
