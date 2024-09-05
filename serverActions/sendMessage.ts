@@ -5,10 +5,7 @@ import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import messageModel from '@/models/messageModel'
 import getSessionUser from '@/serverActions/getSessionUser'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-const sendMessage = async (
-  state: ServerActionResponse,
-  form: FormData
-): Promise<ServerActionResponse> => {
+const sendMessage: Function = async (form: FormData): Promise<ServerActionResponse> => {
   try {
     const {
       error,

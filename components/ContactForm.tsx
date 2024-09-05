@@ -1,30 +1,26 @@
 'use client'
-import {FunctionComponent, ReactElement, useEffect} from 'react'
-import {useFormState} from 'react-dom'
+import {FunctionComponent, ReactElement} from 'react'
 import {toast} from 'react-toastify'
 import SubmitButton from '@/components/SubmitButton'
 import sendMessage from '@/serverActions/sendMessage'
 import State from '@/interfaces/State'
 import {useGlobalContext} from '@/components/GlobalContextProvider'
 import DestructuredProperty from '@/interfaces/DestructuredProperty'
+import ServerActionResponse from '@/interfaces/ServerActionResponse'
 const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
   const {user}: State = useGlobalContext()
   const isOwner: boolean = user?._id === property.owner
-  const [submitState, formAction] = useFormState(sendMessage, {success: false})
-  useEffect(
-    (): void => {
-      submitState.success && toast.success(submitState.message)
-      submitState.error && toast.error(submitState.error)
-    },
-    [submitState]
-  )
+  const handleSubmit: Function = async (form: FormData): Promise<void> => {
+    const {error, message, success}: ServerActionResponse = await sendMessage(form)
+    success ? toast.success(message) : toast.error(`Error sending inquiry:\n${error}`)
+  }
   return (
     <div className='bg-white p-6 rounded-lg shadow-md'>
-      <h3 className={`text-xl text-center font-bold py-1${submitState.success ? ' text-green-500' : submitState.error ? ' text-red-500' : ''}`}>
-        {submitState.success ? 'Message sent.' : submitState.error ? 'Error sending message.' : user ? isOwner ? 'This is one of your properties.' : 'Inquire' : 'Log in to Inquire'}
+      <h3 className='text-xl text-center font-bold py-1'>
+        {user ? isOwner ? 'This is one of your properties.' : 'Inquiry Form' : 'Log in to Inquire'}
       </h3>
-      {!submitState.success && !submitState.error && user && !isOwner && (
-        <form action={formAction}>
+      {user && !isOwner && (
+        <form action={handleSubmit.bind(null)}>
           <input
             type='hidden'
             id='property'
