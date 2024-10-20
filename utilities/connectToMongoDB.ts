@@ -8,9 +8,9 @@ const connectToMongoDB: Function = async (): Promise<void> => {
     }:${
       process.env.MONGODB_PASSWORD ?? ''
     }@${
-      process.env.MONGODB_HOST ?? ''
+      process.env.MONGODB_HOST ?? 'mongodb://localhost:27017'
     }/${
-      process.env.MONGODB_DATABASE ?? ''
+      process.env.MONGODB_DATABASE ?? 'PropertyPulse'
     }?retryWrites=true&w=majority`)
     connected = true
     console.log('MongoDB successfully connected.')

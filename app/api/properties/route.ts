@@ -66,7 +66,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
               .arrayBuffer()))
               .toString('base64')
             }`,
-            {folder: process.env.CLOUDINARY_FOLDER_NAME ?? ''}
+            {folder: process.env.CLOUDINARY_FOLDER_NAME ?? 'PropertyPulse'}
           )
           images.push(secure_url)
           imageIds.push(public_id)
