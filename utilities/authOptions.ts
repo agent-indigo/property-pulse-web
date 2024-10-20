@@ -8,15 +8,11 @@ import AdapterUserWithId from '@/interfaces/AdapterUserWithId'
 import SessionWithUserId from '@/interfaces/SessionWithUserId'
 import SessionParams from '@/interfaces/SessionParams'
 import SignInParams from '@/interfaces/SignInParams'
-const {
-  GOOGLE_CLIENT_ID,
-  GOOGLE_CLIENT_SECRET
-} = process.env
 const authOptions: AuthOptions = {
   providers: [
     Google<GoogleProfile>({
-      clientId: GOOGLE_CLIENT_ID ?? '',
-      clientSecret: GOOGLE_CLIENT_SECRET ?? '',
+      clientId: process.env.GOOGLE_CLIENT_ID ?? '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
       authorization: {
         params: {
           prompt: 'consent',

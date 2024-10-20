@@ -2,21 +2,15 @@ import {connect, set} from 'mongoose'
 const connectToMongoDB: Function = async (): Promise<void> => {
   let connected: boolean = false
   if (!connected) try {
-    const {
-      MONGODB_USER,
-      MONGODB_PASSWORD,
-      MONGODB_HOST,
-      MONGODB_DATABASE
-    } = process.env
     set('strictQuery',true)
     await connect(`mongodb+srv://${
-      MONGODB_USER ?? ''
+      process.env.MONGODB_USER ?? ''
     }:${
-      MONGODB_PASSWORD ?? ''
+      process.env.MONGODB_PASSWORD ?? ''
     }@${
-      MONGODB_HOST ?? ''
+      process.env.MONGODB_HOST ?? ''
     }/${
-      MONGODB_DATABASE ?? ''
+      process.env.MONGODB_DATABASE ?? ''
     }?retryWrites=true&w=majority`)
     connected = true
     console.log('MongoDB successfully connected.')
