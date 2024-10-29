@@ -5,7 +5,10 @@ import {
 const connectToMongoDB: Function = async (): Promise<void> => {
   let connected: boolean = false
   if (!connected) try {
-    set('strictQuery',true)
+    set(
+      'strictQuery',
+      true
+    )
     await connect(`mongodb+srv://${
       process.env.MONGODB_USER ?? ''
     }:${
