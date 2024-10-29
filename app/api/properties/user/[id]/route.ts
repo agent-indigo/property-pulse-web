@@ -1,13 +1,18 @@
 import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
-import {NextRequest, NextResponse} from 'next/server'
+import {
+  NextRequest,
+  NextResponse
+} from 'next/server'
 import {FlattenMaps} from 'mongoose'
 import propertyModel from '@/models/propertyModel'
 import userModel from '@/models/userModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import {e404, e500, s200} from '@/utilities/responses'
 import PropertyDocument from '@/interfaces/PropertyDocument'
 import PlainProperty from '@/interfaces/PlainProperty'
 import convertToPlainDocument from '@/utilities/convertToPlainDocument'
+import dataResponse from '@/httpResponses/dataResponse'
+import notFoundResponse from '@/httpResponses/notFoundResponse'
+import serverErrorResponse from '@/httpResponses/serverErrorResponse'
 export {dynamic} from '@/utilities/dynamic'
 /**
  * @name    GET
@@ -15,18 +20,22 @@ export {dynamic} from '@/utilities/dynamic'
  * @route   GET /api/properties/user/:id
  * @access  public
  */
-export const GET = async (request: NextRequest, {params}: Params): Promise<NextResponse> => {
+export const GET = async (
+  request: NextRequest,
+  {params}: Params
+): Promise<NextResponse> => {
   try {
     const id: string = params.id
     await connectToMongoDB()
     return await userModel.findById(id)
-    ? s200(JSON.stringify(((await propertyModel
-      .find({owner: id})
-      .lean()
-    ).map((property: FlattenMaps<PropertyDocument>): PlainProperty => convertToPlainDocument(property)))))
-    : e404('User')
+    ? dataResponse(JSON.stringify(((await propertyModel.find({
+      owner: id
+    }).lean()).map((
+      property: FlattenMaps<PropertyDocument>
+    ): PlainProperty => convertToPlainDocument(property)))))
+    : notFoundResponse('User')
   } catch (error: any) {
-    return e500(
+    return serverErrorResponse(
       'retrieving user\'s properties',
       error
     )

@@ -1,4 +1,7 @@
-import {FunctionComponent, ReactElement} from 'react'
+import {
+  FunctionComponent,
+  ReactElement
+} from 'react'
 import Link from 'next/link'
 import {FlattenMaps} from 'mongoose'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
@@ -9,12 +12,11 @@ import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 import PropertyDocument from '@/interfaces/PropertyDocument'
 const HomeProperties: FunctionComponent = async (): Promise<ReactElement> => {
   await connectToMongoDB()
-  const properties: PlainProperty[] = (await propertyModel
-    .find()
-    .sort({createdAt: -1})
-    .limit(3)
-    .lean()
-  ).map((property: FlattenMaps<PropertyDocument>): PlainProperty => convertToPlainDocument(property))
+  const properties: PlainProperty[] = (await propertyModel.find().sort({
+    createdAt: -1
+  }).limit(3).lean()).map((
+    property: FlattenMaps<PropertyDocument>
+  ): PlainProperty => convertToPlainDocument(property))
   return (
     <>
       <section className='px-4 py-6'>

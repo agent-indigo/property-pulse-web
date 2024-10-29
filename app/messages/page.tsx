@@ -1,4 +1,7 @@
-import {FunctionComponent, ReactElement} from 'react'
+import {
+  FunctionComponent,
+  ReactElement
+} from 'react'
 import {Metadata} from 'next'
 import {FlattenMaps} from 'mongoose'
 import MessageCard from '@/components/MessageCard'
@@ -15,13 +18,18 @@ export const metadata: Metadata = {
 const MessagesPage: FunctionComponent = async (): Promise<ReactElement> => {
   const {sessionUser}: ServerActionResponse = await getSessionUser()
   await connectToMongoDB()
-  const messages: PlainMessage[] = (await messageModel
-    .find({recipient: sessionUser?._id})
-    .populate('sender', 'username')
-    .populate('property', 'id name')
-    .sort({read: 1, createdAt: -1})
-    .lean()
-  ).map((message: FlattenMaps<MessageDocument>): PlainMessage => {
+  const messages: PlainMessage[] = (await messageModel.find({
+    recipient: sessionUser?._id
+  }).populate(
+    'sender',
+    'username'
+  ).populate(
+    'property',
+    'id name'
+  ).sort({
+    read: 1,
+    createdAt: -1
+  }).lean()).map((message: FlattenMaps<MessageDocument>): PlainMessage => {
     const plainMessage: PlainMessage = convertToPlainDocument(message)
     plainMessage.sender = convertToPlainDocument(plainMessage.sender)
     plainMessage.property = convertToPlainDocument(plainMessage.property)

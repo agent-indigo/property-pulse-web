@@ -5,7 +5,11 @@ import connectToMongoDB from '@/utilities/connectToMongoDB'
 import messageModel from '@/models/messageModel'
 const getUnreadMessagesCount: Function = async (): Promise<ServerActionResponse> => {
   try {
-    const {error, success, sessionUser}: ServerActionResponse = await getSessionUser()
+    const {
+      error,
+      success,
+      sessionUser
+    }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
       await connectToMongoDB()
       return {

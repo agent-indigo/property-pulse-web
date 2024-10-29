@@ -1,16 +1,29 @@
 'use client'
-import {FunctionComponent, ReactElement, useState} from 'react'
+import {
+  FunctionComponent,
+  ReactElement,
+  useState
+} from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {toast} from 'react-toastify'
 import deleteProperty from '@/serverActions/deleteProperty'
 import Properties from '@/interfaces/Properties'
 import PlainProperty from '@/interfaces/PlainProperty'
-const ProfileProperties: FunctionComponent<Properties> = ({properties: received}): ReactElement => {
-  const [properties, setProperties] = useState<PlainProperty[]>(received)
+const ProfileProperties: FunctionComponent<Properties> = ({
+  properties: received
+}): ReactElement => {
+  const [
+    properties,
+    setProperties
+  ] = useState<PlainProperty[]>(received)
   const handleDelete: Function = async (propertyId: string): Promise<void> => {
     if (window.confirm('Are you sure you want to delete this proerty?')) {
-      const {error, message, success} = await deleteProperty(propertyId)
+      const {
+        error,
+        message,
+        success
+      } = await deleteProperty(propertyId)
       setProperties(properties.filter((
         property: PlainProperty
       ): boolean => property._id !== propertyId))

@@ -1,14 +1,30 @@
 'use client'
-import {ChangeEvent, ChangeEventHandler, FormEvent, FormEventHandler, FunctionComponent, ReactElement, useState} from 'react'
+import {
+  ChangeEvent,
+  ChangeEventHandler,
+  FormEvent,
+  FormEventHandler,
+  FunctionComponent,
+  ReactElement,
+  useState
+} from 'react'
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import {useRouter} from 'next/navigation'
 import PropertySearchParams from '@/interfaces/PropertySearchParams'
 import FormInput from '@/interfaces/FormInput'
 const SearchPropertiesForm: FunctionComponent = (): ReactElement => {
   const router: AppRouterInstance = useRouter()
-  const [fields, setFields] = useState<PropertySearchParams>({type: 'All'})
+  const [
+    fields,
+    setFields
+  ] = useState<PropertySearchParams>({
+    type: 'All'
+  })
   const handleChange: ChangeEventHandler<HTMLInputElement | HTMLSelectElement> = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
-    const {name, value}: FormInput = event.target
+    const {
+      name,
+      value
+    }: FormInput = event.target
     setFields((previousValues: PropertySearchParams): PropertySearchParams => ({
       ...previousValues,
       [name]: value

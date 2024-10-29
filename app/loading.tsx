@@ -1,5 +1,8 @@
 import {Metadata} from 'next'
-import {FunctionComponent, ReactElement} from 'react'
+import {
+  FunctionComponent,
+  ReactElement
+} from 'react'
 import {ClipLoader} from 'react-spinners'
 export const metadata: Metadata = {
   title: 'Loading... | PropertyPulse | Find the Perfect Rental',

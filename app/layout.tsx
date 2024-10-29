@@ -1,4 +1,7 @@
-import {FunctionComponent, ReactElement} from 'react'
+import {
+  FunctionComponent,
+  ReactElement
+} from 'react'
 import {Metadata} from 'next'
 import {Inter} from 'next/font/google'
 import {NextFont} from 'next/dist/compiled/@next/font'
@@ -20,9 +23,9 @@ export const metadata: Metadata = {
   description: 'Find the perfect rental property.',
   keywords: 'find, rental, property'
 }
-const RootLayout: FunctionComponent<DestructuredReactNode> = (
-  {children}
-): ReactElement => (
+const RootLayout: FunctionComponent<DestructuredReactNode> = ({
+  children
+}): ReactElement => (
   <AuthProvider>
     <GlobalContextProvider>
       <html lang='en'>

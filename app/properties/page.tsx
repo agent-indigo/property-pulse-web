@@ -1,4 +1,7 @@
-import {FunctionComponent, ReactElement} from 'react'
+import {
+  FunctionComponent,
+  ReactElement
+} from 'react'
 import {Metadata} from 'next'
 import {FlattenMaps} from 'mongoose'
 import SearchPropertiesForm from '@/components/SearchPropertiesForm'
@@ -18,12 +21,11 @@ const PropertiesPage: FunctionComponent<UrlSearchParams> = async ({searchParams:
   size = 6
 }}): Promise<ReactElement> => {
   await connectToMongoDB()
-  const properties: PlainProperty[] = (await propertyModel
-    .find()
-    .skip((parseInt(page.toString() ?? '1') - 1) * size)
-    .limit(size)
-    .lean()
-  ).map((property: FlattenMaps<PropertyDocument>): PlainProperty => convertToPlainDocument(property))
+  const properties: PlainProperty[] = (await propertyModel.find().skip((
+    parseInt(page.toString() ?? '1'
+  ) - 1) * size).limit(size).lean()).map((
+    property: FlattenMaps<PropertyDocument>
+  ): PlainProperty => convertToPlainDocument(property))
   return (
     <>
       <section className='bg-blue-700 py-4'>

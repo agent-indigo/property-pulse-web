@@ -1,6 +1,8 @@
 import {Config} from 'tailwindcss'
 const tailwindConfig: Config = {
-  content: ['**/*.tsx'],
+  content: [
+    '**/*.tsx'
+  ],
   theme: {
     extend: {
       fontFamily: {

@@ -1,18 +1,41 @@
 'use client'
-import {FunctionComponent, ReactElement, useEffect, useState} from 'react'
+import {
+  FunctionComponent,
+  ReactElement,
+  useEffect,
+  useState
+} from 'react'
 import {toast} from 'react-toastify'
-import {GoogleMap, LoadScript, Marker} from '@react-google-maps/api'
+import {
+  GoogleMap,
+  LoadScript,
+  Marker
+} from '@react-google-maps/api'
 import Spinner from '@/components/Spinner'
 import geoLocateProperty from '@/serverActions/geoLocateProperty'
 import PropertyLocation from '@/interfaces/PropertyLocation'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import DestructuredProperty from '@/interfaces/DestructuredProperty'
-const PropertyMap: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
+const PropertyMap: FunctionComponent<DestructuredProperty> = ({
+  property
+}): ReactElement => {
   const location: PropertyLocation = property.location
-  const [lat, setLat] = useState<number>(0)
-  const [lng, setLng] = useState<number>(0)
-  const [loading, setLoading] = useState<boolean>(true)
-  const [errorOccured, setErrorOccured] = useState<boolean>(false)
+  const [
+    lat,
+    setLat
+  ] = useState<number>(0)
+  const [
+    lng,
+    setLng
+  ] = useState<number>(0)
+  const [
+    loading,
+    setLoading
+  ] = useState<boolean>(true)
+  const [
+    errorOccured,
+    setErrorOccured
+  ] = useState<boolean>(false)
   useEffect(
     (): void => {
       const geoLocate: Function = async (): Promise<void> => {
@@ -46,10 +69,16 @@ const PropertyMap: FunctionComponent<DestructuredProperty> = ({property}): React
           width: '100%',
           height: 500
         }}
-        center={{lat, lng}}
+        center={{
+          lat,
+          lng
+        }}
         zoom={15}
       >
-        <Marker position={{lat, lng}}/>
+        <Marker position={{
+          lat,
+          lng
+        }}/>
       </GoogleMap>
     </LoadScript>
   )

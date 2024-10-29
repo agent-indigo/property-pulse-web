@@ -1,5 +1,8 @@
 'use client'
-import {FunctionComponent, ReactElement} from 'react'
+import {
+  FunctionComponent,
+  ReactElement
+} from 'react'
 import {useRouter} from 'next/navigation'
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import {toast} from 'react-toastify'
@@ -7,10 +10,19 @@ import editProperty from '@/serverActions/editProperty'
 import SubmitButton from '@/components/SubmitButton'
 import DestructuredProperty from '@/interfaces/DestructuredProperty'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
-const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
+const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
+  property
+}): ReactElement => {
   const router: AppRouterInstance = useRouter()
   const handleSubmit: Function = async (form: FormData): Promise<void> => {
-    const {error, message, success}: ServerActionResponse = await editProperty(property._id, form)
+    const {
+      error,
+      message,
+      success
+    }: ServerActionResponse = await editProperty(
+      property._id,
+      form
+    )
     if (success) {
       toast.success(message)
       router.push(`/properties/${property._id}`)

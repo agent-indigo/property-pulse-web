@@ -1,6 +1,9 @@
 import Image from 'next/image'
 import {Metadata} from 'next'
-import {FunctionComponent, ReactElement} from 'react'
+import {
+  FunctionComponent,
+  ReactElement
+} from 'react'
 import {FlattenMaps} from 'mongoose'
 import profileDefault from '@/assets/images/profile.png'
 import ProfileProperties from '@/components/ProfileProperties'
@@ -17,10 +20,11 @@ export const metadata: Metadata = {
 const ProfilePage: FunctionComponent =  async (): Promise<ReactElement> => {
   const {sessionUser}: ServerActionResponse = await getSessionUser()
   await connectToMongoDB()
-  const properties: PlainProperty[] = (await propertyModel
-    .find({owner: sessionUser?._id})
-    .lean()
-  ).map((property: FlattenMaps<PropertyDocument>): PlainProperty => convertToPlainDocument(property))
+  const properties: PlainProperty[] = (await propertyModel.find({
+    owner: sessionUser?._id
+  }).lean()).map((
+    property: FlattenMaps<PropertyDocument>
+  ): PlainProperty => convertToPlainDocument(property))
   return (
     <section className='bg-blue-50'>
       <div className='container m-auto py-24'>

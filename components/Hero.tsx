@@ -1,4 +1,7 @@
-import {FunctionComponent, ReactElement} from 'react'
+import {
+  FunctionComponent,
+  ReactElement
+} from 'react'
 import SearchPropertiesForm from '@/components/SearchPropertiesForm'
 const Hero: FunctionComponent = (): ReactElement => (
   <section className='bg-blue-700 py-20 mb-4'>

@@ -1,7 +1,16 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import {FunctionComponent, ReactElement} from 'react'
-import {FaBed, FaBath, FaRulerCombined, FaMoneyBill, FaMapMarker} from 'react-icons/fa'
+import {
+  FunctionComponent,
+  ReactElement
+} from 'react'
+import {
+  FaBed,
+  FaBath,
+  FaRulerCombined,
+  FaMoneyBill,
+  FaMapMarker
+} from 'react-icons/fa'
 import getRateDisplay from '@/utilities/getRateDisplay'
 import PropertyLocation from '@/interfaces/PropertyLocation'
 import PropertyRates from '@/interfaces/PropertyRates'

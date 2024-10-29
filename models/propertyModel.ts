@@ -1,4 +1,9 @@
-import {Model, Schema, model, models} from 'mongoose'
+import {
+  Model,
+  Schema,
+  model,
+  models
+} from 'mongoose'
 import PropertyDocument from '@/interfaces/PropertyDocument'
 const PropertySchema = new Schema<PropertyDocument>({
   owner : {

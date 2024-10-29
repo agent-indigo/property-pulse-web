@@ -26,7 +26,9 @@ const authOptions: AuthOptions = {
     async signIn(params: SignInParams): Promise<boolean> {
       const {profile}: GoogleSignInParams = params as GoogleSignInParams
       await connectToMongoDB()
-      const user: UserDocument | null = await userModel.findOne({email: profile?.email})
+      const user: UserDocument | null = await userModel.findOne({
+        email: profile?.email
+      })
       if (user) {
         user.image = profile.picture
         await user.save()
@@ -46,7 +48,9 @@ const authOptions: AuthOptions = {
         ...session,
         user: {
           ...sessionUser,
-          id: (await userModel.findOne({email: sessionUser.email}))?._id
+          id: (await userModel.findOne({
+            email: sessionUser.email
+          }))?._id
         }
       }
     }

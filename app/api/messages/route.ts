@@ -1,13 +1,20 @@
-import {NextRequest, NextResponse} from 'next/server'
+import {
+  NextRequest,
+  NextResponse
+} from 'next/server'
 import {FlattenMaps} from 'mongoose'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import messageModel from '@/models/messageModel'
-import {e400, e401, e500, s200, s204} from '@/utilities/responses'
 import getSessionUser from '@/serverActions/getSessionUser'
 import MessageDocument from '@/interfaces/MessageDocument'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import PlainMessage from '@/interfaces/PlainMessage'
 import convertToPlainDocument from '@/utilities/convertToPlainDocument'
+import dataResponse from '@/httpResponses/dataResponse'
+import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
+import serverErrorResponse from '@/httpResponses/serverErrorResponse'
+import noDataResponse from '@/httpResponses/noDataResponse'
+import badRequestResponse from '@/httpResponses/badRequestResponse'
 export {dynamic} from '@/utilities/dynamic'
 /**
  * @name    GET
@@ -17,27 +24,34 @@ export {dynamic} from '@/utilities/dynamic'
  */
 export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
-    const {sessionUser, success}: ServerActionResponse = await getSessionUser()
+    const {
+      sessionUser,
+      success
+    }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
       await connectToMongoDB()
-      return s200(JSON.stringify((await messageModel
-        .find({recipient: sessionUser._id})
-        .populate('sender', 'username')
-        .populate('property', 'id name')
-        .sort({read: 1, createdAt: -1})
-        .lean())
-        .map((message: FlattenMaps<MessageDocument>): PlainMessage => {
-          const plainMessage: PlainMessage = convertToPlainDocument(message)
-          plainMessage.sender = convertToPlainDocument(plainMessage.sender)
-          plainMessage.property = convertToPlainDocument(plainMessage.property)
-          return plainMessage
-        })
-      ))
+      return dataResponse(JSON.stringify((await messageModel.find({
+        recipient: sessionUser._id
+      }).populate(
+        'sender',
+        'username'
+      ).populate(
+        'property',
+        'id name'
+      ).sort({
+        read: 1,
+        createdAt: -1
+      }).lean()).map((message: FlattenMaps<MessageDocument>): PlainMessage => {
+        const plainMessage: PlainMessage = convertToPlainDocument(message)
+        plainMessage.sender = convertToPlainDocument(plainMessage.sender)
+        plainMessage.property = convertToPlainDocument(plainMessage.property)
+        return plainMessage
+      })))
     } else {
-      return e401
+      return unauthorizedResponse
     }
   } catch (error: any) {
-    return e500(
+    return serverErrorResponse(
       'retrieving messages',
       error
     )
@@ -51,7 +65,10 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
  */
 export const POST = async (request: NextRequest): Promise<NextResponse> => {
   try {
-    const {sessionUser, success}: ServerActionResponse = await getSessionUser()
+    const {
+      sessionUser,
+      success
+    }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
       const form: FormData = await request.formData()
       const sender: string = sessionUser._id
@@ -69,15 +86,15 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
         })
         await connectToMongoDB()
         await message.save()
-        return s204('Message sent.')
+        return noDataResponse('Message sent.')
       } else {
-        return e400('send yourself a message')
+        return badRequestResponse('send yourself a message')
       }
     } else {
-      return e401
+      return unauthorizedResponse
     }
   } catch (error: any) {
-    return e500(
+    return serverErrorResponse(
       'sending message',
       error
     )

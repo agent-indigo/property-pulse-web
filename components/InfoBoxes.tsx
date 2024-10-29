@@ -1,4 +1,7 @@
-import {FunctionComponent, ReactElement} from 'react'
+import {
+  FunctionComponent,
+  ReactElement
+} from 'react'
 import InfoBox from '@/components/InfoBox'
 const InfoBoxes: FunctionComponent = (): ReactElement => (
   <section>

@@ -1,5 +1,8 @@
 'use client'
-import {FunctionComponent, ReactElement} from 'react'
+import {
+  FunctionComponent,
+  ReactElement
+} from 'react'
 import {useGlobalContext} from '@/components/GlobalContextProvider'
 import State from '@/interfaces/State'
 const UnreadMessagesCount: FunctionComponent = (): ReactElement | null => {

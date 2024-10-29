@@ -1,5 +1,10 @@
 'use client'
-import {FunctionComponent, MouseEventHandler, ReactElement, useState} from 'react'
+import {
+  FunctionComponent,
+  MouseEventHandler,
+  ReactElement,
+  useState
+} from 'react'
 import {toast} from 'react-toastify'
 import Link from 'next/link'
 import {useGlobalContext} from '@/components/GlobalContextProvider'
@@ -8,7 +13,9 @@ import toggleMessageRead from '@/serverActions/toggleMessageRead'
 import State from '@/interfaces/State'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import DestructuredMessage from '@/interfaces/DestructuredMessage'
-const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactElement | null => {
+const MessageCard: FunctionComponent<DestructuredMessage> = ({
+  message
+}): ReactElement | null => {
   const messageId: string = message._id
   const body: string | undefined = message.body
   const email: string = message.email
@@ -33,7 +40,11 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactEl
     }
   }
   const handleDelete: MouseEventHandler<HTMLButtonElement> = async (): Promise<void> => {
-    const {error, message, success}: ServerActionResponse = await deleteMessage(messageId)
+    const {
+      error,
+      message,
+      success
+    }: ServerActionResponse = await deleteMessage(messageId)
     if (success) {
       setUnreadMessagesCount((previousValue: number): number => previousValue - 1)
       toast.success(message)
@@ -90,9 +101,7 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactEl
       <button
         onClick={handleToggle}
         className={`mt-4 mr-3 ${
-          read
-          ? 'bg-gray-300'
-          : 'bg-blue-500 text-white'
+          read ? 'bg-gray-300' : 'bg-blue-500 text-white'
         } py-1 px-3 rounded-md`}
       >
         Mark as {read ? 'unread' : 'read'}

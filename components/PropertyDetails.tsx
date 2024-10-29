@@ -1,5 +1,15 @@
-import {FunctionComponent, ReactElement} from 'react'
-import {FaBed, FaBath, FaRulerCombined, FaTimes, FaCheck, FaMapMarker} from 'react-icons/fa'
+import {
+  FunctionComponent,
+  ReactElement
+} from 'react'
+import {
+  FaBed,
+  FaBath,
+  FaRulerCombined,
+  FaTimes,
+  FaCheck,
+  FaMapMarker
+} from 'react-icons/fa'
 import PropertyMap from '@/components/PropertyMap'
 import PropertyLocation from '@/interfaces/PropertyLocation'
 import PropertyRates from '@/interfaces/PropertyRates'

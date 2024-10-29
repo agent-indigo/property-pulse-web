@@ -1,7 +1,12 @@
-import {NextRequest, NextResponse} from 'next/server'
-import {FlattenMaps, ObjectId} from 'mongoose'
+import {
+  NextRequest,
+  NextResponse
+} from 'next/server'
+import {
+  FlattenMaps,
+  ObjectId
+} from 'mongoose'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import {e400, e401, e404, e500, s200} from '@/utilities/responses'
 import propertyModel from '@/models/propertyModel'
 import userModel from '@/models/userModel'
 import getSessionUser from '@/serverActions/getSessionUser'
@@ -11,6 +16,11 @@ import PropertyId from '@/interfaces/PropertyId'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import PlainProperty from '@/interfaces/PlainProperty'
 import convertToPlainDocument from '@/utilities/convertToPlainDocument'
+import dataResponse from '@/httpResponses/dataResponse'
+import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
+import serverErrorResponse from '@/httpResponses/serverErrorResponse'
+import badRequestResponse from '@/httpResponses/badRequestResponse'
+import notFoundResponse from '@/httpResponses/notFoundResponse'
 export {dynamic} from '@/utilities/dynamic'
 /**
  * @name    GET
@@ -18,20 +28,28 @@ export {dynamic} from '@/utilities/dynamic'
  * @route   GET /api/properties/bookmarked
  * @access  private
  */
-export const GET = async (request: NextRequest): Promise<NextResponse> => {
+export const GET = async (
+  request: NextRequest
+): Promise<NextResponse> => {
   try {
-    const {sessionUser, success}: ServerActionResponse = await getSessionUser()
+    const {
+      sessionUser,
+      success
+    }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
       await connectToMongoDB()
-      return s200(JSON.stringify((await propertyModel
-        .find({_id: {$in: sessionUser.bookmarks}})
-        .lean()
-      ).map((property: FlattenMaps<PropertyDocument>): PlainProperty => convertToPlainDocument(property))))
+      return dataResponse(JSON.stringify((await propertyModel.find({
+        _id: {
+          $in: sessionUser.bookmarks
+        }
+      }).lean()).map((
+        property: FlattenMaps<PropertyDocument>
+      ): PlainProperty => convertToPlainDocument(property))))
     } else {
-      return e401
+      return unauthorizedResponse
     }
   } catch (error: any) {
-    return e500(
+    return serverErrorResponse(
       'retrieving bookmarked properties',
       error
     )
@@ -43,10 +61,15 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
  * @route   PATCH /api/properties/bookmarked
  * @access  private
  */
-export const PATCH = async (request: NextRequest): Promise<NextResponse> => {
+export const PATCH = async (
+  request: NextRequest
+): Promise<NextResponse> => {
   let action: string = 'adding/removing'
   try {
-    const {sessionUser, success}: ServerActionResponse = await getSessionUser()
+    const {
+      sessionUser,
+      success
+    }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
       await connectToMongoDB()
       const user: UserDocument | null = await userModel.findById(sessionUser._id)
@@ -58,7 +81,9 @@ export const PATCH = async (request: NextRequest): Promise<NextResponse> => {
             let bookmarked: boolean = user.bookmarks.includes(propertyId)
             let message: string
             if (bookmarked) {
-              user.bookmarks = user.bookmarks.filter((bookmark: ObjectId): boolean => bookmark.toString() !== propertyId.toString())
+              user.bookmarks = user.bookmarks.filter((
+                bookmark: ObjectId
+              ): boolean => bookmark.toString() !== propertyId.toString())
               message = 'Bookmark removed.'
               bookmarked = false
               action = 'removing'
@@ -69,24 +94,24 @@ export const PATCH = async (request: NextRequest): Promise<NextResponse> => {
               action = 'adding'
             }
             await user.save()
-            return s200(JSON.stringify({
+            return dataResponse(JSON.stringify({
               message,
               bookmarked
             }))
           } else {
-            return e400('bookmark your own property')
+            return badRequestResponse('bookmark your own property')
           }
         } else {
-          return e404('Property')
+          return notFoundResponse('Property')
         }
       } else {
-        return e401
+        return unauthorizedResponse
       }
     } else {
-      return e401
+      return unauthorizedResponse
     }
   } catch (error: any) {
-    return e500(
+    return serverErrorResponse(
       `${action} bookmark`,
       error
     )

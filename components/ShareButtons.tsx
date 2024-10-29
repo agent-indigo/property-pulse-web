@@ -1,5 +1,8 @@
 'use client'
-import {FunctionComponent, ReactElement} from 'react'
+import {
+  FunctionComponent,
+  ReactElement
+} from 'react'
 import {
   FacebookShareButton,
   FacebookIcon,
@@ -14,8 +17,14 @@ import {
   EmailIcon
 } from 'react-share'
 import DestructuredProperty from '@/interfaces/DestructuredProperty'
-const ShareButtons: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
-  const url: string = `${process.env.NEXT_PUBLIC_DOMAIN}/properties/${property._id}`
+const ShareButtons: FunctionComponent<DestructuredProperty> = ({
+  property
+}): ReactElement => {
+  const url: string = `${
+    process.env.NEXT_PUBLIC_DOMAIN
+  }/properties/${
+    property._id
+  }`
   const name: string = property.name
   const type: string = property.type
   return (
@@ -69,7 +78,13 @@ const ShareButtons: FunctionComponent<DestructuredProperty> = ({property}): Reac
         <EmailShareButton
           url={url}
           subject={`${name} for rent`}
-          body={`I thought this ${type} might meet your needs:\n${name}\n${url}`}
+          body={`I thought this ${
+            type
+          } might meet your needs:\n${
+            name
+          }\n${
+            url
+          }`}
         >
           <EmailIcon
             size={40}

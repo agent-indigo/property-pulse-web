@@ -1,4 +1,9 @@
-import {Model, Schema, model, models} from 'mongoose'
+import {
+  Model,
+  Schema,
+  model,
+  models
+} from 'mongoose'
 import UserDocument from '@/interfaces/UserDocument'
 const UserSchema = new Schema<UserDocument>({
   email: {

@@ -5,9 +5,15 @@ import getSessionUser from '@/serverActions/getSessionUser'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import MessageDocument from '@/interfaces/MessageDocument'
 import messageModel from '@/models/messageModel'
-const toggleMessageRead: Function = async (messageId: string): Promise<ServerActionResponse> => {
+const toggleMessageRead: Function = async (
+  messageId: string
+): Promise<ServerActionResponse> => {
   try {
-    const {error, success, sessionUser}: ServerActionResponse = await getSessionUser()
+    const {
+      error,
+      success,
+      sessionUser
+    }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
       await connectToMongoDB()
       const message: MessageDocument | null = await messageModel.findById(messageId)
@@ -16,7 +22,10 @@ const toggleMessageRead: Function = async (messageId: string): Promise<ServerAct
           const read: boolean = message.read
           message.read = !read
           await message.save()
-          revalidatePath('/messages', 'page')
+          revalidatePath(
+            '/messages',
+            'page'
+          )
           return {
             message: `Message marked as ${read ? 'unread' : 'read'}.`,
             read: !read,

@@ -7,7 +7,9 @@ import cloudinary from '@/utilities/cloudinary'
 import PropertyDocument from '@/interfaces/PropertyDocument'
 import propertyModel from '@/models/propertyModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-const addProperty: Function = async (form: FormData): Promise<ServerActionResponse> => {
+const addProperty: Function = async (
+  form: FormData
+): Promise<ServerActionResponse> => {
   try {
     const {
       error,
@@ -17,19 +19,19 @@ const addProperty: Function = async (form: FormData): Promise<ServerActionRespon
     if (success && sessionUser) {
       const images: string[] = []
       const imageIds: string[] = []
-      await Promise.all(form
-        .getAll('files')
-        .map(async (image: FormDataEntryValue): Promise<void> => {
+      await Promise.all(form.getAll('files').map(async (
+        image: FormDataEntryValue
+      ): Promise<void> => {
           const {
             secure_url,
             public_id
           }: UploadApiResponse = await cloudinary.uploader.upload(
-            `data:image/png;base64,${Buffer
-              .from(new Uint8Array(await (image as File)
-              .arrayBuffer()))
-              .toString('base64')
-            }`,
-            {folder: process.env.CLOUDINARY_FOLDER_NAME ?? 'PropertyPulse'}
+            `data:image/png;base64,${Buffer.from(new Uint8Array(await (
+              image as File
+            ).arrayBuffer())).toString('base64')
+            }`, {
+              folder: process.env.CLOUDINARY_FOLDER_NAME ?? 'PropertyPulse'
+            }
           )
           images.push(secure_url)
           imageIds.push(public_id)
@@ -70,7 +72,10 @@ const addProperty: Function = async (form: FormData): Promise<ServerActionRespon
       })
       await connectToMongoDB()
       await property.save()
-      revalidatePath('/', 'layout')
+      revalidatePath(
+        '/',
+        'layout'
+      )
       return {
         message: 'Property added.',
         propertyId: property.id,

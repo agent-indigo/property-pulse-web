@@ -1,11 +1,19 @@
 import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
-import {NextRequest, NextResponse} from 'next/server'
-import {Client, GeocodeResponse} from '@googlemaps/google-maps-services-js'
+import {
+  NextRequest,
+  NextResponse
+} from 'next/server'
+import {
+  Client,
+  GeocodeResponse
+} from '@googlemaps/google-maps-services-js'
 import propertyModel from '@/models/propertyModel'
-import {e404, e500, s200} from '@/utilities/responses'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import PropertyDocument from '@/interfaces/PropertyDocument'
 import PropertyLocation from '@/interfaces/PropertyLocation'
+import dataResponse from '@/httpResponses/dataResponse'
+import serverErrorResponse from '@/httpResponses/serverErrorResponse'
+import notFoundResponse from '@/httpResponses/notFoundResponse'
 export {dynamic} from '@/utilities/dynamic'
 /**
  * @name    GET
@@ -13,7 +21,10 @@ export {dynamic} from '@/utilities/dynamic'
  * @route   GET /api/properties/:id/geolocate
  * @access  public
  */
-export const GET = async (request: NextRequest, {params}: Params): Promise<NextResponse> => {
+export const GET = async (
+  request: NextRequest,
+  {params}: Params
+): Promise<NextResponse> => {
   const activity: string = 'geolocating property'
   try {
     await connectToMongoDB()
@@ -22,20 +33,28 @@ export const GET = async (request: NextRequest, {params}: Params): Promise<NextR
       const location: PropertyLocation = property.location
       const geolocator: Client = new Client()
       const response: GeocodeResponse = await geolocator.geocode({params: {
-        address: `${location.street} ${location.city} ${location.state} ${location.zipcode} USA`,
+        address: `${
+          location.street
+        } ${
+          location.city
+        } ${
+          location.state
+        } ${
+          location.zipcode
+        } USA`,
         key: process.env.PRIVATE_GOOGLE_MAPS_GEOCODING_API_KEY ?? ''
       }})
       return response.status === 200
-      ? s200(JSON.stringify(response.data.results[0].geometry.location))
-      : e500(
+      ? dataResponse(JSON.stringify(response.data.results[0].geometry.location))
+      : serverErrorResponse(
         activity,
         'Geocoding error.'
       )
     } else {
-      return e404('Property')
+      return notFoundResponse('Property')
     }
   } catch (error: any) {
-    return e500(
+    return serverErrorResponse(
       activity,
       error
     )

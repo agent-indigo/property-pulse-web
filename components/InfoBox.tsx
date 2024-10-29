@@ -1,5 +1,8 @@
 import Link from 'next/link'
-import {FunctionComponent, ReactElement} from 'react'
+import {
+  FunctionComponent,
+  ReactElement
+} from 'react'
 import InfoBoxProps from '@/interfaces/InfoBoxProps'
 const InfoBox: FunctionComponent<InfoBoxProps> = ({
   heading,
@@ -17,7 +20,9 @@ const InfoBox: FunctionComponent<InfoBoxProps> = ({
     </p>
     <Link
       href={buttonProps.url}
-      className={`inline-block ${buttonProps.bgColor} text-white rounded-lg px-4 py-2 hover:opacity-80`}
+      className={`inline-block ${
+        buttonProps.bgColor
+      } text-white rounded-lg px-4 py-2 hover:opacity-80`}
     >
       {buttonProps.text}
     </Link>

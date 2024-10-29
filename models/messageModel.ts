@@ -1,4 +1,9 @@
-import {Model, Schema, model, models} from 'mongoose'
+import {
+  Model,
+  Schema,
+  model,
+  models
+} from 'mongoose'
 import MessageDocument from '@/interfaces/MessageDocument'
 const MessageSchema = new Schema<MessageDocument>({
   sender: {

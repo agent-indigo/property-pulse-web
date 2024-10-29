@@ -1,4 +1,7 @@
-import {FunctionComponent, ReactElement} from 'react'
+import {
+  FunctionComponent,
+  ReactElement
+} from 'react'
 import {Metadata} from 'next'
 import Link from 'next/link'
 import {FlattenMaps} from 'mongoose'
@@ -26,23 +29,33 @@ const ResultsPage: FunctionComponent<UrlSearchParams> = async ({searchParams: {
   await connectToMongoDB()
   const query: PropertySearchQuery = {}
   if (location !== '') {
-    const locationPattern: RegExp = new RegExp(location, 'i')
-    query.$or = [
-      {name: locationPattern},
-      {description: locationPattern},
-      {'location.street': locationPattern},
-      {'location.city': locationPattern},
-      {'location.state': locationPattern},
-      {'location.zipcode': locationPattern}
-    ]
+    const locationPattern: RegExp = new RegExp(
+      location,
+      'i'
+    )
+    query.$or = [{
+      name: locationPattern
+    }, {
+      description: locationPattern
+    }, {
+      'location.street': locationPattern
+    }, {
+      'location.city': locationPattern
+    }, {
+      'location.state': locationPattern
+    }, {
+      'location.zipcode': locationPattern
+    }]
   }
-  if (type !== 'All') query.type = new RegExp(type, 'i')
-  const properties: PlainProperty[] = (await propertyModel
-    .find(query)
-    .skip((parseInt(page.toString() ?? '1') - 1) * size)
-    .limit(size)
-    .lean()
-  ).map((property: FlattenMaps<PropertyDocument>): PlainProperty => convertToPlainDocument(property))
+  if (type !== 'All') query.type = new RegExp(
+    type,
+    'i'
+  )
+  const properties: PlainProperty[] = (await propertyModel.find(query).skip((
+    parseInt(page.toString() ?? '1'
+  ) - 1) * size).limit(size).lean()).map((
+    property: FlattenMaps<PropertyDocument>
+  ): PlainProperty => convertToPlainDocument(property))
   return (
     <>
       <section className='bg-blue-700 py-4'>

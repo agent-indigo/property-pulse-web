@@ -1,4 +1,7 @@
-import {FunctionComponent, ReactElement} from 'react'
+import {
+  FunctionComponent,
+  ReactElement
+} from 'react'
 import {Metadata} from 'next'
 import Hero from '@/components/Hero'
 import InfoBoxes from '@/components/InfoBoxes'

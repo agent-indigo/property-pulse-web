@@ -1,5 +1,8 @@
 import type {Metadata} from 'next'
-import {FunctionComponent, ReactElement} from 'react'
+import {
+  FunctionComponent,
+  ReactElement
+} from 'react'
 import AddPropertyForm from '@/components/AddPropertyForm'
 export const metadata: Metadata = {
   title: 'Add Property'

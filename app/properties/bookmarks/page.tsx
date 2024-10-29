@@ -1,4 +1,7 @@
-import {FunctionComponent, ReactElement} from 'react'
+import {
+  FunctionComponent,
+  ReactElement
+} from 'react'
 import {Metadata} from 'next'
 import {FlattenMaps} from 'mongoose'
 import PropertyCard from '@/components/PropertyCard'
@@ -16,10 +19,13 @@ export const metadata: Metadata = {
 const BookmarksPage: FunctionComponent = async (): Promise<ReactElement> => {
   const {sessionUser}: ServerActionResponse = await getSessionUser()
   await connectToMongoDB()
-  const bookmarks: PlainProperty[] = (await propertyModel
-    .find({_id: {$in: sessionUser?.bookmarks}})
-    .lean()
-  ).map((property: FlattenMaps<PropertyDocument>): PlainProperty => convertToPlainDocument(property))
+  const bookmarks: PlainProperty[] = (await propertyModel.find({
+    _id: {
+      $in: sessionUser?.bookmarks
+    }
+  }).lean()).map((
+    property: FlattenMaps<PropertyDocument>
+  ): PlainProperty => convertToPlainDocument(property))
   return (
     <section className='px-4 py-6'>
       <div className='container-xl lg:container m-auto px-4 py-6'>

@@ -5,7 +5,9 @@ import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import messageModel from '@/models/messageModel'
 import getSessionUser from '@/serverActions/getSessionUser'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-const sendMessage: Function = async (form: FormData): Promise<ServerActionResponse> => {
+const sendMessage: Function = async (
+  form: FormData
+): Promise<ServerActionResponse> => {
   try {
     const {
       error,
@@ -14,10 +16,7 @@ const sendMessage: Function = async (form: FormData): Promise<ServerActionRespon
     }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
       const sender: string = sessionUser._id
-      const recipient: string | undefined = form
-        .get('recipient')
-        ?.valueOf()
-        .toString()
+      const recipient: string | undefined = form.get('recipient')?.valueOf().toString()
       if (recipient && recipient !== sender) {
         const message: MessageDocument = new messageModel({
           sender,
@@ -31,7 +30,10 @@ const sendMessage: Function = async (form: FormData): Promise<ServerActionRespon
         })
         await connectToMongoDB()
         await message.save()
-        revalidatePath('/messages', 'page')
+        revalidatePath(
+          '/messages',
+          'page'
+        )
         return {
           message: 'Message sent.',
           success: true

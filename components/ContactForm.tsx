@@ -1,5 +1,8 @@
 'use client'
-import {FunctionComponent, ReactElement} from 'react'
+import {
+  FunctionComponent,
+  ReactElement
+} from 'react'
 import {toast} from 'react-toastify'
 import SubmitButton from '@/components/SubmitButton'
 import sendMessage from '@/serverActions/sendMessage'
@@ -10,8 +13,14 @@ import ServerActionResponse from '@/interfaces/ServerActionResponse'
 const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
   const {user}: State = useGlobalContext()
   const isOwner: boolean = user?._id === property.owner
-  const handleSubmit: Function = async (form: FormData): Promise<void> => {
-    const {error, message, success}: ServerActionResponse = await sendMessage(form)
+  const handleSubmit: Function = async (
+    form: FormData
+  ): Promise<void> => {
+    const {
+      error,
+      message,
+      success
+    }: ServerActionResponse = await sendMessage(form)
     success ? toast.success(message) : toast.error(`Error sending inquiry:\n${error}`)
   }
   return (

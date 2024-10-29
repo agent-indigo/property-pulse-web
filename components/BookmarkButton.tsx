@@ -1,5 +1,11 @@
 'use client'
-import {FunctionComponent, MouseEventHandler, ReactElement, useEffect, useState} from 'react'
+import {
+  FunctionComponent,
+  MouseEventHandler,
+  ReactElement,
+  useEffect,
+  useState
+} from 'react'
 import {FaBookmark} from 'react-icons/fa'
 import {toast} from 'react-toastify'
 import Spinner from '@/components/Spinner'
@@ -12,15 +18,28 @@ import DestructuredProperty from '@/interfaces/DestructuredProperty'
 const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): ReactElement | null => {
   const {user}: State = useGlobalContext()
   const propertyId: string = property._id
-  const [bookmarked, setBookmarked] = useState<boolean>(false)
+  const [
+    bookmarked,
+    setBookmarked
+  ] = useState<boolean>(false)
   const buttonBg: string = bookmarked ? 'red' : 'blue'
-  const [loading, setLoading] = useState<boolean>(true)
-  const [errorOccured, setErrorOccured] = useState<boolean>(false)
+  const [
+    loading,
+    setLoading
+  ] = useState<boolean>(true)
+  const [
+    errorOccured,
+    setErrorOccured
+  ] = useState<boolean>(false)
   useEffect(
     (): void => {
       const getStatus: Function = async (): Promise<void> => {
         if (user) {
-          const {bookmarked, error, success}: ServerActionResponse = await getPropertyBookmarked(propertyId)
+          const {
+            bookmarked,
+            error,
+            success
+          }: ServerActionResponse = await getPropertyBookmarked(propertyId)
           if (success && bookmarked !== undefined) {
             setBookmarked(bookmarked)
           } else {
@@ -31,11 +50,18 @@ const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): Re
         setLoading(false)
       }
       getStatus()
-    },
-    [propertyId, user]
+    }, [
+      propertyId,
+      user
+    ]
   )
   const handleClick: MouseEventHandler<HTMLButtonElement> = async (): Promise<void> => {
-    const {bookmarked, error, message, success}: ServerActionResponse = await togglePropertyBookmarked(propertyId)
+    const {
+      bookmarked,
+      error,
+      message,
+      success
+    }: ServerActionResponse = await togglePropertyBookmarked(propertyId)
     if (success && bookmarked !== undefined) {
       setBookmarked(bookmarked)
       toast.success(message)
@@ -51,7 +77,11 @@ const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): Re
     <button
       disabled={!user}
       onClick={handleClick}
-      className={`bg-${buttonBg}-500 hover:bg-${buttonBg}-600 text-white font-bold w-full py-2 px-4 rounded-full flex items-center justify-center`}
+      className={`bg-${
+        buttonBg
+      }-500 hover:bg-${
+        buttonBg
+      }-600 text-white font-bold w-full py-2 px-4 rounded-full flex items-center justify-center`}
     >
       <FaBookmark className='mr-2'/> {!user && 'Log in to '}{bookmarked ? 'Remove Bookmark' : 'Bookmark'}
     </button>

@@ -1,6 +1,9 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import {FunctionComponent, ReactElement} from 'react'
+import {
+  FunctionComponent,
+  ReactElement
+} from 'react'
 import logo from '@/assets/images/logo.png'
 const Footer: FunctionComponent = (): ReactElement =>  (
   <footer className='bg-gray-200 py-4 mt-24'>

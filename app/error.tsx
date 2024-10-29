@@ -1,9 +1,15 @@
 'use client'
 import Link from 'next/link'
 import {FaExclamationTriangle} from 'react-icons/fa'
-import {FunctionComponent, ReactElement} from 'react'
+import {
+  FunctionComponent,
+  ReactElement
+} from 'react'
 import ErrorPageProps from '@/interfaces/ErrorPageProps'
-const ErrorPage: FunctionComponent<ErrorPageProps> = ({error, reset}): ReactElement => (
+const ErrorPage: FunctionComponent<ErrorPageProps> = ({
+  error,
+  reset
+}): ReactElement => (
   <section className='bg-blue-50 min-h-screen flex-grow'>
     <div className='container m-auto max-w-2xl py-24'>
       <div className='bg-white px-6 py-24 mb-4 shadow-md rounded-md border m-4 md:m-0'>

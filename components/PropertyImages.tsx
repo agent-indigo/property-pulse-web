@@ -1,9 +1,17 @@
 'use client'
 import Image from 'next/image'
-import {FunctionComponent, ReactElement} from 'react'
-import {Gallery, Item} from 'react-photoswipe-gallery'
+import {
+  FunctionComponent,
+  ReactElement
+} from 'react'
+import {
+  Gallery,
+  Item
+} from 'react-photoswipe-gallery'
 import Images from '@/interfaces/Images'
-const PropertyImages: FunctionComponent<Images> = ({images}): ReactElement => {
+const PropertyImages: FunctionComponent<Images> = ({
+  images
+}): ReactElement => {
   const image: string = images[0]
   return (
     <Gallery>
@@ -16,7 +24,10 @@ const PropertyImages: FunctionComponent<Images> = ({images}): ReactElement => {
               width={1000}
               height={600}
             >
-              {({ref, open}): ReactElement => (
+              {({
+                ref,
+                open
+              }): ReactElement => (
                 <Image
                   ref={ref}
                   onClick={open}
@@ -49,7 +60,10 @@ const PropertyImages: FunctionComponent<Images> = ({images}): ReactElement => {
                     width={1000}
                     height={600}
                   >
-                    {({ref, open}): ReactElement => (
+                    {({
+                      ref,
+                      open
+                    }): ReactElement => (
                       <Image
                         ref={ref}
                         onClick={open}

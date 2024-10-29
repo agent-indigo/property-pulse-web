@@ -1,4 +1,7 @@
-import {FunctionComponent, ReactElement} from 'react'
+import {
+  FunctionComponent,
+  ReactElement
+} from 'react'
 import PropertyCard from '@/components/PropertyCard'
 import Paginator from '@/components/Paginator'
 import PropertiesComponentProps from '@/interfaces/PropertiesComponentProps'

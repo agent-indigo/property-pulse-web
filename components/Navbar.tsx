@@ -1,11 +1,24 @@
 'use client'
-import {ClientSafeProvider, LiteralUnion, SignInResponse} from 'next-auth/react'
+import {
+  ClientSafeProvider,
+  LiteralUnion,
+  SignInResponse
+} from 'next-auth/react'
 import {BuiltInProviderType} from 'next-auth/providers/index'
-import {FunctionComponent, ReactElement, useEffect, useState} from 'react'
+import {
+  FunctionComponent,
+  ReactElement,
+  useEffect,
+  useState
+} from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import {usePathname} from 'next/navigation'
-import {signIn, signOut, getProviders} from 'next-auth/react'
+import {
+  signIn,
+  signOut,
+  getProviders
+} from 'next-auth/react'
 import {FaGoogle} from 'react-icons/fa'
 import logo from '@/assets/images/logo-white.png'
 import profileDefault from '@/assets/images/profile.png'
@@ -14,9 +27,24 @@ import State from '@/interfaces/State'
 import {useGlobalContext} from '@/components/GlobalContextProvider'
 const Navbar: FunctionComponent = (): ReactElement => {
   const {user}: State = useGlobalContext()
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false)
-  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState<boolean>(false)
-  const [providers, setProviders] = useState<Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null>(null)
+  const [
+    isMobileMenuOpen,
+    setIsMobileMenuOpen
+  ] = useState<boolean>(false)
+  const [
+    isProfileMenuOpen,
+    setIsProfileMenuOpen
+  ] = useState<boolean>(false)
+  const [
+    providers,
+    setProviders
+  ] = useState<Record<
+    LiteralUnion<
+      BuiltInProviderType,
+      string
+    >,
+    ClientSafeProvider
+  > | null>(null)
   const pathname: string = usePathname()
   useEffect(
     (): void => {

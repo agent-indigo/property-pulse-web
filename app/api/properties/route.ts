@@ -1,5 +1,8 @@
 import {UploadApiResponse} from 'cloudinary'
-import {NextRequest, NextResponse} from 'next/server'
+import {
+  NextRequest,
+  NextResponse
+} from 'next/server'
 import {FlattenMaps} from 'mongoose'
 import PropertyDocument from '@/interfaces/PropertyDocument'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
@@ -7,9 +10,12 @@ import propertyModel from '@/models/propertyModel'
 import getSessionUser from '@/serverActions/getSessionUser'
 import cloudinary from '@/utilities/cloudinary'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import {e401, e500, redirect, s200} from '@/utilities/responses'
 import PlainProperty from '@/interfaces/PlainProperty'
 import convertToPlainDocument from '@/utilities/convertToPlainDocument'
+import dataResponse from '@/httpResponses/dataResponse'
+import serverErrorResponse from '@/httpResponses/serverErrorResponse'
+import redirectResponse from '@/httpResponses/redirectResponse'
+import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
 export {dynamic} from '@/utilities/dynamic'
 /**
  * @name    GET
@@ -21,21 +27,18 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
     const page: string = new URL(request.url).searchParams.get('page') ?? ''
     await connectToMongoDB()
-    return s200(JSON.stringify({
-      properties: (page !== ''
-        ? await propertyModel
-        .find()
-        .skip((parseInt(page) - 1) * 6)
-        .limit(6)
-        .lean()
-        : await propertyModel
-        .find()
-        .lean()
-      ).map((property: FlattenMaps<PropertyDocument>): PlainProperty => convertToPlainDocument(property)),
+    return dataResponse(JSON.stringify({
+      properties: (page === ''
+      ? await propertyModel.find().lean()
+      : await propertyModel.find().skip((
+        parseInt(page) - 1
+      ) * 6).limit(6).lean()).map((
+        property: FlattenMaps<PropertyDocument>
+      ): PlainProperty => convertToPlainDocument(property)),
       total: await propertyModel.countDocuments()
     }))
   } catch (error: any) {
-    return e500(
+    return serverErrorResponse(
       'retrieving properties',
       error
     )
@@ -49,24 +52,26 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
  */
 export const POST = async (request: NextRequest): Promise<NextResponse> => {
   try {
-    const {sessionUser, success}: ServerActionResponse = await getSessionUser()
+    const {
+      sessionUser,
+      success
+    }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
       const form: FormData = await request.formData()
       const images: string[] = []
       const imageIds: string[] = []
-      await Promise.all(form
-        .getAll('files')
-        .map(async (image: FormDataEntryValue): Promise<void> => {
+      await Promise.all(form.getAll('files').map(async (
+        image: FormDataEntryValue
+      ): Promise<void> => {
           const {
             secure_url,
             public_id
           }: UploadApiResponse = await cloudinary.uploader.upload(
-            `data:image/png;base64,${Buffer
-              .from(new Uint8Array(await (image as File)
-              .arrayBuffer()))
-              .toString('base64')
-            }`,
-            {folder: process.env.CLOUDINARY_FOLDER_NAME ?? 'PropertyPulse'}
+            `data:image/png;base64,${Buffer.from(new Uint8Array(await (
+              image as File
+            ).arrayBuffer())).toString('base64')}`, {
+              folder: process.env.CLOUDINARY_FOLDER_NAME ?? 'PropertyPulse'
+            }
           )
           images.push(secure_url)
           imageIds.push(public_id)
@@ -86,9 +91,9 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
         beds: form.get('beds')?.valueOf(),
         baths: form.get('baths')?.valueOf(),
         square_feet: form.get('square_feet')?.valueOf(),
-        amenities: form
-          .getAll('amenities')
-          .map((amenity: FormDataEntryValue): string => amenity
+        amenities: form.getAll('amenities').map((
+          amenity: FormDataEntryValue
+        ): string => amenity
           .valueOf()
           .toString()
         ),
@@ -107,12 +112,16 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
       })
       await connectToMongoDB()
       await property.save()
-      return redirect(`${process.env.NEXT_PUBLIC_DOMAIN}/properties/${property.id}`)
+      return redirectResponse(`${
+        process.env.NEXT_PUBLIC_DOMAIN
+      }/properties/${
+        property.id
+      }`)
     } else {
-      return e401
+      return unauthorizedResponse
     }
   } catch (error: any) {
-    return e500(
+    return serverErrorResponse(
       'adding property',
       error
     )

@@ -19,13 +19,24 @@ const GlobalContext: Context<State> = createContext<State>({
   unreadMessagesCount: 0,
   setUnreadMessagesCount: (): void => {}
 })
-const GlobalContextProvider: FunctionComponent<DestructuredReactNode> = ({children}): ReactElement => {
-  const [unreadMessagesCount, setUnreadMessagesCount] = useState<number>(0)
-  const [user, setUser] = useState<PlainUser | undefined>(undefined)
+const GlobalContextProvider: FunctionComponent<DestructuredReactNode> = ({
+  children
+}): ReactElement => {
+  const [
+    unreadMessagesCount,
+    setUnreadMessagesCount
+  ] = useState<number>(0)
+  const [
+    user,
+    setUser
+  ] = useState<PlainUser | undefined>(undefined)
   useEffect(
     (): void => {
       const getUser: Function = async (): Promise<void> => {
-        const {success, sessionUser}: ServerActionResponse = await getSessionUser()
+        const {
+          success,
+          sessionUser
+        }: ServerActionResponse = await getSessionUser()
         success && sessionUser && setUser(sessionUser)
       }
       getUser()

@@ -5,16 +5,25 @@ import getSessionUser from '@/serverActions/getSessionUser'
 import MessageDocument from '@/interfaces/MessageDocument'
 import messageModel from '@/models/messageModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-const deleteMessage: Function = async (messageId: string): Promise<ServerActionResponse> => {
+const deleteMessage: Function = async (
+  messageId: string
+): Promise<ServerActionResponse> => {
   try {
-    const {error, success, sessionUser}: ServerActionResponse = await getSessionUser()
+    const {
+      error,
+      success,
+      sessionUser
+    }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
       const message: MessageDocument | null = await messageModel.findById(messageId)
       if (message) {
         if (sessionUser._id === message.recipient.toString()) {
           await connectToMongoDB()
           await messageModel.findByIdAndDelete(messageId)
-          revalidatePath('/messages', 'page')
+          revalidatePath(
+            '/messages',
+            'page'
+          )
           return {
             message: 'Message deleted.',
             success: true

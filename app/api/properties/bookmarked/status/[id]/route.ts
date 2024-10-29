@@ -1,8 +1,13 @@
-import {NextRequest, NextResponse} from 'next/server'
+import {
+  NextRequest,
+  NextResponse
+} from 'next/server'
 import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
 import getSessionUser from '@/serverActions/getSessionUser'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
-import {e401, e500, s200} from '@/utilities/responses'
+import dataResponse from '@/httpResponses/dataResponse'
+import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
+import serverErrorResponse from '@/httpResponses/serverErrorResponse'
 export {dynamic} from '@/utilities/dynamic'
 /**
  * @name    GET
@@ -15,12 +20,15 @@ export const GET = async (
   {params}: Params
 ): Promise<NextResponse> => {
   try {
-    const {sessionUser, success}: ServerActionResponse = await getSessionUser()
-    return success && sessionUser
-    ? s200(JSON.stringify({bookmarked: sessionUser.bookmarks.includes(params.id)}))
-    : e401
+    const {
+      sessionUser,
+      success
+    }: ServerActionResponse = await getSessionUser()
+    return success && sessionUser ? dataResponse(JSON.stringify({
+      bookmarked: sessionUser.bookmarks.includes(params.id)
+    })) : unauthorizedResponse
   } catch (error: any) {
-    return e500(
+    return serverErrorResponse(
       'retrieving bookmark status',
       error
     )

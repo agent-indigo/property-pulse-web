@@ -10,7 +10,11 @@ const editProperty: Function = async (
   form: FormData
 ): Promise<ServerActionResponse> => {
   try {
-    const {error, success, sessionUser}: ServerActionResponse = await getSessionUser()
+    const {
+      error,
+      success,
+      sessionUser
+    }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
       await connectToMongoDB()
       const property: PropertyDocument | null = await propertyModel.findById(propertyId)
@@ -46,7 +50,10 @@ const editProperty: Function = async (
               phone: form.get('seller_info')?.valueOf().toString()
             }
           })
-          revalidatePath('/', 'layout')
+          revalidatePath(
+            '/',
+            'layout'
+          )
           return {
             message: 'Changes saved.',
             success: true

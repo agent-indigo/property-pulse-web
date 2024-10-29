@@ -1,5 +1,4 @@
 .next/
 node_modules/
-.DS_Store
 .env
 next-env.d.ts

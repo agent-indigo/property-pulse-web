@@ -6,9 +6,15 @@ import connectToMongoDB from '@/utilities/connectToMongoDB'
 import PropertyDocument from '@/interfaces/PropertyDocument'
 import propertyModel from '@/models/propertyModel'
 import cloudinary from '@/utilities/cloudinary'
-const deleteProperty: Function = async (propertyId: string): Promise<ServerActionResponse> => {
+const deleteProperty: Function = async (
+  propertyId: string
+): Promise<ServerActionResponse> => {
   try {
-    const {error, success, sessionUser}: ServerActionResponse = await getSessionUser()
+    const {
+      error,
+      success,
+      sessionUser
+    }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
       await connectToMongoDB()
       const property: PropertyDocument | null = await propertyModel.findById(propertyId)
@@ -18,7 +24,10 @@ const deleteProperty: Function = async (propertyId: string): Promise<ServerActio
             imageId: string
           ): Promise<void> => await cloudinary.uploader.destroy(imageId))
           await propertyModel.findByIdAndDelete(propertyId)
-          revalidatePath('/', 'layout')
+          revalidatePath(
+            '/',
+            'layout'
+          )
           return {
             message: 'Property deleted.',
             success: true

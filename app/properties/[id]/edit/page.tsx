@@ -1,4 +1,7 @@
-import {FunctionComponent, ReactElement} from 'react'
+import {
+  FunctionComponent,
+  ReactElement
+} from 'react'
 import {Metadata} from 'next'
 import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
 import EditPropertyForm from '@/components/EditPropertyForm'
@@ -8,7 +11,9 @@ import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 export const metadata: Metadata = {
   title: 'Edit Property'
 }
-const EditPropertyPage: FunctionComponent<Params> = async ({params}): Promise<ReactElement> => {
+const EditPropertyPage: FunctionComponent<Params> = async ({
+  params
+}): Promise<ReactElement> => {
   await connectToMongoDB()
   return (
     <section className='bg-blue-50'>

@@ -1,4 +1,7 @@
-import {FunctionComponent, ReactElement} from 'react'
+import {
+  FunctionComponent,
+  ReactElement
+} from 'react'
 import {Metadata} from 'next'
 import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
 import Link from 'next/link'
@@ -16,7 +19,9 @@ import PlainProperty from '@/interfaces/PlainProperty'
 export const metadata: Metadata = {
   title: 'Property Details'
 }
-const PropertyPage: FunctionComponent<Params> = async ({params}): Promise<ReactElement> => {
+const PropertyPage: FunctionComponent<Params> = async ({
+  params
+}): Promise<ReactElement> => {
   await connectToMongoDB()
   const property: PlainProperty = convertToPlainDocument(await propertyModel
     .findById(params.id)
