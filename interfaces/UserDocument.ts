@@ -1,4 +1,7 @@
-import {Document, ObjectId} from 'mongoose'
+import {
+  Document,
+  ObjectId
+} from 'mongoose'
 interface UserDocument extends Document {
   email: string
   username: string

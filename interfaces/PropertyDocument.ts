@@ -1,4 +1,7 @@
-import {Document, ObjectId} from 'mongoose'
+import {
+  Document,
+  ObjectId
+} from 'mongoose'
 import PropertyLocation from '@/interfaces/PropertyLocation'
 import PropertyRates from '@/interfaces/PropertyRates'
 import PropertyContact from '@/interfaces/PropertyContact'

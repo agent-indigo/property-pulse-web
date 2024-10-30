@@ -1,4 +1,4 @@
-import PropertyRates from "@/interfaces/PropertyRates"
+import PropertyRates from '@/interfaces/PropertyRates'
 const getRateDisplay: Function = (
   rates: PropertyRates
 ): string | undefined => {

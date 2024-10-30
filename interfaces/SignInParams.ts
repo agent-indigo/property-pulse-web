@@ -1,4 +1,8 @@
-import {User, Account, Profile} from 'next-auth'
+import {
+  User,
+  Account,
+  Profile
+} from 'next-auth'
 import {AdapterUser} from 'next-auth/adapters'
 import {CredentialInput} from 'next-auth/providers/credentials'
 import {GoogleProfile} from 'next-auth/providers/google'

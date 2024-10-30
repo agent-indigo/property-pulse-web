@@ -1,4 +1,7 @@
-import {Document, ObjectId} from 'mongoose'
+import {
+  Document,
+  ObjectId
+} from 'mongoose'
 interface MessageDocument extends Document {
   sender: ObjectId
   recipient: ObjectId
