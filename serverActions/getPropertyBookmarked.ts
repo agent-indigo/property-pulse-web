@@ -19,8 +19,8 @@ const getPropertyBookmarked: Function = async (
     }
   } catch (error: any) {
     return {
-        error: `500: Internal Server Error:\n${error.toString()}`,
-        success: false
+      error: `500: Internal Server Error:\n${error.toString()}`,
+      success: false
     }
   }
 }

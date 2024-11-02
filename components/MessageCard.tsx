@@ -20,7 +20,10 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({
   const body: string | undefined = message.body
   const email: string = message.email
   const phone: string | undefined = message.phone
-  const [read, setRead] = useState<boolean | undefined>(message.read)
+  const [
+    read,
+    setRead
+  ] = useState<boolean | undefined>(message.read)
   const {setUnreadMessagesCount}: State = useGlobalContext()
   const handleToggle: MouseEventHandler<HTMLButtonElement> = async (): Promise<void> => {
     const {

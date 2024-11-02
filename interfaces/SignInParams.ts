@@ -10,7 +10,12 @@ interface SignInParams {
   user?: User | AdapterUser
   account?: Account | null
   profile?: Profile | GoogleProfile
-  email?: {verificationRequest?: boolean}
-  credentials?: Record<string, CredentialInput>
+  email?: {
+    verificationRequest?: boolean
+  }
+  credentials?: Record<
+    string,
+    CredentialInput
+  >
 }
 export default SignInParams

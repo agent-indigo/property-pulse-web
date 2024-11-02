@@ -1,6 +1,8 @@
 import PlainDocument from '@/interfaces/PlainDocument'
 interface PlainMessage extends PlainDocument {
-  sender: {username: string}
+  sender: {
+    username: string
+  }
   recipient: string
   property: {
     id: string
