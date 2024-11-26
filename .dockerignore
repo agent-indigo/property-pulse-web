@@ -1,5 +1,7 @@
 .next/
 node_modules/
+.dockerignore
+.gitignore
 Dockerfile
 docker-compose.yaml
 environmentTemplate.txt
