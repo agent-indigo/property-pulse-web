@@ -8,7 +8,7 @@ import PropertyDocument from '@/interfaces/PropertyDocument'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import propertyModel from '@/models/propertyModel'
 import getSessionUser from '@/serverActions/getSessionUser'
-import cloudinary from '@/utilities/cloudinary'
+import cloudinary from '@/config/cloudinary'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import PlainProperty from '@/interfaces/PlainProperty'
 import convertToPlainDocument from '@/utilities/convertToPlainDocument'
@@ -16,7 +16,7 @@ import dataResponse from '@/httpResponses/dataResponse'
 import serverErrorResponse from '@/httpResponses/serverErrorResponse'
 import redirectResponse from '@/httpResponses/redirectResponse'
 import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
-export {dynamic} from '@/utilities/dynamic'
+export {dynamic} from '@/config/dynamic'
 /**
  * @name    GET
  * @desc    GET all properties

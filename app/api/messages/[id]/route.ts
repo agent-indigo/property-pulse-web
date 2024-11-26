@@ -12,7 +12,7 @@ import noDataResponse from '@/httpResponses/noDataResponse'
 import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
 import notFoundResponse from '@/httpResponses/notFoundResponse'
 import serverErrorResponse from '@/httpResponses/serverErrorResponse'
-export {dynamic} from '@/utilities/dynamic'
+export {dynamic} from '@/config/dynamic'
 /**
  * @name    DELETE
  * @desc    Delete a message

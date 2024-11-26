@@ -21,7 +21,7 @@ import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
 import serverErrorResponse from '@/httpResponses/serverErrorResponse'
 import badRequestResponse from '@/httpResponses/badRequestResponse'
 import notFoundResponse from '@/httpResponses/notFoundResponse'
-export {dynamic} from '@/utilities/dynamic'
+export {dynamic} from '@/config/dynamic'
 /**
  * @name    GET
  * @desc    Get all bookmarked properties

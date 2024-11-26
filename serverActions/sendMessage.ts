@@ -1,6 +1,5 @@
 'use server'
 import {revalidatePath} from 'next/cache'
-import MessageDocument from '@/interfaces/MessageDocument'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import messageModel from '@/models/messageModel'
 import getSessionUser from '@/serverActions/getSessionUser'
@@ -18,7 +17,8 @@ const sendMessage: Function = async (
       const sender: string = sessionUser._id
       const recipient: string | undefined = form.get('recipient')?.valueOf().toString()
       if (recipient && recipient !== sender) {
-        const message: MessageDocument = new messageModel({
+        await connectToMongoDB()
+        await messageModel.create({
           sender,
           recipient,
           property: form.get('property')?.valueOf(),
@@ -28,8 +28,6 @@ const sendMessage: Function = async (
           body: form.get('body')?.valueOf(),
           read: false
         })
-        await connectToMongoDB()
-        await message.save()
         revalidatePath(
           '/messages',
           'page'

@@ -14,7 +14,7 @@ import PropertyLocation from '@/interfaces/PropertyLocation'
 import dataResponse from '@/httpResponses/dataResponse'
 import serverErrorResponse from '@/httpResponses/serverErrorResponse'
 import notFoundResponse from '@/httpResponses/notFoundResponse'
-export {dynamic} from '@/utilities/dynamic'
+export {dynamic} from '@/config/dynamic'
 /**
  * @name    GET
  * @desc    Geolocate a property

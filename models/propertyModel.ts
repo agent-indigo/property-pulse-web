@@ -5,7 +5,7 @@ import {
   models
 } from 'mongoose'
 import PropertyDocument from '@/interfaces/PropertyDocument'
-const PropertySchema = new Schema<PropertyDocument>({
+const PropertySchema: Schema<PropertyDocument> = new Schema<PropertyDocument>({
   owner : {
     type: Schema.Types.ObjectId,
     ref: 'User',

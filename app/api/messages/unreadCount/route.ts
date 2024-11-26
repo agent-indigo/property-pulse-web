@@ -9,7 +9,7 @@ import connectToMongoDB from '@/utilities/connectToMongoDB'
 import dataResponse from '@/httpResponses/dataResponse'
 import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
 import serverErrorResponse from '@/httpResponses/serverErrorResponse'
-export {dynamic} from '@/utilities/dynamic'
+export {dynamic} from '@/config/dynamic'
 /**
  * @name    GET
  * @desc    Get the number of unread messages

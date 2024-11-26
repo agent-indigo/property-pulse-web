@@ -8,7 +8,7 @@ import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import dataResponse from '@/httpResponses/dataResponse'
 import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
 import serverErrorResponse from '@/httpResponses/serverErrorResponse'
-export {dynamic} from '@/utilities/dynamic'
+export {dynamic} from '@/config/dynamic'
 /**
  * @name    GET
  * @desc    Check if a property is bookmarked

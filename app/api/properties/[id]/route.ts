@@ -8,7 +8,7 @@ import propertyModel from '@/models/propertyModel'
 import PropertyDocument from '@/interfaces/PropertyDocument'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import getSessionUser from '@/serverActions/getSessionUser'
-import cloudinary from '@/utilities/cloudinary'
+import cloudinary from '@/config/cloudinary'
 import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 import dataResponse from '@/httpResponses/dataResponse'
 import notFoundResponse from '@/httpResponses/notFoundResponse'
@@ -16,7 +16,7 @@ import serverErrorResponse from '@/httpResponses/serverErrorResponse'
 import noDataResponse from '@/httpResponses/noDataResponse'
 import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
 import redirectResponse from '@/httpResponses/redirectResponse'
-export {dynamic} from '@/utilities/dynamic'
+export {dynamic} from '@/config/dynamic'
 /**
  * @name    GET
  * @desc    GET a single property

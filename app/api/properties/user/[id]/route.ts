@@ -13,7 +13,7 @@ import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 import dataResponse from '@/httpResponses/dataResponse'
 import notFoundResponse from '@/httpResponses/notFoundResponse'
 import serverErrorResponse from '@/httpResponses/serverErrorResponse'
-export {dynamic} from '@/utilities/dynamic'
+export {dynamic} from '@/config/dynamic'
 /**
  * @name    GET
  * @desc    Get all properties listed by the given user

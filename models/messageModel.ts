@@ -5,7 +5,7 @@ import {
   models
 } from 'mongoose'
 import MessageDocument from '@/interfaces/MessageDocument'
-const MessageSchema = new Schema<MessageDocument>({
+const MessageSchema: Schema<MessageDocument> = new Schema<MessageDocument>({
   sender: {
     type: Schema.Types.ObjectId,
     ref: 'User',

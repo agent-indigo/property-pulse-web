@@ -15,7 +15,7 @@ import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
 import serverErrorResponse from '@/httpResponses/serverErrorResponse'
 import noDataResponse from '@/httpResponses/noDataResponse'
 import badRequestResponse from '@/httpResponses/badRequestResponse'
-export {dynamic} from '@/utilities/dynamic'
+export {dynamic} from '@/config/dynamic'
 /**
  * @name    GET
  * @desc    Get all messages
@@ -74,7 +74,8 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
       const sender: string = sessionUser._id
       const recipient: string | undefined = form.get('recipient')?.valueOf().toString()
       if (recipient && recipient !== sender) {
-        const message: MessageDocument = new messageModel({
+        await connectToMongoDB()
+        await messageModel.create({
           sender,
           recipient,
           property: form.get('property')?.valueOf(),
@@ -84,8 +85,6 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
           body: form.get('body')?.valueOf(),
           read: false
         })
-        await connectToMongoDB()
-        await message.save()
         return noDataResponse('Message sent.')
       } else {
         return badRequestResponse('send yourself a message')

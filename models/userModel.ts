@@ -5,7 +5,7 @@ import {
   models
 } from 'mongoose'
 import UserDocument from '@/interfaces/UserDocument'
-const UserSchema = new Schema<UserDocument>({
+const UserSchema: Schema<UserDocument> = new Schema<UserDocument>({
   email: {
     type: String,
     unique: true,
