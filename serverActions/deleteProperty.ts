@@ -5,7 +5,7 @@ import getSessionUser from '@/serverActions/getSessionUser'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import PropertyDocument from '@/interfaces/PropertyDocument'
 import propertyModel from '@/models/propertyModel'
-import cloudinary from '@/utilities/cloudinary'
+import cloudinary from '@/config/cloudinary'
 const deleteProperty: Function = async (
   propertyId: string
 ): Promise<ServerActionResponse> => {

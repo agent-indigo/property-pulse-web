@@ -3,15 +3,15 @@ import {
   ReactElement
 } from 'react'
 import {Metadata} from 'next'
-import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
 import EditPropertyForm from '@/components/EditPropertyForm'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
 import convertToPlainDocument from '@/utilities/convertToPlainDocument'
+import UrlParams from '@/interfaces/UrlParams'
 export const metadata: Metadata = {
   title: 'Edit Property'
 }
-const EditPropertyPage: FunctionComponent<Params> = async ({
+const EditPropertyPage: FunctionComponent<UrlParams> = async ({
   params
 }): Promise<ReactElement> => {
   await connectToMongoDB()

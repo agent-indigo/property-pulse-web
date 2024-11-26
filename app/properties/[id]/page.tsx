@@ -3,7 +3,6 @@ import {
   ReactElement
 } from 'react'
 import {Metadata} from 'next'
-import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
 import Link from 'next/link'
 import {FaArrowLeft} from 'react-icons/fa'
 import PropertyHeaderImage from '@/components/PropertyHeaderImage'
@@ -16,10 +15,11 @@ import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
 import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 import PlainProperty from '@/interfaces/PlainProperty'
+import UrlParams from '@/interfaces/UrlParams'
 export const metadata: Metadata = {
   title: 'Property Details'
 }
-const PropertyPage: FunctionComponent<Params> = async ({
+const PropertyPage: FunctionComponent<UrlParams> = async ({
   params
 }): Promise<ReactElement> => {
   await connectToMongoDB()
