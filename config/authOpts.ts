@@ -3,8 +3,6 @@ import Google, {GoogleProfile} from 'next-auth/providers/google'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import userModel from '@/models/userModel'
 import UserDocument from '@/interfaces/UserDocument'
-import GoogleSignInParams from '@/interfaces/GoogleSignInParams'
-import AdapterUserWithId from '@/interfaces/AdapterUserWithId'
 import SessionWithUserId from '@/interfaces/SessionWithUserId'
 import SessionParams from '@/interfaces/SessionParams'
 import SignInParams from '@/interfaces/SignInParams'
@@ -24,7 +22,7 @@ const authOpts: AuthOptions = {
   ],
   callbacks: {
     async signIn(params: SignInParams): Promise<boolean> {
-      const {profile}: GoogleSignInParams = params as GoogleSignInParams
+      const {profile}: any = params
       await connectToMongoDB()
       const user: UserDocument | null = await userModel.findOne({
         email: profile?.email
@@ -43,13 +41,13 @@ const authOpts: AuthOptions = {
     },
     async session(params: SessionParams): Promise<SessionWithUserId> {
       const {session} = params
-      const sessionUser: AdapterUserWithId = session.user as AdapterUserWithId
+      const {user}: any = session
       return {
         ...session,
         user: {
-          ...sessionUser,
+          ...user,
           id: (await userModel.findOne({
-            email: sessionUser.email
+            email: user?.email
           }))?._id
         }
       }

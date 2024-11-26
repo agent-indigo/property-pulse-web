@@ -77,7 +77,8 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
           imageIds.push(public_id)
         }
       ))
-      const property: PropertyDocument = new propertyModel({
+      await connectToMongoDB()
+      const property: PropertyDocument = await propertyModel.create({
         owner: sessionUser._id,
         type: form.get('type')?.valueOf(),
         name: form.get('name')?.valueOf(),
@@ -110,8 +111,6 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
         images,
         imageIds
       })
-      await connectToMongoDB()
-      await property.save()
       return redirectResponse(`${
         process.env.NEXT_PUBLIC_DOMAIN
       }/properties/${

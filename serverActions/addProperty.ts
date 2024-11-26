@@ -37,7 +37,8 @@ const addProperty: Function = async (
           imageIds.push(public_id)
         }
       ))
-      const property: PropertyDocument = new propertyModel({
+      await connectToMongoDB()
+      const property: PropertyDocument = await propertyModel.create({
         owner: sessionUser._id,
         type: form.get('type')?.valueOf(),
         name: form.get('name')?.valueOf(),
@@ -70,8 +71,6 @@ const addProperty: Function = async (
         images,
         imageIds
       })
-      await connectToMongoDB()
-      await property.save()
       revalidatePath(
         '/',
         'layout'
