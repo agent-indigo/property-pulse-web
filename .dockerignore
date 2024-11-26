@@ -1,0 +1,8 @@
+.next/
+node_modules/
+Dockerfile
+docker-compose.yaml
+environmentTemplate.txt
+LICENSE.md
+next-env.d.ts
+README.md

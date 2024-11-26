@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  PropertyPulse:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: PropertyPulse:latest
+    ports:
+      - "3000:3000"
