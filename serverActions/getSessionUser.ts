@@ -7,14 +7,14 @@ import {
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import SessionWithUserId from '@/interfaces/SessionWithUserId'
 import userModel from '@/models/userModel'
-import authOptions from '@/utilities/authOptions'
+import authOpts from '@/config/authOpts'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 import UserDocument from '@/interfaces/UserDocument'
 import PlainUser from '@/interfaces/PlainUser'
 const getSessionUser: Function = async (): Promise<ServerActionResponse> => {
   try {
-    const session: SessionWithUserId | null = await getServerSession(authOptions)
+    const session: SessionWithUserId | null = await getServerSession(authOpts)
     if (session) {
       await connectToMongoDB()
       const user: FlattenMaps<UserDocument> | null = await userModel.findById(session.user.id).lean()
