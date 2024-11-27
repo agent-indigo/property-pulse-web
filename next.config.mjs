@@ -1,5 +1,5 @@
 const domain = process.env.VERCEL_URL ?? 'localhost:3000'
-const url = `http${domain === 'localhost:3000' ? null : 's'}://`
+const url = `http${domain === 'localhost:3000' ? null : 's'}://${domain}`
 const nextConfig = {
   env: {
     NEXT_PUBLIC_DOMAIN: url,
