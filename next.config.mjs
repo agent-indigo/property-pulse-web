@@ -1,11 +1,10 @@
-const VERCEL_URL = process.env.VERCEL_URL ?? ''
-const devUrl = 'http://localhost:3000'
-const prodUrl = `https://${VERCEL_URL}`
+const domain = process.env.VERCEL_URL ?? 'localhost:3000'
+const url = `http${domain === 'localhost:3000' ? null : 's'}://`
 const nextConfig = {
   env: {
-    NEXT_PUBLIC_DOMAIN: VERCEL_URL === '' ? devUrl : prodUrl,
-    NEXT_PUBLIC_API_DOMAIN: `${VERCEL_URL === '' ? devUrl : prodUrl}/api`,
-    NEXTAUTH_URL: VERCEL_URL === '' ? devUrl : prodUrl
+    NEXT_PUBLIC_DOMAIN: url,
+    NEXT_PUBLIC_API_DOMAIN: `${url}/api`,
+    NEXTAUTH_URL: url
   },
   images: {
     remotePatterns: [{
