@@ -1,7 +1,7 @@
 import PlainUser from '@/interfaces/PlainUser'
 interface ServerActionResponse {
   bookmarked?: boolean
-  error?: any
+  error?: string
   lat?: number
   lng?: number
   message?: string
