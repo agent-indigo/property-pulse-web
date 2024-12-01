@@ -6,7 +6,7 @@ import {
 import {AdapterUser} from 'next-auth/adapters'
 import {CredentialInput} from 'next-auth/providers/credentials'
 import {GoogleProfile} from 'next-auth/providers/google'
-interface SignInParams {
+export default interface SignInParams {
   user?: User | AdapterUser
   account?: Account | null
   profile?: Profile | GoogleProfile
@@ -18,4 +18,3 @@ interface SignInParams {
     CredentialInput
   >
 }
-export default SignInParams

@@ -1,4 +1,3 @@
-interface SpinnerProps {
+export default interface SpinnerProps {
   loading: boolean
 }
-export default SpinnerProps

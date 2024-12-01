@@ -1,5 +1,4 @@
 import {ReactNode} from 'react'
-interface DestructuredReactNode {
+export default interface DestructuredReactNode {
   children: ReactNode
 }
-export default DestructuredReactNode

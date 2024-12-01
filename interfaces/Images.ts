@@ -1,4 +1,3 @@
-interface Images {
+export default interface Images {
   images: string[]
 }
-export default Images

@@ -2,7 +2,7 @@ import PlainDocument from '@/interfaces/PlainDocument'
 import PropertyContact from '@/interfaces/PropertyContact'
 import PropertyLocation from '@/interfaces/PropertyLocation'
 import PropertyRates from '@/interfaces/PropertyRates'
-interface PlainProperty extends PlainDocument {
+export default interface PlainProperty extends PlainDocument {
   owner: string
   name: string
   type: string
@@ -18,4 +18,3 @@ interface PlainProperty extends PlainDocument {
   imageIds: string[]
   is_featured: boolean
 }
-export default PlainProperty

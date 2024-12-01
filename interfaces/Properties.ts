@@ -1,5 +1,4 @@
 import PlainProperty from '@/interfaces/PlainProperty'
-interface Properties {
+export default interface Properties {
   properties: PlainProperty[]
 }
-export default Properties

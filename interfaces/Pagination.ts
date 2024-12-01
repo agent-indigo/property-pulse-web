@@ -1,6 +1,5 @@
-interface Pagination {
+export default interface Pagination {
   page?: number
   size?: number
   total?: number
 }
-export default Pagination

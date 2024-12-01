@@ -1,5 +1,4 @@
-interface FormInput {
+export default interface FormInput {
   name: string
   value: string
 }
-export default FormInput

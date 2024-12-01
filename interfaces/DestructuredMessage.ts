@@ -1,5 +1,4 @@
 import PlainMessage from '@/interfaces/PlainMessage'
-interface DestructuredMessage {
+export default interface DestructuredMessage {
   message: PlainMessage
 }
-export default DestructuredMessage

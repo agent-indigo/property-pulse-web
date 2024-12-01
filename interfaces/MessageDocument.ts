@@ -2,7 +2,7 @@ import {
   Document,
   ObjectId
 } from 'mongoose'
-interface MessageDocument extends Document {
+export default interface MessageDocument extends Document {
   sender: ObjectId
   recipient: ObjectId
   property: ObjectId
@@ -12,4 +12,3 @@ interface MessageDocument extends Document {
   body?: string
   read: boolean
 }
-export default MessageDocument

@@ -5,7 +5,7 @@ import {
 import PropertyLocation from '@/interfaces/PropertyLocation'
 import PropertyRates from '@/interfaces/PropertyRates'
 import PropertyContact from '@/interfaces/PropertyContact'
-interface PropertyDocument extends Document {
+export default interface PropertyDocument extends Document {
   owner: ObjectId
   name: string
   type: string
@@ -21,4 +21,3 @@ interface PropertyDocument extends Document {
   imageIds: string[]
   is_featured: boolean
 }
-export default PropertyDocument

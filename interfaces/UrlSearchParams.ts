@@ -1,5 +1,4 @@
 import PropertySearchParams from '@/interfaces/PropertySearchParams'
-interface UrlSearchParams {
+export default interface UrlSearchParams {
   searchParams: PropertySearchParams
 }
-export default UrlSearchParams

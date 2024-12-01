@@ -1,4 +1,4 @@
-interface PropertySearchQuery {
+export default interface PropertySearchQuery {
   $or?: Array<{
     name?: RegExp
     description?: RegExp
@@ -9,4 +9,3 @@ interface PropertySearchQuery {
   }>
   type?: RegExp
 }
-export default PropertySearchQuery

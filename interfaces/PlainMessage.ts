@@ -1,5 +1,5 @@
 import PlainDocument from '@/interfaces/PlainDocument'
-interface PlainMessage extends PlainDocument {
+export default interface PlainMessage extends PlainDocument {
   sender: {
     username: string
   }
@@ -14,4 +14,3 @@ interface PlainMessage extends PlainDocument {
   body?: string
   read: boolean
 }
-export default PlainMessage

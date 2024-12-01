@@ -1,5 +1,4 @@
 import {ObjectId} from 'mongoose'
-interface PropertyId {
+export default interface PropertyId {
   propertyId: ObjectId
 }
-export default PropertyId
