@@ -9,12 +9,19 @@ const connectToMongoDB: Function = async (): Promise<void> => {
       'strictQuery',
       true
     )
-    await connect(`mongodb+srv://${
+    const host: string = process.env.MONGODB_HOST ?? 'localhost'
+    await connect(`mongodb${
+      host === 'localhost' ? '' : '+srv'
+    }://${
       process.env.MONGODB_USER ?? ''
     }:${
       process.env.MONGODB_PASSWORD ?? ''
     }@${
-      process.env.MONGODB_HOST ?? 'localhost'
+      host
+    }${
+      host === 'localhost' ? `:${
+        process.env.MONGODB_PORT ?? '27017'
+      }` : ''
     }/${
       process.env.MONGODB_DATABASE ?? 'PropertyPulse'
     }?retryWrites=true&w=majority`)
