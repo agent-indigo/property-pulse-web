@@ -20,12 +20,15 @@ import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 export const metadata: Metadata = {
   title: 'Search Results'
 }
-const ResultsPage: FunctionComponent<UrlSearchParams> = async ({searchParams: {
-  location = '',
-  type = 'All',
-  page = 1,
-  size = 6
-}}): Promise<ReactElement> => {
+const ResultsPage: FunctionComponent<UrlSearchParams> = async ({
+  searchParams
+}): Promise<ReactElement> => {
+  const {
+    location = '',
+    type = 'All',
+    page = 1,
+    size = 6
+  } = await searchParams
   await connectToMongoDB()
   const query: PropertySearchQuery = {}
   if (location !== '') {

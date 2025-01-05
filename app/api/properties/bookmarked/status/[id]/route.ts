@@ -2,12 +2,12 @@ import {
   NextRequest,
   NextResponse
 } from 'next/server'
-import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
 import getSessionUser from '@/serverActions/getSessionUser'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import dataResponse from '@/httpResponses/dataResponse'
 import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
 import serverErrorResponse from '@/httpResponses/serverErrorResponse'
+import UrlParams from '@/interfaces/UrlParams'
 export {dynamic} from '@/config/dynamic'
 /**
  * @name    GET
@@ -17,7 +17,7 @@ export {dynamic} from '@/config/dynamic'
  */
 export const GET = async (
   request: NextRequest,
-  {params}: Params
+  {params}: UrlParams
 ): Promise<NextResponse> => {
   try {
     const {

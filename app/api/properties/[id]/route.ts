@@ -1,4 +1,3 @@
-import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
 import {
   NextRequest,
   NextResponse
@@ -16,6 +15,7 @@ import serverErrorResponse from '@/httpResponses/serverErrorResponse'
 import noDataResponse from '@/httpResponses/noDataResponse'
 import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
 import redirectResponse from '@/httpResponses/redirectResponse'
+import UrlParams from '@/interfaces/UrlParams'
 export {dynamic} from '@/config/dynamic'
 /**
  * @name    GET
@@ -25,7 +25,7 @@ export {dynamic} from '@/config/dynamic'
  */
 export const GET = async (
   request: NextRequest,
-  {params}: Params
+  {params}: UrlParams
 ): Promise<NextResponse> => {
   try {
     await connectToMongoDB()
@@ -48,7 +48,7 @@ export const GET = async (
  */
 export const DELETE = async (
   request: NextRequest,
-  {params}: Params
+  {params}: UrlParams
 ): Promise<NextResponse> => {
   try {
     const {
@@ -89,7 +89,7 @@ export const DELETE = async (
  */
 export const PATCH = async (
   request: NextRequest,
-  {params}: Params
+  {params}: UrlParams
 ): Promise<NextResponse> => {
   try {
     const {

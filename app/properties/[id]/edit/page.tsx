@@ -14,13 +14,14 @@ export const metadata: Metadata = {
 const EditPropertyPage: FunctionComponent<UrlParams> = async ({
   params
 }): Promise<ReactElement> => {
+  const {id} = await params
   await connectToMongoDB()
   return (
     <section className='bg-blue-50'>
       <div className='container m-auto max-w-2xl py-24'>
         <div className='bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0'>
           <EditPropertyForm property={convertToPlainDocument(await propertyModel
-            .findById(params.id)
+            .findById(id)
             .lean()
           )}/>
         </div>

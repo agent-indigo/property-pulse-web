@@ -16,10 +16,13 @@ import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 export const metadata: Metadata = {
   title: 'Properties'
 }
-const PropertiesPage: FunctionComponent<UrlSearchParams> = async ({searchParams: {
-  page = 1,
-  size = 6
-}}): Promise<ReactElement> => {
+const PropertiesPage: FunctionComponent<UrlSearchParams> = async ({
+  searchParams
+}): Promise<ReactElement> => {
+  const {
+    page = 1,
+    size = 6
+  } = await searchParams
   await connectToMongoDB()
   const properties: PlainProperty[] = (await propertyModel.find().skip((
     parseInt(page.toString() ?? '1'

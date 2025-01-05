@@ -22,9 +22,10 @@ export const metadata: Metadata = {
 const PropertyPage: FunctionComponent<UrlParams> = async ({
   params
 }): Promise<ReactElement> => {
+  const {id} = await params
   await connectToMongoDB()
   const property: PlainProperty = convertToPlainDocument(await propertyModel
-    .findById(params.id)
+    .findById(id)
     .lean()
   )
   return (

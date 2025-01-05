@@ -1,4 +1,3 @@
-import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
 import {
   NextRequest,
   NextResponse
@@ -13,6 +12,7 @@ import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 import dataResponse from '@/httpResponses/dataResponse'
 import notFoundResponse from '@/httpResponses/notFoundResponse'
 import serverErrorResponse from '@/httpResponses/serverErrorResponse'
+import UrlParams from '@/interfaces/UrlParams'
 export {dynamic} from '@/config/dynamic'
 /**
  * @name    GET
@@ -22,7 +22,7 @@ export {dynamic} from '@/config/dynamic'
  */
 export const GET = async (
   request: NextRequest,
-  {params}: Params
+  {params}: UrlParams
 ): Promise<NextResponse> => {
   try {
     const id: string = params.id

@@ -1,7 +1,8 @@
 import {Config} from 'tailwindcss'
 const tailwindConfig: Config = {
   content: [
-    '**/*.tsx'
+    'app/**/*.tsx',
+    'components/**/*.tsx'
   ],
   theme: {
     extend: {

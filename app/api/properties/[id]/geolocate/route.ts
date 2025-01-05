@@ -1,4 +1,3 @@
-import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
 import {
   NextRequest,
   NextResponse
@@ -14,6 +13,7 @@ import PropertyLocation from '@/interfaces/PropertyLocation'
 import dataResponse from '@/httpResponses/dataResponse'
 import serverErrorResponse from '@/httpResponses/serverErrorResponse'
 import notFoundResponse from '@/httpResponses/notFoundResponse'
+import UrlParams from '@/interfaces/UrlParams'
 export {dynamic} from '@/config/dynamic'
 /**
  * @name    GET
@@ -23,7 +23,7 @@ export {dynamic} from '@/config/dynamic'
  */
 export const GET = async (
   request: NextRequest,
-  {params}: Params
+  {params}: UrlParams
 ): Promise<NextResponse> => {
   const activity: string = 'geolocating property'
   try {

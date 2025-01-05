@@ -53,7 +53,7 @@ const GlobalContextProvider: FunctionComponent<DestructuredReactNode> = ({
         }: ServerActionResponse = await getUnreadMessagesCount()
         success && unreadMessagesCount !== undefined
         ? setUnreadMessagesCount(unreadMessagesCount)
-        : toast.error(`Error retrieving unread messages count:\n${error.toString()}`)
+        : toast.error(`Error retrieving unread messages count:\n${error?.toString()}`)
       }
       user && getCount()
     }

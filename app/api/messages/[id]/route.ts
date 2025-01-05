@@ -2,7 +2,6 @@ import {
   NextRequest,
   NextResponse
 } from 'next/server'
-import {Params} from 'next/dist/shared/lib/router/utils/route-matcher'
 import MessageDocument from '@/interfaces/MessageDocument'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import getSessionUser from '@/serverActions/getSessionUser'
@@ -12,6 +11,7 @@ import noDataResponse from '@/httpResponses/noDataResponse'
 import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
 import notFoundResponse from '@/httpResponses/notFoundResponse'
 import serverErrorResponse from '@/httpResponses/serverErrorResponse'
+import UrlParams from '@/interfaces/UrlParams'
 export {dynamic} from '@/config/dynamic'
 /**
  * @name    DELETE
@@ -21,7 +21,7 @@ export {dynamic} from '@/config/dynamic'
  */
 export const DELETE = async (
   request: NextRequest,
-  {params}: Params
+  {params}: UrlParams
 ): Promise<NextResponse> => {
   try {
     const {
@@ -59,7 +59,7 @@ export const DELETE = async (
  */
 export const PATCH = async (
   request: NextRequest,
-  {params}: Params
+  {params}: UrlParams
 ): Promise<NextResponse> => {
   let status: string = 'read/unread'
   try {
