@@ -3,7 +3,10 @@ import {
   FunctionComponent,
   ReactElement
 } from 'react'
-import {FormStatus, useFormStatus} from 'react-dom'
+import {
+  FormStatus,
+  useFormStatus
+} from 'react-dom'
 import SubmitButtonProps from '@/interfaces/SubmitButtonProps'
 const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
   message,
