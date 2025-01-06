@@ -3,15 +3,12 @@ import {
   NextRequest,
   NextResponse
 } from 'next/server'
-import {FlattenMaps} from 'mongoose'
 import PropertyDocument from '@/interfaces/PropertyDocument'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import propertyModel from '@/models/propertyModel'
 import getSessionUser from '@/serverActions/getSessionUser'
 import cloudinary from '@/config/cloudinary'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import PlainProperty from '@/interfaces/PlainProperty'
-import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 import dataResponse from '@/httpResponses/dataResponse'
 import serverErrorResponse from '@/httpResponses/serverErrorResponse'
 import redirectResponse from '@/httpResponses/redirectResponse'
@@ -28,13 +25,16 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     const page: string = new URL(request.url).searchParams.get('page') ?? ''
     await connectToMongoDB()
     return dataResponse(JSON.stringify({
-      properties: (page === ''
-      ? await propertyModel.find().lean()
-      : await propertyModel.find().skip((
-        parseInt(page) - 1
-      ) * 6).limit(6).lean()).map((
-        property: FlattenMaps<PropertyDocument>
-      ): PlainProperty => convertToPlainDocument(property)),
+      properties: JSON.parse(JSON.stringify(page === ''
+      ? await propertyModel
+        .find()
+        .lean()
+      : await propertyModel
+        .find()
+        .skip((parseInt(page) - 1) * 6)
+        .limit(6)
+        .lean()
+      )),
       total: await propertyModel.countDocuments()
     }))
   } catch (error: any) {

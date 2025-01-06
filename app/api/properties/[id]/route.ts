@@ -8,7 +8,6 @@ import PropertyDocument from '@/interfaces/PropertyDocument'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import getSessionUser from '@/serverActions/getSessionUser'
 import cloudinary from '@/config/cloudinary'
-import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 import dataResponse from '@/httpResponses/dataResponse'
 import notFoundResponse from '@/httpResponses/notFoundResponse'
 import serverErrorResponse from '@/httpResponses/serverErrorResponse'
@@ -28,10 +27,11 @@ export const GET = async (
   {params}: UrlParams
 ): Promise<NextResponse> => {
   try {
+    const {id} = await params
     await connectToMongoDB()
-    const property: PropertyDocument | null = await propertyModel.findById(params.id)
+    const property: PropertyDocument | null = await propertyModel.findById(id)
     return property
-    ? dataResponse(JSON.stringify(convertToPlainDocument(property)))
+    ? dataResponse(JSON.stringify(JSON.parse(JSON.stringify(property))))
     : notFoundResponse('Property')
   } catch (error: any) {
     return serverErrorResponse(
@@ -56,8 +56,9 @@ export const DELETE = async (
       success
     }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
+      const {id} = await params
       await connectToMongoDB()
-      const property: PropertyDocument | null = await propertyModel.findById(params.id)
+      const property: PropertyDocument | null = await propertyModel.findById(id)
       if (property) {
         if (sessionUser._id === property.owner.toString()) {
           property.imageIds.map(async (
@@ -97,8 +98,9 @@ export const PATCH = async (
       success
     }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
+      const {id} = await params
       await connectToMongoDB()
-      const property: PropertyDocument | null = await propertyModel.findById(params.id)
+      const property: PropertyDocument | null = await propertyModel.findById(id)
       if (property) {
         if (sessionUser._id === property.owner.toString()) {
           const form: FormData = await request.formData()

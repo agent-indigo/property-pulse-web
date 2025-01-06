@@ -13,7 +13,6 @@ import ContactForm from '@/components/ContactForm'
 import ShareButtons from '@/components/ShareButtons'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
-import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 import PlainProperty from '@/interfaces/PlainProperty'
 import UrlParams from '@/interfaces/UrlParams'
 export const metadata: Metadata = {
@@ -24,10 +23,10 @@ const PropertyPage: FunctionComponent<UrlParams> = async ({
 }): Promise<ReactElement> => {
   const {id} = await params
   await connectToMongoDB()
-  const property: PlainProperty = convertToPlainDocument(await propertyModel
+  const property: PlainProperty = JSON.parse(JSON.stringify(await propertyModel
     .findById(id)
     .lean()
-  )
+  ))
   return (
     <>
       <PropertyHeaderImage image={property.images[0]}/>

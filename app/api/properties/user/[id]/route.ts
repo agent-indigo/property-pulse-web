@@ -2,13 +2,9 @@ import {
   NextRequest,
   NextResponse
 } from 'next/server'
-import {FlattenMaps} from 'mongoose'
 import propertyModel from '@/models/propertyModel'
 import userModel from '@/models/userModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import PropertyDocument from '@/interfaces/PropertyDocument'
-import PlainProperty from '@/interfaces/PlainProperty'
-import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 import dataResponse from '@/httpResponses/dataResponse'
 import notFoundResponse from '@/httpResponses/notFoundResponse'
 import serverErrorResponse from '@/httpResponses/serverErrorResponse'
@@ -28,11 +24,12 @@ export const GET = async (
     const id: string = params.id
     await connectToMongoDB()
     return await userModel.findById(id)
-    ? dataResponse(JSON.stringify(((await propertyModel.find({
-      owner: id
-    }).lean()).map((
-      property: FlattenMaps<PropertyDocument>
-    ): PlainProperty => convertToPlainDocument(property)))))
+    ? dataResponse(JSON.stringify(JSON.parse(JSON.stringify(await propertyModel
+      .find({
+        owner: id
+      })
+      .lean()
+    ))))
     : notFoundResponse('User')
   } catch (error: any) {
     return serverErrorResponse(

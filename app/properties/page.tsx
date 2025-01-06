@@ -3,16 +3,13 @@ import {
   ReactElement
 } from 'react'
 import {Metadata} from 'next'
-import {FlattenMaps} from 'mongoose'
 import SearchPropertiesForm from '@/components/SearchPropertiesForm'
 import Properties from '@/components/Properties'
 import propertyModel from '@/models/propertyModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import UrlSearchParams from '@/interfaces/UrlSearchParams'
 import FeaturedProperties from '@/components/FeaturedProperties'
-import PropertyDocument from '@/interfaces/PropertyDocument'
 import PlainProperty from '@/interfaces/PlainProperty'
-import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 export const metadata: Metadata = {
   title: 'Properties'
 }
@@ -24,11 +21,12 @@ const PropertiesPage: FunctionComponent<UrlSearchParams> = async ({
     size = 6
   } = await searchParams
   await connectToMongoDB()
-  const properties: PlainProperty[] = (await propertyModel.find().skip((
-    parseInt(page.toString() ?? '1'
-  ) - 1) * size).limit(size).lean()).map((
-    property: FlattenMaps<PropertyDocument>
-  ): PlainProperty => convertToPlainDocument(property))
+  const properties: PlainProperty[] = JSON.parse(JSON.stringify(await propertyModel
+    .find()
+    .skip((parseInt(page.toString() ?? '1') - 1) * size)
+    .limit(size)
+    .lean()
+  ))
   return (
     <>
       <section className='bg-blue-700 py-4'>

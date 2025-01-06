@@ -11,30 +11,36 @@ import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import getSessionUser from '@/serverActions/getSessionUser'
 import PlainMessage from '@/interfaces/PlainMessage'
 import MessageDocument from '@/interfaces/MessageDocument'
-import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 export const metadata: Metadata = {
   title: 'Messages'
 }
 const MessagesPage: FunctionComponent = async (): Promise<ReactElement> => {
   const {sessionUser}: ServerActionResponse = await getSessionUser()
   await connectToMongoDB()
-  const messages: PlainMessage[] = (await messageModel.find({
-    recipient: sessionUser?._id
-  }).populate(
-    'sender',
-    'username'
-  ).populate(
-    'property',
-    'id name'
-  ).sort({
-    read: 1,
-    createdAt: -1
-  }).lean()).map((message: FlattenMaps<MessageDocument>): PlainMessage => {
-    const plainMessage: PlainMessage = convertToPlainDocument(message)
-    plainMessage.sender = convertToPlainDocument(plainMessage.sender)
-    plainMessage.property = convertToPlainDocument(plainMessage.property)
-    return plainMessage
-  })
+  const messages: PlainMessage[] = JSON.parse(JSON.stringify((await messageModel
+    .find({
+      recipient: sessionUser?._id
+    })
+    .populate(
+      'sender',
+      'username'
+    )
+    .populate(
+      'property',
+      'id name'
+    )
+    .sort({
+      read: 1,
+      createdAt: -1
+    })
+    .lean())
+    .map((message: FlattenMaps<MessageDocument>): PlainMessage => {
+      const plainMessage: PlainMessage = JSON.parse(JSON.stringify(message))
+      plainMessage.sender = JSON.parse(JSON.stringify(plainMessage.sender))
+      plainMessage.property = JSON.parse(JSON.stringify(plainMessage.property))
+      return plainMessage
+    })
+  ))
   return (
     <section className='bg-blue-50'>
       <div className='container m-auto py-24 max-w-6xl'>

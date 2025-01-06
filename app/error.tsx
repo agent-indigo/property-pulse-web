@@ -18,7 +18,7 @@ const ErrorPage: FunctionComponent<ErrorPageProps> = ({
         </div>
         <div className='text-center'>
           <h1 className='text-3xl font-bold mt-4 mb02'>
-            Error
+            500: Internal Server Error
           </h1>
           <h2 className='text-2xl font-bold my-2 text-red-400'>
             {error.message}

@@ -29,8 +29,9 @@ export const DELETE = async (
       success
     }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
+      const {id} = await params
       await connectToMongoDB()
-      const message: MessageDocument | null = await messageModel.findById(params.id)
+      const message: MessageDocument | null = await messageModel.findById(id)
       if (message) {
         if (sessionUser._id === message.recipient.toString()) {
           await messageModel.findByIdAndDelete(message._id)
@@ -68,8 +69,9 @@ export const PATCH = async (
       success
     }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
+      const {id} = await params
       await connectToMongoDB()
-      const message: MessageDocument | null = await messageModel.findById(params.id)
+      const message: MessageDocument | null = await messageModel.findById(id)
       if (message) {
         if (sessionUser._id = message.recipient.toString()) {
           const read: boolean = message.read

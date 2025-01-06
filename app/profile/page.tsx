@@ -4,27 +4,23 @@ import {
   FunctionComponent,
   ReactElement
 } from 'react'
-import {FlattenMaps} from 'mongoose'
 import profileDefault from '@/assets/images/profile.png'
 import ProfileProperties from '@/components/ProfileProperties'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import getSessionUser from '@/serverActions/getSessionUser'
 import propertyModel from '@/models/propertyModel'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
-import PropertyDocument from '@/interfaces/PropertyDocument'
 import PlainProperty from '@/interfaces/PlainProperty'
-import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 export const metadata: Metadata = {
   title: 'Profile'
 }
 const ProfilePage: FunctionComponent =  async (): Promise<ReactElement> => {
   const {sessionUser}: ServerActionResponse = await getSessionUser()
   await connectToMongoDB()
-  const properties: PlainProperty[] = (await propertyModel.find({
-    owner: sessionUser?._id
-  }).lean()).map((
-    property: FlattenMaps<PropertyDocument>
-  ): PlainProperty => convertToPlainDocument(property))
+  const properties: PlainProperty[] = JSON.parse(JSON.stringify(await propertyModel
+    .find({owner: sessionUser?._id})
+    .lean()
+  ))
   return (
     <section className='bg-blue-50'>
       <div className='container m-auto py-24'>

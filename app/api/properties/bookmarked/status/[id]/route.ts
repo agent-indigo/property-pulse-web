@@ -24,8 +24,9 @@ export const GET = async (
       sessionUser,
       success
     }: ServerActionResponse = await getSessionUser()
+    const {id} = await params
     return success && sessionUser ? dataResponse(JSON.stringify({
-      bookmarked: sessionUser.bookmarks.includes(params.id)
+      bookmarked: sessionUser.bookmarks.includes(id)
     })) : unauthorizedResponse
   } catch (error: any) {
     return serverErrorResponse(

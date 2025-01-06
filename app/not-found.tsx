@@ -20,7 +20,7 @@ const NotFoundPage: FunctionComponent = (): ReactElement => (
         <div className='text-center'>
           <h1 className='text-3xl font-bold mt-4 mb-2'>Error 404</h1>
           <p className='text-gray-500 text-xl mb-10'>
-            Page Not Found
+            Error 400: Page Not Found
           </p>
           <Link
             href='/'

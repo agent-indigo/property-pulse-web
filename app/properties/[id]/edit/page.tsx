@@ -6,7 +6,6 @@ import {Metadata} from 'next'
 import EditPropertyForm from '@/components/EditPropertyForm'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
-import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 import UrlParams from '@/interfaces/UrlParams'
 export const metadata: Metadata = {
   title: 'Edit Property'
@@ -20,10 +19,10 @@ const EditPropertyPage: FunctionComponent<UrlParams> = async ({
     <section className='bg-blue-50'>
       <div className='container m-auto max-w-2xl py-24'>
         <div className='bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0'>
-          <EditPropertyForm property={convertToPlainDocument(await propertyModel
+          <EditPropertyForm property={JSON.parse(JSON.stringify(await propertyModel
             .findById(id)
             .lean()
-          )}/>
+          ))}/>
         </div>
       </div>
     </section>

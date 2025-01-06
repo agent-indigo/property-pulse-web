@@ -2,10 +2,7 @@ import {
   NextRequest,
   NextResponse
 } from 'next/server'
-import {
-  FlattenMaps,
-  ObjectId
-} from 'mongoose'
+import {ObjectId} from 'mongoose'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
 import userModel from '@/models/userModel'
@@ -14,8 +11,6 @@ import UserDocument from '@/interfaces/UserDocument'
 import PropertyDocument from '@/interfaces/PropertyDocument'
 import PropertyId from '@/interfaces/PropertyId'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
-import PlainProperty from '@/interfaces/PlainProperty'
-import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 import dataResponse from '@/httpResponses/dataResponse'
 import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
 import serverErrorResponse from '@/httpResponses/serverErrorResponse'
@@ -38,13 +33,14 @@ export const GET = async (
     }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
       await connectToMongoDB()
-      return dataResponse(JSON.stringify((await propertyModel.find({
-        _id: {
-          $in: sessionUser.bookmarks
-        }
-      }).lean()).map((
-        property: FlattenMaps<PropertyDocument>
-      ): PlainProperty => convertToPlainDocument(property))))
+      return dataResponse(JSON.stringify(JSON.parse(JSON.stringify(await propertyModel
+        .find({
+          _id: {
+            $in: sessionUser.bookmarks
+          }
+        })
+        .lean()
+      ))))
     } else {
       return unauthorizedResponse
     }

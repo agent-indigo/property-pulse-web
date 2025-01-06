@@ -2,12 +2,8 @@ import {
   NextRequest,
   NextResponse
 } from 'next/server'
-import {FlattenMaps} from 'mongoose'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
-import PropertyDocument from '@/interfaces/PropertyDocument'
-import PlainProperty from '@/interfaces/PlainProperty'
-import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 import dataResponse from '@/httpResponses/dataResponse'
 import serverErrorResponse from '@/httpResponses/serverErrorResponse'
 export {dynamic} from '@/config/dynamic'
@@ -22,11 +18,12 @@ export const GET = async (
 ): Promise<NextResponse> => {
   try {
     await connectToMongoDB()
-    return dataResponse(JSON.stringify((await propertyModel.find({
-      is_featured: true
-    }).lean()).map((
-      property: FlattenMaps<PropertyDocument>
-    ): PlainProperty => convertToPlainDocument(property))))
+    return dataResponse(JSON.stringify(JSON.parse(JSON.stringify(await propertyModel
+      .find({
+        is_featured: true
+      })
+      .lean()
+    ))))
   } catch (error: any) {
     return serverErrorResponse(
       'retrieving featured properties',

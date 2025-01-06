@@ -9,7 +9,6 @@ import SessionWithUserId from '@/interfaces/SessionWithUserId'
 import userModel from '@/models/userModel'
 import authOpts from '@/config/authOpts'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 import UserDocument from '@/interfaces/UserDocument'
 import PlainUser from '@/interfaces/PlainUser'
 const getSessionUser: Function = async (): Promise<ServerActionResponse> => {
@@ -19,7 +18,7 @@ const getSessionUser: Function = async (): Promise<ServerActionResponse> => {
       await connectToMongoDB()
       const user: FlattenMaps<UserDocument> | null = await userModel.findById(session.user.id).lean()
       if (user) {
-        const sessionUser: PlainUser = convertToPlainDocument(user)
+        const sessionUser: PlainUser = JSON.parse(JSON.stringify(user))
         sessionUser.bookmarks = user.bookmarks.map((bookmark: ObjectId): string => bookmark.toString())
         return {
           sessionUser,

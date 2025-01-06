@@ -4,7 +4,6 @@ import {
 } from 'react'
 import {Metadata} from 'next'
 import Link from 'next/link'
-import {FlattenMaps} from 'mongoose'
 import {FaArrowCircleLeft} from 'react-icons/fa'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import UrlSearchParams from '@/interfaces/UrlSearchParams'
@@ -14,9 +13,7 @@ import SearchPropertiesForm from '@/components/SearchPropertiesForm'
 import PropertyCard from '@/components/PropertyCard'
 import FeaturedProperties from '@/components/FeaturedProperties'
 import Paginator from '@/components/Paginator'
-import PropertyDocument from '@/interfaces/PropertyDocument'
 import PlainProperty from '@/interfaces/PlainProperty'
-import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 export const metadata: Metadata = {
   title: 'Search Results'
 }
@@ -54,11 +51,12 @@ const ResultsPage: FunctionComponent<UrlSearchParams> = async ({
     type,
     'i'
   )
-  const properties: PlainProperty[] = (await propertyModel.find(query).skip((
-    parseInt(page.toString() ?? '1'
-  ) - 1) * size).limit(size).lean()).map((
-    property: FlattenMaps<PropertyDocument>
-  ): PlainProperty => convertToPlainDocument(property))
+  const properties: PlainProperty[] = JSON.parse(JSON.stringify(await propertyModel
+    .find(query)
+    .skip((parseInt(page.toString() ?? '1') - 1) * size)
+    .limit(size)
+    .lean()
+  ))
   return (
     <>
       <section className='bg-blue-700 py-4'>

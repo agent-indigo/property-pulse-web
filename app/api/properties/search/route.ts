@@ -2,13 +2,9 @@ import {
   NextRequest,
   NextResponse
 } from 'next/server'
-import {FlattenMaps} from 'mongoose'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
 import PropertySearchQuery from '@/interfaces/PropertySearchQuery'
-import PropertyDocument from '@/interfaces/PropertyDocument'
-import PlainProperty from '@/interfaces/PlainProperty'
-import convertToPlainDocument from '@/utilities/convertToPlainDocument'
 import dataResponse from '@/httpResponses/dataResponse'
 import serverErrorResponse from '@/httpResponses/serverErrorResponse'
 export {dynamic} from '@/config/dynamic'
@@ -50,11 +46,12 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     )
     await connectToMongoDB()
     return dataResponse(JSON.stringify({
-      properties: (await propertyModel.find(query).skip((parseInt(
-        page && page !== '' ? page : '1'
-      ) - 1) * 6).limit(6).lean()).map((
-        property: FlattenMaps<PropertyDocument>
-      ): PlainProperty => convertToPlainDocument(property)),
+      properties: JSON.parse(JSON.stringify(await propertyModel
+        .find(query)
+        .skip((parseInt(page && page !== '' ? page : '1') - 1) * 6)
+        .limit(6)
+        .lean()
+      )),
       total: (await propertyModel.find(query)).length
     }))
   } catch (error: any) {
