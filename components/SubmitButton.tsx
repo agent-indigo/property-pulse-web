@@ -3,13 +3,13 @@ import {
   FunctionComponent,
   ReactElement
 } from 'react'
-import {useFormStatus} from 'react-dom'
+import {FormStatus, useFormStatus} from 'react-dom'
 import SubmitButtonProps from '@/interfaces/SubmitButtonProps'
 const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
   message,
   action
 }): ReactElement => {
-  const pending: boolean = useFormStatus().pending
+  const {pending}: FormStatus = useFormStatus()
   return (
     <button
       className='bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline'
