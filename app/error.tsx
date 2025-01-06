@@ -21,7 +21,7 @@ const ErrorPage: FunctionComponent<ErrorPageProps> = ({
             500: Internal Server Error
           </h1>
           <h2 className='text-2xl font-bold my-2 text-red-400'>
-            {error.message}
+            {error.toString()}
           </h2>
           <div className='pb-1'>
             <button
