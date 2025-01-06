@@ -46,12 +46,11 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     )
     await connectToMongoDB()
     return dataResponse(JSON.stringify({
-      properties: JSON.parse(JSON.stringify(await propertyModel
+      properties: await propertyModel
         .find(query)
         .skip((parseInt(page && page !== '' ? page : '1') - 1) * 6)
         .limit(6)
-        .lean()
-      )),
+        .lean(),
       total: (await propertyModel.find(query)).length
     }))
   } catch (error: any) {

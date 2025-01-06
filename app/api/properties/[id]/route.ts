@@ -31,7 +31,7 @@ export const GET = async (
     await connectToMongoDB()
     const property: PropertyDocument | null = await propertyModel.findById(id)
     return property
-    ? dataResponse(JSON.stringify(JSON.parse(JSON.stringify(property))))
+    ? dataResponse(JSON.stringify(property))
     : notFoundResponse('Property')
   } catch (error: any) {
     return serverErrorResponse(

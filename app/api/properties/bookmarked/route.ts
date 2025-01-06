@@ -33,14 +33,14 @@ export const GET = async (
     }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
       await connectToMongoDB()
-      return dataResponse(JSON.stringify(JSON.parse(JSON.stringify(await propertyModel
+      return dataResponse(JSON.stringify(await propertyModel
         .find({
           _id: {
             $in: sessionUser.bookmarks
           }
         })
         .lean()
-      ))))
+      ))
     } else {
       return unauthorizedResponse
     }

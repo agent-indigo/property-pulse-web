@@ -25,7 +25,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     const page: string = new URL(request.url).searchParams.get('page') ?? ''
     await connectToMongoDB()
     return dataResponse(JSON.stringify({
-      properties: JSON.parse(JSON.stringify(page === ''
+      properties: page === ''
       ? await propertyModel
         .find()
         .lean()
@@ -33,8 +33,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
         .find()
         .skip((parseInt(page) - 1) * 6)
         .limit(6)
-        .lean()
-      )),
+        .lean(),
       total: await propertyModel.countDocuments()
     }))
   } catch (error: any) {

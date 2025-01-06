@@ -29,7 +29,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
       await connectToMongoDB()
-      return dataResponse(JSON.stringify(JSON.parse(JSON.stringify((await messageModel
+      return dataResponse(JSON.stringify((await messageModel
         .find({
           recipient: sessionUser._id
         })
@@ -52,7 +52,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
           plainMessage.property = JSON.parse(JSON.stringify(plainMessage.property))
           return plainMessage
         }))
-      )))
+      )
     } else {
       return unauthorizedResponse
     }

@@ -18,12 +18,12 @@ export const GET = async (
 ): Promise<NextResponse> => {
   try {
     await connectToMongoDB()
-    return dataResponse(JSON.stringify(JSON.parse(JSON.stringify(await propertyModel
+    return dataResponse(JSON.stringify(await propertyModel
       .find({
         is_featured: true
       })
       .lean()
-    ))))
+    ))
   } catch (error: any) {
     return serverErrorResponse(
       'retrieving featured properties',
