@@ -14,8 +14,7 @@ import serverErrorResponse from '@/httpResponses/serverErrorResponse'
 import noDataResponse from '@/httpResponses/noDataResponse'
 import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
 import redirectResponse from '@/httpResponses/redirectResponse'
-import UrlParams from '@/interfaces/UrlParams'
-export {dynamic} from '@/config/dynamic'
+export const dynamic = 'force-dynamic'
 /**
  * @name    GET
  * @desc    GET a single property
@@ -24,15 +23,12 @@ export {dynamic} from '@/config/dynamic'
  */
 export const GET = async (
   request: NextRequest,
-  {params}: UrlParams
+  params: any
 ): Promise<NextResponse> => {
   try {
-    const {id} = await params
     await connectToMongoDB()
-    const property: PropertyDocument | null = await propertyModel.findById(id)
-    return property
-    ? dataResponse(JSON.stringify(property))
-    : notFoundResponse('Property')
+    const property: PropertyDocument | null = await propertyModel.findById(params.id)
+    return property ? dataResponse(JSON.stringify(property)) : notFoundResponse('Property')
   } catch (error: any) {
     return serverErrorResponse(
       'retrieving property',
@@ -48,7 +44,7 @@ export const GET = async (
  */
 export const DELETE = async (
   request: NextRequest,
-  {params}: UrlParams
+  params: any
 ): Promise<NextResponse> => {
   try {
     const {
@@ -56,14 +52,11 @@ export const DELETE = async (
       success
     }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
-      const {id} = await params
       await connectToMongoDB()
-      const property: PropertyDocument | null = await propertyModel.findById(id)
+      const property: PropertyDocument | null = await propertyModel.findById(params.id)
       if (property) {
         if (sessionUser._id === property.owner.toString()) {
-          property.imageIds.map(async (
-            image: string
-          ): Promise<void> => await cloudinary.uploader.destroy(image))
+          property.imageIds.map(async (image: string): Promise<void> => await cloudinary.uploader.destroy(image))
           await propertyModel.findByIdAndDelete(property._id)
           return noDataResponse('Property deleted.')
         } else {
@@ -90,7 +83,7 @@ export const DELETE = async (
  */
 export const PATCH = async (
   request: NextRequest,
-  {params}: UrlParams
+  params: any
 ): Promise<NextResponse> => {
   try {
     const {
@@ -98,9 +91,8 @@ export const PATCH = async (
       success
     }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
-      const {id} = await params
       await connectToMongoDB()
-      const property: PropertyDocument | null = await propertyModel.findById(id)
+      const property: PropertyDocument | null = await propertyModel.findById(params.id)
       if (property) {
         if (sessionUser._id === property.owner.toString()) {
           const form: FormData = await request.formData()
@@ -117,12 +109,7 @@ export const PATCH = async (
             beds: form.get('beds')?.valueOf().toString(),
             baths: form.get('baths')?.valueOf().toString(),
             square_feet: form.get('square_feet')?.valueOf().toString(),
-            amenities: form.getAll('amenities').map((
-              amenity: FormDataEntryValue
-            ): string => amenity
-              .valueOf()
-              .toString()
-            ),
+            amenities: form.getAll('amenities').map((amenity: FormDataEntryValue): string => amenity.valueOf().toString()),
             rates: {
               nightly: form.get('rates.nightly')?.valueOf().toString(),
               weekly: form.get('rates.weekly')?.valueOf().toString(),

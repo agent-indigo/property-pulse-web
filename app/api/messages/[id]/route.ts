@@ -11,8 +11,7 @@ import noDataResponse from '@/httpResponses/noDataResponse'
 import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
 import notFoundResponse from '@/httpResponses/notFoundResponse'
 import serverErrorResponse from '@/httpResponses/serverErrorResponse'
-import UrlParams from '@/interfaces/UrlParams'
-export {dynamic} from '@/config/dynamic'
+export const dynamic = 'force-dynamic'
 /**
  * @name    DELETE
  * @desc    Delete a message
@@ -21,7 +20,7 @@ export {dynamic} from '@/config/dynamic'
  */
 export const DELETE = async (
   request: NextRequest,
-  {params}: UrlParams
+  params: any
 ): Promise<NextResponse> => {
   try {
     const {
@@ -29,9 +28,8 @@ export const DELETE = async (
       success
     }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
-      const {id} = await params
       await connectToMongoDB()
-      const message: MessageDocument | null = await messageModel.findById(id)
+      const message: MessageDocument | null = await messageModel.findById(params.id)
       if (message) {
         if (sessionUser._id === message.recipient.toString()) {
           await messageModel.findByIdAndDelete(message._id)
@@ -60,7 +58,7 @@ export const DELETE = async (
  */
 export const PATCH = async (
   request: NextRequest,
-  {params}: UrlParams
+  params: any
 ): Promise<NextResponse> => {
   let status: string = 'read/unread'
   try {
@@ -69,9 +67,8 @@ export const PATCH = async (
       success
     }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
-      const {id} = await params
       await connectToMongoDB()
-      const message: MessageDocument | null = await messageModel.findById(id)
+      const message: MessageDocument | null = await messageModel.findById(params.id)
       if (message) {
         if (sessionUser._id = message.recipient.toString()) {
           const read: boolean = message.read

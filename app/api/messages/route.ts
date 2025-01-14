@@ -14,7 +14,8 @@ import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
 import serverErrorResponse from '@/httpResponses/serverErrorResponse'
 import noDataResponse from '@/httpResponses/noDataResponse'
 import badRequestResponse from '@/httpResponses/badRequestResponse'
-export {dynamic} from '@/config/dynamic'
+import PlainUser from '@/interfaces/PlainUser'
+export const dynamic = 'force-dynamic'
 /**
  * @name    GET
  * @desc    Get all messages
@@ -29,30 +30,23 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
       await connectToMongoDB()
-      return dataResponse(JSON.stringify((await messageModel
-        .find({
-          recipient: sessionUser._id
-        })
-        .populate(
-          'sender',
-          'username'
-        )
-        .populate(
-          'property',
-          'id name'
-        )
-        .sort({
-          read: 1,
-          createdAt: -1
-        })
-        .lean())
-        .map((message: FlattenMaps<MessageDocument>): PlainMessage => {
-          const plainMessage: PlainMessage = JSON.parse(JSON.stringify(message))
-          plainMessage.sender = JSON.parse(JSON.stringify(plainMessage.sender))
-          plainMessage.property = JSON.parse(JSON.stringify(plainMessage.property))
-          return plainMessage
-        }))
-      )
+      return dataResponse((await messageModel.find({
+        recipient: sessionUser._id
+      }).populate(
+        'sender',
+        'username'
+      ).populate(
+        'property',
+        'id name'
+      ).sort({
+        read: 1,
+        createdAt: -1
+      }).lean()).map((message: FlattenMaps<MessageDocument>): PlainMessage => {
+        const plainMessage: PlainMessage = JSON.parse(JSON.stringify(message))
+        plainMessage.sender = JSON.parse(JSON.stringify(plainMessage.sender))
+        plainMessage.property = JSON.parse(JSON.stringify(plainMessage.property))
+        return plainMessage
+      }))
     } else {
       return unauthorizedResponse
     }
@@ -77,7 +71,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
     }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
       const form: FormData = await request.formData()
-      const sender: string = sessionUser._id
+      const {_id: sender}: PlainUser = sessionUser
       const recipient: string | undefined = form.get('recipient')?.valueOf().toString()
       if (recipient && recipient !== sender) {
         await connectToMongoDB()

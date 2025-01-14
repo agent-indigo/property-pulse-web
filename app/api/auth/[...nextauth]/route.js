@@ -1,6 +1,6 @@
 import NextAuth from 'next-auth/next'
 import authOpts from '@/config/authOpts'
-export {dynamic} from '@/config/dynamic'
+export const dynamic = 'force-dynamic'
 const NextAuthHandler = NextAuth(authOpts)
 export {
   /**

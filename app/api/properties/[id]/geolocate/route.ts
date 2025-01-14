@@ -9,12 +9,10 @@ import {
 import propertyModel from '@/models/propertyModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import PropertyDocument from '@/interfaces/PropertyDocument'
-import PropertyLocation from '@/interfaces/PropertyLocation'
 import dataResponse from '@/httpResponses/dataResponse'
 import serverErrorResponse from '@/httpResponses/serverErrorResponse'
 import notFoundResponse from '@/httpResponses/notFoundResponse'
-import UrlParams from '@/interfaces/UrlParams'
-export {dynamic} from '@/config/dynamic'
+export const dynamic = 'force-dynamic'
 /**
  * @name    GET
  * @desc    Geolocate a property
@@ -23,31 +21,21 @@ export {dynamic} from '@/config/dynamic'
  */
 export const GET = async (
   request: NextRequest,
-  {params}: UrlParams
+  params: any
 ): Promise<NextResponse> => {
   const activity: string = 'geolocating property'
   try {
-    const {id} = await params
     await connectToMongoDB()
-    const property: PropertyDocument | null = await propertyModel.findById(id)
+    const property: PropertyDocument | null = await propertyModel.findById(params.id)
     if (property) {
-      const location: PropertyLocation = property.location
-      const geolocator: Client = new Client()
-      const response: GeocodeResponse = await geolocator.geocode({params: {
-        address: `${
-          location.street
-        } ${
-          location.city
-        } ${
-          location.state
-        } ${
-          location.zipcode
-        } USA`,
-        key: process.env.PRIVATE_GOOGLE_MAPS_GEOCODING_API_KEY ?? ''
-      }})
-      return response.status === 200
-      ? dataResponse(JSON.stringify(response.data.results[0].geometry.location))
-      : serverErrorResponse(
+      const {location}: PropertyDocument = property
+      const response: GeocodeResponse = await new Client().geocode({
+        params: {
+          address: `${location.street} ${location.city} ${location.state} ${location.zipcode} USA`,
+          key: process.env.PRIVATE_GOOGLE_MAPS_GEOCODING_API_KEY ?? ''
+        }
+      })
+      return response.status === 200 ? dataResponse(response.data.results[0].geometry.location) : serverErrorResponse(
         activity,
         'Geocoding error.'
       )

@@ -7,7 +7,7 @@ import propertyModel from '@/models/propertyModel'
 import PropertySearchQuery from '@/interfaces/PropertySearchQuery'
 import dataResponse from '@/httpResponses/dataResponse'
 import serverErrorResponse from '@/httpResponses/serverErrorResponse'
-export {dynamic} from '@/config/dynamic'
+export const dynamic = 'force-dynamic'
 /**
  * @name    GET
  * @desc    Get search results
@@ -16,7 +16,7 @@ export {dynamic} from '@/config/dynamic'
  */
 export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
-    const searchParams: URLSearchParams = new URL(request.url).searchParams
+    const {searchParams}: URL = new URL(request.url)
     const location: string | null = searchParams.get('location')
     const propertyType: string | null = searchParams.get('type')
     const page: string | null = searchParams.get('page')
@@ -45,14 +45,14 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
       'i'
     )
     await connectToMongoDB()
-    return dataResponse(JSON.stringify({
+    return dataResponse({
       properties: await propertyModel
         .find(query)
         .skip((parseInt(page && page !== '' ? page : '1') - 1) * 6)
         .limit(6)
         .lean(),
       total: (await propertyModel.find(query)).length
-    }))
+    })
   } catch (error: any) {
     return serverErrorResponse(
       'retrieving property search results',
