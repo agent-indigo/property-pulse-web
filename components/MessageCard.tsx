@@ -106,9 +106,7 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactEl
       </ul>
       <button
         onClick={handleToggle}
-        className={`mt-4 mr-3 ${
-          read ? 'bg-gray-300' : 'bg-blue-500 text-white'
-        } py-1 px-3 rounded-md`}
+        className={`mt-4 mr-3 ${read ? 'bg-gray-300' : 'bg-blue-500 text-white'} py-1 px-3 rounded-md`}
       >
         Mark as {read ? 'unread' : 'read'}
       </button>
