@@ -79,9 +79,9 @@ const PropertyCard: FunctionComponent<DestructuredProperty> = ({property}): Reac
         <div className='flex justify-center gap-4 text-green-900 text-sm mb-4'>
             <p>
               <FaMoneyBill className='inline mr-2'/>
-              {nightly && ' Nightly'}
-              {weekly && ' Weekly'}
-              {monthly && ' Monthly'}
+              {nightly && `$${nightly.toLocaleString()} Nightly${weekly && ' '}`}
+              {weekly && `$${weekly.toLocaleString()} Weekly${monthly && ' '}`}
+              {monthly && `$${monthly.toLocaleString()} Monthly`}
             </p>
         </div>
         <div className='border border-gray-100 mb-5'/>

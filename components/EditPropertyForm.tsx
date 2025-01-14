@@ -17,7 +17,7 @@ import PropertyContact from '@/interfaces/PropertyContact'
 const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
   const {
     _id,
-    name,
+    name: propertyName,
     type,
     rates,
     beds,
@@ -117,7 +117,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
           className='border rounded w-full py-2 px-3 mb-2'
           placeholder='eg. Beautiful Apartment In Miami'
           required
-          defaultValue={name}
+          defaultValue={propertyName}
         />
       </div>
       <div className='mb-4'>

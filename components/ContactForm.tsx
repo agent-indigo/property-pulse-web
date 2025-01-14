@@ -10,9 +10,14 @@ import State from '@/interfaces/State'
 import {useGlobalContext} from '@/components/GlobalContextProvider'
 import DestructuredProperty from '@/interfaces/DestructuredProperty'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
+import PlainProperty from '@/interfaces/PlainProperty'
 const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
+  const {
+    _id,
+    owner
+  }: PlainProperty = property
   const {user}: State = useGlobalContext()
-  const isOwner: boolean = user?._id === property.owner
+  const isOwner: boolean = user?._id === owner
   const handleSubmit: Function = async (form: FormData): Promise<void> => {
     const {
       error,
@@ -34,7 +39,7 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
             name='property'
             required
             readOnly
-            defaultValue={property._id}
+            defaultValue={_id}
           />
           <input
             type='hidden'
@@ -42,7 +47,7 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
             name='recipient'
             required
             readOnly
-            defaultValue={property.owner}
+            defaultValue={owner}
           />
           <div className='mb-4'>
             <label

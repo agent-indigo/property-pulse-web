@@ -76,13 +76,7 @@ const ShareButtons: FunctionComponent<DestructuredProperty> = ({property}): Reac
         <EmailShareButton
           url={url}
           subject={`${name} for rent`}
-          body={`I thought this ${
-            type
-          } might meet your needs:\n${
-            name
-          }\n${
-            url
-          }`}
+          body={`I thought this ${type} might meet your needs:\n${name}\n${url}`}
         >
           <EmailIcon
             size={40}

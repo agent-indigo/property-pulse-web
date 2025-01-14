@@ -15,9 +15,10 @@ import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import State from '@/interfaces/State'
 import {useGlobalContext} from '@/components/GlobalContextProvider'
 import DestructuredProperty from '@/interfaces/DestructuredProperty'
+import PlainProperty from '@/interfaces/PlainProperty'
 const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): ReactElement | null => {
   const {user}: State = useGlobalContext()
-  const propertyId: string = property._id
+  const {_id}: PlainProperty = property
   const [
     bookmarked,
     setBookmarked
@@ -38,7 +39,7 @@ const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): Re
           bookmarked,
           error,
           success
-        }: ServerActionResponse = await getPropertyBookmarked(propertyId)
+        }: ServerActionResponse = await getPropertyBookmarked(_id)
         if (success && bookmarked !== undefined) {
           setBookmarked(bookmarked)
         } else {
@@ -50,7 +51,7 @@ const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): Re
     }
     getStatus()
   }, [
-    propertyId,
+    _id,
     user
   ])
   const handleClick: MouseEventHandler<HTMLButtonElement> = async (): Promise<void> => {
@@ -59,7 +60,7 @@ const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): Re
       error,
       message,
       success
-    }: ServerActionResponse = await togglePropertyBookmarked(propertyId)
+    }: ServerActionResponse = await togglePropertyBookmarked(_id)
     if (success && bookmarked !== undefined) {
       setBookmarked(bookmarked)
       toast.success(message)
