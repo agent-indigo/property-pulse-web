@@ -129,18 +129,21 @@ const Navbar: FunctionComponent = (): ReactElement => {
           {!user && (
             <div className='hidden md:block md:ml-6'>
               <div className='flex items-center'>
-                {providers && Object.values(providers).map((provider: ClientSafeProvider): ReactElement => (
-                  <button
-                    key={provider.id}
-                    onClick={(): Promise<SignInResponse | undefined> => signIn(provider.id)}
-                    className='flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2'
-                  >
-                    <FaGoogle className='text-white mr-2'/>
-                    <span>
-                      Log In or Register
-                    </span>
-                  </button>
-                ))}
+                {providers && Object.values(providers).map((provider: ClientSafeProvider): ReactElement => {
+                  const {id}: ClientSafeProvider = provider
+                  return (
+                    <button
+                      key={id}
+                      onClick={(): Promise<SignInResponse | undefined> => signIn(id)}
+                      className='flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2'
+                    >
+                      <FaGoogle className='text-white mr-2'/>
+                      <span>
+                        Log In or Register
+                      </span>
+                    </button>
+                  )
+                })}
               </div>
             </div>
           )}
@@ -274,18 +277,21 @@ const Navbar: FunctionComponent = (): ReactElement => {
                 Add Property
               </Link>
             )}
-            {!user && providers && Object.values(providers).map((provider: ClientSafeProvider): ReactElement => (
-              <button
-                key={provider.id}
-                onClick={(): Promise<SignInResponse | undefined> => signIn(provider.id)}
-                className='flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2'
-              >
-                <FaGoogle className='text-white mr-2'/>
-                <span>
-                  Log In or Register
-                </span>
-              </button>
-            ))}
+            {!user && providers && Object.values(providers).map((provider: ClientSafeProvider): ReactElement => {
+              const {id}: ClientSafeProvider = provider
+              return (
+                <button
+                  key={id}
+                  onClick={(): Promise<SignInResponse | undefined> => signIn(id)}
+                  className='flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2'
+                >
+                  <FaGoogle className='text-white mr-2'/>
+                  <span>
+                    Log In or Register
+                  </span>
+                </button>
+              )
+            })}
           </div>
         </div>
       )}
