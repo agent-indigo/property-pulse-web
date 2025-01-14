@@ -5,9 +5,7 @@ import getSessionUser from '@/serverActions/getSessionUser'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import MessageDocument from '@/interfaces/MessageDocument'
 import messageModel from '@/models/messageModel'
-const toggleMessageRead: Function = async (
-  messageId: string
-): Promise<ServerActionResponse> => {
+const toggleMessageRead: Function = async (messageId: string): Promise<ServerActionResponse> => {
   try {
     const {
       error,
@@ -39,7 +37,7 @@ const toggleMessageRead: Function = async (
         }
       } else {
         return {
-          error: '404: Message Not Found',
+          error: '404: Message not found',
           success: false
         }
       }
@@ -51,7 +49,7 @@ const toggleMessageRead: Function = async (
     }
   } catch (error: any) {
     return {
-      error: `500: Internal Server Error:\n${error.toString()}`,
+      error: `500: Internal server error marking message as read/unread:\n${error.toString()}`,
       success: false
     }
   }

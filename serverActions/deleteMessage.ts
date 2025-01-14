@@ -5,9 +5,7 @@ import getSessionUser from '@/serverActions/getSessionUser'
 import MessageDocument from '@/interfaces/MessageDocument'
 import messageModel from '@/models/messageModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-const deleteMessage: Function = async (
-  messageId: string
-): Promise<ServerActionResponse> => {
+const deleteMessage: Function = async (messageId: string): Promise<ServerActionResponse> => {
   try {
     const {
       error,
@@ -36,7 +34,7 @@ const deleteMessage: Function = async (
         }
       } else {
         return {
-          error: '404: Message Not Found',
+          error: '404: Message not found',
           success: false
         }
       }
@@ -48,7 +46,7 @@ const deleteMessage: Function = async (
     }
   } catch (error: any) {
     return {
-      error: `500: Internal Server Error:\n${error.toString()}`,
+      error: `500: Internal server error deleting message:\n${error.toString()}`,
       success: false
     }
   }

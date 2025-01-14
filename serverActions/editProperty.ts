@@ -33,12 +33,7 @@ const editProperty: Function = async (
             beds: form.get('beds')?.valueOf().toString(),
             baths: form.get('baths')?.valueOf().toString(),
             square_feet: form.get('square_feet')?.valueOf().toString(),
-            amenities: form.getAll('amenities').map((
-              amenity: FormDataEntryValue
-            ): string => amenity
-              .valueOf()
-              .toString()
-            ),
+            amenities: form.getAll('amenities').map((amenity: FormDataEntryValue): string => amenity.valueOf().toString()),
             rates: {
               nightly: form.get('rates.nightly')?.valueOf().toString(),
               weekly: form.get('rates.weekly')?.valueOf().toString(),
@@ -66,7 +61,7 @@ const editProperty: Function = async (
         }
       } else {
         return {
-          error: '404: Property Not Found',
+          error: '404: Property not found',
           success: false
         }
       }
@@ -78,7 +73,7 @@ const editProperty: Function = async (
     }
   } catch (error: any) {
     return {
-      error: `500: Internal Server Error:\n${error.toString()}`,
+      error: `500: Internal server error editing property:\n${error.toString()}`,
       success: false
     }
   }

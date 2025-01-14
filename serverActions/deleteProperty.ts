@@ -6,9 +6,7 @@ import connectToMongoDB from '@/utilities/connectToMongoDB'
 import PropertyDocument from '@/interfaces/PropertyDocument'
 import propertyModel from '@/models/propertyModel'
 import cloudinary from '@/config/cloudinary'
-const deleteProperty: Function = async (
-  propertyId: string
-): Promise<ServerActionResponse> => {
+const deleteProperty: Function = async (propertyId: string): Promise<ServerActionResponse> => {
   try {
     const {
       error,
@@ -20,9 +18,7 @@ const deleteProperty: Function = async (
       const property: PropertyDocument | null = await propertyModel.findById(propertyId)
       if (property) {
         if (sessionUser._id === property.owner.toString()) {
-          property.imageIds.map(async (
-            imageId: string
-          ): Promise<void> => await cloudinary.uploader.destroy(imageId))
+          property.imageIds.map(async (imageId: string): Promise<void> => await cloudinary.uploader.destroy(imageId))
           await propertyModel.findByIdAndDelete(propertyId)
           revalidatePath(
             '/',
@@ -40,7 +36,7 @@ const deleteProperty: Function = async (
         }
       } else {
         return {
-          error: '404: Property Not Found',
+          error: '404: Property not found',
           success: false
         }
       }
@@ -52,7 +48,7 @@ const deleteProperty: Function = async (
     }
   } catch (error: any) {
     return {
-      error: `500: Internal Server Error:\n${error.toString()}`,
+      error: `500: Internal server error deleting property:\n${error.toString()}`,
       success: false
     }
   }

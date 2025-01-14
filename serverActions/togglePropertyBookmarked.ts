@@ -8,9 +8,7 @@ import PropertyDocument from '@/interfaces/PropertyDocument'
 import propertyModel from '@/models/propertyModel'
 import UserDocument from '@/interfaces/UserDocument'
 import userModel from '@/models/userModel'
-const togglePropertyBookmarked: Function = async (
-  propertyId: ObjectId
-): Promise<ServerActionResponse> => {
+const togglePropertyBookmarked: Function = async (propertyId: ObjectId): Promise<ServerActionResponse> => {
   try {
     const {
       error,
@@ -26,9 +24,7 @@ const togglePropertyBookmarked: Function = async (
           let bookmarked: boolean = user.bookmarks.includes(propertyId)
           let message: string
           if (bookmarked) {
-            user.bookmarks = user.bookmarks.filter((
-              bookmark: ObjectId
-            ): boolean => bookmark.toString() !== propertyId.toString())
+            user.bookmarks = user.bookmarks.filter((bookmark: ObjectId): boolean => bookmark.toString() !== propertyId.toString())
             bookmarked = false
             message = 'Bookmark removed.'
           } else {
@@ -66,7 +62,7 @@ const togglePropertyBookmarked: Function = async (
     }
   } catch (error: any) {
     return {
-      error: `500: Interval Server Error:\n${error.toString()}`,
+      error: `500: Interval server error adding/removing bookmark:\n${error.toString()}`,
       success: false
     }
   }

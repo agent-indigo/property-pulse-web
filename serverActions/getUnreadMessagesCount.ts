@@ -27,7 +27,7 @@ const getUnreadMessagesCount: Function = async (): Promise<ServerActionResponse>
     }
   } catch (error: any) {
     return {
-      error: `500: Internal Server Error:\n${error.toString()}`,
+      error: `500: Internal server error getting unread messages count:\n${error.toString()}`,
       success: false
     }
   }
