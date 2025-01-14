@@ -28,6 +28,10 @@ const RootLayout: FunctionComponent<DestructuredReactNode> = ({children}): React
     <GlobalContextProvider>
       <html lang='en'>
         <body className={inter.className}>
+          <noscript>
+            We're very sorry, but you will need to enable JavaScript in
+            your web browser before you will be able to use our website.
+          </noscript>
           <Navbar/>
           <main>
             {children}
