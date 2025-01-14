@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 }
 const PropertyPage: FunctionComponent<any> = async ({params}): Promise<ReactElement> => {
   await connectToMongoDB()
-  const property: PlainProperty = JSON.parse(JSON.stringify(await propertyModel.findById(params.id).lean()))
+  const property: PlainProperty = JSON.parse(JSON.stringify(await propertyModel.findById((await params).id).lean()))
   return (
     <>
       <PropertyHeaderImage image={property.images[0]}/>

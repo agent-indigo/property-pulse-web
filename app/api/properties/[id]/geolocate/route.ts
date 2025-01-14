@@ -26,7 +26,7 @@ export const GET = async (
   const activity: string = 'geolocating property'
   try {
     await connectToMongoDB()
-    const property: PropertyDocument | null = await propertyModel.findById(params.id)
+    const property: PropertyDocument | null = await propertyModel.findById((await params).id)
     if (property) {
       const {location}: PropertyDocument = property
       const response: GeocodeResponse = await new Client().geocode({

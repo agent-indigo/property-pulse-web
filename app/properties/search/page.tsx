@@ -22,7 +22,7 @@ const ResultsPage: FunctionComponent<any> = async ({searchParams}): Promise<Reac
     type = 'All',
     page = 1,
     size = 6
-  } = searchParams
+  } = await searchParams
   await connectToMongoDB()
   const query: PropertySearchQuery = {}
   if (location !== '') {

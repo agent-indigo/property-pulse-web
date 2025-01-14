@@ -16,7 +16,7 @@ const PropertiesPage: FunctionComponent<any> = async ({searchParams}): Promise<R
   const {
     page = 1,
     size = 6
-  } = searchParams
+  } = await searchParams
   await connectToMongoDB()
   const properties: PlainProperty[] = JSON.parse(JSON.stringify(await propertyModel
     .find()

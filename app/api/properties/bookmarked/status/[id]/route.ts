@@ -32,7 +32,7 @@ export const GET = async (
       success
     }: ServerActionResponse = await getSessionUser()
     return success && sessionUser ? dataResponse({
-      bookmarked: sessionUser.bookmarks.includes(params.id)
+      bookmarked: sessionUser.bookmarks.includes((await params).id)
     }) : unauthorizedResponse
   } catch (error: any) {
     return serverErrorResponse(
@@ -61,7 +61,7 @@ export const PATCH = async (
       await connectToMongoDB()
       const user: UserDocument | null = await userModel.findById(sessionUser._id)
       if (user) {
-        const property: PropertyDocument | null = await propertyModel.findById(params.id)
+        const property: PropertyDocument | null = await propertyModel.findById((await params).id)
         if (property) {
           if (user.id !== property.owner.toString()) {
             const {id}: PropertyDocument = property

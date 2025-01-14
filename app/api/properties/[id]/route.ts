@@ -27,7 +27,7 @@ export const GET = async (
 ): Promise<NextResponse> => {
   try {
     await connectToMongoDB()
-    const property: PropertyDocument | null = await propertyModel.findById(params.id)
+    const property: PropertyDocument | null = await propertyModel.findById((await params).id)
     return property ? dataResponse(JSON.stringify(property)) : notFoundResponse('Property')
   } catch (error: any) {
     return serverErrorResponse(
@@ -53,7 +53,7 @@ export const DELETE = async (
     }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
       await connectToMongoDB()
-      const property: PropertyDocument | null = await propertyModel.findById(params.id)
+      const property: PropertyDocument | null = await propertyModel.findById((await params).id)
       if (property) {
         if (sessionUser._id === property.owner.toString()) {
           property.imageIds.map(async (image: string): Promise<void> => await cloudinary.uploader.destroy(image))
@@ -92,7 +92,7 @@ export const PATCH = async (
     }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
       await connectToMongoDB()
-      const property: PropertyDocument | null = await propertyModel.findById(params.id)
+      const property: PropertyDocument | null = await propertyModel.findById((await params).id)
       if (property) {
         if (sessionUser._id === property.owner.toString()) {
           const form: FormData = await request.formData()
