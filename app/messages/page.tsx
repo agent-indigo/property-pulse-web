@@ -3,35 +3,28 @@ import {
   ReactElement
 } from 'react'
 import {Metadata} from 'next'
-import {FlattenMaps} from 'mongoose'
 import MessageCard from '@/components/MessageCard'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import messageModel from '@/models/messageModel'
 import getSessionUser from '@/serverActions/getSessionUser'
 import PlainMessage from '@/interfaces/PlainMessage'
-import MessageDocument from '@/interfaces/MessageDocument'
 export const metadata: Metadata = {
   title: 'Messages'
 }
 const MessagesPage: FunctionComponent = async (): Promise<ReactElement> => {
   await connectToMongoDB()
-  const messages: PlainMessage[] = (await messageModel.find({
+  const messages: PlainMessage[] = JSON.parse(JSON.stringify(await messageModel.find({
     recipient: (await getSessionUser()).sessionUser?._id
   }).populate(
     'sender',
     'username'
   ).populate(
     'property',
-    'id name'
+    '_id name'
   ).sort({
     read: 1,
     createdAt: -1
-  }).lean()).map((message: FlattenMaps<MessageDocument>): PlainMessage => {
-    const plainMessage: PlainMessage = JSON.parse(JSON.stringify(message))
-    plainMessage.sender = JSON.parse(JSON.stringify(plainMessage.sender))
-    plainMessage.property = JSON.parse(JSON.stringify(plainMessage.property))
-    return plainMessage
-  })
+  }).lean()))
   return (
     <section className='bg-blue-50'>
       <div className='container m-auto py-24 max-w-6xl'>

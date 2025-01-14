@@ -14,9 +14,11 @@ import State from '@/interfaces/State'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import DestructuredMessage from '@/interfaces/DestructuredMessage'
 import PlainMessage from '@/interfaces/PlainMessage'
+import PlainUser from '@/interfaces/PlainUser'
+import PlainProperty from '@/interfaces/PlainProperty'
 const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactElement | null => {
   const {
-    _id,
+    _id: messageId,
     body,
     email,
     phone,
@@ -25,6 +27,11 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactEl
     sender,
     createdAt
   }: PlainMessage = message
+  const {username}: PlainUser = sender
+  const {
+    _id: propertyId,
+    name
+  }: PlainProperty = property
   const [
     read,
     setRead
@@ -36,7 +43,7 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactEl
       message,
       read,
       success
-    }: ServerActionResponse = await toggleMessageRead(_id)
+    }: ServerActionResponse = await toggleMessageRead(messageId)
     if (success && read !== undefined) {
       setRead(read)
       setUnreadMessagesCount((previousValue: number): number => read ? previousValue - 1 : previousValue + 1)
@@ -50,7 +57,7 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactEl
       error,
       message,
       success
-    }: ServerActionResponse = await deleteMessage(_id)
+    }: ServerActionResponse = await deleteMessage(messageId)
     if (success) {
       setUnreadMessagesCount((previousValue: number): number => previousValue - 1)
       toast.success(message)
@@ -67,10 +74,10 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactEl
       )}
       <h2 className='text-xl mb-4'>
         <Link
-          href={`/properties/${property.id}`}
+          href={`/properties/${propertyId}`}
           className='text-blue-500'
         >
-          {property.name}
+          {name}
         </Link>
       </h2>
       {body && (
@@ -80,7 +87,7 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactEl
       )}
       <ul className='mt-4'>
         <li>
-          {sender.username}
+          {username}
         </li>
         <li>
           <a

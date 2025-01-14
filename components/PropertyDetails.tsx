@@ -125,11 +125,8 @@ const PropertyDetails: FunctionComponent<DestructuredProperty> = ({property}): R
           Amenities
         </h3>
         <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 list-none space-y-2'>
-          {amenities.map((
-            amenity: string,
-            index: number
-          ): ReactElement => (
-            <li key={index}>
+          {amenities.map((amenity: string): ReactElement => (
+            <li key={amenity}>
               <FaCheck className='inline-block text-green-600 mr-2'/>
               {amenity}
             </li>

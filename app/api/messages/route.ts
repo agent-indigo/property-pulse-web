@@ -2,13 +2,10 @@ import {
   NextRequest,
   NextResponse
 } from 'next/server'
-import {FlattenMaps} from 'mongoose'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import messageModel from '@/models/messageModel'
 import getSessionUser from '@/serverActions/getSessionUser'
-import MessageDocument from '@/interfaces/MessageDocument'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
-import PlainMessage from '@/interfaces/PlainMessage'
 import dataResponse from '@/httpResponses/dataResponse'
 import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
 import serverErrorResponse from '@/httpResponses/serverErrorResponse'
@@ -30,23 +27,18 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
       await connectToMongoDB()
-      return dataResponse((await messageModel.find({
+      return dataResponse(await messageModel.find({
         recipient: sessionUser._id
       }).populate(
         'sender',
         'username'
       ).populate(
         'property',
-        'id name'
+        '_id name'
       ).sort({
         read: 1,
         createdAt: -1
-      }).lean()).map((message: FlattenMaps<MessageDocument>): PlainMessage => {
-        const plainMessage: PlainMessage = JSON.parse(JSON.stringify(message))
-        plainMessage.sender = JSON.parse(JSON.stringify(plainMessage.sender))
-        plainMessage.property = JSON.parse(JSON.stringify(plainMessage.property))
-        return plainMessage
-      }))
+      }).lean())
     } else {
       return unauthorizedResponse
     }
