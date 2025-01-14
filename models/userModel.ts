@@ -9,7 +9,7 @@ const userModel: Model<UserDocument> = models.User ?? model<UserDocument>(
   'User',
   new Schema<UserDocument>({
     email: {
-      type: String,
+      type: Schema.Types.String,
       unique: true,
       required: [
         true,
@@ -17,14 +17,14 @@ const userModel: Model<UserDocument> = models.User ?? model<UserDocument>(
       ]
     },
     username: {
-      type: String,
+      type: Schema.Types.String,
       required: [
         true,
         'Please provide a user name.'
       ]
     },
     image: {
-      type: String
+      type: Schema.Types.String
     },
     bookmarks: [{
       type: Schema.Types.ObjectId,

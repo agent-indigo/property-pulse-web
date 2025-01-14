@@ -17,21 +17,21 @@ const propertyModel: Model<PropertyDocument> = models.Property ?? model<Property
       ]
     },
     name: {
-      type: String,
+      type: Schema.Types.String,
       required: [
         true,
         'Please provide a property name.'
       ]
     },
     type: {
-      type: String,
+      type: Schema.Types.String,
       required: [
         true,
         'Please provide the property type.'
       ]
     },
     description: {
-      type: String,
+      type: Schema.Types.String,
       required: [
         true,
         'Please provide a description.'
@@ -39,28 +39,28 @@ const propertyModel: Model<PropertyDocument> = models.Property ?? model<Property
     },
     location: {
       street: {
-        type: String,
+        type: Schema.Types.String,
         required: [
           true,
           'Please provide the street.'
         ]
       },
       city: {
-        type: String,
+        type: Schema.Types.String,
         required: [
           true,
           'Please provide the city.'
         ]
       },
       state: {
-        type: String,
+        type: Schema.Types.String,
         required: [
           true,
           'Please provide the state.'
         ]
       },
       zipcode: {
-        type: String,
+        type: Schema.Types.String,
         required: [
           true,
           'Please provide the zip code.'
@@ -68,28 +68,28 @@ const propertyModel: Model<PropertyDocument> = models.Property ?? model<Property
       }
     },
     beds: {
-      type: Number,
+      type: Schema.Types.Number,
       required: [
         true,
         'Please provide the number of beds.'
       ]
     },
     baths: {
-      type: Number,
+      type: Schema.Types.Number,
       required: [
         true,
         'Please provide the number of baths.'
       ]
     },
     square_feet: {
-      type: Number,
+      type: Schema.Types.Number,
       required: [
         true,
         'Please provide the size in square feet.'
       ]
     },
     amenities: [{
-      type: String,
+      type: Schema.Types.String,
       required: [
         true,
         'Please list the available amenities.'
@@ -97,32 +97,32 @@ const propertyModel: Model<PropertyDocument> = models.Property ?? model<Property
     }],
     rates: {
       nightly: {
-        type: Number
+        type: Schema.Types.Number
       },
       weekly: {
-        type: Number
+        type: Schema.Types.Number
       },
       monthly: {
-        type: Number
+        type: Schema.Types.Number
       }
     },
     seller_info: {
       name: {
-        type: String,
+        type: Schema.Types.String,
         required: [
           true,
           'Please provide the owner\'s name.'
         ]
       },
       email: {
-        type: String,
+        type: Schema.Types.String,
         required: [
           true,
           'Please provide the owner\'s email address.'
         ]
       },
       phone: {
-        type: String,
+        type: Schema.Types.String,
         required: [
           true,
           'Please provide the owner\'s phone number.'
@@ -130,21 +130,21 @@ const propertyModel: Model<PropertyDocument> = models.Property ?? model<Property
       }
     },
     images: [{
-      type: String,
+      type: Schema.Types.String,
       required: [
         true,
         'Please upload some photos of the property.'
       ]
     }],
     imageIds: [{
-      type: String,
+      type: Schema.Types.String,
       required: [
         true,
         'Please upload some photos of the property.'
       ]
     }],
     is_featured: {
-      type: Boolean,
+      type: Schema.Types.Boolean,
       default: false,
       required: true
     }

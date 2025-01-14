@@ -24,27 +24,27 @@ const messageModel: Model<MessageDocument> = models.Message ?? model<MessageDocu
       required: true
     },
     name: {
-      type: String,
+      type: Schema.Types.String,
       required: [
         true,
         'Please provide your name.'
       ]
     },
     email: {
-      type: String,
+      type: Schema.Types.String,
       required: [
         true,
         'Please provide your email address.'
       ]
     },
     phone: {
-      type: String
+      type: Schema.Types.String
     },
     body: {
-      type: String
+      type: Schema.Types.String
     },
     read: {
-      type: Boolean,
+      type: Schema.Types.Boolean,
       required: true,
       default: false
     }
