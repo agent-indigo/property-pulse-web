@@ -13,9 +13,7 @@ import ServerActionResponse from '@/interfaces/ServerActionResponse'
 const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
   const {user}: State = useGlobalContext()
   const isOwner: boolean = user?._id === property.owner
-  const handleSubmit: Function = async (
-    form: FormData
-  ): Promise<void> => {
+  const handleSubmit: Function = async (form: FormData): Promise<void> => {
     const {
       error,
       message,

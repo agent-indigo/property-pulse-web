@@ -17,16 +17,14 @@ import {
   EmailIcon
 } from 'react-share'
 import DestructuredProperty from '@/interfaces/DestructuredProperty'
-const ShareButtons: FunctionComponent<DestructuredProperty> = ({
-  property
-}): ReactElement => {
-  const url: string = `${
-    process.env.NEXT_PUBLIC_DOMAIN
-  }/properties/${
-    property._id
-  }`
-  const name: string = property.name
-  const type: string = property.type
+import PlainProperty from '@/interfaces/PlainProperty'
+const ShareButtons: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
+  const {
+    _id,
+    name,
+    type
+  }: PlainProperty = property
+  const url: string = `${process.env.NEXT_PUBLIC_DOMAIN}/properties/${_id}`
   return (
     <>
       <h3 className='text-xl font-bold text-center pt-2'>

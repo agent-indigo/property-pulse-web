@@ -1,9 +1,9 @@
-import Image from 'next/image'
-import {Metadata} from 'next'
 import {
   FunctionComponent,
   ReactElement
 } from 'react'
+import Image from 'next/image'
+import {Metadata} from 'next'
 import profileDefault from '@/assets/images/profile.png'
 import ProfileProperties from '@/components/ProfileProperties'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
@@ -17,10 +17,9 @@ export const metadata: Metadata = {
 const ProfilePage: FunctionComponent =  async (): Promise<ReactElement> => {
   const {sessionUser}: ServerActionResponse = await getSessionUser()
   await connectToMongoDB()
-  const properties: PlainProperty[] = JSON.parse(JSON.stringify(await propertyModel
-    .find({owner: sessionUser?._id})
-    .lean()
-  ))
+  const properties: PlainProperty[] = JSON.parse(JSON.stringify(await propertyModel.find({
+    owner: sessionUser?._id
+  }).lean()))
   return (
     <section className='bg-blue-50'>
       <div className='container m-auto py-24'>

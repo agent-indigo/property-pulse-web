@@ -1,7 +1,5 @@
 import PropertyRates from '@/interfaces/PropertyRates'
-const getRateDisplay: Function = (
-  rates: PropertyRates
-): string | undefined => {
+const getRateDisplay: Function = (rates: PropertyRates): string | undefined => {
   if (rates.monthly) {
     return `${rates.monthly?.toLocaleString()}/mo`
   } else if (rates.weekly) {

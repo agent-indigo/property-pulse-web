@@ -10,9 +10,40 @@ import editProperty from '@/serverActions/editProperty'
 import SubmitButton from '@/components/SubmitButton'
 import DestructuredProperty from '@/interfaces/DestructuredProperty'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
-const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
-  property
-}): ReactElement => {
+import PlainProperty from '@/interfaces/PlainProperty'
+import PropertyLocation from '@/interfaces/PropertyLocation'
+import PropertyRates from '@/interfaces/PropertyRates'
+import PropertyContact from '@/interfaces/PropertyContact'
+const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
+  const {
+    _id,
+    name,
+    type,
+    rates,
+    beds,
+    baths,
+    square_feet,
+    location,
+    description,
+    seller_info,
+    amenities
+  }: PlainProperty = property
+  const {
+    nightly,
+    weekly,
+    monthly
+  }: PropertyRates = rates
+  const {
+    city,
+    state,
+    street,
+    zipcode
+  }: PropertyLocation = location
+  const {
+    name: sellerName,
+    email,
+    phone
+  }: PropertyContact = seller_info
   const router: AppRouterInstance = useRouter()
   const handleSubmit: Function = async (form: FormData): Promise<void> => {
     const {
@@ -20,12 +51,12 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
       message,
       success
     }: ServerActionResponse = await editProperty(
-      property._id,
+      _id,
       form
     )
     if (success) {
       toast.success(message)
-      router.push(`/properties/${property._id}`)
+      router.push(`/properties/${_id}`)
     } else {
       toast.error(`Error saving changes:\n${error}`)
     }
@@ -47,7 +78,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
           name='type'
           className='border rounded w-full py-2 px-3'
           required
-          defaultValue={property.type}
+          defaultValue={type}
         >
           <option defaultValue='Apartment'>
             Apartment
@@ -86,7 +117,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
           className='border rounded w-full py-2 px-3 mb-2'
           placeholder='eg. Beautiful Apartment In Miami'
           required
-          defaultValue={property.name}
+          defaultValue={name}
         />
       </div>
       <div className='mb-4'>
@@ -102,7 +133,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
           className='border rounded w-full py-2 px-3'
           rows={4}
           placeholder='Add an optional description of your property'
-          defaultValue={property.description}
+          defaultValue={description}
         />
       </div>
       <div className='mb-4 bg-blue-50 p-4'>
@@ -118,7 +149,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
           name='location.street'
           className='border rounded w-full py-2 px-3 mb-2'
           placeholder='Street'
-          defaultValue={property.location.street}
+          defaultValue={street}
         />
         <input
           type='text'
@@ -127,7 +158,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
           className='border rounded w-full py-2 px-3 mb-2'
           placeholder='City'
           required
-          defaultValue={property.location.city}
+          defaultValue={city}
         />
         <input
           type='text'
@@ -136,7 +167,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
           className='border rounded w-full py-2 px-3 mb-2'
           placeholder='State'
           required
-          defaultValue={property.location.state}
+          defaultValue={state}
         />
         <input
           type='text'
@@ -144,7 +175,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
           name='location.zipcode'
           className='border rounded w-full py-2 px-3 mb-2'
           placeholder='Zipcode'
-          defaultValue={property.location.zipcode}
+          defaultValue={zipcode}
         />
       </div>
       <div className='mb-4 flex flex-wrap'>
@@ -161,7 +192,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
             name='beds'
             className='border rounded w-full py-2 px-3'
             required
-            defaultValue={property.beds}
+            defaultValue={beds}
           />
         </div>
         <div className='w-full sm:w-1/3 px-2'>
@@ -177,7 +208,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
             name='baths'
             className='border rounded w-full py-2 px-3'
             required
-            defaultValue={property.baths}
+            defaultValue={baths}
           />
         </div>
         <div className='w-full sm:w-1/3 pl-2'>
@@ -193,7 +224,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
             name='square_feet'
             className='border rounded w-full py-2 px-3'
             required
-            defaultValue={property.square_feet}
+            defaultValue={square_feet}
           />
         </div>
       </div>
@@ -212,7 +243,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
               name='amenities'
               defaultValue='Wifi'
               className='mr-2'
-              defaultChecked={property.amenities.includes('Wifi')}
+              defaultChecked={amenities.includes('Wifi')}
             />
             <label htmlFor='amenity_wifi'>
               Wifi
@@ -225,7 +256,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
               name='amenities'
               defaultValue='Full Kitchen'
               className='mr-2'
-              defaultChecked={property.amenities.includes('Full Kitchen')}
+              defaultChecked={amenities.includes('Full Kitchen')}
             />
             <label htmlFor='amenity_kitchen'>
               Full kitchen
@@ -238,7 +269,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
               name='amenities'
               defaultValue='Washer & Dryer'
               className='mr-2'
-              defaultChecked={property.amenities.includes('Washer & Dryer')}
+              defaultChecked={amenities.includes('Washer & Dryer')}
             />
             <label htmlFor='amenity_washer_dryer'>
               Washer & Dryer
@@ -251,7 +282,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
               name='amenities'
               defaultValue='Free Parking'
               className='mr-2'
-              defaultChecked={property.amenities.includes('Free Parking')}
+              defaultChecked={amenities.includes('Free Parking')}
             />
             <label htmlFor='amenity_free_parking'>
               Free Parking
@@ -264,7 +295,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
               name='amenities'
               defaultValue='Swimming Pool'
               className='mr-2'
-              defaultChecked={property.amenities.includes('Swimming Pool')}
+              defaultChecked={amenities.includes('Swimming Pool')}
             />
             <label htmlFor='amenity_pool'>
               Swimming Pool
@@ -277,7 +308,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
               name='amenities'
               defaultValue='Hot Tub'
               className='mr-2'
-              defaultChecked={property.amenities.includes('Hot Tub')}
+              defaultChecked={amenities.includes('Hot Tub')}
             />
             <label htmlFor='amenity_hot_tub'>
               Hot Tub
@@ -290,7 +321,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
               name='amenities'
               defaultValue='24/7 Security'
               className='mr-2'
-              defaultChecked={property.amenities.includes('24/7 Security')}
+              defaultChecked={amenities.includes('24/7 Security')}
             />
             <label htmlFor='amenity_24_7_security'>
               24/7 Security
@@ -303,7 +334,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
               name='amenities'
               defaultValue='Wheelchair Accessible'
               className='mr-2'
-              defaultChecked={property.amenities.includes('Wheelchair Accessible')}
+              defaultChecked={amenities.includes('Wheelchair Accessible')}
             />
             <label htmlFor='amenity_wheelchair_accessible'>
               Wheelchair Accessible
@@ -316,7 +347,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
               name='amenities'
               defaultValue='Elevator Access'
               className='mr-2'
-              defaultChecked={property.amenities.includes('Elevator Access')}
+              defaultChecked={amenities.includes('Elevator Access')}
             />
             <label htmlFor='amenity_elevator_access'>
               Elevator Access
@@ -329,7 +360,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
               name='amenities'
               defaultValue='Dishwasher'
               className='mr-2'
-              defaultChecked={property.amenities.includes('Dishwasher')}
+              defaultChecked={amenities.includes('Dishwasher')}
             />
             <label htmlFor='amenity_dishwasher'>
               Dishwasher
@@ -342,7 +373,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
               name='amenities'
               defaultValue='Gym/Fitness Center'
               className='mr-2'
-              defaultChecked={property.amenities.includes('Gym/Fitness Center')}
+              defaultChecked={amenities.includes('Gym/Fitness Center')}
             />
             <label htmlFor='amenity_gym_fitness_center'>
               Gym/Fitness Center
@@ -355,7 +386,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
               name='amenities'
               defaultValue='Air Conditioning'
               className='mr-2'
-              defaultChecked={property.amenities.includes('Air Conditioning')}
+              defaultChecked={amenities.includes('Air Conditioning')}
             />
             <label htmlFor='amenity_air_conditioning'>
               Air Conditioning
@@ -368,7 +399,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
               name='amenities'
               defaultValue='Balcony/Patio'
               className='mr-2'
-              defaultChecked={property.amenities.includes('Balcony/Patio')}
+              defaultChecked={amenities.includes('Balcony/Patio')}
             />
             <label htmlFor='amenity_balcony_patio'>
               Balcony/Patio
@@ -381,7 +412,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
               name='amenities'
               defaultValue='Smart TV'
               className='mr-2'
-              defaultChecked={property.amenities.includes('Smart TV')}
+              defaultChecked={amenities.includes('Smart TV')}
             />
             <label htmlFor='amenity_smart_tv'>
               Smart TV
@@ -394,7 +425,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
               name='amenities'
               defaultValue='Coffee Maker'
               className='mr-2'
-              defaultChecked={property.amenities.includes('Coffee Maker')}
+              defaultChecked={amenities.includes('Coffee Maker')}
             />
             <label htmlFor='amenity_coffee_maker'>
               Coffee Maker
@@ -422,7 +453,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
               id='weekly_rate'
               name='rates.weekly'
               className='border rounded w-full py-2 px-3'
-              defaultValue={property.rates.weekly}
+              defaultValue={weekly}
             />
           </div>
           <div className='flex items-center'>
@@ -437,7 +468,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
               id='monthly_rate'
               name='rates.monthly'
               className='border rounded w-full py-2 px-3'
-              defaultValue={property.rates.monthly}
+              defaultValue={monthly}
             />
           </div>
           <div className='flex items-center'>
@@ -452,7 +483,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
               id='nightly_rate'
               name='rates.nightly'
               className='border rounded w-full py-2 px-3'
-              defaultValue={property.rates.nightly}
+              defaultValue={nightly}
             />
           </div>
         </div>
@@ -470,7 +501,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
           name='seller_info.name'
           className='border rounded w-full py-2 px-3'
           placeholder='Name'
-          defaultValue={property.seller_info.name}
+          defaultValue={sellerName}
         />
       </div>
       <div className='mb-4'>
@@ -487,7 +518,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
           className='border rounded w-full py-2 px-3'
           placeholder='Email address'
           required
-          defaultValue={property.seller_info.email}
+          defaultValue={email}
         />
       </div>
       <div className='mb-4'>
@@ -503,7 +534,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({
           name='seller_info.phone'
           className='border rounded w-full py-2 px-3'
           placeholder='Phone'
-          defaultValue={property.seller_info.phone}
+          defaultValue={phone}
         />
       </div>
       <div>

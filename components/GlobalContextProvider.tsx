@@ -19,9 +19,7 @@ const GlobalContext: Context<State> = createContext<State>({
   unreadMessagesCount: 0,
   setUnreadMessagesCount: (): void => {}
 })
-const GlobalContextProvider: FunctionComponent<DestructuredReactNode> = ({
-  children
-}): ReactElement => {
+const GlobalContextProvider: FunctionComponent<DestructuredReactNode> = ({children}): ReactElement => {
   const [
     unreadMessagesCount,
     setUnreadMessagesCount
@@ -30,34 +28,29 @@ const GlobalContextProvider: FunctionComponent<DestructuredReactNode> = ({
     user,
     setUser
   ] = useState<PlainUser | undefined>(undefined)
-  useEffect(
-    (): void => {
-      const getUser: Function = async (): Promise<void> => {
-        const {
-          success,
-          sessionUser
-        }: ServerActionResponse = await getSessionUser()
-        success && sessionUser && setUser(sessionUser)
-      }
-      getUser()
-    },
-    []
-  )
-  useEffect(
-    (): void => {
-      const getCount: Function = async (): Promise<void> => {
-        const {
-          error,
-          success,
-          unreadMessagesCount
-        }: ServerActionResponse = await getUnreadMessagesCount()
-        success && unreadMessagesCount !== undefined
-        ? setUnreadMessagesCount(unreadMessagesCount)
-        : toast.error(`Error retrieving unread messages count:\n${error?.toString()}`)
-      }
-      user && getCount()
+  useEffect((): void => {
+    const getUser: Function = async (): Promise<void> => {
+      const {
+        success,
+        sessionUser
+      }: ServerActionResponse = await getSessionUser()
+      success && sessionUser && setUser(sessionUser)
     }
-  )
+    getUser()
+  }, [])
+  useEffect((): void => {
+    const getCount: Function = async (): Promise<void> => {
+      const {
+        error,
+        success,
+        unreadMessagesCount
+      }: ServerActionResponse = await getUnreadMessagesCount()
+      success && unreadMessagesCount !== undefined
+      ? setUnreadMessagesCount(unreadMessagesCount)
+      : toast.error(`Error retrieving unread messages count:\n${error?.toString()}`)
+    }
+    user && getCount()
+  })
   return (
     <GlobalContext.Provider value={{
       unreadMessagesCount,

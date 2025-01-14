@@ -9,14 +9,9 @@ import PropertyCard from '@/components/PropertyCard'
 import PlainProperty from '@/interfaces/PlainProperty'
 const HomeProperties: FunctionComponent = async (): Promise<ReactElement> => {
   await connectToMongoDB()
-  const properties: PlainProperty[] = JSON.parse(JSON.stringify(await propertyModel
-    .find()
-    .sort({
-      createdAt: -1
-    })
-    .limit(3)
-    .lean()
-  ))
+  const properties: PlainProperty[] = JSON.parse(JSON.stringify(await propertyModel.find().sort({
+    createdAt: -1
+  }).limit(3).lean()))
   return (
     <>
       <section className='px-4 py-6'>

@@ -10,9 +10,7 @@ import {toast} from 'react-toastify'
 import deleteProperty from '@/serverActions/deleteProperty'
 import Properties from '@/interfaces/Properties'
 import PlainProperty from '@/interfaces/PlainProperty'
-const ProfileProperties: FunctionComponent<Properties> = ({
-  properties: received
-}): ReactElement => {
+const ProfileProperties: FunctionComponent<Properties> = ({properties: received}): ReactElement => {
   const [
     properties,
     setProperties
@@ -24,9 +22,7 @@ const ProfileProperties: FunctionComponent<Properties> = ({
         message,
         success
       } = await deleteProperty(propertyId)
-      setProperties(properties.filter((
-        property: PlainProperty
-      ): boolean => property._id !== propertyId))
+      setProperties(properties.filter((property: PlainProperty): boolean => property._id !== propertyId))
       success ? toast.success(message) : toast.error(`Error deleting property:\n${error}`)
     }
   }

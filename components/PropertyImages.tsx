@@ -9,9 +9,7 @@ import {
   Item
 } from 'react-photoswipe-gallery'
 import Images from '@/interfaces/Images'
-const PropertyImages: FunctionComponent<Images> = ({
-  images
-}): ReactElement => {
+const PropertyImages: FunctionComponent<Images> = ({images}): ReactElement => {
   const image: string = images[0]
   return (
     <Gallery>

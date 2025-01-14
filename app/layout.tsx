@@ -23,9 +23,7 @@ export const metadata: Metadata = {
   description: 'Find the perfect rental property.',
   keywords: 'find, rental, property'
 }
-const RootLayout: FunctionComponent<DestructuredReactNode> = ({
-  children
-}): ReactElement => (
+const RootLayout: FunctionComponent<DestructuredReactNode> = ({children}): ReactElement => (
   <AuthProvider>
     <GlobalContextProvider>
       <html lang='en'>

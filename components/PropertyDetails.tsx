@@ -14,22 +14,43 @@ import PropertyMap from '@/components/PropertyMap'
 import PropertyLocation from '@/interfaces/PropertyLocation'
 import PropertyRates from '@/interfaces/PropertyRates'
 import DestructuredProperty from '@/interfaces/DestructuredProperty'
+import PlainProperty from '@/interfaces/PlainProperty'
 const PropertyDetails: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
-  const location: PropertyLocation = property.location
-  const rates: PropertyRates = property.rates
+  const {
+    name,
+    type,
+    rates,
+    beds,
+    baths,
+    square_feet,
+    location,
+    description,
+    amenities
+  }: PlainProperty = property
+  const {
+    nightly,
+    weekly,
+    monthly
+  }: PropertyRates = rates
+  const {
+    street,
+    city,
+    state,
+    zipcode
+  }: PropertyLocation = location
   return (
     <section>
       <div className='bg-white p-6 rounded-lg shadow-md text-center md:text-left'>
         <div className='text-gray-500 mb-4'>
-          {property.type}
+          {type}
         </div>
         <h1 className='text-3xl font-bold mb-4'>
-          {property.name}
+          {name}
         </h1>
         <div className='text-gray-500 mb-4 flex align-middle justify-center md:justify-start'>
           <FaMapMarker className='text-lg text-orange-700 mr-2'/>
           <p className='text-orange-700'>
-            {location.street}, {location.city}, {location.state}, {location.zipcode}
+            {street}, {city}, {state}, {zipcode}
           </p>
         </div>
         <h3 className='text-lg font-bold my-6 bg-gray-800 text-white p-2'>
@@ -40,9 +61,9 @@ const PropertyDetails: FunctionComponent<DestructuredProperty> = ({property}): R
             <div className='text-gray-500 mr-2 font-bold'>
               Nightly
             </div>
-              {rates.nightly ? (
+              {nightly ? (
                 <div className='text-2xl font-bold text-blue-500'>
-                  ${rates.nightly.toLocaleString()}
+                  ${nightly.toLocaleString()}
                 </div>
               ) : (
                 <FaTimes className='text-red-700'/>
@@ -52,9 +73,9 @@ const PropertyDetails: FunctionComponent<DestructuredProperty> = ({property}): R
             <div className='text-gray-500 mr-2 font-bold'>
               Weekly
             </div>
-              {rates.weekly ? (
+              {weekly ? (
                 <div className='text-2xl font-bold text-blue-500'>
-                  ${rates.weekly.toLocaleString()}
+                  ${weekly.toLocaleString()}
                 </div>
               ) : (
                 <FaTimes className='text-red-700'/>
@@ -64,9 +85,9 @@ const PropertyDetails: FunctionComponent<DestructuredProperty> = ({property}): R
             <div className='text-gray-500 mr-2 font-bold'>
               Monthly
             </div>
-              {rates.monthly ? (
+              {monthly ? (
                 <div className='text-2xl font-bold text-blue-500'>
-                  ${rates.monthly.toLocaleString()}
+                  ${monthly.toLocaleString()}
                 </div>
               ) : (
                 <FaTimes className='text-red-700'/>
@@ -81,22 +102,22 @@ const PropertyDetails: FunctionComponent<DestructuredProperty> = ({property}): R
         <div className='flex justify-center gap-4 text-blue-500 mb-4 text-xl space-x-9'>
           <p>
             <FaBed className='inline-block mr-2'/>
-            {property.beds}
+            {beds}
             <span className='hidden sm:inline'> Beds</span>
           </p>
           <p>
             <FaBath className='inline-block mr-2'/>
-            {property.baths}
+            {baths}
             <span className='hidden sm:inline'> Baths</span>
           </p>
           <p>
             <FaRulerCombined className='inline-block mr-2'/>
-            {property.square_feet}
+            {square_feet}
             <span className='hidden sm:inline'> sqft</span>
           </p>
         </div>
         <p className='text-gray-500 mb-4'>
-          {property.description}
+          {description}
         </p>
       </div>
       <div className='bg-white p-6 rounded-lg shadow-md mt-6'>
@@ -104,7 +125,7 @@ const PropertyDetails: FunctionComponent<DestructuredProperty> = ({property}): R
           Amenities
         </h3>
         <ul className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 list-none space-y-2'>
-          {property.amenities.map((
+          {amenities.map((
             amenity: string,
             index: number
           ): ReactElement => (

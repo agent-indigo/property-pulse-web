@@ -13,13 +13,11 @@ import {
 } from '@react-google-maps/api'
 import Spinner from '@/components/Spinner'
 import geoLocateProperty from '@/serverActions/geoLocateProperty'
-import PropertyLocation from '@/interfaces/PropertyLocation'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import DestructuredProperty from '@/interfaces/DestructuredProperty'
-const PropertyMap: FunctionComponent<DestructuredProperty> = ({
-  property
-}): ReactElement => {
-  const location: PropertyLocation = property.location
+import PlainProperty from '@/interfaces/PlainProperty'
+const PropertyMap: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
+  const {location}: PlainProperty = property
   const [
     lat,
     setLat
@@ -36,28 +34,25 @@ const PropertyMap: FunctionComponent<DestructuredProperty> = ({
     errorOccured,
     setErrorOccured
   ] = useState<boolean>(false)
-  useEffect(
-    (): void => {
-      const geoLocate: Function = async (): Promise<void> => {
-        const {
-          error,
-          lat,
-          lng,
-          success
-        }: ServerActionResponse = await geoLocateProperty(location)
-        if (success && lat !== undefined && lng !== undefined) {
-          setLat(lat)
-          setLng(lng)
-        } else {
-          toast.error(`Error geolocating property:\n${error}`)
-          setErrorOccured(true)
-        }
-        setLoading(false)
+  useEffect((): void => {
+    const geoLocate: Function = async (): Promise<void> => {
+      const {
+        error,
+        lat,
+        lng,
+        success
+      }: ServerActionResponse = await geoLocateProperty(location)
+      if (success && lat !== undefined && lng !== undefined) {
+        setLat(lat)
+        setLng(lng)
+      } else {
+        toast.error(`Error geolocating property:\n${error}`)
+        setErrorOccured(true)
       }
-      geoLocate()
-    },
-    [location]
-  )
+      setLoading(false)
+    }
+    geoLocate()
+  }, [location])
   return loading ? <Spinner loading={loading}/> : errorOccured ? (
     <h1 className='text-red-500 text-center font-bold'>
       Error geolocating property.

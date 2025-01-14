@@ -13,17 +13,22 @@ import toggleMessageRead from '@/serverActions/toggleMessageRead'
 import State from '@/interfaces/State'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import DestructuredMessage from '@/interfaces/DestructuredMessage'
-const MessageCard: FunctionComponent<DestructuredMessage> = ({
-  message
-}): ReactElement | null => {
-  const messageId: string = message._id
-  const body: string | undefined = message.body
-  const email: string = message.email
-  const phone: string | undefined = message.phone
+import PlainMessage from '@/interfaces/PlainMessage'
+const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactElement | null => {
+  const {
+    _id,
+    body,
+    email,
+    phone,
+    read: messageRead,
+    property,
+    sender,
+    createdAt
+  }: PlainMessage = message
   const [
     read,
     setRead
-  ] = useState<boolean | undefined>(message.read)
+  ] = useState<boolean | undefined>(messageRead)
   const {setUnreadMessagesCount}: State = useGlobalContext()
   const handleToggle: MouseEventHandler<HTMLButtonElement> = async (): Promise<void> => {
     const {
@@ -31,12 +36,10 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({
       message,
       read,
       success
-    }: ServerActionResponse = await toggleMessageRead(messageId)
+    }: ServerActionResponse = await toggleMessageRead(_id)
     if (success && read !== undefined) {
       setRead(read)
-      setUnreadMessagesCount((
-        previousValue: number
-      ): number => read ? previousValue - 1 : previousValue + 1)
+      setUnreadMessagesCount((previousValue: number): number => read ? previousValue - 1 : previousValue + 1)
       toast.success(message)
     } else {
       toast.error(`Error marking message as read/unread:\n${error}`)
@@ -47,7 +50,7 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({
       error,
       message,
       success
-    }: ServerActionResponse = await deleteMessage(messageId)
+    }: ServerActionResponse = await deleteMessage(_id)
     if (success) {
       setUnreadMessagesCount((previousValue: number): number => previousValue - 1)
       toast.success(message)
@@ -64,10 +67,10 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({
       )}
       <h2 className='text-xl mb-4'>
         <Link
-          href={`/properties/${message.property.id}`}
+          href={`/properties/${property.id}`}
           className='text-blue-500'
         >
-          {message.property.name}
+          {property.name}
         </Link>
       </h2>
       {body && (
@@ -77,7 +80,7 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({
       )}
       <ul className='mt-4'>
         <li>
-          {message.sender.username}
+          {sender.username}
         </li>
         <li>
           <a
@@ -98,7 +101,7 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({
           </li>
         )}
         <li>
-          {message.createdAt}
+          {createdAt}
         </li>
       </ul>
       <button

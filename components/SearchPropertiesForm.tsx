@@ -20,6 +20,10 @@ const SearchPropertiesForm: FunctionComponent = (): ReactElement => {
   ] = useState<PropertySearchParams>({
     type: 'All'
   })
+  const {
+    location,
+    type
+  }: PropertySearchParams = fields
   const handleChange: ChangeEventHandler<HTMLInputElement | HTMLSelectElement> = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
     const {
       name,
@@ -32,7 +36,7 @@ const SearchPropertiesForm: FunctionComponent = (): ReactElement => {
   }
   const handleSubmit: FormEventHandler<HTMLFormElement> = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault()
-    router.push(`/properties/search?location=${fields.location}&type=${fields.type}&page=1`)
+    router.push(`/properties/search?location=${location}&type=${type}&page=1`)
   }
   return (
     <form
@@ -51,7 +55,7 @@ const SearchPropertiesForm: FunctionComponent = (): ReactElement => {
           id='location'
           name='location'
           placeholder='Enter keywords or location'
-          value={fields.location}
+          value={location}
           onChange={handleChange}
           className='w-full px-4 py-3 rounded-lg bg-white text-gray-800 focus:outline-none focus:ring focus:ring-blue-500'
         />
@@ -66,7 +70,7 @@ const SearchPropertiesForm: FunctionComponent = (): ReactElement => {
         <select
           id='type'
           name='type'
-          value={fields.type}
+          value={type}
           onChange={handleChange}
           className='w-full px-4 py-3 rounded-lg bg-white text-gray-800 focus:outline-none focus:ring focus:ring-blue-500'
         >

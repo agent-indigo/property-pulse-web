@@ -15,13 +15,32 @@ import getRateDisplay from '@/utilities/getRateDisplay'
 import PropertyLocation from '@/interfaces/PropertyLocation'
 import PropertyRates from '@/interfaces/PropertyRates'
 import DestructuredProperty from '@/interfaces/DestructuredProperty'
+import PlainProperty from '@/interfaces/PlainProperty'
 const PropertyCard: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
-  const location: PropertyLocation = property.location
-  const rates: PropertyRates = property.rates
+  const {
+    _id,
+    images,
+    name,
+    type,
+    rates,
+    beds,
+    baths,
+    square_feet,
+    location,
+  }: PlainProperty = property
+  const {
+    nightly,
+    weekly,
+    monthly
+  }: PropertyRates = rates
+  const {
+    city,
+    state
+  }: PropertyLocation = location
   return (
     <div className='rounded-xl shadow-md relative'>
       <Image
-        src={property.images[0]}
+        src={images[0]}
         alt=''
         height={0}
         width={0}
@@ -31,38 +50,38 @@ const PropertyCard: FunctionComponent<DestructuredProperty> = ({property}): Reac
       <div className='p-4'>
         <div className='text-left md:text-center lg:text-left mb-6'>
           <div className='text-gray-600'>
-            {property.type}
+            {type}
           </div>
           <h3 className='text-xl font-bold'>
-            {property.name}
+            {name}
           </h3>
         </div>
         <h3 className='absolute top-[10px] right-[10px] bg-white px-4 py-2 rounded-lg text-blue-500 font-bold text-right md:text-center lg:text-right'>
-          ${getRateDisplay(property.rates)}
+          ${getRateDisplay(rates)}
         </h3>
         <div className='flex justify-center gap-4 text-gray-500 mb-4'>
           <p>
             <FaBed className='inline mr-2'/>
-            {property.beds}
+            {beds}
             <span className='md:hidden lg:inline'> Beds</span>
           </p>
           <p>
             <FaBath className='inline mr-2'/>
-            {property.baths}
+            {baths}
             <span className='md:hidden lg:inline'> Baths</span>
           </p>
           <p>
             <FaRulerCombined className='inline mr-2'/>
-            {property.square_feet}
+            {square_feet}
             <span className='md:hidden lg:inline'> sqft</span>
           </p>
         </div>
         <div className='flex justify-center gap-4 text-green-900 text-sm mb-4'>
             <p>
               <FaMoneyBill className='inline mr-2'/>
-              {rates.nightly && ' Nightly'}
-              {rates.weekly && ' Weekly'}
-              {rates.monthly && ' Monthly'}
+              {nightly && ' Nightly'}
+              {weekly && ' Weekly'}
+              {monthly && ' Monthly'}
             </p>
         </div>
         <div className='border border-gray-100 mb-5'/>
@@ -70,11 +89,11 @@ const PropertyCard: FunctionComponent<DestructuredProperty> = ({property}): Reac
           <div className='flex align-middle gap-2 mb-4 lg:mb-0'>
             <FaMapMarker className='text-orange-700 mt-1'/>
             <span className='text-orange-700'>
-              {location.city}, {location.state}
+              {city}, {state}
             </span>
           </div>
           <Link
-            href={`/properties/${property._id}`}
+            href={`/properties/${_id}`}
             className='h-[36px] bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-center text-sm'
           >
             Details
