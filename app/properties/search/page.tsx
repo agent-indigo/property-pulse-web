@@ -6,7 +6,6 @@ import {Metadata} from 'next'
 import Link from 'next/link'
 import {FaArrowCircleLeft} from 'react-icons/fa'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import UrlSearchParams from '@/interfaces/UrlSearchParams'
 import PropertySearchQuery from '@/interfaces/PropertySearchQuery'
 import propertyModel from '@/models/propertyModel'
 import SearchPropertiesForm from '@/components/SearchPropertiesForm'
@@ -17,15 +16,13 @@ import PlainProperty from '@/interfaces/PlainProperty'
 export const metadata: Metadata = {
   title: 'Search Results'
 }
-const ResultsPage: FunctionComponent<UrlSearchParams> = async ({
-  searchParams
-}): Promise<ReactElement> => {
+const ResultsPage: FunctionComponent<any> = async ({searchParams}): Promise<ReactElement> => {
   const {
     location = '',
     type = 'All',
     page = 1,
     size = 6
-  } = await searchParams
+  } = searchParams
   await connectToMongoDB()
   const query: PropertySearchQuery = {}
   if (location !== '') {

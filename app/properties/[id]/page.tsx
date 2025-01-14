@@ -14,19 +14,12 @@ import ShareButtons from '@/components/ShareButtons'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
 import PlainProperty from '@/interfaces/PlainProperty'
-import UrlParams from '@/interfaces/UrlParams'
 export const metadata: Metadata = {
   title: 'Property Details'
 }
-const PropertyPage: FunctionComponent<UrlParams> = async ({
-  params
-}): Promise<ReactElement> => {
-  const {id} = await params
+const PropertyPage: FunctionComponent<any> = async ({params}): Promise<ReactElement> => {
   await connectToMongoDB()
-  const property: PlainProperty = JSON.parse(JSON.stringify(await propertyModel
-    .findById(id)
-    .lean()
-  ))
+  const property: PlainProperty = JSON.parse(JSON.stringify(await propertyModel.findById(params.id).lean()))
   return (
     <>
       <PropertyHeaderImage image={property.images[0]}/>

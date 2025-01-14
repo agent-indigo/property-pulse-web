@@ -7,19 +7,16 @@ import SearchPropertiesForm from '@/components/SearchPropertiesForm'
 import Properties from '@/components/Properties'
 import propertyModel from '@/models/propertyModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import UrlSearchParams from '@/interfaces/UrlSearchParams'
 import FeaturedProperties from '@/components/FeaturedProperties'
 import PlainProperty from '@/interfaces/PlainProperty'
 export const metadata: Metadata = {
   title: 'Properties'
 }
-const PropertiesPage: FunctionComponent<UrlSearchParams> = async ({
-  searchParams
-}): Promise<ReactElement> => {
+const PropertiesPage: FunctionComponent<any> = async ({searchParams}): Promise<ReactElement> => {
   const {
     page = 1,
     size = 6
-  } = await searchParams
+  } = searchParams
   await connectToMongoDB()
   const properties: PlainProperty[] = JSON.parse(JSON.stringify(await propertyModel
     .find()

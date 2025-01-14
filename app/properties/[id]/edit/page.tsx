@@ -6,23 +6,16 @@ import {Metadata} from 'next'
 import EditPropertyForm from '@/components/EditPropertyForm'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
-import UrlParams from '@/interfaces/UrlParams'
 export const metadata: Metadata = {
   title: 'Edit Property'
 }
-const EditPropertyPage: FunctionComponent<UrlParams> = async ({
-  params
-}): Promise<ReactElement> => {
-  const {id} = await params
+const EditPropertyPage: FunctionComponent<any> = async ({params}): Promise<ReactElement> => {
   await connectToMongoDB()
   return (
     <section className='bg-blue-50'>
       <div className='container m-auto max-w-2xl py-24'>
         <div className='bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0'>
-          <EditPropertyForm property={JSON.parse(JSON.stringify(await propertyModel
-            .findById(id)
-            .lean()
-          ))}/>
+          <EditPropertyForm property={JSON.parse(JSON.stringify(await propertyModel.findById(params.id).lean()))}/>
         </div>
       </div>
     </section>
