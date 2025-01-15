@@ -6,11 +6,6 @@ import connectToMongoDB from '@/utilities/connectToMongoDB'
 import messageModel from '@/models/messageModel'
 import getSessionUser from '@/serverActions/getSessionUser'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
-import dataResponse from '@/httpResponses/dataResponse'
-import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
-import serverErrorResponse from '@/httpResponses/serverErrorResponse'
-import noDataResponse from '@/httpResponses/noDataResponse'
-import badRequestResponse from '@/httpResponses/badRequestResponse'
 import PlainUser from '@/interfaces/PlainUser'
 export const dynamic = 'force-dynamic'
 /**
@@ -27,25 +22,37 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
       await connectToMongoDB()
-      return dataResponse(await messageModel.find({
-        recipient: sessionUser._id
-      }).populate(
-        'sender',
-        'username'
-      ).populate(
-        'property',
-        '_id name'
-      ).sort({
-        read: 1,
-        createdAt: -1
-      }).lean())
+      return new NextResponse(
+        JSON.stringify(await messageModel.find({
+          recipient: sessionUser._id
+        }).populate(
+          'sender',
+          'username'
+        ).populate(
+          'property',
+          '_id name'
+        ).sort({
+          read: 1,
+          createdAt: -1
+        }).lean()), {
+          status: 200,
+          statusText: 'OK'
+        }
+      )
     } else {
-      return unauthorizedResponse
+      return new NextResponse(
+        undefined, {
+          status: 401,
+          statusText: 'Unauthorized'
+        }
+      )
     }
   } catch (error: any) {
-    return serverErrorResponse(
-      'retrieving messages',
-      error
+    return new NextResponse(
+      undefined, {
+        status: 500,
+        statusText: `Internal server error:\n${error.toString()}`
+      }
     )
   }
 }
@@ -67,27 +74,43 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
       const recipient: string | undefined = form.get('recipient')?.valueOf().toString()
       if (recipient && recipient !== sender) {
         await connectToMongoDB()
-        await messageModel.create({
-          sender,
-          recipient,
-          property: form.get('property')?.valueOf(),
-          name: form.get('name')?.valueOf(),
-          email: form.get('email')?.valueOf(),
-          phone: form.get('phone')?.valueOf(),
-          body: form.get('body')?.valueOf(),
-          read: false
-        })
-        return noDataResponse('Message sent.')
+        return new NextResponse(
+          JSON.stringify(await messageModel.create({
+            sender,
+            recipient,
+            property: form.get('property')?.valueOf(),
+            name: form.get('name')?.valueOf(),
+            email: form.get('email')?.valueOf(),
+            phone: form.get('phone')?.valueOf(),
+            body: form.get('body')?.valueOf(),
+            read: false
+          })), {
+            status: 201,
+            statusText: 'Message sent.'
+          }
+        )
       } else {
-        return badRequestResponse('send yourself a message')
+        return new NextResponse(
+          undefined, {
+            status: 400,
+            statusText: 'You can\'t send yourself a message.'
+          }
+        )
       }
     } else {
-      return unauthorizedResponse
+      return new NextResponse(
+        undefined, {
+          status: 401,
+          statusText: 'Unauthorized'
+        }
+      )
     }
   } catch (error: any) {
-    return serverErrorResponse(
-      'sending message',
-      error
+    return new NextResponse(
+      undefined, {
+        status: 500,
+        statusText: `Internal server error:\n${error.toString()}`
+      }
     )
   }
 }

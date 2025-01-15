@@ -8,12 +8,6 @@ import PropertyDocument from '@/interfaces/PropertyDocument'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import getSessionUser from '@/serverActions/getSessionUser'
 import cloudinary from '@/config/cloudinary'
-import dataResponse from '@/httpResponses/dataResponse'
-import notFoundResponse from '@/httpResponses/notFoundResponse'
-import serverErrorResponse from '@/httpResponses/serverErrorResponse'
-import noDataResponse from '@/httpResponses/noDataResponse'
-import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
-import redirectResponse from '@/httpResponses/redirectResponse'
 export const dynamic = 'force-dynamic'
 /**
  * @name    GET
@@ -28,11 +22,23 @@ export const GET = async (
   try {
     await connectToMongoDB()
     const property: PropertyDocument | null = await propertyModel.findById((await params).id)
-    return property ? dataResponse(property) : notFoundResponse('Property')
+    return property ? new NextResponse(
+      JSON.stringify(property), {
+        status: 200,
+        statusText: 'OK'
+      }
+    ) : new NextResponse(
+      undefined, {
+        status: 404,
+        statusText: 'Property not found'
+      }
+    )
   } catch (error: any) {
-    return serverErrorResponse(
-      'retrieving property',
-      error
+    return new NextResponse(
+      undefined, {
+        status: 500,
+        statusText: `Internal server error:\n${error.toString()}`
+      }
     )
   }
 }
@@ -58,20 +64,42 @@ export const DELETE = async (
         if (sessionUser._id === property.owner.toString()) {
           property.imageIds.map(async (image: string): Promise<void> => await cloudinary.uploader.destroy(image))
           await propertyModel.findByIdAndDelete(property._id)
-          return noDataResponse('Property deleted.')
+          return new NextResponse(
+            undefined, {
+              status: 204,
+              statusText: 'Property deleted'
+            }
+          )
         } else {
-          return unauthorizedResponse
+          return new NextResponse(
+            undefined, {
+              status: 401,
+              statusText: 'Unauthorized'
+            }
+          )
         }
       } else {
-        return notFoundResponse('Property')
+        return new NextResponse(
+          undefined, {
+            status: 404,
+            statusText: 'Property not found'
+          }
+        )
       }
     } else {
-      return unauthorizedResponse
+      return new NextResponse(
+        undefined, {
+          status: 401,
+          statusText: 'Unauthorized'
+        }
+      )
     }
   } catch (error: any) {
-    return serverErrorResponse(
-      'deleting property',
-      error
+    return new NextResponse(
+      undefined, {
+        status: 500,
+        statusText: `Internal server error:\n${error.toString()}`
+      }
     )
   }
 }
@@ -121,20 +149,37 @@ export const PATCH = async (
               phone: form.get('seller_info')?.valueOf().toString()
             }
           })
-          return redirectResponse(`${process.env.NEXT_PUBLIC_DOMAIN}/properties/${property.id}`)
+          return NextResponse.redirect(`${process.env.NEXT_PUBLIC_DOMAIN}/properties/${property.id}`)
         } else {
-          return unauthorizedResponse
+          return new NextResponse(
+            undefined, {
+              status: 401,
+              statusText: 'Unauthorized'
+            }
+          )
         }
       } else {
-        return notFoundResponse('Property')
+        return new NextResponse(
+          undefined, {
+            status: 404,
+            statusText: 'Property not found'
+          }
+        )
       }
     } else {
-      return unauthorizedResponse
+      return new NextResponse(
+        undefined, {
+          status: 401,
+          statusText: 'Unauthorized'
+        }
+      )
     }
   } catch (error: any) {
-    return serverErrorResponse(
-      'saving changes',
-      error
+    return new NextResponse(
+      undefined, {
+        status: 500,
+        statusText: `Internal server error:\n${error.toString()}`
+      }
     )
   }
 }

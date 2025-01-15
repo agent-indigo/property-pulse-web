@@ -7,10 +7,6 @@ import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import getSessionUser from '@/serverActions/getSessionUser'
 import messageModel from '@/models/messageModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import noDataResponse from '@/httpResponses/noDataResponse'
-import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
-import notFoundResponse from '@/httpResponses/notFoundResponse'
-import serverErrorResponse from '@/httpResponses/serverErrorResponse'
 export const dynamic = 'force-dynamic'
 /**
  * @name    DELETE
@@ -33,20 +29,42 @@ export const DELETE = async (
       if (message) {
         if (sessionUser._id === message.recipient.toString()) {
           await messageModel.findByIdAndDelete(message._id)
-          return noDataResponse('Message deleted.')
+          return new NextResponse(
+            undefined, {
+              status: 204,
+              statusText: 'Message deleted'
+            }
+          )
         } else {
-          return unauthorizedResponse
+          return new NextResponse(
+            undefined, {
+              status: 401,
+              statusText: 'Undefined'
+            }
+          )
         }
       } else {
-        return notFoundResponse('Message')
+        return new NextResponse(
+          undefined, {
+            status: 404,
+            statusText: 'Message not found'
+          }
+        )
       }
     } else {
-      return unauthorizedResponse
+      return new NextResponse(
+        undefined, {
+          status: 401,
+          statusText: 'Undefined'
+        }
+      )
     }
   } catch (error: any) {
-    return serverErrorResponse(
-      'deleting message',
-      error
+    return new NextResponse(
+      undefined, {
+        status: 500,
+        statusText: `Internal server error:\n${error.toString()}`
+      }
     )
   }
 }
@@ -75,20 +93,42 @@ export const PATCH = async (
           message.read = !read
           status = read ? 'unread' : 'read'
           await message.save()
-          return noDataResponse(`Message marked as ${status}.`)
+          return new NextResponse(
+            JSON.stringify(message), {
+              status: 200,
+              statusText: `Message marked as ${status}.`
+            }
+          )
         } else {
-          return unauthorizedResponse
+          return new NextResponse(
+            undefined, {
+              status: 401,
+              statusText: 'Undefined'
+            }
+          )
         }
       } else {
-        return notFoundResponse('Message')
+        return new NextResponse(
+          undefined, {
+            status: 404,
+            statusText: 'Message not found'
+          }
+        )
       }
     } else {
-      return unauthorizedResponse
+      return new NextResponse(
+        undefined, {
+          status: 401,
+          statusText: 'Undefined'
+        }
+      )
     }
   } catch (error: any) {
-    return serverErrorResponse(
-      `marking message as ${status}`,
-      error
+    return new NextResponse(
+      undefined, {
+        status: 500,
+        statusText: `Internal server error:\n${error.toString()}`
+      }
     )
   }
 }

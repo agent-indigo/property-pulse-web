@@ -9,9 +9,6 @@ import {
 import propertyModel from '@/models/propertyModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import PropertyDocument from '@/interfaces/PropertyDocument'
-import dataResponse from '@/httpResponses/dataResponse'
-import serverErrorResponse from '@/httpResponses/serverErrorResponse'
-import notFoundResponse from '@/httpResponses/notFoundResponse'
 export const dynamic = 'force-dynamic'
 /**
  * @name    GET
@@ -23,7 +20,6 @@ export const GET = async (
   request: NextRequest,
   {params}: any
 ): Promise<NextResponse> => {
-  const activity: string = 'geolocating property'
   try {
     await connectToMongoDB()
     const property: PropertyDocument | null = await propertyModel.findById((await params).id)
@@ -35,17 +31,31 @@ export const GET = async (
           key: process.env.PRIVATE_GOOGLE_MAPS_GEOCODING_API_KEY ?? ''
         }
       })
-      return response.status === 200 ? dataResponse(response.data.results[0].geometry.location) : serverErrorResponse(
-        activity,
-        'Geocoding error.'
+      return response.status === 200 ? new NextResponse(
+        JSON.stringify(response.data.results[0].geometry.location), {
+          status: 200,
+          statusText: 'OK'
+        }
+      ) : new NextResponse(
+        undefined, {
+          status: 500,
+          statusText: response.statusText
+        }
       )
     } else {
-      return notFoundResponse('Property')
+      return new NextResponse(
+        undefined, {
+          status: 404,
+          statusText: 'Property not found'
+        }
+      )
     }
   } catch (error: any) {
-    return serverErrorResponse(
-      activity,
-      error
+    return new NextResponse(
+      undefined, {
+        status: 500,
+        statusText: `Internal server error:\n${error.toString()}`
+      }
     )
   }
 }

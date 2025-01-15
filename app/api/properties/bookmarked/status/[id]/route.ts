@@ -5,11 +5,6 @@ import {
 import {ObjectId} from 'mongoose'
 import getSessionUser from '@/serverActions/getSessionUser'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
-import dataResponse from '@/httpResponses/dataResponse'
-import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
-import serverErrorResponse from '@/httpResponses/serverErrorResponse'
-import badRequestResponse from '@/httpResponses/badRequestResponse'
-import notFoundResponse from '@/httpResponses/notFoundResponse'
 import PropertyDocument from '@/interfaces/PropertyDocument'
 import UserDocument from '@/interfaces/UserDocument'
 import propertyModel from '@/models/propertyModel'
@@ -31,13 +26,25 @@ export const GET = async (
       sessionUser,
       success
     }: ServerActionResponse = await getSessionUser()
-    return success && sessionUser ? dataResponse({
-      bookmarked: sessionUser.bookmarks.includes((await params).id)
-    }) : unauthorizedResponse
+    return success && sessionUser ? new NextResponse(
+      JSON.stringify({
+        bookmarked: sessionUser.bookmarks.includes((await params).id)
+      }), {
+        status: 200,
+        statusText: 'OK'
+      }
+    ) : new NextResponse(
+      undefined, {
+        status: 401,
+        statusText: 'Unauthorized'
+      }
+    )
   } catch (error: any) {
-    return serverErrorResponse(
-      'retrieving bookmark status',
-      error
+    return new NextResponse(
+      undefined, {
+        status: 500,
+        statusText: `Internal server error:\n${error.toString()}`
+      }
     )
   }
 }
@@ -51,7 +58,6 @@ export const PATCH = async (
   request: NextRequest,
   {params}: any
 ): Promise<NextResponse> => {
-  let action: string = 'adding/removing'
   try {
     const {
       sessionUser,
@@ -66,39 +72,64 @@ export const PATCH = async (
           if (user.id !== property.owner.toString()) {
             const {id}: PropertyDocument = property
             let bookmarked: boolean = user.bookmarks.includes(id)
-            let message: string
+            let message: string = ''
             if (bookmarked) {
               user.bookmarks = user.bookmarks.filter((bookmark: ObjectId): boolean => bookmark.toString() !== id)
               message = 'Bookmark removed.'
               bookmarked = false
-              action = 'removing'
             } else {
               user.bookmarks.push(id)
               message = 'Property bookmarked.'
               bookmarked = true
-              action = 'adding'
             }
             await user.save()
-            return dataResponse({
-              message,
-              bookmarked
-            })
+            return new NextResponse(
+              JSON.stringify({
+                message,
+                bookmarked
+              }), {
+                status: 200,
+                statusText: 'OK'
+              }
+            )
           } else {
-            return badRequestResponse('bookmark your own property')
+            return new NextResponse(
+              undefined, {
+                status: 400,
+                statusText: 'You can\'t bookmark your own property.'
+              }
+            )
           }
         } else {
-          return notFoundResponse('Property')
+          return new NextResponse(
+            undefined, {
+              status: 404,
+              statusText: 'Property not found'
+            }
+          )
         }
       } else {
-        return unauthorizedResponse
+        return new NextResponse(
+          undefined, {
+            status: 401,
+            statusText: 'Unauthorized'
+          }
+        )
       }
     } else {
-      return unauthorizedResponse
+      return new NextResponse(
+        undefined, {
+          status: 401,
+          statusText: 'Unauthorized'
+        }
+      )
     }
   } catch (error: any) {
-    return serverErrorResponse(
-      `${action} bookmark`,
-      error
+    return new NextResponse(
+      undefined, {
+        status: 500,
+        statusText: `Internal server error:\n${error.toString()}`
+      }
     )
   }
 }

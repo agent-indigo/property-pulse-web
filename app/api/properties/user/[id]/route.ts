@@ -5,9 +5,6 @@ import {
 import propertyModel from '@/models/propertyModel'
 import userModel from '@/models/userModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import dataResponse from '@/httpResponses/dataResponse'
-import notFoundResponse from '@/httpResponses/notFoundResponse'
-import serverErrorResponse from '@/httpResponses/serverErrorResponse'
 export const dynamic = 'force-dynamic'
 /**
  * @name    GET
@@ -22,13 +19,25 @@ export const GET = async (
   try {
     const {id}: any = await params
     await connectToMongoDB()
-    return await userModel.findById(id) ? dataResponse(await propertyModel.find({
-      owner: id
-    }).lean()) : notFoundResponse('User')
+    return await userModel.findById(id) ? new NextResponse(
+      JSON.stringify(await propertyModel.find({
+        owner: id
+      })), {
+        status: 200,
+        statusText: 'OK'
+      }
+    ) : new NextResponse(
+      undefined, {
+        status: 404,
+        statusText: 'User not found'
+      }
+    )
   } catch (error: any) {
-    return serverErrorResponse(
-      'retrieving user\'s properties',
-      error
+    return new NextResponse(
+      undefined, {
+        status: 500,
+        statusText: `Internal server error:\n${error.toString()}`
+      }
     )
   }
 }

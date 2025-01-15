@@ -6,9 +6,6 @@ import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import getSessionUser from '@/serverActions/getSessionUser'
 import messageModel from '@/models/messageModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import dataResponse from '@/httpResponses/dataResponse'
-import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
-import serverErrorResponse from '@/httpResponses/serverErrorResponse'
 export const dynamic = 'force-dynamic'
 /**
  * @name    GET
@@ -24,19 +21,31 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
       await connectToMongoDB()
-      return dataResponse({
-        unread: await messageModel.countDocuments({
-          recipient: sessionUser._id,
-          read: false
-        })
-      })
+      return new NextResponse(
+        JSON.stringify({
+          unread: await messageModel.countDocuments({
+            recipient: sessionUser._id,
+            read: false
+          })
+        }), {
+          status: 200,
+          statusText: 'OK'
+        }
+      )
     } else {
-      return unauthorizedResponse
+      return new NextResponse(
+        undefined, {
+          status: 401,
+          statusText: 'Unauthorized'
+        }
+      )
     }
   } catch (error: any) {
-    return serverErrorResponse(
-      'retrieving unread messages count',
-      error
+    return new NextResponse(
+      undefined, {
+        status: 500,
+        statusText: `Internal server error:\n${error.toString()}`
+      }
     )
   }
 }

@@ -6,9 +6,6 @@ import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
 import getSessionUser from '@/serverActions/getSessionUser'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
-import dataResponse from '@/httpResponses/dataResponse'
-import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
-import serverErrorResponse from '@/httpResponses/serverErrorResponse'
 export const dynamic = 'force-dynamic'
 /**
  * @name    GET
@@ -24,18 +21,30 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
       await connectToMongoDB()
-      return dataResponse(await propertyModel.find({
-        _id: {
-          $in: sessionUser.bookmarks
+      return new NextResponse(
+        JSON.stringify(await propertyModel.find({
+          _id: {
+            $in: sessionUser.bookmarks
+          }
+        }).lean()), {
+          status: 200,
+          statusText: 'OK'
         }
-      }).lean())
+      )
     } else {
-      return unauthorizedResponse
+      return new NextResponse(
+        undefined, {
+          status: 401,
+          statusText: 'Unauthorized'
+        }
+      )
     }
   } catch (error: any) {
-    return serverErrorResponse(
-      'retrieving bookmarked properties',
-      error
+    return new NextResponse(
+      undefined, {
+        status: 500,
+        statusText: `Internal server error:\n${error.toString()}`
+      }
     )
   }
 }

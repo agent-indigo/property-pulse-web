@@ -9,10 +9,6 @@ import propertyModel from '@/models/propertyModel'
 import getSessionUser from '@/serverActions/getSessionUser'
 import cloudinary from '@/config/cloudinary'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import dataResponse from '@/httpResponses/dataResponse'
-import serverErrorResponse from '@/httpResponses/serverErrorResponse'
-import redirectResponse from '@/httpResponses/redirectResponse'
-import unauthorizedResponse from '@/httpResponses/unauthorizedResponse'
 export const dynamic = 'force-dynamic'
 /**
  * @name    GET
@@ -24,22 +20,29 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
     const page: string = new URL(request.url).searchParams.get('page') ?? ''
     await connectToMongoDB()
-    return dataResponse({
-      properties: page === ''
-      ? await propertyModel
-        .find()
-        .lean()
-      : await propertyModel
-        .find()
-        .skip((parseInt(page) - 1) * 6)
-        .limit(6)
-        .lean(),
-      total: await propertyModel.countDocuments()
-    })
+    return new NextResponse(
+      JSON.stringify({
+        properties: page === ''
+        ? await propertyModel
+          .find()
+          .lean()
+        : await propertyModel
+          .find()
+          .skip((parseInt(page) - 1) * 6)
+          .limit(6)
+          .lean(),
+        total: await propertyModel.countDocuments()
+      }), {
+        status: 200,
+        statusText: 'OK'
+      }
+    )
   } catch (error: any) {
-    return serverErrorResponse(
-      'retrieving properties',
-      error
+    return new NextResponse(
+      undefined, {
+        status: 500,
+        statusText: `Internal server error:\n${error.toString()}`
+      }
     )
   }
 }
@@ -102,14 +105,21 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
         images,
         imageIds
       })
-      return redirectResponse(`${process.env.NEXT_PUBLIC_DOMAIN}/properties/${property.id}`)
+      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_DOMAIN}/properties/${property.id}`)
     } else {
-      return unauthorizedResponse
+      return new NextResponse(
+        undefined, {
+          status: 401,
+          statusText: 'Unauthorized'
+        }
+      )
     }
   } catch (error: any) {
-    return serverErrorResponse(
-      'adding property',
-      error
+    return new NextResponse(
+      undefined, {
+        status: 500,
+        statusText: `Internal server error:\n${error.toString()}`
+      }
     )
   }
 }
