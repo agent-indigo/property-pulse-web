@@ -21,7 +21,7 @@ export const dynamic = 'force-dynamic'
  */
 export const GET = async (
   request: NextRequest,
-  params: any
+  {params}: any
 ): Promise<NextResponse> => {
   const activity: string = 'geolocating property'
   try {

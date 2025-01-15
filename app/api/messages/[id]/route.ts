@@ -20,7 +20,7 @@ export const dynamic = 'force-dynamic'
  */
 export const DELETE = async (
   request: NextRequest,
-  params: any
+  {params}: any
 ): Promise<NextResponse> => {
   try {
     const {
@@ -58,7 +58,7 @@ export const DELETE = async (
  */
 export const PATCH = async (
   request: NextRequest,
-  params: any
+  {params}: any
 ): Promise<NextResponse> => {
   let status: string = 'read/unread'
   try {

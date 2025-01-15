@@ -17,10 +17,10 @@ export const dynamic = 'force-dynamic'
  */
 export const GET = async (
   request: NextRequest,
-  params: any
+  {params}: any
 ): Promise<NextResponse> => {
   try {
-    const {id}: any = params
+    const {id}: any = await params
     await connectToMongoDB()
     return await userModel.findById(id) ? dataResponse(await propertyModel.find({
       owner: id

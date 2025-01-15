@@ -24,7 +24,7 @@ export const dynamic = 'force-dynamic'
  */
 export const GET = async (
   request: NextRequest,
-  params: any
+  {params}: any
 ): Promise<NextResponse> => {
   try {
     const {
@@ -49,7 +49,7 @@ export const GET = async (
  */
 export const PATCH = async (
   request: NextRequest,
-  params: any
+  {params}: any
 ): Promise<NextResponse> => {
   let action: string = 'adding/removing'
   try {

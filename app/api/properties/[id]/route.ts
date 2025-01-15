@@ -23,7 +23,7 @@ export const dynamic = 'force-dynamic'
  */
 export const GET = async (
   request: NextRequest,
-  params: any
+  {params}: any
 ): Promise<NextResponse> => {
   try {
     await connectToMongoDB()
@@ -44,7 +44,7 @@ export const GET = async (
  */
 export const DELETE = async (
   request: NextRequest,
-  params: any
+  {params}: any
 ): Promise<NextResponse> => {
   try {
     const {
@@ -83,7 +83,7 @@ export const DELETE = async (
  */
 export const PATCH = async (
   request: NextRequest,
-  params: any
+  {params}: any
 ): Promise<NextResponse> => {
   try {
     const {
