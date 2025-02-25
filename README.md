@@ -12,7 +12,13 @@ I made the following modifications:
 
 - Kept the RESTful API even though it's currently unused
 
-- Moved `NEXT_PUBLIC_DOMAIN` and `NEXT_PUBLIC_API_DOMAIN` into `next.config.mjs`
+- Moved `NEXT_PUBLIC_DOMAIN` and `NEXT_PUBLIC_API_DOMAIN` into `next.config.ts`
+
+- Deleting a property also deletes its images
+
+- Made adding a property more efficient
+
+- Editing a property only sends the changes
 
 - Moved geocoding into a Server Action and an API route
 

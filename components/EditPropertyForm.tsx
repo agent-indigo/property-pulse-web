@@ -46,13 +46,53 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
   }: PropertyContact = seller_info
   const router: AppRouterInstance = useRouter()
   const handleSubmit: Function = async (form: FormData): Promise<void> => {
+    const patch: FormData = new FormData
+    for (const [
+      formEntryKey,
+      formEntryValue
+    ] of form.entries()) {
+      for (const [
+        propertyFieldKey,
+        propertyFieldValue
+      ] of Object.entries(property)) {
+        if (formEntryKey === propertyFieldKey) {
+          if (formEntryValue instanceof Object && propertyFieldValue instanceof Object) {
+            for (const [
+              nestedFormEntryKey,
+              nestedFormEntryValue
+            ] of Object.entries(formEntryValue)) {
+              for (const [
+                nestedPropertyFieldKey,
+                nestedPropertyFieldValue
+              ] of Object.entries(propertyFieldValue)) {
+                if (nestedFormEntryKey === nestedPropertyFieldKey) {
+                  if (nestedFormEntryValue !== nestedPropertyFieldValue) {
+                    patch.append(
+                      `${formEntryKey}.${nestedFormEntryKey}`,
+                      nestedFormEntryValue
+                    )
+                  }
+                }
+              }
+            }
+          } else {
+            if (formEntryValue !== propertyFieldValue) {
+              patch.append(
+                formEntryKey,
+                formEntryValue
+              )
+            }
+          }
+        }
+      }
+    }
     const {
       error,
       message,
       success
     }: ServerActionResponse = await editProperty(
       _id,
-      form
+      patch
     )
     if (success) {
       toast.success(message)
