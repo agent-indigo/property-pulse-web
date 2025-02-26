@@ -34,7 +34,7 @@ const addProperty: Function = async (form: FormData): Promise<ServerActionRespon
       await connectToMongoDB()
       const property: PropertyDocument = await propertyModel.create({
         owner: sessionUser._id,
-        ...Object.fromEntries(form.entries().filter(([key]: FormDataEntryValue[]): boolean => key !== 'files')),
+        ...Object.fromEntries(form.entries().filter(([key]): boolean => key !== 'files')),
         images,
         imageIds
       })

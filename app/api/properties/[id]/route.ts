@@ -8,6 +8,11 @@ import PropertyDocument from '@/interfaces/PropertyDocument'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import getSessionUser from '@/serverActions/getSessionUser'
 import cloudinary from '@/config/cloudinary'
+import success200response from '@/httpResponses/success200response'
+import error404response from '@/httpResponses/error404response'
+import error500response from '@/httpResponses/error500response'
+import success204response from '@/httpResponses/success204response'
+import error401response from '@/httpResponses/error401response'
 export const dynamic = 'force-dynamic'
 /**
  * @name    GET
@@ -22,24 +27,9 @@ export const GET = async (
   try {
     await connectToMongoDB()
     const property: PropertyDocument | null = await propertyModel.findById((await params).id)
-    return property ? new NextResponse(
-      JSON.stringify(property), {
-        status: 200,
-        statusText: 'OK'
-      }
-    ) : new NextResponse(
-      undefined, {
-        status: 404,
-        statusText: 'Property not found'
-      }
-    )
+    return property ? success200response(property) : error404response('Property')
   } catch (error: any) {
-    return new NextResponse(
-      undefined, {
-        status: 500,
-        statusText: `Internal server error:\n${error.toString()}`
-      }
-    )
+    return error500response(error)
   }
 }
 /**
@@ -64,43 +54,18 @@ export const DELETE = async (
         if (sessionUser._id === property.owner.toString()) {
           property.imageIds.map(async (image: string): Promise<void> => await cloudinary.uploader.destroy(image))
           await propertyModel.findByIdAndDelete(property._id)
-          return new NextResponse(
-            undefined, {
-              status: 204,
-              statusText: 'Property deleted'
-            }
-          )
+          return success204response('Property')
         } else {
-          return new NextResponse(
-            undefined, {
-              status: 401,
-              statusText: 'Unauthorized'
-            }
-          )
+          return error401response
         }
       } else {
-        return new NextResponse(
-          undefined, {
-            status: 404,
-            statusText: 'Property not found'
-          }
-        )
+        return error404response('Property')
       }
     } else {
-      return new NextResponse(
-        undefined, {
-          status: 401,
-          statusText: 'Unauthorized'
-        }
-      )
+      return error401response
     }
   } catch (error: any) {
-    return new NextResponse(
-      undefined, {
-        status: 500,
-        statusText: `Internal server error:\n${error.toString()}`
-      }
-    )
+    return error500response(error)
   }
 }
 /**
@@ -123,42 +88,24 @@ export const PATCH = async (
       const property: PropertyDocument | null = await propertyModel.findById((await params).id)
       if (property) {
         if (sessionUser._id === property.owner.toString()) {
-          const form: FormData = await request.formData()
           await propertyModel.findByIdAndUpdate(
             property._id,
-            Object.fromEntries(form.entries())
+            Object.fromEntries((await request.formData()).entries())
           )
-          return NextResponse.redirect(`${process.env.NEXT_PUBLIC_DOMAIN}/properties/${property.id}`)
+          return success200response(
+            property,
+            'Changes saved.'
+          )
         } else {
-          return new NextResponse(
-            undefined, {
-              status: 401,
-              statusText: 'Unauthorized'
-            }
-          )
+          return error401response
         }
       } else {
-        return new NextResponse(
-          undefined, {
-            status: 404,
-            statusText: 'Property not found'
-          }
-        )
+        return error404response('Property')
       }
     } else {
-      return new NextResponse(
-        undefined, {
-          status: 401,
-          statusText: 'Unauthorized'
-        }
-      )
+      return error401response
     }
   } catch (error: any) {
-    return new NextResponse(
-      undefined, {
-        status: 500,
-        statusText: `Internal server error:\n${error.toString()}`
-      }
-    )
+    return error500response(error)
   }
 }

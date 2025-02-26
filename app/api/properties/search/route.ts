@@ -5,6 +5,8 @@ import {
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
 import PropertySearchQuery from '@/interfaces/PropertySearchQuery'
+import success200response from '@/httpResponses/success200response'
+import error500response from '@/httpResponses/error500response'
 export const dynamic = 'force-dynamic'
 /**
  * @name    GET
@@ -43,25 +45,15 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
       'i'
     )
     await connectToMongoDB()
-    return new NextResponse(
-      JSON.stringify({
-        properties: await propertyModel
-          .find(query)
-          .skip((parseInt(page && page !== '' ? page : '1') - 1) * 6)
-          .limit(6)
-          .lean(),
-        total: (await propertyModel.find(query)).length
-      }), {
-        status: 200,
-        statusText: 'OK'
-      }
-    )
+    return success200response({
+      properties: await propertyModel
+        .find(query)
+        .skip((parseInt(page && page !== '' ? page : '1') - 1) * 6)
+        .limit(6)
+        .lean(),
+      total: (await propertyModel.find(query)).length
+    })
   } catch (error: any) {
-    return new NextResponse(
-      undefined, {
-        status: 500,
-        statusText: `Internal server error:\n${error.toString()}`
-      }
-    )
+    return error500response(error)
   }
 }

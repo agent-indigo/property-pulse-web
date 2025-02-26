@@ -10,6 +10,11 @@ import UserDocument from '@/interfaces/UserDocument'
 import propertyModel from '@/models/propertyModel'
 import userModel from '@/models/userModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
+import success200response from '@/httpResponses/success200response'
+import error401response from '@/httpResponses/error401response'
+import error500response from '@/httpResponses/error500response'
+import error400response from '@/httpResponses/error400response'
+import error404response from '@/httpResponses/error404response'
 export const dynamic = 'force-dynamic'
 /**
  * @name    GET
@@ -26,26 +31,9 @@ export const GET = async (
       sessionUser,
       success
     }: ServerActionResponse = await getSessionUser()
-    return success && sessionUser ? new NextResponse(
-      JSON.stringify({
-        bookmarked: sessionUser.bookmarks.includes((await params).id)
-      }), {
-        status: 200,
-        statusText: 'OK'
-      }
-    ) : new NextResponse(
-      undefined, {
-        status: 401,
-        statusText: 'Unauthorized'
-      }
-    )
+    return success && sessionUser ? success200response({bookmarked: sessionUser.bookmarks.includes((await params).id)}) : error401response
   } catch (error: any) {
-    return new NextResponse(
-      undefined, {
-        status: 500,
-        statusText: `Internal server error:\n${error.toString()}`
-      }
-    )
+    return error500response(error)
   }
 }
 /**
@@ -83,53 +71,23 @@ export const PATCH = async (
               bookmarked = true
             }
             await user.save()
-            return new NextResponse(
-              JSON.stringify({
-                message,
-                bookmarked
-              }), {
-                status: 200,
-                statusText: 'OK'
-              }
-            )
+            return success200response({
+              message,
+              bookmarked
+            })
           } else {
-            return new NextResponse(
-              undefined, {
-                status: 400,
-                statusText: 'You can\'t bookmark your own property.'
-              }
-            )
+            return error400response('bookmark your own property')
           }
         } else {
-          return new NextResponse(
-            undefined, {
-              status: 404,
-              statusText: 'Property not found'
-            }
-          )
+          return error404response('Property')
         }
       } else {
-        return new NextResponse(
-          undefined, {
-            status: 401,
-            statusText: 'Unauthorized'
-          }
-        )
+        return error401response
       }
     } else {
-      return new NextResponse(
-        undefined, {
-          status: 401,
-          statusText: 'Unauthorized'
-        }
-      )
+      return error401response
     }
   } catch (error: any) {
-    return new NextResponse(
-      undefined, {
-        status: 500,
-        statusText: `Internal server error:\n${error.toString()}`
-      }
-    )
+    return error500response(error)
   }
 }

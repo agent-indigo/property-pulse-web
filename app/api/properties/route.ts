@@ -79,11 +79,16 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
       await connectToMongoDB()
       const property: PropertyDocument = await propertyModel.create({
         owner: sessionUser._id,
-        ...Object.fromEntries(form.entries().filter(([key]: FormDataEntryValue[]): boolean => key !== 'files')),
+        ...Object.fromEntries(form.entries().filter(([key]): boolean => key !== 'files')),
         images,
         imageIds
       })
-      return NextResponse.redirect(`${process.env.NEXT_PUBLIC_DOMAIN}/properties/${property.id}`)
+      return new NextResponse(
+        JSON.stringify(property), {
+          status: 201,
+          statusText: 'Property added.'
+        }
+      )
     } else {
       return new NextResponse(
         undefined, {

@@ -5,7 +5,7 @@ const success201response: Function = (
 ): NextResponse => new NextResponse(
   JSON.stringify(data), {
     status: 201,
-    statusText: type.toLowerCase() === 'message' ? 'Message sent' : `${type} created`
+    statusText: type.toLowerCase() === 'message' ? 'Message sent.' : `${type} added.`
   }
 )
 export default success201response

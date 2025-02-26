@@ -6,6 +6,9 @@ import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
 import getSessionUser from '@/serverActions/getSessionUser'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
+import success200response from '@/httpResponses/success200response'
+import error401response from '@/httpResponses/error401response'
+import error500response from '@/httpResponses/error500response'
 export const dynamic = 'force-dynamic'
 /**
  * @name    GET
@@ -21,30 +24,15 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     }: ServerActionResponse = await getSessionUser()
     if (success && sessionUser) {
       await connectToMongoDB()
-      return new NextResponse(
-        JSON.stringify(await propertyModel.find({
-          _id: {
-            $in: sessionUser.bookmarks
-          }
-        }).lean()), {
-          status: 200,
-          statusText: 'OK'
+      return success200response(await propertyModel.find({
+        _id: {
+          $in: sessionUser.bookmarks
         }
-      )
+      }).lean())
     } else {
-      return new NextResponse(
-        undefined, {
-          status: 401,
-          statusText: 'Unauthorized'
-        }
-      )
+      return error401response
     }
   } catch (error: any) {
-    return new NextResponse(
-      undefined, {
-        status: 500,
-        statusText: `Internal server error:\n${error.toString()}`
-      }
-    )
+    return error500response(error)
   }
 }

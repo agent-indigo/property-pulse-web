@@ -9,6 +9,9 @@ import {
 import propertyModel from '@/models/propertyModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import PropertyDocument from '@/interfaces/PropertyDocument'
+import success200response from '@/httpResponses/success200response'
+import error500response from '@/httpResponses/error500response'
+import error404response from '@/httpResponses/error404response'
 export const dynamic = 'force-dynamic'
 /**
  * @name    GET
@@ -31,31 +34,11 @@ export const GET = async (
           key: process.env.PRIVATE_GOOGLE_MAPS_GEOCODING_API_KEY ?? ''
         }
       })
-      return response.status === 200 ? new NextResponse(
-        JSON.stringify(response.data.results[0].geometry.location), {
-          status: 200,
-          statusText: 'OK'
-        }
-      ) : new NextResponse(
-        undefined, {
-          status: 500,
-          statusText: response.statusText
-        }
-      )
+      return response.status === 200 ? success200response(response.data.results[0].geometry.location) : error500response(response.statusText)
     } else {
-      return new NextResponse(
-        undefined, {
-          status: 404,
-          statusText: 'Property not found'
-        }
-      )
+      return error404response('Property')
     }
   } catch (error: any) {
-    return new NextResponse(
-      undefined, {
-        status: 500,
-        statusText: `Internal server error:\n${error.toString()}`
-      }
-    )
+    return error500response(error)
   }
 }
