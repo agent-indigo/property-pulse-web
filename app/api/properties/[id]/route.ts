@@ -88,10 +88,8 @@ export const PATCH = async (
       const property: PropertyDocument | null = await propertyModel.findById((await params).id)
       if (property) {
         if (sessionUser._id === property.owner.toString()) {
-          await propertyModel.findByIdAndUpdate(
-            property._id,
-            Object.fromEntries((await request.formData()).entries())
-          )
+          property.overwrite(request.json())
+          await property.save()
           return success200response(property)
         } else {
           return error401response
