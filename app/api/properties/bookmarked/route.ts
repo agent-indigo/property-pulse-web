@@ -19,6 +19,7 @@ export const dynamic = 'force-dynamic'
 export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
     const {
+      error,
       sessionUser,
       success
     }: ServerActionResponse = await getSessionUser()
@@ -30,7 +31,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
         }
       }).lean())
     } else {
-      return error401response
+      return error ? error500response(error) : error401response
     }
   } catch (error: any) {
     return error500response(error)

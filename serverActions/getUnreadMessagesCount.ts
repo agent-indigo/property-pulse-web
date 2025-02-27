@@ -3,6 +3,8 @@ import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import getSessionUser from '@/serverActions/getSessionUser'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import messageModel from '@/models/messageModel'
+import unauthorizedResponse from '@/serverActionResponses/unauthorizedResponse'
+import internalServerErrorResponse from '@/serverActionResponses/internalServerErrorResponse'
 const getUnreadMessagesCount: Function = async (): Promise<ServerActionResponse> => {
   try {
     const {
@@ -20,16 +22,10 @@ const getUnreadMessagesCount: Function = async (): Promise<ServerActionResponse>
         success: true
       }
     } else {
-      return {
-        error,
-        success: false
-      }
+      return error ? internalServerErrorResponse(error) : unauthorizedResponse
     }
   } catch (error: any) {
-    return {
-      error: `500: Internal server error getting unread messages count:\n${error.toString()}`,
-      success: false
-    }
+    return internalServerErrorResponse(error)
   }
 }
 export default getUnreadMessagesCount

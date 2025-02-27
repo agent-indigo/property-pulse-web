@@ -8,6 +8,10 @@ import PropertyDocument from '@/interfaces/PropertyDocument'
 import propertyModel from '@/models/propertyModel'
 import UserDocument from '@/interfaces/UserDocument'
 import userModel from '@/models/userModel'
+import notFoundResponse from '@/serverActionResponses/notFoundResponse'
+import unauthorizedResponse from '@/serverActionResponses/unauthorizedResponse'
+import internalServerErrorResponse from '@/serverActionResponses/internalServerErrorResponse'
+import badRequestResponse from '@/serverActionResponses/badRequestResponse'
 const togglePropertyBookmarked: Function = async (propertyId: ObjectId): Promise<ServerActionResponse> => {
   try {
     const {
@@ -43,28 +47,16 @@ const togglePropertyBookmarked: Function = async (propertyId: ObjectId): Promise
             success: true
           }
         } else {
-          return {
-            error: '400: You can\'t bookmark your own property.',
-            success: false
-          }
+          return badRequestResponse('bookmark your own property')
         }
       } else {
-        return {
-          error: '404: Property Not Found',
-          success: false
-        }
+        return notFoundResponse('Property')
       }
     } else {
-      return {
-        error,
-        success: false
-      }
+      return error ? internalServerErrorResponse(error) : unauthorizedResponse
     }
   } catch (error: any) {
-    return {
-      error: `500: Interval server error adding/removing bookmark:\n${error.toString()}`,
-      success: false
-    }
+    return internalServerErrorResponse(error)
   }
 }
 export default togglePropertyBookmarked

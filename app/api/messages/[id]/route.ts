@@ -25,6 +25,7 @@ export const DELETE = async (
 ): Promise<NextResponse> => {
   try {
     const {
+      error,
       sessionUser,
       success
     }: ServerActionResponse = await getSessionUser()
@@ -42,7 +43,7 @@ export const DELETE = async (
         return error404response
       }
     } else {
-      return error401response
+      return error ? error500response(error) : error401response
     }
   } catch (error: any) {
     return error500response(error)
@@ -60,6 +61,7 @@ export const PATCH = async (
 ): Promise<NextResponse> => {
   try {
     const {
+      error,
       sessionUser,
       success
     }: ServerActionResponse = await getSessionUser()
@@ -78,7 +80,7 @@ export const PATCH = async (
         return error404response
       }
     } else {
-      return error401response
+      return error ? error500response(error) : error401response
     }
   } catch (error: any) {
     return error500response(error)

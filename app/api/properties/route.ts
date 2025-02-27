@@ -49,6 +49,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
 export const POST = async (request: NextRequest): Promise<NextResponse> => {
   try {
     const {
+      error,
       sessionUser,
       success
     }: ServerActionResponse = await getSessionUser()
@@ -79,7 +80,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
       })
       return success201response(property)
     } else {
-      return error401response
+      return error ? error500response(error) : error401response
     }
   } catch (error: any) {
     return error500response(error)

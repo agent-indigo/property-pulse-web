@@ -5,6 +5,9 @@ import getSessionUser from '@/serverActions/getSessionUser'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import MessageDocument from '@/interfaces/MessageDocument'
 import messageModel from '@/models/messageModel'
+import unauthorizedResponse from '@/serverActionResponses/unauthorizedResponse'
+import notFoundResponse from '@/serverActionResponses/notFoundResponse'
+import internalServerErrorResponse from '@/serverActionResponses/internalServerErrorResponse'
 const toggleMessageRead: Function = async (messageId: string): Promise<ServerActionResponse> => {
   try {
     const {
@@ -30,28 +33,16 @@ const toggleMessageRead: Function = async (messageId: string): Promise<ServerAct
             success: true
           }
         } else {
-          return {
-            error: '401: Unauthorized',
-            success: false
-          }
+          return unauthorizedResponse
         }
       } else {
-        return {
-          error: '404: Message not found',
-          success: false
-        }
+        return notFoundResponse('Message')
       }
     } else {
-      return {
-        error,
-        success: false
-      }
+      return error ? internalServerErrorResponse(error) : unauthorizedResponse
     }
   } catch (error: any) {
-    return {
-      error: `500: Internal server error marking message as read/unread:\n${error.toString()}`,
-      success: false
-    }
+    return internalServerErrorResponse(error)
   }
 }
 export default toggleMessageRead

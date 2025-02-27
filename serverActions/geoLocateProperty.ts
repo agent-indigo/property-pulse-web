@@ -6,6 +6,7 @@ import {
 } from '@googlemaps/google-maps-services-js'
 import PropertyLocation from '@/interfaces/PropertyLocation'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
+import internalServerErrorResponse from '@/serverActionResponses/internalServerErrorResponse'
 const geoLocateProperty: Function = async (location: PropertyLocation): Promise<ServerActionResponse> => {
   try {
     const response: GeocodeResponse = await new Client().geocode({
@@ -25,16 +26,10 @@ const geoLocateProperty: Function = async (location: PropertyLocation): Promise<
         success: true
       }
     } else {
-      return {
-        error: `500: Internal server error geolocating property:\n${response.data.error_message}`,
-        success: false
-      }
+      return internalServerErrorResponse(new Error(response.data.error_message))
     }
   } catch (error: any) {
-    return {
-      error: `500: Internal server error geolocating property:\n${error.toString()}`,
-      success: false
-    }
+    return internalServerErrorResponse(error)
   }
 }
 export default geoLocateProperty

@@ -1,16 +1,17 @@
 'use server'
-import {revalidatePath} from 'next/cache'
-import PropertyDocument from '@/interfaces/PropertyDocument'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
-import getSessionUser from './getSessionUser'
+import getSessionUser from '@/serverActions/getSessionUser'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
+import PropertyDocument from '@/interfaces/PropertyDocument'
 import propertyModel from '@/models/propertyModel'
+import cloudinary from '@/config/cloudinary'
 import unauthorizedResponse from '@/serverActionResponses/unauthorizedResponse'
+import deletedResponse from '@/serverActionResponses/deletedResponse'
 import notFoundResponse from '@/serverActionResponses/notFoundResponse'
 import internalServerErrorResponse from '@/serverActionResponses/internalServerErrorResponse'
-const editProperty: Function = async (
+const deletePropertyImage: Function = async (
   propertyId: string,
-  form: FormData
+  imageId: string
 ): Promise<ServerActionResponse> => {
   try {
     const {
@@ -22,19 +23,12 @@ const editProperty: Function = async (
       await connectToMongoDB()
       const property: PropertyDocument | null = await propertyModel.findById(propertyId)
       if (property) {
-        if (sessionUser._id === property.owner.toString()) {
-          await propertyModel.findByIdAndUpdate(
-            propertyId,
-            Object.fromEntries(form.entries())
-          )
-          revalidatePath(
-            '/',
-            'layout'
-          )
-          return {
-            message: 'Changes saved.',
-            success: true
-          }
+        if (property.owner.toString() === sessionUser._id) {
+          property.images = property.images.filter((url: string): boolean => !url.includes(imageId))
+          property.imageIds = property.imageIds.filter((id: string): boolean => id !== imageId)
+          await cloudinary.uploader.destroy(imageId)
+          await property.save()
+          return deletedResponse('Image')
         } else {
           return unauthorizedResponse
         }
@@ -48,4 +42,4 @@ const editProperty: Function = async (
     return internalServerErrorResponse(error)
   }
 }
-export default editProperty
+export default deletePropertyImage

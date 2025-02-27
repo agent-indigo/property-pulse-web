@@ -6,6 +6,10 @@ import connectToMongoDB from '@/utilities/connectToMongoDB'
 import PropertyDocument from '@/interfaces/PropertyDocument'
 import propertyModel from '@/models/propertyModel'
 import cloudinary from '@/config/cloudinary'
+import deletedResponse from '@/serverActionResponses/deletedResponse'
+import unauthorizedResponse from '@/serverActionResponses/unauthorizedResponse'
+import notFoundResponse from '@/serverActionResponses/notFoundResponse'
+import internalServerErrorResponse from '@/serverActionResponses/internalServerErrorResponse'
 const deleteProperty: Function = async (propertyId: string): Promise<ServerActionResponse> => {
   try {
     const {
@@ -24,33 +28,18 @@ const deleteProperty: Function = async (propertyId: string): Promise<ServerActio
             '/',
             'layout'
           )
-          return {
-            message: 'Property deleted.',
-            success: true
-          }
+          return deletedResponse('Property')
         } else {
-          return {
-            error: '401: Unauthorized',
-            success: false
-          }
+          return unauthorizedResponse
         }
       } else {
-        return {
-          error: '404: Property not found',
-          success: false
-        }
+        return notFoundResponse('Property')
       }
     } else {
-      return {
-        error,
-        success: false
-      }
+      return error ? internalServerErrorResponse(error) : unauthorizedResponse
     }
   } catch (error: any) {
-    return {
-      error: `500: Internal server error deleting property:\n${error.toString()}`,
-      success: false
-    }
+    return internalServerErrorResponse(error)
   }
 }
 export default deleteProperty

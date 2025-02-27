@@ -11,6 +11,8 @@ import authOpts from '@/config/authOpts'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import UserDocument from '@/interfaces/UserDocument'
 import PlainUser from '@/interfaces/PlainUser'
+import unauthorizedResponse from '@/serverActionResponses/unauthorizedResponse'
+import internalServerErrorResponse from '@/serverActionResponses/internalServerErrorResponse'
 const getSessionUser: Function = async (): Promise<ServerActionResponse> => {
   try {
     const session: SessionWithUserId | null = await getServerSession(authOpts)
@@ -25,22 +27,13 @@ const getSessionUser: Function = async (): Promise<ServerActionResponse> => {
           success: true
         }
       } else {
-        return {
-          error: '401: Unauthorized',
-          success: false
-        }
+        return unauthorizedResponse
       }
     } else {
-      return {
-        error: '401: Unauthorized',
-        success: false
-      }
+      return unauthorizedResponse
     }
   } catch (error: any) {
-    return {
-      error: `500: Internal server error getting session user:\n${error.toString()}`,
-      success: false
-    }
+    return internalServerErrorResponse(error)
   }
 }
 export default getSessionUser

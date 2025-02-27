@@ -28,12 +28,13 @@ export const GET = async (
 ): Promise<NextResponse> => {
   try {
     const {
+      error,
       sessionUser,
       success
     }: ServerActionResponse = await getSessionUser()
     return success && sessionUser ? success200response({bookmarked: sessionUser.bookmarks.includes((await params).id)}) : error401response
   } catch (error: any) {
-    return error500response(error)
+    return error ? error500response(error) : error500response(error)
   }
 }
 /**
@@ -48,6 +49,7 @@ export const PATCH = async (
 ): Promise<NextResponse> => {
   try {
     const {
+      error,
       sessionUser,
       success
     }: ServerActionResponse = await getSessionUser()
@@ -85,7 +87,7 @@ export const PATCH = async (
         return error401response
       }
     } else {
-      return error401response
+      return error ? error500response(error) : error401response
     }
   } catch (error: any) {
     return error500response(error)

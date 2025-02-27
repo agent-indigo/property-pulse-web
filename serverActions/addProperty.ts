@@ -7,6 +7,8 @@ import cloudinary from '@/config/cloudinary'
 import PropertyDocument from '@/interfaces/PropertyDocument'
 import propertyModel from '@/models/propertyModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
+import unauthorizedResponse from '@/serverActionResponses/unauthorizedResponse'
+import internalServerErrorResponse from '@/serverActionResponses/internalServerErrorResponse'
 const addProperty: Function = async (form: FormData): Promise<ServerActionResponse> => {
   try {
     const {
@@ -48,16 +50,10 @@ const addProperty: Function = async (form: FormData): Promise<ServerActionRespon
         success: true
       }
     } else {
-      return {
-        error,
-        success: false
-      }
+      return error ? internalServerErrorResponse(error) : unauthorizedResponse
     }
   } catch (error: any) {
-    return {
-      error: `500: Internal server error adding property:\n${error.toString()}`,
-      success: false
-    }
+    return internalServerErrorResponse(error)
   }
 }
 export default addProperty

@@ -4,6 +4,9 @@ import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import messageModel from '@/models/messageModel'
 import getSessionUser from '@/serverActions/getSessionUser'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
+import unauthorizedResponse from '@/serverActionResponses/unauthorizedResponse'
+import internalServerErrorResponse from '@/serverActionResponses/internalServerErrorResponse'
+import badRequestResponse from '@/serverActionResponses/badRequestResponse'
 const sendMessage: Function = async (form: FormData): Promise<ServerActionResponse> => {
   try {
     const {
@@ -18,12 +21,7 @@ const sendMessage: Function = async (form: FormData): Promise<ServerActionRespon
         await connectToMongoDB()
         await messageModel.create({
           sender,
-          recipient,
-          property: form.get('property')?.valueOf(),
-          name: form.get('name')?.valueOf(),
-          email: form.get('email')?.valueOf(),
-          phone: form.get('phone')?.valueOf(),
-          body: form.get('body')?.valueOf(),
+          ...Object.fromEntries(form.entries()),
           read: false
         })
         revalidatePath(
@@ -35,22 +33,13 @@ const sendMessage: Function = async (form: FormData): Promise<ServerActionRespon
           success: true
         }
       } else {
-        return {
-          error: '400: You can\'t send yourself a message.',
-          success: false
-        }
+        return badRequestResponse('send yourself a message')
       }
     } else {
-      return {
-        error,
-        success: false
-      }
+      return error ? internalServerErrorResponse(error) : unauthorizedResponse
     }
   } catch (error: any) {
-    return {
-      error: `500: Internal server error sending message:\n${error.toString()}`,
-      success: false
-    }
+    return internalServerErrorResponse(error)
   }
 }
 export default sendMessage

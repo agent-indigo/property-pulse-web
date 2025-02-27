@@ -1,5 +1,7 @@
 'use server'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
+import internalServerErrorResponse from '@/serverActionResponses/internalServerErrorResponse'
+import unauthorizedResponse from '@/serverActionResponses/unauthorizedResponse'
 import getSessionUser from '@/serverActions/getSessionUser'
 const getPropertyBookmarked: Function = async (propertyId: string): Promise<ServerActionResponse> => {
   try {
@@ -11,15 +13,9 @@ const getPropertyBookmarked: Function = async (propertyId: string): Promise<Serv
     return success && sessionUser ? {
       bookmarked: sessionUser.bookmarks.includes(propertyId),
       success: true
-    } : {
-      error,
-      success: false
-    }
+    } : error ? internalServerErrorResponse(error) : unauthorizedResponse
   } catch (error: any) {
-    return {
-      error: `500: Internal server error bookmarking property:\n${error.toString()}`,
-      success: false
-    }
+    return internalServerErrorResponse(error)
   }
 }
 export default getPropertyBookmarked

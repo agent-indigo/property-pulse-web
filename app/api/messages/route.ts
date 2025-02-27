@@ -22,6 +22,7 @@ export const dynamic = 'force-dynamic'
 export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
     const {
+      error,
       sessionUser,
       success
     }: ServerActionResponse = await getSessionUser()
@@ -40,7 +41,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
         createdAt: -1
       }).lean())
     } else {
-      return error401response
+      return error ? error500response(error) : error401response
     }
   } catch (error: any) {
     return error500response(error)
@@ -55,6 +56,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
 export const POST = async (request: NextRequest): Promise<NextResponse> => {
   try {
     const {
+      error,
       sessionUser,
       success
     }: ServerActionResponse = await getSessionUser()
@@ -76,7 +78,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
         return error400response('send yourself a message')
       }
     } else {
-      return error401response
+      return error ? error500response(error) : error401response
     }
   } catch (error: any) {
     return error500response(error)

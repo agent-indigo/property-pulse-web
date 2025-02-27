@@ -1,7 +1,7 @@
 import PlainUser from '@/interfaces/PlainUser'
 export default interface ServerActionResponse {
   bookmarked?: boolean
-  error?: string
+  error?: string | Error
   lat?: number
   lng?: number
   message?: string
@@ -10,4 +10,5 @@ export default interface ServerActionResponse {
   success: boolean
   unreadMessagesCount?: number
   sessionUser?: PlainUser
+  stack?: string
 }
