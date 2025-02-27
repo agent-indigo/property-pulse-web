@@ -68,11 +68,15 @@ const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): Re
       toast.error(error)
     }
   }
-  return loading ? <Spinner loading={loading}/> : errorOccured ? (
+  return loading ? (
+    <Spinner loading={loading}/>
+  ) : errorOccured ? (
     <h1 className='text-red-500 text-center font-bold'>
       Error checking bookmark status.
     </h1>
-  ) : user && user._id === property.owner ? null : (
+  ) : user && user._id === property.owner ? (
+    null
+  ) : (
     <button
       disabled={!user}
       onClick={handleClick}

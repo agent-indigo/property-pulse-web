@@ -53,7 +53,9 @@ const PropertyMap: FunctionComponent<DestructuredProperty> = ({property}): React
     }
     geoLocate()
   }, [location])
-  return loading ? <Spinner loading={loading}/> : errorOccured ? (
+  return loading ? (
+    <Spinner loading={loading}/>
+  ) : errorOccured ? (
     <h1 className='text-red-500 text-center font-bold'>
       Error geolocating property.
     </h1>
