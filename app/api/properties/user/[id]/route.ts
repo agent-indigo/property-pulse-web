@@ -24,7 +24,7 @@ export const GET = async (
     await connectToMongoDB()
     return await userModel.findById(id) ? success200response(await propertyModel.find({
       owner: id
-    })) : error404response('User')
+    })) : error404response
   } catch (error: any) {
     return error500response(error)
   }

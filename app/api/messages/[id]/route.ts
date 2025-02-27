@@ -34,12 +34,12 @@ export const DELETE = async (
       if (message) {
         if (sessionUser._id === message.recipient.toString()) {
           await messageModel.findByIdAndDelete(message._id)
-          return success204response('Message')
+          return success204response
         } else {
           return error401response
         }
       } else {
-        return error404response('Message')
+        return error404response
       }
     } else {
       return error401response
@@ -58,7 +58,6 @@ export const PATCH = async (
   request: NextRequest,
   {params}: any
 ): Promise<NextResponse> => {
-  let status: string = 'read/unread'
   try {
     const {
       sessionUser,
@@ -69,16 +68,14 @@ export const PATCH = async (
       const message: MessageDocument | null = await messageModel.findById((await params).id)
       if (message) {
         if (sessionUser._id = message.recipient.toString()) {
-          const read: boolean = message.read
-          message.read = !read
-          status = read ? 'unread' : 'read'
+          message.read = !message.read
           await message.save()
-          return success200response({message: `Message marked as ${status}.`})
+          return success200response(message)
         } else {
           return error401response
         }
       } else {
-        return error404response('Message')
+        return error404response
       }
     } else {
       return error401response

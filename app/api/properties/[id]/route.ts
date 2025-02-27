@@ -27,7 +27,7 @@ export const GET = async (
   try {
     await connectToMongoDB()
     const property: PropertyDocument | null = await propertyModel.findById((await params).id)
-    return property ? success200response(property) : error404response('Property')
+    return property ? success200response(property) : error404response
   } catch (error: any) {
     return error500response(error)
   }
@@ -54,12 +54,12 @@ export const DELETE = async (
         if (sessionUser._id === property.owner.toString()) {
           property.imageIds.map(async (image: string): Promise<void> => await cloudinary.uploader.destroy(image))
           await propertyModel.findByIdAndDelete(property._id)
-          return success204response('Property')
+          return success204response
         } else {
           return error401response
         }
       } else {
-        return error404response('Property')
+        return error404response
       }
     } else {
       return error401response
@@ -92,15 +92,12 @@ export const PATCH = async (
             property._id,
             Object.fromEntries((await request.formData()).entries())
           )
-          return success200response(
-            property,
-            'Changes saved.'
-          )
+          return success200response(property)
         } else {
           return error401response
         }
       } else {
-        return error404response('Property')
+        return error404response
       }
     } else {
       return error401response

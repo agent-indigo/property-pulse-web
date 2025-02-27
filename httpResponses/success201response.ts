@@ -1,11 +1,7 @@
 import {NextResponse} from 'next/server'
-const success201response: Function = (
-  data: object,
-  type: string
-): NextResponse => new NextResponse(
+const success201response: Function = (data: object): NextResponse => new NextResponse(
   JSON.stringify(data), {
-    status: 201,
-    statusText: type.toLowerCase() === 'message' ? 'Message sent.' : `${type} added.`
+    status: 201
   }
 )
 export default success201response

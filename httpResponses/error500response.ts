@@ -1,8 +1,10 @@
 import {NextResponse} from 'next/server'
 const error500response: Function = (error: Error): NextResponse => new NextResponse(
-  undefined, {
-    status: 500,
-    statusText: `Internal server error:\n${error.toString()}`
+  JSON.stringify({
+    message: error.message,
+    stack: process.env.NODE_ENV === 'development' ? error.stack : null
+  }), {
+    status: 500
   }
 )
 export default error500response

@@ -1,8 +1,9 @@
 import {NextResponse} from 'next/server'
 const error400response: Function = (action: string): NextResponse => new NextResponse(
-  undefined, {
-    status: 400,
-    statusText: `You can't ${action}.`
+  JSON.stringify({
+    message: `You can't ${action}.`
+  }), {
+    status: 400
   }
 )
 export default error400response

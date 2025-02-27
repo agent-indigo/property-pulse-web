@@ -79,7 +79,7 @@ export const PATCH = async (
             return error400response('bookmark your own property')
           }
         } else {
-          return error404response('Property')
+          return error404response
         }
       } else {
         return error401response

@@ -9,6 +9,10 @@ import propertyModel from '@/models/propertyModel'
 import getSessionUser from '@/serverActions/getSessionUser'
 import cloudinary from '@/config/cloudinary'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
+import error500response from '@/httpResponses/error500response'
+import success200response from '@/httpResponses/success200response'
+import success201response from '@/httpResponses/success201response'
+import error401response from '@/httpResponses/error401response'
 export const dynamic = 'force-dynamic'
 /**
  * @name    GET
@@ -20,30 +24,20 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
     const page: string = new URL(request.url).searchParams.get('page') ?? ''
     await connectToMongoDB()
-    return new NextResponse(
-      JSON.stringify({
-        properties: page === ''
-        ? await propertyModel
-          .find()
-          .lean()
-        : await propertyModel
-          .find()
-          .skip((parseInt(page) - 1) * 6)
-          .limit(6)
-          .lean(),
-        total: await propertyModel.countDocuments()
-      }), {
-        status: 200,
-        statusText: 'OK'
-      }
-    )
+    return success200response({
+      properties: page === ''
+      ? await propertyModel
+        .find()
+        .lean()
+      : await propertyModel
+        .find()
+        .skip((parseInt(page) - 1) * 6)
+        .limit(6)
+        .lean(),
+      total: await propertyModel.countDocuments()
+    })
   } catch (error: any) {
-    return new NextResponse(
-      undefined, {
-        status: 500,
-        statusText: `Internal server error:\n${error.toString()}`
-      }
-    )
+    return error500response(error)
   }
 }
 /**
@@ -83,26 +77,11 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
         images,
         imageIds
       })
-      return new NextResponse(
-        JSON.stringify(property), {
-          status: 201,
-          statusText: 'Property added.'
-        }
-      )
+      return success201response(property)
     } else {
-      return new NextResponse(
-        undefined, {
-          status: 401,
-          statusText: 'Unauthorized'
-        }
-      )
+      return error401response
     }
   } catch (error: any) {
-    return new NextResponse(
-      undefined, {
-        status: 500,
-        statusText: `Internal server error:\n${error.toString()}`
-      }
-    )
+    return error500response(error)
   }
 }
