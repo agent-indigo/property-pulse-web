@@ -50,41 +50,25 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
     for (const [
       formEntryKey,
       formEntryValue
-    ] of form.entries()) {
+    ] of form.entries()) for (const [
+      propertyFieldKey,
+      propertyFieldValue
+    ] of Object.entries(property)) if (formEntryKey === propertyFieldKey) if (formEntryValue instanceof Object && propertyFieldValue instanceof Object) {
       for (const [
-        propertyFieldKey,
-        propertyFieldValue
-      ] of Object.entries(property)) {
-        if (formEntryKey === propertyFieldKey) {
-          if (formEntryValue instanceof Object && propertyFieldValue instanceof Object) {
-            for (const [
-              nestedFormEntryKey,
-              nestedFormEntryValue
-            ] of Object.entries(formEntryValue)) {
-              for (const [
-                nestedPropertyFieldKey,
-                nestedPropertyFieldValue
-              ] of Object.entries(propertyFieldValue)) {
-                if (nestedFormEntryKey === nestedPropertyFieldKey) {
-                  if (nestedFormEntryValue !== nestedPropertyFieldValue) {
-                    patch.append(
-                      `${formEntryKey}.${nestedFormEntryKey}`,
-                      nestedFormEntryValue
-                    )
-                  }
-                }
-              }
-            }
-          } else {
-            if (formEntryValue !== propertyFieldValue) {
-              patch.append(
-                formEntryKey,
-                formEntryValue
-              )
-            }
-          }
-        }
-      }
+        nestedFormEntryKey,
+        nestedFormEntryValue
+      ] of Object.entries(formEntryValue)) for (const [
+        nestedPropertyFieldKey,
+        nestedPropertyFieldValue
+      ] of Object.entries(propertyFieldValue)) nestedFormEntryKey === nestedPropertyFieldKey && nestedFormEntryValue !== nestedPropertyFieldValue && patch.append(
+        `${formEntryKey}.${nestedFormEntryKey}`,
+        nestedFormEntryValue
+      )
+    } else {
+      formEntryValue !== propertyFieldValue && patch.append(
+        formEntryKey,
+        formEntryValue
+      )
     }
     const {
       error,
