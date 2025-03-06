@@ -1,16 +1,12 @@
 'use server'
 import {getServerSession} from 'next-auth'
-import {
-  FlattenMaps,
-  ObjectId
-} from 'mongoose'
+import {FlattenMaps} from 'mongoose'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import SessionWithUserId from '@/interfaces/SessionWithUserId'
 import userModel from '@/models/userModel'
 import authOpts from '@/config/authOpts'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import UserDocument from '@/interfaces/UserDocument'
-import PlainUser from '@/interfaces/PlainUser'
 import unauthorizedResponse from '@/serverActionResponses/unauthorizedResponse'
 import internalServerErrorResponse from '@/serverActionResponses/internalServerErrorResponse'
 const getSessionUser: Function = async (): Promise<ServerActionResponse> => {
@@ -19,16 +15,10 @@ const getSessionUser: Function = async (): Promise<ServerActionResponse> => {
     if (session) {
       await connectToMongoDB()
       const user: FlattenMaps<UserDocument> | null = await userModel.findById(session.user.id).lean()
-      if (user) {
-        const sessionUser: PlainUser = JSON.parse(JSON.stringify(user))
-        sessionUser.bookmarks = user.bookmarks.map((bookmark: ObjectId): string => bookmark.toString())
-        return {
-          sessionUser,
-          success: true
-        }
-      } else {
-        return unauthorizedResponse
-      }
+      return user ? {
+        sessionUser: user.toObject(),
+        success: true
+      } : unauthorizedResponse
     } else {
       return unauthorizedResponse
     }
