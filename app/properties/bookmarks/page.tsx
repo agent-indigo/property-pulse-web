@@ -3,12 +3,13 @@ import {
   ReactElement
 } from 'react'
 import {Metadata} from 'next'
+import {getServerSession} from 'next-auth'
 import PropertyCard from '@/components/PropertyCard'
-import getSessionUser from '@/serverActions/getSessionUser'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
 import BookmarkButton from '@/components/BookmarkButton'
 import PlainProperty from '@/interfaces/PlainProperty'
+import userModel from '@/models/userModel'
 export const metadata: Metadata = {
   title: 'Bookmarks'
 }
@@ -16,7 +17,9 @@ const BookmarksPage: FunctionComponent = async (): Promise<ReactElement> => {
   await connectToMongoDB()
   const bookmarks: PlainProperty[] = JSON.parse(JSON.stringify(await propertyModel.find({
     _id: {
-      $in: (await getSessionUser()).sessionUser?.bookmarks
+      $in: (await userModel.findOne({
+        email: (await getServerSession())?.user?.email
+      }))?.bookmarks
     }
   }).lean()))
   return (
