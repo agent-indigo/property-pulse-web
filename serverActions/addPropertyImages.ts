@@ -1,5 +1,6 @@
 'use server'
 import {UploadApiResponse} from 'cloudinary'
+import {revalidatePath} from 'next/cache'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import getSessionUser from '@/serverActions/getSessionUser'
 import cloudinary from '@/config/cloudinary'
@@ -39,6 +40,10 @@ const addPropertyImages: Function = async (
               }
             })))
             await property.save()
+            revalidatePath(
+              '/',
+              'layout'
+            )
             return {
               success: true,
               message: 'Photo uploaded.'

@@ -44,7 +44,7 @@ const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): Re
           setBookmarked(bookmarked)
         } else {
           setErrorOccured(true)
-          toast.error(error)
+          toast.error(`Error checking if property is bookmarked:\n${error}`)
         }
       }
       setLoading(false)
@@ -65,7 +65,7 @@ const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): Re
       setBookmarked(bookmarked)
       toast.success(message)
     } else {
-      toast.error(error)
+      toast.error(`Error adding/removing bookmark:\n${error}`)
     }
   }
   return loading ? (

@@ -1,4 +1,5 @@
 'use server'
+import {revalidatePath} from 'next/cache'
 import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import getSessionUser from '@/serverActions/getSessionUser'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
@@ -28,6 +29,10 @@ const deletePropertyImage: Function = async (
           property.imageIds = property.imageIds.filter((id: string): boolean => id !== imageId)
           await cloudinary.uploader.destroy(imageId)
           await property.save()
+          revalidatePath(
+            '/',
+            'layout'
+          )
           return deletedResponse('Image')
         } else {
           return unauthorizedResponse
