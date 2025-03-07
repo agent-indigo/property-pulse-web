@@ -12,6 +12,13 @@ import SessionWithUserId from '@/interfaces/SessionWithUserId'
 import userModel from '@/models/userModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import UserDocument from '@/interfaces/UserDocument'
+export const dynamic = 'force-dynamic'
+/**
+ * @name    GET
+ * @desc    GET the current user
+ * @route   GET /api/auth/user
+ * @access  public
+ */
 export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
     const session: SessionWithUserId | null = await getServerSession(authOpts)
