@@ -16,7 +16,7 @@ const getSessionUser: Function = async (): Promise<ServerActionResponse> => {
       await connectToMongoDB()
       const user: FlattenMaps<UserDocument> | null = await userModel.findById(session.user.id).lean()
       return user ? {
-        sessionUser: user.toObject(),
+        sessionUser: JSON.parse(JSON.stringify(user)),
         success: true
       } : unauthorizedResponse
     } else {
