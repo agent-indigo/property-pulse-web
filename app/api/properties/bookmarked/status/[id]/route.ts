@@ -2,8 +2,11 @@ import {
   NextRequest,
   NextResponse
 } from 'next/server'
-import {FlattenMaps, ObjectId} from 'mongoose'
-import {getServerSession} from 'next-auth'
+import {ObjectId} from 'mongoose'
+import {
+  getServerSession,
+  Session
+} from 'next-auth'
 import {revalidatePath} from 'next/cache'
 import PropertyDocument from '@/interfaces/PropertyDocument'
 import UserDocument from '@/interfaces/UserDocument'
@@ -14,7 +17,6 @@ import success200response from '@/httpResponses/success200response'
 import error401response from '@/httpResponses/error401response'
 import error500response from '@/httpResponses/error500response'
 import error404response from '@/httpResponses/error404response'
-import SessionWithUserId from '@/interfaces/SessionWithUserId'
 import authOpts from '@/config/authOpts'
 export const dynamic = 'force-dynamic'
 /**
@@ -28,10 +30,12 @@ export const GET = async (
   {params}: any
 ): Promise<NextResponse> => {
   try {
-    const session: SessionWithUserId | null = await getServerSession(authOpts)
+    const session: Session | null = await getServerSession(authOpts)
     if (session) {
       await connectToMongoDB()
-      const user: FlattenMaps<UserDocument> | null = await userModel.findById(session.user.id).lean()
+      const user: UserDocument | null = await userModel.findOne({
+        email: session.user?.email
+      })
       return user ? success200response({
         bookmarked: user.toObject().bookmarks.includes((await params).id)
       }) : error401response
@@ -53,34 +57,26 @@ export const PATCH = async (
   {params}: any
 ): Promise<NextResponse> => {
   try {
-    const session: SessionWithUserId | null = await getServerSession(authOpts)
+    const session: Session | null = await getServerSession(authOpts)
     if (session) {
       await connectToMongoDB()
-      const user: UserDocument | null = await userModel.findById(session.user.id)
+      const user: UserDocument | null = await userModel.findOne({
+        email: session.user?.email
+      })
       if (user) {
         const property: PropertyDocument | null = await propertyModel.findById((await params).id)
         if (property) {
           if (property.owner.toString() === user.id) {
             const {id}: PropertyDocument = property
-            let bookmarked: boolean = user.bookmarks.includes(id)
-            let message: string = ''
-            if (bookmarked) {
-              user.bookmarks = user.bookmarks.filter((bookmark: ObjectId): boolean => bookmark.toString() !== id)
-              message = 'Bookmark removed.'
-              bookmarked = false
-            } else {
-              user.bookmarks.push(id)
-              message = 'Property bookmarked.'
-              bookmarked = true
-            }
+            const bookmarked: boolean = user.toObject().bookmarks.includes(id)
+            bookmarked ? user.bookmarks = user.bookmarks.filter((bookmark: ObjectId): boolean => bookmark.toString() !== id) : user.bookmarks.push(id)
             await user.save()
             revalidatePath(
               '/properties/bookmarks',
               'page'
             )
             return success200response({
-              message,
-              bookmarked
+              bookmarked: !bookmarked
             })
           } else {
             return error401response

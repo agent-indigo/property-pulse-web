@@ -6,10 +6,8 @@ import {
 import {useRouter} from 'next/navigation'
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import {toast} from 'react-toastify'
-import editProperty from '@/serverActions/editProperty'
 import SubmitButton from '@/components/SubmitButton'
 import DestructuredProperty from '@/interfaces/DestructuredProperty'
-import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import PlainProperty from '@/interfaces/PlainProperty'
 import PropertyLocation from '@/interfaces/PropertyLocation'
 import PropertyRates from '@/interfaces/PropertyRates'
@@ -70,19 +68,17 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
         formEntryValue
       )
     }
-    const {
-      error,
-      message,
-      success
-    }: ServerActionResponse = await editProperty(
-      _id,
-      patch
+    const response: Response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_DOMAIN}/properties/${_id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(Object.fromEntries(patch.entries()))
+      }
     )
-    if (success) {
-      toast.success(message)
+    if (response.ok) {
+      toast.success('Changes saved.')
       router.push(`/properties/${_id}`)
     } else {
-      toast.error(`Error saving changes:\n${error}`)
+      toast.error(await response.text())
     }
   }
   return (

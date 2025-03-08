@@ -1,11 +1,10 @@
 import {Session} from 'next-auth'
 import {JWT} from 'next-auth/jwt'
-import AdapterUserWithId from '@/interfaces/AdapterUserWithId'
-import SessionWithUserId from '@/interfaces/SessionWithUserId'
+import {AdapterUser} from 'next-auth/adapters'
 export default interface SessionParams {
   session: Session
   token?: JWT
-  user: AdapterUserWithId
-  newSession: SessionWithUserId
+  user: AdapterUser
+  newSession: Session
   trigger: 'update'
 }

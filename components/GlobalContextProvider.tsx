@@ -8,12 +8,8 @@ import {
   useEffect,
   useState
 } from 'react'
-import {toast} from 'react-toastify'
-import getUnreadMessagesCount from '@/serverActions/getUnreadMessagesCount'
 import State from '@/interfaces/State'
 import DestructuredReactNode from '@/interfaces/DestructuredReactNode'
-import ServerActionResponse from '@/interfaces/ServerActionResponse'
-import getSessionUser from '@/serverActions/getSessionUser'
 import PlainUser from '@/interfaces/PlainUser'
 const GlobalContext: Context<State> = createContext<State>({
   unreadMessagesCount: 0,
@@ -30,24 +26,15 @@ const GlobalContextProvider: FunctionComponent<DestructuredReactNode> = ({childr
   ] = useState<PlainUser | undefined>(undefined)
   useEffect((): void => {
     const getUser: Function = async (): Promise<void> => {
-      const {
-        success,
-        sessionUser
-      }: ServerActionResponse = await getSessionUser()
-      success && sessionUser && setUser(sessionUser)
+      const response: Response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/auth/user`)
+      response.ok && setUser(await response.json())
     }
     getUser()
   }, [])
   useEffect((): void => {
     const getCount: Function = async (): Promise<void> => {
-      const {
-        error,
-        success,
-        unreadMessagesCount
-      }: ServerActionResponse = await getUnreadMessagesCount()
-      success && unreadMessagesCount !== undefined
-      ? setUnreadMessagesCount(unreadMessagesCount)
-      : toast.error(`Error retrieving unread messages count:\n${error?.toString()}`)
+      const response: Response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/messages/unreadCount`)
+      response.ok && setUnreadMessagesCount((await response.json()).unread)
     }
     user && getCount()
   })

@@ -6,12 +6,12 @@ import Image from 'next/image'
 import {Metadata} from 'next'
 import {getServerSession} from 'next-auth'
 import profileDefault from '@/assets/images/profile.png'
-import ProfileProperties from '@/components/ProfileProperties'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
 import PlainProperty from '@/interfaces/PlainProperty'
 import UserDocument from '@/interfaces/UserDocument'
 import userModel from '@/models/userModel'
+import ProfilePropertyCard from '@/components/ProfilePropertyCard'
 export const metadata: Metadata = {
   title: 'Profile'
 }
@@ -57,7 +57,11 @@ const ProfilePage: FunctionComponent =  async (): Promise<ReactElement> => {
                   You have no listings.
                 </p>
               ) : (
-                <ProfileProperties properties={properties}/>
+                <section>
+                  {properties.map((property: PlainProperty): ReactElement => (
+                    <ProfilePropertyCard property={property}/>
+                  ))}
+                </section>
               )}
             </div>
           </div>

@@ -3,7 +3,10 @@ import {
   NextResponse
 } from 'next/server'
 import {UploadApiResponse} from 'cloudinary'
-import {getServerSession} from 'next-auth'
+import {
+  getServerSession,
+  Session
+} from 'next-auth'
 import {revalidatePath} from 'next/cache'
 import cloudinary from '@/config/cloudinary'
 import error401response from '@/httpResponses/error401response'
@@ -13,7 +16,6 @@ import success200response from '@/httpResponses/success200response'
 import PropertyDocument from '@/interfaces/PropertyDocument'
 import propertyModel from '@/models/propertyModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import SessionWithUserId from '@/interfaces/SessionWithUserId'
 import authOpts from '@/config/authOpts'
 import UserDocument from '@/interfaces/UserDocument'
 import userModel from '@/models/userModel'
@@ -29,10 +31,12 @@ export const POST = async (
   {params}: any
 ): Promise<NextResponse> => {
   try {
-    const session: SessionWithUserId | null = await getServerSession(authOpts)
+    const session: Session | null = await getServerSession(authOpts)
     if (session) {
       await connectToMongoDB()
-      const user: UserDocument | null = await userModel.findById(session.user.id)
+      const user: UserDocument | null = await userModel.findOne({
+        email: session.user?.email
+      })
       if (user) {
         const property: PropertyDocument | null = await propertyModel.findById((await params).id)
         if (property) {
@@ -56,7 +60,7 @@ export const POST = async (
               '/',
               'layout'
             )
-            return success200response(property)
+            return success200response(property.toObject())
           } else {
             return error401response
           }

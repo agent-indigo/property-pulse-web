@@ -8,10 +8,7 @@ import {
 import {toast} from 'react-toastify'
 import Link from 'next/link'
 import {useGlobalContext} from '@/components/GlobalContextProvider'
-import deleteMessage from '@/serverActions/deleteMessage'
-import toggleMessageRead from '@/serverActions/toggleMessageRead'
 import State from '@/interfaces/State'
-import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import DestructuredMessage from '@/interfaces/DestructuredMessage'
 import PlainMessage from '@/interfaces/PlainMessage'
 import PlainUser from '@/interfaces/PlainUser'
@@ -35,34 +32,34 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactEl
   const [
     read,
     setRead
-  ] = useState<boolean | undefined>(messageRead)
+  ] = useState<boolean>(messageRead)
   const {setUnreadMessagesCount}: State = useGlobalContext()
   const handleToggle: MouseEventHandler<HTMLButtonElement> = async (): Promise<void> => {
-    const {
-      error,
-      message,
-      read,
-      success
-    }: ServerActionResponse = await toggleMessageRead(messageId)
-    if (success && read !== undefined) {
+    const response: Response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_DOMAIN}/messages/${messageId}`, {
+        method: 'PATCH'
+      }
+    )
+    if (response.ok) {
+      const {read}: PlainMessage = await response.json()
       setRead(read)
       setUnreadMessagesCount((previousValue: number): number => read ? previousValue - 1 : previousValue + 1)
-      toast.success(message)
+      toast.success(`Message marked as ${read ? 'read' : 'unread'}.`)
     } else {
-      toast.error(`Error marking message as read/unread:\n${error}`)
+      toast.error(await response.text())
     }
   }
   const handleDelete: MouseEventHandler<HTMLButtonElement> = async (): Promise<void> => {
-    const {
-      error,
-      message,
-      success
-    }: ServerActionResponse = await deleteMessage(messageId)
-    if (success) {
+    const response: Response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_DOMAIN}/messages/${messageId}`, {
+        method: 'DELETE'
+      }
+    )
+    if (response.ok) {
       setUnreadMessagesCount((previousValue: number): number => previousValue - 1)
-      toast.success(message)
+      toast.success('Message deleted.')
     } else {
-      toast.error(`Error deleting message:\n${error}`)
+      toast.error(await response.text())
     }
   }
   return (

@@ -4,7 +4,8 @@ import {
 } from 'next/server'
 import {
   Client,
-  GeocodeResponse
+  GeocodeResponse,
+  GeocodeResponseData
 } from '@googlemaps/google-maps-services-js'
 import propertyModel from '@/models/propertyModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
@@ -34,7 +35,15 @@ export const GET = async (
           key: process.env.PRIVATE_GOOGLE_MAPS_GEOCODING_API_KEY ?? ''
         }
       })
-      return response.status === 200 ? success200response(response.data.results[0].geometry.location) : error500response(new Error(response.data.error_message))
+      const {
+        data,
+        status
+      }: GeocodeResponse = response
+      const {
+        error_message,
+        results
+      }: GeocodeResponseData = data
+      return status === 200 ? success200response(results[0].geometry.location) : error500response(new Error(error_message))
     } else {
       return error404response
     }

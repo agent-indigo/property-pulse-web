@@ -4,4 +4,5 @@ export default interface PlainUser extends PlainDocument {
   username: string
   image?: string
   bookmarks: string[]
+  role: 'admin' | 'dev' | 'root' | 'user'
 }

@@ -2,7 +2,10 @@ import {
   NextRequest,
   NextResponse
 } from 'next/server'
-import {getServerSession} from 'next-auth'
+import {
+  getServerSession,
+  Session
+} from 'next-auth'
 import {revalidatePath} from 'next/cache'
 import MessageDocument from '@/interfaces/MessageDocument'
 import messageModel from '@/models/messageModel'
@@ -12,7 +15,6 @@ import error401response from '@/httpResponses/error401response'
 import error404response from '@/httpResponses/error404response'
 import error500response from '@/httpResponses/error500response'
 import success200response from '@/httpResponses/success200response'
-import SessionWithUserId from '@/interfaces/SessionWithUserId'
 import authOpts from '@/config/authOpts'
 import UserDocument from '@/interfaces/UserDocument'
 import userModel from '@/models/userModel'
@@ -28,15 +30,17 @@ export const DELETE = async (
   {params}: any
 ): Promise<NextResponse> => {
   try {
-    const session: SessionWithUserId | null = await getServerSession(authOpts)
+    const session: Session | null = await getServerSession(authOpts)
     if (session) {
       await connectToMongoDB()
-      const user: UserDocument | null = await userModel.findById(session.user.id)
+      const user: UserDocument | null = await userModel.findOne({
+        email: session.user?.email
+      })
       if (user) {
         const message: MessageDocument | null = await messageModel.findById((await params).id)
         if (message) {
           if (user.id === message.recipient.toString()) {
-            await messageModel.findByIdAndDelete(message.id)
+            await message.deleteOne()
             revalidatePath(
               '/messages',
               'page'
@@ -69,10 +73,12 @@ export const PATCH = async (
   {params}: any
 ): Promise<NextResponse> => {
   try {
-    const session: SessionWithUserId | null = await getServerSession(authOpts)
+    const session: Session | null = await getServerSession(authOpts)
     if (session) {
       await connectToMongoDB()
-      const user: UserDocument | null = await userModel.findById(session.user.id)
+      const user: UserDocument | null = await userModel.findOne({
+        email: session.user?.email
+      })
       if (user) {
         const message: MessageDocument | null = await messageModel.findById((await params).id)
         if (message) {
@@ -83,7 +89,7 @@ export const PATCH = async (
               '/messages',
               'page'
             )
-            return success200response(message)
+            return success200response(message.toObject())
           } else {
             return error401response
           }

@@ -2,7 +2,10 @@ import {
   NextRequest,
   NextResponse
 } from 'next/server'
-import {getServerSession} from 'next-auth'
+import {
+  getServerSession,
+  Session
+} from 'next-auth'
 import {revalidatePath} from 'next/cache'
 import error401response from '@/httpResponses/error401response'
 import error404response from '@/httpResponses/error404response'
@@ -12,7 +15,6 @@ import propertyModel from '@/models/propertyModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import cloudinary from '@/config/cloudinary'
 import success200response from '@/httpResponses/success200response'
-import SessionWithUserId from '@/interfaces/SessionWithUserId'
 import authOpts from '@/config/authOpts'
 import UserDocument from '@/interfaces/UserDocument'
 import userModel from '@/models/userModel'
@@ -28,15 +30,20 @@ export const DELETE = async (
   {params}: any
 ): Promise<NextResponse> => {
   try {
-    const session: SessionWithUserId | null = await getServerSession(authOpts)
+    const session: Session | null = await getServerSession(authOpts)
     if (session) {
       await connectToMongoDB()
-      const user: UserDocument | null = await userModel.findById(session.user.id)
+      const user: UserDocument | null = await userModel.findOne({
+        email: session.user?.email
+      })
       if (user) {
-        const property: PropertyDocument | null = await propertyModel.findById((await params).id)
+        const {
+          id,
+          imageId
+        }: any = await params
+        const property: PropertyDocument | null = await propertyModel.findById(id)
         if (property) {
           if (property.owner.toString() === user.id) {
-            const imageId: string = (await params).imageId
             property.images = property.images.filter((url: string): boolean => !url.includes(imageId))
             property.imageIds = property.imageIds.filter((id: string): boolean => id !== imageId)
             await cloudinary.uploader.destroy(imageId)
@@ -45,7 +52,7 @@ export const DELETE = async (
               '/',
               'layout'
             )
-            return success200response(property)
+            return success200response(property.toObject())
           } else {
             return error401response
           }

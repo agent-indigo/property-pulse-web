@@ -29,7 +29,17 @@ const userModel: Model<UserDocument> = models.User ?? model<UserDocument>(
     bookmarks: [{
       type: Schema.Types.ObjectId,
       ref: 'Property'
-    }]
+    }],
+    role: {
+      type: Schema.Types.String,
+      required: true,
+      enum: [
+        'admin',
+        'dev',
+        'root',
+        'user'
+      ]
+    }
   }, {
     timestamps: true
   })

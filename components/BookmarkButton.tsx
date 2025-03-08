@@ -9,9 +9,6 @@ import {
 import {FaBookmark} from 'react-icons/fa'
 import {toast} from 'react-toastify'
 import Spinner from '@/components/Spinner'
-import getPropertyBookmarked from '@/serverActions/getPropertyBookmarked'
-import togglePropertyBookmarked from '@/serverActions/togglePropertyBookmarked'
-import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import State from '@/interfaces/State'
 import {useGlobalContext} from '@/components/GlobalContextProvider'
 import DestructuredProperty from '@/interfaces/DestructuredProperty'
@@ -35,16 +32,12 @@ const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): Re
   useEffect((): void => {
     const getStatus: Function = async (): Promise<void> => {
       if (user) {
-        const {
-          bookmarked,
-          error,
-          success
-        }: ServerActionResponse = await getPropertyBookmarked(_id)
-        if (success && bookmarked !== undefined) {
-          setBookmarked(bookmarked)
+        const response: Response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/properties/bookmarked/status/${_id}`)
+        if (response.ok) {
+          setBookmarked((await response.json()).bookmarked)
         } else {
           setErrorOccured(true)
-          toast.error(`Error checking if property is bookmarked:\n${error}`)
+          toast.error(await response.text())
         }
       }
       setLoading(false)
@@ -55,17 +48,17 @@ const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): Re
     user
   ])
   const handleClick: MouseEventHandler<HTMLButtonElement> = async (): Promise<void> => {
-    const {
-      bookmarked,
-      error,
-      message,
-      success
-    }: ServerActionResponse = await togglePropertyBookmarked(_id)
-    if (success && bookmarked !== undefined) {
+    const response: Response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_DOMAIN}/properties/bookmarked/status/${_id}`, {
+        method: 'PATCH'
+      }
+    )
+    if (response.ok) {
+      const bookmarked: boolean = (await response.json()).bookmarked
       setBookmarked(bookmarked)
-      toast.success(message)
+      toast.success(`Bookmark ${bookmarked ? 'added' : 'removed'}.`)
     } else {
-      toast.error(`Error adding/removing bookmark:\n${error}`)
+      toast.error(await response.text())
     }
   }
   return loading ? (

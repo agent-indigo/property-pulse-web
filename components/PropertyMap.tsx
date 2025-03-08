@@ -11,13 +11,15 @@ import {
   LoadScript,
   Marker
 } from '@react-google-maps/api'
+import {LatLngLiteral} from '@googlemaps/google-maps-services-js'
 import Spinner from '@/components/Spinner'
-import geoLocateProperty from '@/serverActions/geoLocateProperty'
-import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import DestructuredProperty from '@/interfaces/DestructuredProperty'
 import PlainProperty from '@/interfaces/PlainProperty'
 const PropertyMap: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
-  const {location}: PlainProperty = property
+  const {
+    _id,
+    location
+  }: PlainProperty = property
   const [
     lat,
     setLat
@@ -36,17 +38,16 @@ const PropertyMap: FunctionComponent<DestructuredProperty> = ({property}): React
   ] = useState<boolean>(false)
   useEffect((): void => {
     const geoLocate: Function = async (): Promise<void> => {
-      const {
-        error,
-        lat,
-        lng,
-        success
-      }: ServerActionResponse = await geoLocateProperty(location)
-      if (success && lat !== undefined && lng !== undefined) {
+      const response: Response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/properties/${_id}/geolocate`)
+      if (response.ok) {
+        const {
+          lat,
+          lng
+        }: LatLngLiteral = await response.json()
         setLat(lat)
         setLng(lng)
       } else {
-        toast.error(`Error geolocating property:\n${error}`)
+        toast.error(await response.text())
         setErrorOccured(true)
       }
       setLoading(false)

@@ -5,11 +5,9 @@ import {
 } from 'react'
 import {toast} from 'react-toastify'
 import SubmitButton from '@/components/SubmitButton'
-import sendMessage from '@/serverActions/sendMessage'
 import State from '@/interfaces/State'
 import {useGlobalContext} from '@/components/GlobalContextProvider'
 import DestructuredProperty from '@/interfaces/DestructuredProperty'
-import ServerActionResponse from '@/interfaces/ServerActionResponse'
 import PlainProperty from '@/interfaces/PlainProperty'
 const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
   const {
@@ -18,13 +16,14 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
   }: PlainProperty = property
   const {user}: State = useGlobalContext()
   const isOwner: boolean = user?._id === owner
-  const handleSubmit: Function = async (form: FormData): Promise<void> => {
-    const {
-      error,
-      message,
-      success
-    }: ServerActionResponse = await sendMessage(form)
-    success ? toast.success(message) : toast.error(`Error sending inquiry:\n${error}`)
+  const handleSubmit: Function = async (body: FormData): Promise<void> => {
+    const response: Response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_DOMAIN}/messages`, {
+        method: 'POST',
+        body
+      }
+    )
+    response.ok ? toast.success('Message sent.') : toast.error(await response.text())
   }
   return (
     <div className='bg-white p-6 rounded-lg shadow-md'>

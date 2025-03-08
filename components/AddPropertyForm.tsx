@@ -6,23 +6,21 @@ import {
 import {useRouter} from 'next/navigation'
 import {toast} from 'react-toastify'
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
-import addProperty from '@/serverActions/addProperty'
 import SubmitButton from '@/components/SubmitButton'
-import ServerActionResponse from '@/interfaces/ServerActionResponse'
 const AddPropertyForm: FunctionComponent = (): ReactElement => {
   const router: AppRouterInstance = useRouter()
-  const handleSubmit: Function = async (form: FormData): Promise<void> => {
-    const {
-      error,
-      message,
-      propertyId,
-      success
-    }: ServerActionResponse = await addProperty(form)
-    if (success) {
-      toast.success(message)
-      router.push(`/properties/${propertyId}`)
+  const handleSubmit: Function = async (body: FormData): Promise<void> => {
+    const response: Response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_DOMAIN}/properties`, {
+        method: 'POST',
+        body
+      }
+    )
+    if (response.ok) {
+      toast.success('Property added.')
+      router.push(`/properties/${(await response.json())._id}`)
     } else {
-      toast.error(`Error adding property:\n${error}`)
+      toast.error(await response.text())
     }
   }
   return (

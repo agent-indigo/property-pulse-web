@@ -2,7 +2,10 @@ import {
   NextRequest,
   NextResponse
 } from 'next/server'
-import {getServerSession} from 'next-auth'
+import {
+  getServerSession,
+  Session
+} from 'next-auth'
 import {revalidatePath} from 'next/cache'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
@@ -13,7 +16,6 @@ import error404response from '@/httpResponses/error404response'
 import error500response from '@/httpResponses/error500response'
 import success204response from '@/httpResponses/success204response'
 import error401response from '@/httpResponses/error401response'
-import SessionWithUserId from '@/interfaces/SessionWithUserId'
 import authOpts from '@/config/authOpts'
 import UserDocument from '@/interfaces/UserDocument'
 import userModel from '@/models/userModel'
@@ -31,7 +33,7 @@ export const GET = async (
   try {
     await connectToMongoDB()
     const property: PropertyDocument | null = await propertyModel.findById((await params).id)
-    return property ? success200response(property) : error404response
+    return property ? success200response(property.toObject()) : error404response
   } catch (error: any) {
     return error500response(error)
   }
@@ -47,16 +49,18 @@ export const DELETE = async (
   {params}: any
 ): Promise<NextResponse> => {
   try {
-    const session: SessionWithUserId | null = await getServerSession(authOpts)
+    const session: Session | null = await getServerSession(authOpts)
     if (session) {
       await connectToMongoDB()
-      const user: UserDocument | null = await userModel.findById(session.user.id)
+      const user: UserDocument | null = await userModel.findOne({
+        email: session.user?.email
+      })
       if (user) {
         const property: PropertyDocument | null = await propertyModel.findById((await params).id)
         if (property) {
           if (property.owner.toString() === user.id) {
             property.imageIds.map(async (id: string): Promise<void> => await cloudinary.uploader.destroy(id))
-            await propertyModel.findByIdAndDelete(property.id)
+            await property.deleteOne()
             revalidatePath(
               '/',
               'layout'
@@ -89,21 +93,23 @@ export const PATCH = async (
   {params}: any
 ): Promise<NextResponse> => {
   try {
-    const session: SessionWithUserId | null = await getServerSession(authOpts)
+    const session: Session | null = await getServerSession(authOpts)
     if (session) {
       await connectToMongoDB()
-      const user: UserDocument | null = await userModel.findById(session.user.id)
+      const user: UserDocument | null = await userModel.findOne({
+        email: session.user?.email
+      })
       if (user) {
         const property: PropertyDocument | null = await propertyModel.findById((await params).id)
         if (property) {
           if (property.owner.toString() === user.id) {
-            property.overwrite(request.json())
+            property.overwrite(await request.json())
             await property.save()
             revalidatePath(
               '/',
               'layout'
             )
-            return success200response(property)
+            return success200response(property.toObject())
           } else {
             return error401response
           }

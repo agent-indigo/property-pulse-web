@@ -2,7 +2,10 @@ import {
   NextRequest,
   NextResponse
 } from 'next/server'
-import {getServerSession} from 'next-auth'
+import {
+  getServerSession,
+  Session
+} from 'next-auth'
 import {revalidatePath} from 'next/cache'
 import {UploadApiResponse} from 'cloudinary'
 import PropertyDocument from '@/interfaces/PropertyDocument'
@@ -13,7 +16,6 @@ import error500response from '@/httpResponses/error500response'
 import success200response from '@/httpResponses/success200response'
 import success201response from '@/httpResponses/success201response'
 import error401response from '@/httpResponses/error401response'
-import SessionWithUserId from '@/interfaces/SessionWithUserId'
 import authOpts from '@/config/authOpts'
 import UserDocument from '@/interfaces/UserDocument'
 import userModel from '@/models/userModel'
@@ -52,10 +54,12 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
  */
 export const POST = async (request: NextRequest): Promise<NextResponse> => {
   try {
-    const session: SessionWithUserId | null = await getServerSession(authOpts)
+    const session: Session | null = await getServerSession(authOpts)
     if (session) {
       await connectToMongoDB()
-      const user: UserDocument | null = await userModel.findById(session.user.id)
+      const user: UserDocument | null = await userModel.findOne({
+        email: session.user?.email
+      })
       if (user) {
         const form: FormData = await request.formData()
         const images: string[] = []
@@ -84,7 +88,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
           '/',
           'layout'
         )
-        return success201response(property)
+        return success201response(property.toObject())
       } else {
         return error401response
       }
