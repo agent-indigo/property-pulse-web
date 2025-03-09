@@ -38,7 +38,8 @@ const userModel: Model<UserDocument> = models.User ?? model<UserDocument>(
         'dev',
         'root',
         'user'
-      ]
+      ],
+      default: 'user'
     }
   }, {
     timestamps: true

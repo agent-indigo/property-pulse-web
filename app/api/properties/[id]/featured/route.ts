@@ -14,6 +14,7 @@ import PropertyDocument from '@/interfaces/PropertyDocument'
 import UserDocument from '@/interfaces/UserDocument'
 import propertyModel from '@/models/propertyModel'
 import userModel from '@/models/userModel'
+import connectToMongoDB from '@/utilities/connectToMongoDB'
 export const PATCH = async (
   request: NextRequest,
   {params}: any
@@ -21,6 +22,7 @@ export const PATCH = async (
   try {
     const session: Session | null = await getServerSession()
     if (session) {
+      await connectToMongoDB()
       const user: UserDocument | null = await userModel.findOne({
         email: session.user?.email
       })
