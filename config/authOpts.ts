@@ -24,19 +24,19 @@ const authOpts: AuthOptions = {
   ],
   callbacks: {
     signIn: async (params: SignInParams): Promise<boolean> => {
-      const {profile}: SignInParams = params
+      const {profile}: any = params
       await connectToMongoDB()
       const user: UserDocument | null = await userModel.findOne({
         email: profile?.email
       })
       if (user) {
-        user.image = profile?.image
+        user.image = profile?.picture
         await user.save()
       } else {
         await userModel.create({
           email: profile?.email,
           username: profile?.name,
-          image: profile?.image,
+          image: profile?.picture,
           role: await userModel.findOne({
             role: 'root'
           }) ? 'user' : 'root'
@@ -44,14 +44,7 @@ const authOpts: AuthOptions = {
       }
       return true
     },
-    session: async (params: SessionParams): Promise<Session> => {
-      const {session}: SessionParams = params
-      const {user}: Session = session
-      return {
-        ...session,
-        user
-      }
-    }
+    session: async (params: SessionParams): Promise<Session> => params.session
   }
 }
 export default authOpts
