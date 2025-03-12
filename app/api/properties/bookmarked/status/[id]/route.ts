@@ -66,13 +66,10 @@ export const PATCH = async (
       if (user) {
         const property: PropertyDocument | null = await propertyModel.findById((await params).id)
         if (property) {
-          if (property.get('owner').toString() === user.get('id')) {
-            const id: string = property.get('id')
+          if (property.owner.toString() === user.id) {
+            const {id}: PropertyDocument = property
             const bookmarked: boolean = user.toObject().bookmarks.includes(id)
-            bookmarked ? user.set(
-              'bookmarks',
-              user.get('bookmarks').filter((bookmark: ObjectId): boolean => bookmark.toString() !== id)
-            ) : user.bookmarks.push(property.get(id))
+            bookmarked ? user.bookmarks = user.bookmarks.filter((bookmark: ObjectId): boolean => bookmark.toString() !== id) : user.bookmarks.push(id)
             await user.save()
             revalidatePath(
               '/properties/bookmarks',

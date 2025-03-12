@@ -58,8 +58,8 @@ export const DELETE = async (
       if (user) {
         const property: PropertyDocument | null = await propertyModel.findById((await params).id)
         if (property) {
-          if (property.get('owner').toString() === user.get('id')) {
-            property.get('imageIds').map(async (id: string): Promise<void> => await cloudinary.uploader.destroy(id))
+          if (property.owner.toString() === user.id) {
+            property.imageIds.map(async (id: string): Promise<void> => await cloudinary.uploader.destroy(id))
             await property.deleteOne()
             revalidatePath(
               '/',
@@ -102,9 +102,8 @@ export const PATCH = async (
       if (user) {
         const property: PropertyDocument | null = await propertyModel.findById((await params).id)
         if (property) {
-          if (property.get('owner').toString() === user.get('id')) {
-            property.updateOne(await request.json())
-            await property.save()
+          if (property.owner.toString() === user.id) {
+            await property.updateOne(await request.json())
             revalidatePath(
               '/',
               'layout'

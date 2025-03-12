@@ -40,7 +40,7 @@ export const POST = async (
       if (user) {
         const property: PropertyDocument | null = await propertyModel.findById((await params).id)
         if (property) {
-          if (property.get('owner').toString() === user.get('id')) {
+          if (property.owner.toString() === user.id) {
             await Promise.all((await request.formData()).getAll('files').map(async (image: FormDataEntryValue): Promise<void> => {
               if (image instanceof File) {
                 const {

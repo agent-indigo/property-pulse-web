@@ -29,7 +29,7 @@ export const GET = async (
     await connectToMongoDB()
     const property: PropertyDocument | null = await propertyModel.findById((await params).id)
     if (property) {
-      const location: PropertyLocation = property.get('location')
+      const {location}: PropertyDocument = property
       const {
         city,
         state,

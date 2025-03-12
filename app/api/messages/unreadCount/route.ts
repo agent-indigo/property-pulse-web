@@ -31,7 +31,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
       })
       return user ? success200response({
         unread: await messageModel.countDocuments({
-          recipient: user.get('id'),
+          recipient: user.id,
           read: false
         })
       }) : error401response

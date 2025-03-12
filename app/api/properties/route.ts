@@ -79,7 +79,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
           }
         }))
         const property: PropertyDocument = await propertyModel.create({
-          owner: user.get('id'),
+          owner: user.id,
           ...Object.fromEntries(form.entries().filter(([key]): boolean => key !== 'files')),
           images,
           imageIds

@@ -27,14 +27,11 @@ export const PATCH = async (
         email: session.user?.email
       })
       if (user) {
-        const role: string = user.get('role')
+        const {role}: UserDocument = user
         if (role === 'root' || role === 'admin') {
           const property: PropertyDocument | null = await propertyModel.findById((await params).id)
           if (property) {
-            property.set(
-              'is_featured',
-              !property.get('is_featured')
-            )
+            property.is_featured = !property.is_featured
             await property.save()
             return success200response(property.toObject())
           } else {

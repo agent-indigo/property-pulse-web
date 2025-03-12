@@ -29,8 +29,8 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
         email: session.user?.email
       })
       return user ? success200response({
-        _id: user.get('id'),
-        image: user.get('image')
+        _id: user.id,
+        image: user.image
       }) : error401response
     } else {
       return error401response
