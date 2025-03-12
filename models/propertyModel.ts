@@ -122,11 +122,7 @@ const propertyModel: Model<PropertyDocument> = models.Property ?? model<Property
         ]
       },
       phone: {
-        type: Schema.Types.String,
-        required: [
-          true,
-          'Please provide the owner\'s phone number.'
-        ]
+        type: Schema.Types.String
       }
     },
     images: [{

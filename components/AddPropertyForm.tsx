@@ -76,7 +76,6 @@ const AddPropertyForm: FunctionComponent = (): ReactElement => {
           id='name'
           name='name'
           className='border rounded w-full py-2 px-3 mb-2'
-          placeholder='eg. Beautiful Apartment In Miami'
           required
         />
       </div>
@@ -92,7 +91,7 @@ const AddPropertyForm: FunctionComponent = (): ReactElement => {
           name='description'
           className='border rounded w-full py-2 px-3'
           rows={4}
-          placeholder='Add an optional description of your property'
+          required
         />
       </div>
       <div className='mb-4 bg-blue-50 p-4'>
@@ -108,6 +107,7 @@ const AddPropertyForm: FunctionComponent = (): ReactElement => {
           name='location.street'
           className='border rounded w-full py-2 px-3 mb-2'
           placeholder='Street'
+          required
         />
         <input
           type='text'
@@ -434,7 +434,7 @@ const AddPropertyForm: FunctionComponent = (): ReactElement => {
           id='seller_name'
           name='seller_info.name'
           className='border rounded w-full py-2 px-3'
-          placeholder='Name'
+          required
         />
       </div>
       <div className='mb-4'>
@@ -449,7 +449,6 @@ const AddPropertyForm: FunctionComponent = (): ReactElement => {
           id='seller_email'
           name='seller_info.email'
           className='border rounded w-full py-2 px-3'
-          placeholder='Email address'
           required
         />
       </div>
@@ -465,7 +464,6 @@ const AddPropertyForm: FunctionComponent = (): ReactElement => {
           id='seller_phone'
           name='seller_info.phone'
           className='border rounded w-full py-2 px-3'
-          placeholder='Phone'
         />
       </div>
       <div className='mb-4'>

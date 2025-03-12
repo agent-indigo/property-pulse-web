@@ -181,7 +181,6 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
           id='name'
           name='name'
           className='border rounded w-full py-2 px-3 mb-2'
-          placeholder='eg. Beautiful Apartment In Miami'
           required
           defaultValue={propertyName}
           onChange={(event: ChangeEvent<HTMLInputElement>): void => setPropertyName(event.target.value)}
@@ -199,7 +198,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
           name='description'
           className='border rounded w-full py-2 px-3'
           rows={4}
-          placeholder='Add an optional description of your property'
+          required
           defaultValue={description}
           onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => setDesc(event.target.value)}
         />
@@ -217,6 +216,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
           name='location.street'
           className='border rounded w-full py-2 px-3 mb-2'
           placeholder='Street'
+          required
           defaultValue={street}
           onChange={(event: ChangeEvent<HTMLInputElement>): void => setStreet(event.target.value)}
         />
@@ -246,6 +246,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
           name='location.zipcode'
           className='border rounded w-full py-2 px-3 mb-2'
           placeholder='Zipcode'
+          required
           defaultValue={zipcode}
           onChange={(event: ChangeEvent<HTMLInputElement>): void => setZip(event.target.value)}
         />
@@ -593,7 +594,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
           id='seller_name'
           name='seller_info.name'
           className='border rounded w-full py-2 px-3'
-          placeholder='Name'
+          required
           defaultValue={sellerName}
           onChange={(event: ChangeEvent<HTMLInputElement>): void => setSellerName(event.target.value)}
         />
@@ -610,7 +611,6 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
           id='seller_email'
           name='seller_info.email'
           className='border rounded w-full py-2 px-3'
-          placeholder='Email address'
           required
           defaultValue={email}
           onChange={(event: ChangeEvent<HTMLInputElement>): void => setEmail(event.target.value)}
@@ -628,7 +628,6 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
           id='seller_phone'
           name='seller_info.phone'
           className='border rounded w-full py-2 px-3'
-          placeholder='Phone'
           defaultValue={phone}
           onChange={(event: ChangeEvent<HTMLInputElement>): void => setPhone(event.target.value)}
         />

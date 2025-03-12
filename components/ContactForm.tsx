@@ -59,7 +59,6 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
               type='text'
               id='name'
               name='name'
-              placeholder='Enter your name'
               required
               className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
             />
@@ -76,7 +75,6 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
               id='email'
               name='email'
               type='email'
-              placeholder='Enter your email'
               required
             />
           </div>
@@ -92,7 +90,6 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
               id='phone'
               name='phone'
               type='text'
-              placeholder='Enter your phone number'
             />
           </div>
           <div className='mb-4'>
@@ -106,7 +103,7 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
               className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 h-44 focus:outline-none focus:shadow-outline'
               id='body'
               name='body'
-              placeholder='Enter your message'
+              required
             />
           </div>
           <div>
