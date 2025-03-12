@@ -10,11 +10,12 @@ const connectToMongoDB: Function = async (): Promise<void> => {
       true
     )
     const host: string = process.env.MONGODB_HOST ?? 'localhost'
-    await connect(`mongodb${host === 'localhost' ? '' : '+srv'}://${
+    const hostIsLocal: boolean = host === 'localhost' || host.startsWith('192.168.') || host.startsWith('10.') || host.startsWith('172.16.') || host.startsWith('fe80:') || host.startsWith('fd00:')
+    await connect(`mongodb${hostIsLocal ? '' : '+srv'}://${
       process.env.MONGODB_USER ?? ''
     }:${
       process.env.MONGODB_PASSWORD ?? ''
-    }@${host}${host === 'localhost' ? `:${
+    }@${host}${hostIsLocal ? `:${
       process.env.MONGODB_PORT ?? '27017'
     }` : ''}/${
       process.env.MONGODB_DATABASE ?? 'PropertyPulse'
