@@ -43,9 +43,15 @@ export const DELETE = async (
         }: any = await params
         const property: PropertyDocument | null = await propertyModel.findById(id)
         if (property) {
-          if (property.owner.toString() === user.id) {
-            property.images = property.images.filter((url: string): boolean => !url.includes(imageId))
-            property.imageIds = property.imageIds.filter((id: string): boolean => id !== imageId)
+          if (property.get('owner').toString() === user.get('id')) {
+            property.set(
+              'images',
+              property.get('images').filter((url: string): boolean => !url.includes(imageId))
+            )
+            property.set(
+              'imageIds',
+              property.get('imageIds').filter((id: string): boolean => id !== imageId)
+            )
             await cloudinary.uploader.destroy(imageId)
             await property.save()
             revalidatePath(

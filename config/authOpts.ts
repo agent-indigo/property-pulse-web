@@ -30,8 +30,13 @@ const authOpts: AuthOptions = {
         email: profile?.email
       })
       if (user) {
-        user.image = profile?.picture
-        await user.save()
+        if (user.get('image') !== profile?.picture) {
+          user.set(
+            'image',
+            profile?.picture
+          )
+          await user.save()
+        }
       } else {
         await userModel.create({
           email: profile?.email,

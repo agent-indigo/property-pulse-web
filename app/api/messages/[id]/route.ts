@@ -39,7 +39,7 @@ export const DELETE = async (
       if (user) {
         const message: MessageDocument | null = await messageModel.findById((await params).id)
         if (message) {
-          if (user.id === message.recipient.toString()) {
+          if (user.get('id') === message.get('recipient').toString()) {
             await message.deleteOne()
             revalidatePath(
               '/messages',
@@ -82,8 +82,11 @@ export const PATCH = async (
       if (user) {
         const message: MessageDocument | null = await messageModel.findById((await params).id)
         if (message) {
-          if (user.id === message.recipient.toString()) {
-            message.read = !message.read
+          if (user.get('id') === message.get('recipient').toString()) {
+            message.set(
+              'read',
+              !message.get('read')
+            )
             await message.save()
             revalidatePath(
               '/messages',

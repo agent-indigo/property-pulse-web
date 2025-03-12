@@ -34,7 +34,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
         email: session.user?.email
       })
       return user ? success200response(await messageModel.find({
-        recipient: user.id
+        recipient: user.get('id')
       }).populate(
         'sender',
         'username'
@@ -68,7 +68,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
       })
       if (user) {
         const form: FormData = await request.formData()
-        const {id: sender}: UserDocument = user
+        const sender: string = user.get('id')
         const recipient: string | undefined = form.get('recipient')?.valueOf().toString()
         if (recipient && recipient !== sender) {
           const message: MessageDocument = await messageModel.create({

@@ -13,6 +13,7 @@ import PropertyDocument from '@/interfaces/PropertyDocument'
 import success200response from '@/httpResponses/success200response'
 import error500response from '@/httpResponses/error500response'
 import error404response from '@/httpResponses/error404response'
+import PropertyLocation from '@/interfaces/PropertyLocation'
 export const dynamic = 'force-dynamic'
 /**
  * @name    GET
@@ -28,10 +29,16 @@ export const GET = async (
     await connectToMongoDB()
     const property: PropertyDocument | null = await propertyModel.findById((await params).id)
     if (property) {
-      const {location}: PropertyDocument = property
+      const location: PropertyLocation = property.get('location')
+      const {
+        city,
+        state,
+        street,
+        zipcode
+      }: PropertyLocation = location
       const response: GeocodeResponse = await new Client().geocode({
         params: {
-          address: `${location.street} ${location.city} ${location.state} ${location.zipcode} USA`,
+          address: `${street} ${city} ${state} ${zipcode} USA`,
           key: process.env.PRIVATE_GOOGLE_MAPS_GEOCODING_API_KEY ?? ''
         }
       })
