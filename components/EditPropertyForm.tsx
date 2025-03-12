@@ -77,7 +77,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
   const [
     phone,
     setPhone
-  ] = useState<string>(property.seller_info.phone)
+  ] = useState<string | undefined>(property.seller_info.phone)
   const [
     amenities,
     setAmenities
@@ -88,35 +88,75 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
     event.target.value
   ] : amenities.filter((amenity: string): boolean => amenity !== event.target.value))
   const handleSubmit: Function = async (): Promise<void> => {
-    console.log(phone)
+    const patch: FormData = new FormData
+    propertyName !== property.name && patch.append(
+      'name',
+      propertyName
+    )
+    type !== property.type && patch.append(
+      'type',
+      type
+    )
+    nightly !== property.rates.nightly && patch.append(
+      'rates.nightly',
+      nightly ? nightly.toString() : 'null'
+    )
+    weekly !== property.rates.weekly && patch.append(
+      'rates.weekly',
+      weekly ? weekly.toString() : 'null'
+    )
+    monthly !== property.rates.monthly && patch.append(
+      'rates.monthly',
+      monthly ? monthly.toString() : 'null'
+    )
+    beds !== property.beds && patch.append(
+      'beds',
+      beds.toString()
+    )
+    baths !== property.baths && patch.append(
+      'baths',
+      baths.toString()
+    )
+    square_feet !== property.square_feet && patch.append(
+      'square_feet',
+      square_feet.toString()
+    )
+    city !== property.location.city && patch.append(
+      'location.city',
+      city
+    )
+    street !== property.location.street && patch.append(
+      'location.street',
+      street
+    )
+    state !== property.location.state && patch.append(
+      'location.state',
+      state
+    )
+    zipcode !== property.location.zipcode && patch.append(
+      'location.zipcode',
+      zipcode
+    )
+    description !== property.description && patch.append(
+      'description',
+      description
+    )
+    sellerName !== property.seller_info.name && patch.append(
+      'seller_info.name',
+      sellerName
+    )
+    email !== property.seller_info.email && patch.append(
+      'seller_info.email',
+      email
+    )
+    phone !== property.seller_info.phone && patch.append(
+      'seller_info.phone',
+      phone ?? 'null'
+    )
     const response: Response = await fetch(
       `${process.env.NEXT_PUBLIC_API_DOMAIN}/properties/${_id}`, {
         method: 'PATCH',
-        body: JSON.stringify({
-          name: propertyName === property.name ? undefined : propertyName,
-          type: type === property.type ? undefined : type,
-          rates: {
-            nightly: nightly === property.rates.nightly ? undefined : nightly,
-            weekly: weekly === property.rates.weekly ? undefined : weekly,
-            monthly: monthly === property.rates.monthly ? undefined : monthly
-          },
-          beds: beds === property.beds ? undefined : beds,
-          baths: baths === property.baths ? undefined : baths,
-          square_feet: square_feet === property.square_feet ? undefined : square_feet,
-          location: {
-            city: city === property.location.city ? undefined : city,
-            street: street === property.location.street ? undefined : street,
-            state: state === property.location.state ? undefined : state,
-            zipcode: zipcode === property.location.zipcode ? undefined : zipcode
-          },
-          description: description === property.description ? undefined : description,
-          seller_info: {
-            name: sellerName === property.seller_info.name ? undefined : sellerName,
-            email: email === property.seller_info.email ? undefined : email,
-            phone: phone === property.seller_info.phone ? undefined : phone
-          },
-          amenities: amenities === property.amenities ? undefined : amenities
-        })
+        body: JSON.stringify(Object.fromEntries(patch.entries()))
       }
     )
     if (response.ok) {

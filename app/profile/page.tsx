@@ -59,7 +59,10 @@ const ProfilePage: FunctionComponent =  async (): Promise<ReactElement> => {
               ) : (
                 <section>
                   {properties.map((property: PlainProperty): ReactElement => (
-                    <ProfilePropertyCard property={property}/>
+                    <ProfilePropertyCard
+                      key={property._id}
+                      property={property}
+                    />
                   ))}
                 </section>
               )}
