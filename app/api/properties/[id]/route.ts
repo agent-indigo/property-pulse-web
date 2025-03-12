@@ -103,7 +103,7 @@ export const PATCH = async (
         const property: PropertyDocument | null = await propertyModel.findById((await params).id)
         if (property) {
           if (property.get('owner').toString() === user.get('id')) {
-            property.overwrite(await request.json())
+            property.updateOne(await request.json())
             await property.save()
             revalidatePath(
               '/',

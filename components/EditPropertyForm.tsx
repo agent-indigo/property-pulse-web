@@ -1,7 +1,10 @@
 'use client'
 import {
+  ChangeEvent,
+  EventHandler,
   FunctionComponent,
-  ReactElement
+  ReactElement,
+  useState
 } from 'react'
 import {useRouter} from 'next/navigation'
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
@@ -9,69 +12,111 @@ import {toast} from 'react-toastify'
 import SubmitButton from '@/components/SubmitButton'
 import DestructuredProperty from '@/interfaces/DestructuredProperty'
 import PlainProperty from '@/interfaces/PlainProperty'
-import PropertyLocation from '@/interfaces/PropertyLocation'
-import PropertyRates from '@/interfaces/PropertyRates'
-import PropertyContact from '@/interfaces/PropertyContact'
 const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
-  const {
-    _id,
-    name: propertyName,
+  const {_id}: PlainProperty = property
+  const [
+    propertyName,
+    setPropertyName
+  ] = useState<string>(property.name)
+  const [
     type,
-    rates,
-    beds,
-    baths,
-    square_feet,
-    location,
-    description,
-    seller_info,
-    amenities
-  }: PlainProperty = property
-  const {
+    setType
+  ] = useState<string>(property.type)
+  const [
     nightly,
+    setNightly
+  ] = useState<number | undefined>(property.rates.nightly)
+  const [
     weekly,
-    monthly
-  }: PropertyRates = rates
-  const {
+    setWeekly
+  ] = useState<number | undefined>(property.rates.weekly)
+  const [
+    monthly,
+    setMonthly
+  ] = useState<number | undefined>(property.rates.monthly)
+  const [
+    beds,
+    setBeds
+  ] = useState<number>(property.beds)
+  const [
+    baths,
+    setBaths
+  ] = useState<number>(property.baths)
+  const [
+    square_feet,
+    setSqFt
+  ] = useState<number>(property.square_feet)
+  const [
     city,
-    state,
+    setCity
+  ] = useState<string>(property.location.city)
+  const [
     street,
-    zipcode
-  }: PropertyLocation = location
-  const {
-    name: sellerName,
+    setStreet
+  ] = useState<string>(property.location.street)
+  const [
+    state,
+    setState
+  ] = useState<string>(property.location.state)
+  const [
+    zipcode,
+    setZip
+  ] = useState<string>(property.location.zipcode)
+  const [
+    description,
+    setDesc
+  ] = useState<string>(property.description)
+  const [
+    sellerName,
+    setSellerName
+  ] = useState<string>(property.seller_info.name)
+  const [
     email,
-    phone
-  }: PropertyContact = seller_info
+    setEmail
+  ] = useState<string>(property.seller_info.email)
+  const [
+    phone,
+    setPhone
+  ] = useState<string>(property.seller_info.phone)
+  const [
+    amenities,
+    setAmenities
+  ] = useState<string[]>(property.amenities)
   const router: AppRouterInstance = useRouter()
-  const handleSubmit: Function = async (form: FormData): Promise<void> => {
-    const patch: FormData = new FormData
-    for (const [
-      formEntryKey,
-      formEntryValue
-    ] of form.entries()) for (const [
-      propertyFieldKey,
-      propertyFieldValue
-    ] of Object.entries(property)) if (formEntryKey === propertyFieldKey) if (formEntryValue instanceof Object && propertyFieldValue instanceof Object) {
-      for (const [
-        nestedFormEntryKey,
-        nestedFormEntryValue
-      ] of Object.entries(formEntryValue)) for (const [
-        nestedPropertyFieldKey,
-        nestedPropertyFieldValue
-      ] of Object.entries(propertyFieldValue)) nestedFormEntryKey === nestedPropertyFieldKey && nestedFormEntryValue !== nestedPropertyFieldValue && patch.append(
-        `${formEntryKey}.${nestedFormEntryKey}`,
-        nestedFormEntryValue
-      )
-    } else {
-      formEntryValue !== propertyFieldValue && patch.append(
-        formEntryKey,
-        formEntryValue
-      )
-    }
+  const handleCheckbox: EventHandler<ChangeEvent<HTMLInputElement>> = (event: ChangeEvent<HTMLInputElement>): void => setAmenities((amenities: string[]): string[] => event.target.checked ? [
+    ...amenities,
+    event.target.value
+  ] : amenities.filter((amenity: string): boolean => amenity !== event.target.value))
+  const handleSubmit: Function = async (): Promise<void> => {
+    console.log(phone)
     const response: Response = await fetch(
       `${process.env.NEXT_PUBLIC_API_DOMAIN}/properties/${_id}`, {
         method: 'PATCH',
-        body: JSON.stringify(Object.fromEntries(patch.entries()))
+        body: JSON.stringify({
+          name: propertyName === property.name ? undefined : propertyName,
+          type: type === property.type ? undefined : type,
+          rates: {
+            nightly: nightly === property.rates.nightly ? undefined : nightly,
+            weekly: weekly === property.rates.weekly ? undefined : weekly,
+            monthly: monthly === property.rates.monthly ? undefined : monthly
+          },
+          beds: beds === property.beds ? undefined : beds,
+          baths: baths === property.baths ? undefined : baths,
+          square_feet: square_feet === property.square_feet ? undefined : square_feet,
+          location: {
+            city: city === property.location.city ? undefined : city,
+            street: street === property.location.street ? undefined : street,
+            state: state === property.location.state ? undefined : state,
+            zipcode: zipcode === property.location.zipcode ? undefined : zipcode
+          },
+          description: description === property.description ? undefined : description,
+          seller_info: {
+            name: sellerName === property.seller_info.name ? undefined : sellerName,
+            email: email === property.seller_info.email ? undefined : email,
+            phone: phone === property.seller_info.phone ? undefined : phone
+          },
+          amenities: amenities === property.amenities ? undefined : amenities
+        })
       }
     )
     if (response.ok) {
@@ -99,6 +144,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
           className='border rounded w-full py-2 px-3'
           required
           defaultValue={type}
+          onChange={(event: ChangeEvent<HTMLSelectElement>): void => setType(event.target.value)}
         >
           <option defaultValue='Apartment'>
             Apartment
@@ -138,6 +184,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
           placeholder='eg. Beautiful Apartment In Miami'
           required
           defaultValue={propertyName}
+          onChange={(event: ChangeEvent<HTMLInputElement>): void => setPropertyName(event.target.value)}
         />
       </div>
       <div className='mb-4'>
@@ -154,6 +201,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
           rows={4}
           placeholder='Add an optional description of your property'
           defaultValue={description}
+          onChange={(event: ChangeEvent<HTMLTextAreaElement>): void => setDesc(event.target.value)}
         />
       </div>
       <div className='mb-4 bg-blue-50 p-4'>
@@ -170,6 +218,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
           className='border rounded w-full py-2 px-3 mb-2'
           placeholder='Street'
           defaultValue={street}
+          onChange={(event: ChangeEvent<HTMLInputElement>): void => setStreet(event.target.value)}
         />
         <input
           type='text'
@@ -179,6 +228,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
           placeholder='City'
           required
           defaultValue={city}
+          onChange={(event: ChangeEvent<HTMLInputElement>): void => setCity(event.target.value)}
         />
         <input
           type='text'
@@ -188,6 +238,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
           placeholder='State'
           required
           defaultValue={state}
+          onChange={(event: ChangeEvent<HTMLInputElement>): void => setState(event.target.value)}
         />
         <input
           type='text'
@@ -196,6 +247,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
           className='border rounded w-full py-2 px-3 mb-2'
           placeholder='Zipcode'
           defaultValue={zipcode}
+          onChange={(event: ChangeEvent<HTMLInputElement>): void => setZip(event.target.value)}
         />
       </div>
       <div className='mb-4 flex flex-wrap'>
@@ -213,6 +265,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
             className='border rounded w-full py-2 px-3'
             required
             defaultValue={beds}
+            onChange={(event: ChangeEvent<HTMLInputElement>): void => setBeds(parseInt(event.target.value))}
           />
         </div>
         <div className='w-full sm:w-1/3 px-2'>
@@ -229,6 +282,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
             className='border rounded w-full py-2 px-3'
             required
             defaultValue={baths}
+            onChange={(event: ChangeEvent<HTMLInputElement>): void => setBaths(parseFloat(event.target.value))}
           />
         </div>
         <div className='w-full sm:w-1/3 pl-2'>
@@ -245,6 +299,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
             className='border rounded w-full py-2 px-3'
             required
             defaultValue={square_feet}
+            onChange={(event: ChangeEvent<HTMLInputElement>): void => setSqFt(parseFloat(event.target.value))}
           />
         </div>
       </div>
@@ -264,6 +319,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
               defaultValue='Wifi'
               className='mr-2'
               defaultChecked={amenities.includes('Wifi')}
+              onChange={handleCheckbox}
             />
             <label htmlFor='amenity_wifi'>
               Wifi
@@ -277,6 +333,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
               defaultValue='Full Kitchen'
               className='mr-2'
               defaultChecked={amenities.includes('Full Kitchen')}
+              onChange={handleCheckbox}
             />
             <label htmlFor='amenity_kitchen'>
               Full kitchen
@@ -290,6 +347,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
               defaultValue='Washer & Dryer'
               className='mr-2'
               defaultChecked={amenities.includes('Washer & Dryer')}
+              onChange={handleCheckbox}
             />
             <label htmlFor='amenity_washer_dryer'>
               Washer & Dryer
@@ -303,6 +361,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
               defaultValue='Free Parking'
               className='mr-2'
               defaultChecked={amenities.includes('Free Parking')}
+              onChange={handleCheckbox}
             />
             <label htmlFor='amenity_free_parking'>
               Free Parking
@@ -316,6 +375,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
               defaultValue='Swimming Pool'
               className='mr-2'
               defaultChecked={amenities.includes('Swimming Pool')}
+              onChange={handleCheckbox}
             />
             <label htmlFor='amenity_pool'>
               Swimming Pool
@@ -329,6 +389,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
               defaultValue='Hot Tub'
               className='mr-2'
               defaultChecked={amenities.includes('Hot Tub')}
+              onChange={handleCheckbox}
             />
             <label htmlFor='amenity_hot_tub'>
               Hot Tub
@@ -342,6 +403,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
               defaultValue='24/7 Security'
               className='mr-2'
               defaultChecked={amenities.includes('24/7 Security')}
+              onChange={handleCheckbox}
             />
             <label htmlFor='amenity_24_7_security'>
               24/7 Security
@@ -355,6 +417,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
               defaultValue='Wheelchair Accessible'
               className='mr-2'
               defaultChecked={amenities.includes('Wheelchair Accessible')}
+              onChange={handleCheckbox}
             />
             <label htmlFor='amenity_wheelchair_accessible'>
               Wheelchair Accessible
@@ -368,6 +431,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
               defaultValue='Elevator Access'
               className='mr-2'
               defaultChecked={amenities.includes('Elevator Access')}
+              onChange={handleCheckbox}
             />
             <label htmlFor='amenity_elevator_access'>
               Elevator Access
@@ -381,6 +445,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
               defaultValue='Dishwasher'
               className='mr-2'
               defaultChecked={amenities.includes('Dishwasher')}
+              onChange={handleCheckbox}
             />
             <label htmlFor='amenity_dishwasher'>
               Dishwasher
@@ -394,6 +459,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
               defaultValue='Gym/Fitness Center'
               className='mr-2'
               defaultChecked={amenities.includes('Gym/Fitness Center')}
+              onChange={handleCheckbox}
             />
             <label htmlFor='amenity_gym_fitness_center'>
               Gym/Fitness Center
@@ -407,6 +473,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
               defaultValue='Air Conditioning'
               className='mr-2'
               defaultChecked={amenities.includes('Air Conditioning')}
+              onChange={handleCheckbox}
             />
             <label htmlFor='amenity_air_conditioning'>
               Air Conditioning
@@ -420,6 +487,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
               defaultValue='Balcony/Patio'
               className='mr-2'
               defaultChecked={amenities.includes('Balcony/Patio')}
+              onChange={handleCheckbox}
             />
             <label htmlFor='amenity_balcony_patio'>
               Balcony/Patio
@@ -433,6 +501,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
               defaultValue='Smart TV'
               className='mr-2'
               defaultChecked={amenities.includes('Smart TV')}
+              onChange={handleCheckbox}
             />
             <label htmlFor='amenity_smart_tv'>
               Smart TV
@@ -446,6 +515,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
               defaultValue='Coffee Maker'
               className='mr-2'
               defaultChecked={amenities.includes('Coffee Maker')}
+              onChange={handleCheckbox}
             />
             <label htmlFor='amenity_coffee_maker'>
               Coffee Maker
@@ -474,6 +544,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
               name='rates.weekly'
               className='border rounded w-full py-2 px-3'
               defaultValue={weekly}
+              onChange={(event: ChangeEvent<HTMLInputElement>): void => setWeekly(parseFloat(event.target.value))}
             />
           </div>
           <div className='flex items-center'>
@@ -489,6 +560,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
               name='rates.monthly'
               className='border rounded w-full py-2 px-3'
               defaultValue={monthly}
+              onChange={(event: ChangeEvent<HTMLInputElement>): void => setMonthly(parseFloat(event.target.value))}
             />
           </div>
           <div className='flex items-center'>
@@ -504,6 +576,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
               name='rates.nightly'
               className='border rounded w-full py-2 px-3'
               defaultValue={nightly}
+              onChange={(event: ChangeEvent<HTMLInputElement>): void => setNightly(parseFloat(event.target.value))}
             />
           </div>
         </div>
@@ -522,6 +595,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
           className='border rounded w-full py-2 px-3'
           placeholder='Name'
           defaultValue={sellerName}
+          onChange={(event: ChangeEvent<HTMLInputElement>): void => setSellerName(event.target.value)}
         />
       </div>
       <div className='mb-4'>
@@ -539,6 +613,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
           placeholder='Email address'
           required
           defaultValue={email}
+          onChange={(event: ChangeEvent<HTMLInputElement>): void => setEmail(event.target.value)}
         />
       </div>
       <div className='mb-4'>
@@ -555,6 +630,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
           className='border rounded w-full py-2 px-3'
           placeholder='Phone'
           defaultValue={phone}
+          onChange={(event: ChangeEvent<HTMLInputElement>): void => setPhone(event.target.value)}
         />
       </div>
       <div>
