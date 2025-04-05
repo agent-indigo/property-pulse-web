@@ -24,13 +24,10 @@ const GlobalContextProvider: FunctionComponent<DestructuredReactNode> = ({childr
     user,
     setUser
   ] = useState<PlainUser | undefined>(undefined)
-  useEffect((): void => {
-    const getUser: Function = async (): Promise<void> => {
-      const response: Response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/auth/user`)
-      response.ok && setUser(await response.json())
-    }
-    getUser()
-  }, [])
+  useEffect((): void => {(async (): Promise<void> => {
+    const response: Response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/auth/user`)
+    response.ok && setUser(await response.json())
+  })()}, [])
   useEffect((): void => {
     const getCount: Function = async (): Promise<void> => {
       const response: Response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/messages/unreadCount`)

@@ -153,11 +153,12 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
       'seller_info.phone',
       phone ?? 'null'
     )
+    const body: Object = Object.fromEntries(patch.entries())
     const response: Response = await fetch(
       `${process.env.NEXT_PUBLIC_API_DOMAIN}/properties/${_id}`, {
         method: 'PATCH',
-        body: JSON.stringify(amenities.length === property.amenities.length ? Object.fromEntries(patch.entries()) : {
-          ...Object.fromEntries(patch.entries()),
+        body: JSON.stringify(amenities.length === property.amenities.length ? body : {
+          ...body,
           amenities
         })
       }

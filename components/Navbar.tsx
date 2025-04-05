@@ -46,10 +46,10 @@ const Navbar: FunctionComponent = (): ReactElement => {
     ClientSafeProvider
   > | null>(null)
   const pathname: string = usePathname()
-  useEffect((): void => {
-    const setAuthProviders: Function = async (): Promise<void> => setProviders(await getProviders())
-    setAuthProviders()
-  }, [])
+  useEffect(
+    (): void => {(async (): Promise<void> => setProviders(await getProviders()))()},
+    []
+  )
   return (
     <nav className='bg-blue-700 border-b border-blue-500'>
       <div className='mx-auto max-w-7xl px-2 sm:px-6 lg:px-8'>

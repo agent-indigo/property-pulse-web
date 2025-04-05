@@ -36,24 +36,23 @@ const PropertyMap: FunctionComponent<DestructuredProperty> = ({property}): React
     errorOccured,
     setErrorOccured
   ] = useState<boolean>(false)
-  useEffect((): void => {
-    const geoLocate: Function = async (): Promise<void> => {
-      const response: Response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/properties/${_id}/geolocate`)
-      if (response.ok) {
-        const {
-          lat,
-          lng
-        }: LatLngLiteral = await response.json()
-        setLat(lat)
-        setLng(lng)
-      } else {
-        toast.error(await response.text())
-        setErrorOccured(true)
-      }
-      setLoading(false)
+  useEffect((): void => {(async (): Promise<void> => {
+    const response: Response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/properties/${_id}/geolocate`)
+    if (response.ok) {
+      const {
+        lat,
+        lng
+      }: LatLngLiteral = await response.json()
+      setLat(lat)
+      setLng(lng)
+    } else {
+      toast.error(await response.text())
+      setErrorOccured(true)
     }
-    geoLocate()
-  }, [location])
+    setLoading(false)
+  })()}, [
+    location
+  ])
   return loading ? (
     <Spinner loading={loading}/>
   ) : errorOccured ? (

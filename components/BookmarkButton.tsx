@@ -29,21 +29,18 @@ const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): Re
     errorOccured,
     setErrorOccured
   ] = useState<boolean>(false)
-  useEffect((): void => {
-    const getStatus: Function = async (): Promise<void> => {
-      if (user) {
-        const response: Response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/properties/bookmarked/status/${_id}`)
-        if (response.ok) {
-          setBookmarked((await response.json()).bookmarked)
-        } else {
-          setErrorOccured(true)
-          toast.error(await response.text())
-        }
+  useEffect((): void => {(async (): Promise<void> => {
+    if (user) {
+      const response: Response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/properties/bookmarked/status/${_id}`)
+      if (response.ok) {
+        setBookmarked((await response.json()).bookmarked)
+      } else {
+        setErrorOccured(true)
+        toast.error(await response.text())
       }
-      setLoading(false)
     }
-    getStatus()
-  }, [
+    setLoading(false)
+  })()}, [
     _id,
     user
   ])
