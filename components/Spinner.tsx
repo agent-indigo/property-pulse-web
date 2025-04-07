@@ -3,7 +3,7 @@ import {
   ReactElement
 } from 'react'
 import {ClipLoader} from 'react-spinners'
-import SpinnerProps from '@/interfaces/SpinnerProps'
+import SpinnerProps from '@/types/SpinnerProps'
 const Spinner: FunctionComponent<SpinnerProps> = ({loading}): ReactElement => (
   <ClipLoader
     color='#3b82f6'

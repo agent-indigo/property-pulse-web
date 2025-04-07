@@ -8,8 +8,8 @@ import {
   Session
 } from 'next-auth'
 import {revalidatePath} from 'next/cache'
-import PropertyDocument from '@/interfaces/PropertyDocument'
-import UserDocument from '@/interfaces/UserDocument'
+import PropertyDocument from '@/types/PropertyDocument'
+import UserDocument from '@/types/UserDocument'
 import propertyModel from '@/models/propertyModel'
 import userModel from '@/models/userModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'

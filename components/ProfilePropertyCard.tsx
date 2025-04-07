@@ -7,9 +7,9 @@ import {
 import Link from 'next/link'
 import Image from 'next/image'
 import {toast} from 'react-toastify'
-import DestructuredProperty from '@/interfaces/DestructuredProperty'
-import PlainProperty from '@/interfaces/PlainProperty'
-import PropertyLocation from '@/interfaces/PropertyLocation'
+import DestructuredProperty from '@/types/DestructuredProperty'
+import PlainProperty from '@/types/PlainProperty'
+import PropertyLocation from '@/types/PropertyLocation'
 const ProfilePropertyCard: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
   const {
     _id,

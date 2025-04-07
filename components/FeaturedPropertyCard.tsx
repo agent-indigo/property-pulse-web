@@ -12,10 +12,10 @@ import {
   FaRulerCombined
 } from 'react-icons/fa'
 import getRateDisplay from '@/utilities/getRateDisplay'
-import PropertyLocation from '@/interfaces/PropertyLocation'
-import PropertyRates from '@/interfaces/PropertyRates'
-import DestructuredProperty from '@/interfaces/DestructuredProperty'
-import PlainProperty from '@/interfaces/PlainProperty'
+import PropertyLocation from '@/types/PropertyLocation'
+import PropertyRates from '@/types/PropertyRates'
+import DestructuredProperty from '@/types/DestructuredProperty'
+import PlainProperty from '@/types/PlainProperty'
 const FeaturedPropertyCard: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
   const {
     _id,

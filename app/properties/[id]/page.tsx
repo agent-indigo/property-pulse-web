@@ -13,7 +13,7 @@ import ContactForm from '@/components/ContactForm'
 import ShareButtons from '@/components/ShareButtons'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
-import PlainProperty from '@/interfaces/PlainProperty'
+import PlainProperty from '@/types/PlainProperty'
 export const metadata: Metadata = {
   title: 'Property Details'
 }

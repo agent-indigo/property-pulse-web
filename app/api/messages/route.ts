@@ -15,9 +15,9 @@ import error500response from '@/httpResponses/error500response'
 import success201response from '@/httpResponses/success201response'
 import error400response from '@/httpResponses/error400response'
 import authOpts from '@/config/authOpts'
-import UserDocument from '@/interfaces/UserDocument'
+import UserDocument from '@/types/UserDocument'
 import userModel from '@/models/userModel'
-import MessageDocument from '@/interfaces/MessageDocument'
+import MessageDocument from '@/types/MessageDocument'
 export const dynamic = 'force-dynamic'
 /**
  * @name    GET

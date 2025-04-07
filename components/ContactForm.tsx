@@ -5,10 +5,10 @@ import {
 } from 'react'
 import {toast} from 'react-toastify'
 import SubmitButton from '@/components/SubmitButton'
-import ContextProps from '@/interfaces/ContextProps'
+import ContextProps from '@/types/ContextProps'
 import {useGetContext} from '@/components/ContextProvider'
-import DestructuredProperty from '@/interfaces/DestructuredProperty'
-import PlainProperty from '@/interfaces/PlainProperty'
+import DestructuredProperty from '@/types/DestructuredProperty'
+import PlainProperty from '@/types/PlainProperty'
 const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
   const {
     _id,

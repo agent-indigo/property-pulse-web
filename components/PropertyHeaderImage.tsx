@@ -3,7 +3,7 @@ import {
   FunctionComponent,
   ReactElement
 } from 'react'
-import HeaderProps from '@/interfaces/HeaderProps'
+import HeaderProps from '@/types/HeaderProps'
 const PropertyHeaderImage: FunctionComponent<HeaderProps> = ({image}): ReactElement => (
   <section>
     <div className='container-xl m-auto'>

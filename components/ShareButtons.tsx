@@ -16,8 +16,8 @@ import {
   EmailShareButton,
   EmailIcon
 } from 'react-share'
-import DestructuredProperty from '@/interfaces/DestructuredProperty'
-import PlainProperty from '@/interfaces/PlainProperty'
+import DestructuredProperty from '@/types/DestructuredProperty'
+import PlainProperty from '@/types/PlainProperty'
 const ShareButtons: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
   const {
     _id,

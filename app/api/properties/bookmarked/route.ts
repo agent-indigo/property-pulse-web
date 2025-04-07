@@ -12,7 +12,7 @@ import success200response from '@/httpResponses/success200response'
 import error401response from '@/httpResponses/error401response'
 import error500response from '@/httpResponses/error500response'
 import authOpts from '@/config/authOpts'
-import UserDocument from '@/interfaces/UserDocument'
+import UserDocument from '@/types/UserDocument'
 import userModel from '@/models/userModel'
 export const dynamic = 'force-dynamic'
 /**

@@ -5,7 +5,7 @@ import {
   FunctionComponent,
   ReactElement
 } from 'react'
-import ErrorPageProps from '@/interfaces/ErrorPageProps'
+import ErrorPageProps from '@/types/ErrorPageProps'
 const ErrorPage: FunctionComponent<ErrorPageProps> = ({
   error,
   reset

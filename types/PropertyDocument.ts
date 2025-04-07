@@ -2,9 +2,9 @@ import {
   Document,
   ObjectId
 } from 'mongoose'
-import PropertyLocation from '@/interfaces/PropertyLocation'
-import PropertyRates from '@/interfaces/PropertyRates'
-import PropertyContact from '@/interfaces/PropertyContact'
+import PropertyLocation from '@/types/PropertyLocation'
+import PropertyRates from '@/types/PropertyRates'
+import PropertyContact from '@/types/PropertyContact'
 export default interface PropertyDocument extends Document {
   owner: ObjectId
   name: string

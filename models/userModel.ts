@@ -4,7 +4,7 @@ import {
   model,
   models
 } from 'mongoose'
-import UserDocument from '@/interfaces/UserDocument'
+import UserDocument from '@/types/UserDocument'
 const userModel: Model<UserDocument> = models.User ?? model<UserDocument>(
   'User',
   new Schema<UserDocument>({

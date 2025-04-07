@@ -6,7 +6,7 @@ import Link from 'next/link'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
 import PropertyCard from '@/components/PropertyCard'
-import PlainProperty from '@/interfaces/PlainProperty'
+import PlainProperty from '@/types/PlainProperty'
 const HomeProperties: FunctionComponent = async (): Promise<ReactElement> => {
   await connectToMongoDB()
   const properties: PlainProperty[] = JSON.parse(JSON.stringify(await propertyModel.find().sort({

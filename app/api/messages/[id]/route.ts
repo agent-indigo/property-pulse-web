@@ -7,7 +7,7 @@ import {
   Session
 } from 'next-auth'
 import {revalidatePath} from 'next/cache'
-import MessageDocument from '@/interfaces/MessageDocument'
+import MessageDocument from '@/types/MessageDocument'
 import messageModel from '@/models/messageModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import success204response from '@/httpResponses/success204response'
@@ -16,7 +16,7 @@ import error404response from '@/httpResponses/error404response'
 import error500response from '@/httpResponses/error500response'
 import success200response from '@/httpResponses/success200response'
 import authOpts from '@/config/authOpts'
-import UserDocument from '@/interfaces/UserDocument'
+import UserDocument from '@/types/UserDocument'
 import userModel from '@/models/userModel'
 export const dynamic = 'force-dynamic'
 /**

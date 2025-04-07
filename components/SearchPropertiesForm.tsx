@@ -10,8 +10,8 @@ import {
 } from 'react'
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import {useRouter} from 'next/navigation'
-import PropertySearchParams from '@/interfaces/PropertySearchParams'
-import FormInput from '@/interfaces/FormInput'
+import PropertySearchParams from '@/types/PropertySearchParams'
+import FormInput from '@/types/FormInput'
 const SearchPropertiesForm: FunctionComponent = (): ReactElement => {
   const router: AppRouterInstance = useRouter()
   const [

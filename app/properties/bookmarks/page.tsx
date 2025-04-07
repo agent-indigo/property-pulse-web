@@ -8,7 +8,7 @@ import PropertyCard from '@/components/PropertyCard'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
 import BookmarkButton from '@/components/BookmarkButton'
-import PlainProperty from '@/interfaces/PlainProperty'
+import PlainProperty from '@/types/PlainProperty'
 import userModel from '@/models/userModel'
 export const metadata: Metadata = {
   title: 'Bookmarks'

@@ -8,7 +8,7 @@ import {
   Gallery,
   Item
 } from 'react-photoswipe-gallery'
-import Images from '@/interfaces/Images'
+import Images from '@/types/Images'
 const PropertyImages: FunctionComponent<Images> = ({images}): ReactElement => {
   const image: string = images[0]
   return (

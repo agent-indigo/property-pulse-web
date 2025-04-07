@@ -5,9 +5,9 @@ import {
 import Google, {GoogleProfile} from 'next-auth/providers/google'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import userModel from '@/models/userModel'
-import UserDocument from '@/interfaces/UserDocument'
-import SessionParams from '@/interfaces/SessionParams'
-import SignInParams from '@/interfaces/SignInParams'
+import UserDocument from '@/types/UserDocument'
+import SessionParams from '@/types/SessionParams'
+import SignInParams from '@/types/SignInParams'
 const authOpts: AuthOptions = {
   providers: [
     Google<GoogleProfile>({

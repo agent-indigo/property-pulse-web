@@ -8,7 +8,7 @@ import Properties from '@/components/Properties'
 import propertyModel from '@/models/propertyModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import FeaturedProperties from '@/components/FeaturedProperties'
-import PlainProperty from '@/interfaces/PlainProperty'
+import PlainProperty from '@/types/PlainProperty'
 export const metadata: Metadata = {
   title: 'Properties'
 }

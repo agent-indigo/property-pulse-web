@@ -4,7 +4,7 @@ import {
 } from 'next/server'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyModel from '@/models/propertyModel'
-import PropertySearchQuery from '@/interfaces/PropertySearchQuery'
+import PropertySearchQuery from '@/types/PropertySearchQuery'
 import success200response from '@/httpResponses/success200response'
 import error500response from '@/httpResponses/error500response'
 export const dynamic = 'force-dynamic'

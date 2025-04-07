@@ -9,8 +9,8 @@ import {
   useEffect,
   useState
 } from 'react'
-import ContextProps from '@/interfaces/ContextProps'
-import PlainUser from '@/interfaces/PlainUser'
+import ContextProps from '@/types/ContextProps'
+import PlainUser from '@/types/PlainUser'
 const AppContext: Context<ContextProps> = createContext<ContextProps>({
   unreadMessagesCount: 0,
   setUnreadMessagesCount: (): void => {}

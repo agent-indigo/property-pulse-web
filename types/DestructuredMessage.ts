@@ -1,4 +1,4 @@
-import PlainMessage from '@/interfaces/PlainMessage'
+import PlainMessage from '@/types/PlainMessage'
 export default interface DestructuredMessage {
   message: PlainMessage
 }

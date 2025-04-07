@@ -4,7 +4,7 @@ import {
   model,
   models
 } from 'mongoose'
-import MessageDocument from '@/interfaces/MessageDocument'
+import MessageDocument from '@/types/MessageDocument'
 const messageModel: Model<MessageDocument> = models.Message ?? model<MessageDocument>(
   'Message', 
   new Schema<MessageDocument>({

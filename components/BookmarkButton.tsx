@@ -9,10 +9,10 @@ import {
 import {FaBookmark} from 'react-icons/fa'
 import {toast} from 'react-toastify'
 import Spinner from '@/components/Spinner'
-import ContextProps from '@/interfaces/ContextProps'
+import ContextProps from '@/types/ContextProps'
 import {useGetContext} from '@/components/ContextProvider'
-import DestructuredProperty from '@/interfaces/DestructuredProperty'
-import PlainProperty from '@/interfaces/PlainProperty'
+import DestructuredProperty from '@/types/DestructuredProperty'
+import PlainProperty from '@/types/PlainProperty'
 const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): ReactElement | null => {
   const {user}: ContextProps = useGetContext()
   const {_id}: PlainProperty = property

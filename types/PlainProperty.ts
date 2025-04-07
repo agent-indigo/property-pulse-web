@@ -1,7 +1,7 @@
-import PlainDocument from '@/interfaces/PlainDocument'
-import PropertyContact from '@/interfaces/PropertyContact'
-import PropertyLocation from '@/interfaces/PropertyLocation'
-import PropertyRates from '@/interfaces/PropertyRates'
+import PlainDocument from '@/types/PlainDocument'
+import PropertyContact from '@/types/PropertyContact'
+import PropertyLocation from '@/types/PropertyLocation'
+import PropertyRates from '@/types/PropertyRates'
 export default interface PlainProperty extends PlainDocument {
   owner: string
   name: string

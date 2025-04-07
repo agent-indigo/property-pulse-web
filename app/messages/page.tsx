@@ -7,7 +7,7 @@ import {getServerSession} from 'next-auth'
 import MessageCard from '@/components/MessageCard'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import messageModel from '@/models/messageModel'
-import PlainMessage from '@/interfaces/PlainMessage'
+import PlainMessage from '@/types/PlainMessage'
 import userModel from '@/models/userModel'
 export const metadata: Metadata = {
   title: 'Messages'

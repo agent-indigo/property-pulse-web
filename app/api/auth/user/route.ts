@@ -12,7 +12,7 @@ import error500response from '@/httpResponses/error500response'
 import success200response from '@/httpResponses/success200response'
 import userModel from '@/models/userModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import UserDocument from '@/interfaces/UserDocument'
+import UserDocument from '@/types/UserDocument'
 export const dynamic = 'force-dynamic'
 /**
  * @name    GET

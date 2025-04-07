@@ -9,11 +9,11 @@ import {
 } from '@googlemaps/google-maps-services-js'
 import propertyModel from '@/models/propertyModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import PropertyDocument from '@/interfaces/PropertyDocument'
+import PropertyDocument from '@/types/PropertyDocument'
 import success200response from '@/httpResponses/success200response'
 import error500response from '@/httpResponses/error500response'
 import error404response from '@/httpResponses/error404response'
-import PropertyLocation from '@/interfaces/PropertyLocation'
+import PropertyLocation from '@/types/PropertyLocation'
 export const dynamic = 'force-dynamic'
 /**
  * @name    GET

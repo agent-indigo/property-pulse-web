@@ -23,7 +23,7 @@ import {FaGoogle} from 'react-icons/fa'
 import logo from '@/assets/images/logo-white.png'
 import profileDefault from '@/assets/images/profile.png'
 import UnreadMessagesCount from '@/components/UnreadMessagesCount'
-import ContextProps from '@/interfaces/ContextProps'
+import ContextProps from '@/types/ContextProps'
 import {useGetContext} from '@/components/ContextProvider'
 const Navbar: FunctionComponent = (): ReactElement => {
   const {user}: ContextProps = useGetContext()

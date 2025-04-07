@@ -4,7 +4,7 @@ import {
   ReactElement
 } from 'react'
 import {useGetContext} from '@/components/ContextProvider'
-import ContextProps from '@/interfaces/ContextProps'
+import ContextProps from '@/types/ContextProps'
 const UnreadMessagesCount: FunctionComponent = (): ReactElement | null => {
   const {unreadMessagesCount}: ContextProps = useGetContext()
   return unreadMessagesCount > 0 ? (

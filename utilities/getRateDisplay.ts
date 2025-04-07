@@ -1,4 +1,4 @@
-import PropertyRates from '@/interfaces/PropertyRates'
+import PropertyRates from '@/types/PropertyRates'
 const getRateDisplay: Function = (rates: PropertyRates): string | undefined => {
   if (rates.monthly) {
     return `${rates.monthly?.toLocaleString()}/mo`

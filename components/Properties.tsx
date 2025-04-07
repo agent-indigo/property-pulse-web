@@ -4,8 +4,8 @@ import {
 } from 'react'
 import PropertyCard from '@/components/PropertyCard'
 import Paginator from '@/components/Paginator'
-import PropertiesComponentProps from '@/interfaces/PropertiesComponentProps'
-import PlainProperty from '@/interfaces/PlainProperty'
+import PropertiesComponentProps from '@/types/PropertiesComponentProps'
+import PlainProperty from '@/types/PlainProperty'
 const Properties: FunctionComponent<PropertiesComponentProps> = ({
   properties,
   page = 1,

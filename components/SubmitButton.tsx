@@ -7,7 +7,7 @@ import {
   FormStatus,
   useFormStatus
 } from 'react-dom'
-import SubmitButtonProps from '@/interfaces/SubmitButtonProps'
+import SubmitButtonProps from '@/types/SubmitButtonProps'
 const SubmitButton: FunctionComponent<SubmitButtonProps> = ({
   message,
   action

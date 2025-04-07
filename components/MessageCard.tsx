@@ -8,11 +8,11 @@ import {
 import {toast} from 'react-toastify'
 import Link from 'next/link'
 import {useGetContext} from '@/components/ContextProvider'
-import ContextProps from '@/interfaces/ContextProps'
-import DestructuredMessage from '@/interfaces/DestructuredMessage'
-import PlainMessage from '@/interfaces/PlainMessage'
-import PlainUser from '@/interfaces/PlainUser'
-import PlainProperty from '@/interfaces/PlainProperty'
+import ContextProps from '@/types/ContextProps'
+import DestructuredMessage from '@/types/DestructuredMessage'
+import PlainMessage from '@/types/PlainMessage'
+import PlainUser from '@/types/PlainUser'
+import PlainProperty from '@/types/PlainProperty'
 const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactElement | null => {
   const {
     _id: messageId,
