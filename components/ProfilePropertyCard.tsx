@@ -22,7 +22,7 @@ const ProfilePropertyCard: FunctionComponent<DestructuredProperty> = ({property}
     state,
     street
   }: PropertyLocation = location
-  const handleDelete: MouseEventHandler<HTMLButtonElement> = async (): Promise<void> => {
+  const handleDelete: MouseEventHandler = async (): Promise<void> => {
     if (window.confirm('Are you sure you want to delete this property?')) {
       const response: Response = await fetch(
         `${process.env.NEXT_PUBLIC_API_DOMAIN}/properties/${_id}`, {

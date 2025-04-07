@@ -1,19 +1,19 @@
 import {
   FunctionComponent,
+  PropsWithChildren,
   ReactElement
 } from 'react'
 import {Metadata} from 'next'
 import {Inter} from 'next/font/google'
 import {NextFont} from 'next/dist/compiled/@next/font'
 import {ToastContainer} from 'react-toastify'
-import GlobalContextProvider from '@/components/GlobalContextProvider'
+import ContextProvider from '@/components/ContextProvider'
 import AuthProvider from '@/components/AuthProvider'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import 'react-toastify/dist/ReactToastify.css'
 import 'photoswipe/dist/photoswipe.css'
 import '@/assets/styles.css'
-import DestructuredReactNode from '@/interfaces/DestructuredReactNode'
 const inter: NextFont = Inter({subsets: ['latin']})
 export const metadata: Metadata = {
   title: {
@@ -23,9 +23,9 @@ export const metadata: Metadata = {
   description: 'Find the perfect rental property.',
   keywords: 'find, rental, property'
 }
-const RootLayout: FunctionComponent<DestructuredReactNode> = ({children}): ReactElement => (
+const RootLayout: FunctionComponent<PropsWithChildren> = ({children}): ReactElement => (
   <AuthProvider>
-    <GlobalContextProvider>
+    <ContextProvider>
       <html lang='en'>
         <body className={inter.className}>
           <Navbar/>
@@ -36,7 +36,7 @@ const RootLayout: FunctionComponent<DestructuredReactNode> = ({children}): React
           <ToastContainer/>
         </body>
       </html>
-    </GlobalContextProvider>
+    </ContextProvider>
   </AuthProvider>
 )
 export default RootLayout

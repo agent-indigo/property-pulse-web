@@ -23,10 +23,10 @@ import {FaGoogle} from 'react-icons/fa'
 import logo from '@/assets/images/logo-white.png'
 import profileDefault from '@/assets/images/profile.png'
 import UnreadMessagesCount from '@/components/UnreadMessagesCount'
-import State from '@/interfaces/State'
-import {useGlobalContext} from '@/components/GlobalContextProvider'
+import ContextProps from '@/interfaces/ContextProps'
+import {useGetContext} from '@/components/ContextProvider'
 const Navbar: FunctionComponent = (): ReactElement => {
-  const {user}: State = useGlobalContext()
+  const {user}: ContextProps = useGetContext()
   const [
     isMobileMenuOpen,
     setIsMobileMenuOpen

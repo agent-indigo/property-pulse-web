@@ -24,7 +24,7 @@ const SearchPropertiesForm: FunctionComponent = (): ReactElement => {
     location,
     type
   }: PropertySearchParams = fields
-  const handleChange: ChangeEventHandler<HTMLInputElement | HTMLSelectElement> = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
+  const handleChange: ChangeEventHandler = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>): void => {
     const {
       name,
       value
@@ -34,7 +34,7 @@ const SearchPropertiesForm: FunctionComponent = (): ReactElement => {
       [name]: value
     }))
   }
-  const handleSubmit: FormEventHandler<HTMLFormElement> = (event: FormEvent<HTMLFormElement>): void => {
+  const handleSubmit: FormEventHandler = (event: FormEvent<HTMLFormElement>): void => {
     event.preventDefault()
     router.push(`/properties/search?location=${location}&type=${type}&page=1`)
   }

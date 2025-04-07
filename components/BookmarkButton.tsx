@@ -9,12 +9,12 @@ import {
 import {FaBookmark} from 'react-icons/fa'
 import {toast} from 'react-toastify'
 import Spinner from '@/components/Spinner'
-import State from '@/interfaces/State'
-import {useGlobalContext} from '@/components/GlobalContextProvider'
+import ContextProps from '@/interfaces/ContextProps'
+import {useGetContext} from '@/components/ContextProvider'
 import DestructuredProperty from '@/interfaces/DestructuredProperty'
 import PlainProperty from '@/interfaces/PlainProperty'
 const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): ReactElement | null => {
-  const {user}: State = useGlobalContext()
+  const {user}: ContextProps = useGetContext()
   const {_id}: PlainProperty = property
   const [
     bookmarked,
@@ -44,7 +44,7 @@ const BookmarkButton: FunctionComponent<DestructuredProperty> = ({property}): Re
     _id,
     user
   ])
-  const handleClick: MouseEventHandler<HTMLButtonElement> = async (): Promise<void> => {
+  const handleClick: MouseEventHandler = async (): Promise<void> => {
     const response: Response = await fetch(
       `${process.env.NEXT_PUBLIC_API_DOMAIN}/properties/bookmarked/status/${_id}`, {
         method: 'PATCH'

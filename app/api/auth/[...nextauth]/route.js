@@ -1,20 +1,19 @@
 import NextAuth from 'next-auth/next'
 import authOpts from '@/config/authOpts'
 export const dynamic = 'force-dynamic'
-const NextAuthHandler = NextAuth(authOpts)
-export {
+export const {
   /**
    * @name    GET
    * @desc    NextAuth
    * @route   GET /api/auth/[...nextauth]
    * @access  public
    */
-  NextAuthHandler as GET,
+  GET,
   /**
    * @name    POST
    * @desc    NextAuth
    * @route   POST /api/auth/[...nextauth]
    * @access  public
    */
-  NextAuthHandler as POST
-}
+  POST
+} = NextAuth(authOpts)

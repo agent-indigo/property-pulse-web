@@ -3,19 +3,19 @@ import {
   Context,
   createContext,
   FunctionComponent,
+  PropsWithChildren,
   ReactElement,
   useContext,
   useEffect,
   useState
 } from 'react'
-import State from '@/interfaces/State'
-import DestructuredReactNode from '@/interfaces/DestructuredReactNode'
+import ContextProps from '@/interfaces/ContextProps'
 import PlainUser from '@/interfaces/PlainUser'
-const GlobalContext: Context<State> = createContext<State>({
+const AppContext: Context<ContextProps> = createContext<ContextProps>({
   unreadMessagesCount: 0,
   setUnreadMessagesCount: (): void => {}
 })
-const GlobalContextProvider: FunctionComponent<DestructuredReactNode> = ({children}): ReactElement => {
+const ContextProvider: FunctionComponent<PropsWithChildren> = ({children}): ReactElement => {
   const [
     unreadMessagesCount,
     setUnreadMessagesCount
@@ -36,14 +36,14 @@ const GlobalContextProvider: FunctionComponent<DestructuredReactNode> = ({childr
     user && getCount()
   })
   return (
-    <GlobalContext.Provider value={{
+    <AppContext.Provider value={{
       unreadMessagesCount,
       setUnreadMessagesCount,
       user
     }}>
       {children}
-    </GlobalContext.Provider>
+    </AppContext.Provider>
   )
 }
-export const useGlobalContext: Function = (): State => useContext<State>(GlobalContext)
-export default GlobalContextProvider
+export const useGetContext: Function = (): ContextProps => useContext<ContextProps>(AppContext)
+export default ContextProvider

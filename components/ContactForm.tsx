@@ -5,8 +5,8 @@ import {
 } from 'react'
 import {toast} from 'react-toastify'
 import SubmitButton from '@/components/SubmitButton'
-import State from '@/interfaces/State'
-import {useGlobalContext} from '@/components/GlobalContextProvider'
+import ContextProps from '@/interfaces/ContextProps'
+import {useGetContext} from '@/components/ContextProvider'
 import DestructuredProperty from '@/interfaces/DestructuredProperty'
 import PlainProperty from '@/interfaces/PlainProperty'
 const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
@@ -14,7 +14,7 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
     _id,
     owner
   }: PlainProperty = property
-  const {user}: State = useGlobalContext()
+  const {user}: ContextProps = useGetContext()
   const isOwner: boolean = user?._id === owner
   const handleSubmit: Function = async (body: FormData): Promise<void> => {
     const response: Response = await fetch(

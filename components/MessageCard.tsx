@@ -7,8 +7,8 @@ import {
 } from 'react'
 import {toast} from 'react-toastify'
 import Link from 'next/link'
-import {useGlobalContext} from '@/components/GlobalContextProvider'
-import State from '@/interfaces/State'
+import {useGetContext} from '@/components/ContextProvider'
+import ContextProps from '@/interfaces/ContextProps'
 import DestructuredMessage from '@/interfaces/DestructuredMessage'
 import PlainMessage from '@/interfaces/PlainMessage'
 import PlainUser from '@/interfaces/PlainUser'
@@ -33,8 +33,8 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactEl
     read,
     setRead
   ] = useState<boolean>(messageRead)
-  const {setUnreadMessagesCount}: State = useGlobalContext()
-  const handleToggle: MouseEventHandler<HTMLButtonElement> = async (): Promise<void> => {
+  const {setUnreadMessagesCount}: ContextProps = useGetContext()
+  const handleToggle: MouseEventHandler = async (): Promise<void> => {
     const response: Response = await fetch(
       `${process.env.NEXT_PUBLIC_API_DOMAIN}/messages/${messageId}`, {
         method: 'PATCH'
@@ -49,7 +49,7 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactEl
       toast.error(await response.text())
     }
   }
-  const handleDelete: MouseEventHandler<HTMLButtonElement> = async (): Promise<void> => {
+  const handleDelete: MouseEventHandler = async (): Promise<void> => {
     const response: Response = await fetch(
       `${process.env.NEXT_PUBLIC_API_DOMAIN}/messages/${messageId}`, {
         method: 'DELETE'

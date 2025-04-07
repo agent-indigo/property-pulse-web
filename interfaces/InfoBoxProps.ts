@@ -1,6 +1,6 @@
+import {PropsWithChildren} from 'react'
 import ButtonProps from '@/interfaces/ButtonProps'
-import DestructuredReactNode from '@/interfaces/DestructuredReactNode'
-export default interface InfoBoxProps extends DestructuredReactNode {
+export default interface InfoBoxProps extends PropsWithChildren {
   heading: string
   bgColor?: string
   textColor?: string

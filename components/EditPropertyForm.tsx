@@ -1,7 +1,7 @@
 'use client'
 import {
   ChangeEvent,
-  EventHandler,
+  ChangeEventHandler,
   FunctionComponent,
   ReactElement,
   useState
@@ -83,7 +83,7 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
     setAmenities
   ] = useState<string[]>(property.amenities)
   const router: AppRouterInstance = useRouter()
-  const handleCheckbox: EventHandler<ChangeEvent<HTMLInputElement>> = (event: ChangeEvent<HTMLInputElement>): void => setAmenities((amenities: string[]): string[] => event.target.checked ? [
+  const handleCheckbox: ChangeEventHandler = (event: ChangeEvent<HTMLInputElement>): void => setAmenities((amenities: string[]): string[] => event.target.checked ? [
     ...amenities,
     event.target.value
   ] : amenities.filter((amenity: string): boolean => amenity !== event.target.value))
