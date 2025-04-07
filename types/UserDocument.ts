@@ -7,7 +7,5 @@ export default interface UserDocument extends Document {
   username: string
   image?: string
   bookmarks: ObjectId[]
-  roles: [
-    'admin' | 'dev' | 'root' | 'user'
-  ]
+  role: 'admin' | 'dev' | 'root' | 'user'
 }
