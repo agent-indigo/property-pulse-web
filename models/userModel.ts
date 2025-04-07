@@ -30,7 +30,7 @@ const userModel: Model<UserDocument> = models.User ?? model<UserDocument>(
       type: Schema.Types.ObjectId,
       ref: 'Property'
     }],
-    role: {
+    roles: [{
       type: Schema.Types.String,
       required: true,
       enum: [
@@ -39,8 +39,10 @@ const userModel: Model<UserDocument> = models.User ?? model<UserDocument>(
         'root',
         'user'
       ],
-      default: 'user'
-    }
+      default: [
+        'user'
+      ]
+    }]
   }, {
     timestamps: true
   })
