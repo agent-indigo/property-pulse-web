@@ -14,11 +14,11 @@ import error404response from '@/httpResponses/error404response'
 import error500response from '@/httpResponses/error500response'
 import success200response from '@/httpResponses/success200response'
 import PropertyDocument from '@/types/PropertyDocument'
-import propertyModel from '@/models/propertyModel'
+import propertyDocumentModel from '@/models/propertyDocumentModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import authOpts from '@/config/authOpts'
 import UserDocument from '@/types/UserDocument'
-import userModel from '@/models/userModel'
+import userDocumentModel from '@/models/userDocumentModel'
 export const dynamic = 'force-dynamic'
 /**
  * @name    POST
@@ -34,11 +34,11 @@ export const POST = async (
     const session: Session | null = await getServerSession(authOpts)
     if (session) {
       await connectToMongoDB()
-      const user: UserDocument | null = await userModel.findOne({
+      const user: UserDocument | null = await userDocumentModel.findOne({
         email: session.user?.email
       })
       if (user) {
-        const property: PropertyDocument | null = await propertyModel.findById((await params).id)
+        const property: PropertyDocument | null = await propertyDocumentModel.findById((await params).id)
         if (property) {
           if (property.owner.toString() === user.id) {
             await Promise.all((await request.formData()).getAll('files').map(async (image: FormDataEntryValue): Promise<void> => {

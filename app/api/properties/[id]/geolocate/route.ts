@@ -7,7 +7,7 @@ import {
   GeocodeResponse,
   GeocodeResponseData
 } from '@googlemaps/google-maps-services-js'
-import propertyModel from '@/models/propertyModel'
+import propertyDocumentModel from '@/models/propertyDocumentModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import PropertyDocument from '@/types/PropertyDocument'
 import success200response from '@/httpResponses/success200response'
@@ -27,7 +27,7 @@ export const GET = async (
 ): Promise<NextResponse> => {
   try {
     await connectToMongoDB()
-    const property: PropertyDocument | null = await propertyModel.findById((await params).id)
+    const property: PropertyDocument | null = await propertyDocumentModel.findById((await params).id)
     if (property) {
       const {location}: PropertyDocument = property
       const {

@@ -5,7 +5,7 @@ import {
   models
 } from 'mongoose'
 import MessageDocument from '@/types/MessageDocument'
-const messageModel: Model<MessageDocument> = models.Message ?? model<MessageDocument>(
+const messageDocumentModel: Model<MessageDocument> = models.Message ?? model<MessageDocument>(
   'Message', 
   new Schema<MessageDocument>({
     sender: {
@@ -52,4 +52,4 @@ const messageModel: Model<MessageDocument> = models.Message ?? model<MessageDocu
     timestamps: true
   })
 )
-export default messageModel
+export default messageDocumentModel

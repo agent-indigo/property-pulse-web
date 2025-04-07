@@ -7,20 +7,20 @@ import {Metadata} from 'next'
 import {getServerSession} from 'next-auth'
 import profileDefault from '@/assets/images/profile.png'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import propertyModel from '@/models/propertyModel'
+import propertyDocumentModel from '@/models/propertyDocumentModel'
 import PlainProperty from '@/types/PlainProperty'
 import UserDocument from '@/types/UserDocument'
-import userModel from '@/models/userModel'
+import userDocumentModel from '@/models/userDocumentModel'
 import ProfilePropertyCard from '@/components/ProfilePropertyCard'
 export const metadata: Metadata = {
   title: 'Profile'
 }
 const ProfilePage: FunctionComponent =  async (): Promise<ReactElement> => {
   await connectToMongoDB()
-  const user: UserDocument | null = await userModel.findOne({
+  const user: UserDocument | null = await userDocumentModel.findOne({
     email: (await getServerSession())?.user?.email
   })
-  const properties: PlainProperty[] = JSON.parse(JSON.stringify(await propertyModel.find({
+  const properties: PlainProperty[] = JSON.parse(JSON.stringify(await propertyDocumentModel.find({
     owner: user?.id
   }).lean()))
   return (

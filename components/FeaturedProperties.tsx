@@ -3,12 +3,12 @@ import {
   ReactElement
 } from 'react'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import propertyModel from '@/models/propertyModel'
+import propertyDocumentModel from '@/models/propertyDocumentModel'
 import FeaturedPropertyCard from '@/components/FeaturedPropertyCard'
 import PlainProperty from '@/types/PlainProperty'
 const FeaturedProperties: FunctionComponent = async (): Promise<ReactElement | null> => {
   await connectToMongoDB()
-  const featuredProperties: PlainProperty[] = JSON.parse(JSON.stringify(await propertyModel.find({
+  const featuredProperties: PlainProperty[] = JSON.parse(JSON.stringify(await propertyDocumentModel.find({
     is_featured: true
   }).lean()))
   return featuredProperties.length > 0 ? (

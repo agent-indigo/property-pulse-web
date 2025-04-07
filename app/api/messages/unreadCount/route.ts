@@ -6,14 +6,14 @@ import {
   getServerSession,
   Session
 } from 'next-auth'
-import messageModel from '@/models/messageModel'
+import messageDocumentModel from '@/models/messageDocumentModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import success200response from '@/httpResponses/success200response'
 import error401response from '@/httpResponses/error401response'
 import error500response from '@/httpResponses/error500response'
 import authOpts from '@/config/authOpts'
 import UserDocument from '@/types/UserDocument'
-import userModel from '@/models/userModel'
+import userDocumentModel from '@/models/userDocumentModel'
 export const dynamic = 'force-dynamic'
 /**
  * @name    GET
@@ -26,11 +26,11 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     const session: Session | null = await getServerSession(authOpts)
     if (session) {
       await connectToMongoDB()
-      const user: UserDocument | null = await userModel.findOne({
+      const user: UserDocument | null = await userDocumentModel.findOne({
         email: session.user?.email
       })
       return user ? success200response({
-        unread: await messageModel.countDocuments({
+        unread: await messageDocumentModel.countDocuments({
           recipient: user.id,
           read: false
         })

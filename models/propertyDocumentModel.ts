@@ -5,7 +5,7 @@ import {
   models
 } from 'mongoose'
 import PropertyDocument from '@/types/PropertyDocument'
-const propertyModel: Model<PropertyDocument> = models.Property ?? model<PropertyDocument>(
+const propertyDocumentModel: Model<PropertyDocument> = models.Property ?? model<PropertyDocument>(
   'Property',
   new Schema<PropertyDocument>({
     owner : {
@@ -148,4 +148,4 @@ const propertyModel: Model<PropertyDocument> = models.Property ?? model<Property
     timestamps: true
   })
 )
-export default propertyModel
+export default propertyDocumentModel

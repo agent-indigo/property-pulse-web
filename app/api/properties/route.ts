@@ -9,7 +9,7 @@ import {
 import {revalidatePath} from 'next/cache'
 import {UploadApiResponse} from 'cloudinary'
 import PropertyDocument from '@/types/PropertyDocument'
-import propertyModel from '@/models/propertyModel'
+import propertyDocumentModel from '@/models/propertyDocumentModel'
 import cloudinary from '@/config/cloudinary'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import error500response from '@/httpResponses/error500response'
@@ -18,7 +18,7 @@ import success201response from '@/httpResponses/success201response'
 import error401response from '@/httpResponses/error401response'
 import authOpts from '@/config/authOpts'
 import UserDocument from '@/types/UserDocument'
-import userModel from '@/models/userModel'
+import userDocumentModel from '@/models/userDocumentModel'
 export const dynamic = 'force-dynamic'
 /**
  * @name    GET
@@ -32,15 +32,15 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     await connectToMongoDB()
     return success200response({
       properties: page === ''
-      ? await propertyModel
+      ? await propertyDocumentModel
         .find()
         .lean()
-      : await propertyModel
+      : await propertyDocumentModel
         .find()
         .skip((parseInt(page) - 1) * 6)
         .limit(6)
         .lean(),
-      total: await propertyModel.countDocuments()
+      total: await propertyDocumentModel.countDocuments()
     })
   } catch (error: any) {
     return error500response(error)
@@ -57,7 +57,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
     const session: Session | null = await getServerSession(authOpts)
     if (session) {
       await connectToMongoDB()
-      const user: UserDocument | null = await userModel.findOne({
+      const user: UserDocument | null = await userDocumentModel.findOne({
         email: session.user?.email
       })
       if (user) {
@@ -78,7 +78,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
             imageIds.push(public_id)
           }
         }))
-        const property: PropertyDocument = await propertyModel.create({
+        const property: PropertyDocument = await propertyDocumentModel.create({
           owner: user.id,
           ...Object.fromEntries(form.entries().filter(([key]): boolean => key !== 'files')),
           images,

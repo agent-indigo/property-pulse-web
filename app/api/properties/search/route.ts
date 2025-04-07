@@ -3,7 +3,7 @@ import {
   NextResponse
 } from 'next/server'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import propertyModel from '@/models/propertyModel'
+import propertyDocumentModel from '@/models/propertyDocumentModel'
 import PropertySearchQuery from '@/types/PropertySearchQuery'
 import success200response from '@/httpResponses/success200response'
 import error500response from '@/httpResponses/error500response'
@@ -46,12 +46,12 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     )
     await connectToMongoDB()
     return success200response({
-      properties: await propertyModel
+      properties: await propertyDocumentModel
         .find(query)
         .skip((parseInt(page && page !== '' ? page : '1') - 1) * 6)
         .limit(6)
         .lean(),
-      total: (await propertyModel.find(query)).length
+      total: (await propertyDocumentModel.find(query)).length
     })
   } catch (error: any) {
     return error500response(error)

@@ -5,7 +5,7 @@ import {
 import {Metadata} from 'next'
 import SearchPropertiesForm from '@/components/SearchPropertiesForm'
 import Properties from '@/components/Properties'
-import propertyModel from '@/models/propertyModel'
+import propertyDocumentModel from '@/models/propertyDocumentModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import FeaturedProperties from '@/components/FeaturedProperties'
 import PlainProperty from '@/types/PlainProperty'
@@ -18,7 +18,7 @@ const PropertiesPage: FunctionComponent<any> = async ({searchParams}): Promise<R
     size = 6
   } = await searchParams
   await connectToMongoDB()
-  const properties: PlainProperty[] = JSON.parse(JSON.stringify(await propertyModel
+  const properties: PlainProperty[] = JSON.parse(JSON.stringify(await propertyDocumentModel
     .find()
     .skip((parseInt(page.toString() ?? '1') - 1) * size)
     .limit(size)
@@ -34,7 +34,7 @@ const PropertiesPage: FunctionComponent<any> = async ({searchParams}): Promise<R
       <FeaturedProperties/>
       <Properties
         properties={properties}
-        total={await propertyModel.countDocuments()}
+        total={await propertyDocumentModel.countDocuments()}
         page={page}
         size={size}
       />

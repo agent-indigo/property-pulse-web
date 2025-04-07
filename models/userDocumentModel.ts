@@ -5,7 +5,7 @@ import {
   models
 } from 'mongoose'
 import UserDocument from '@/types/UserDocument'
-const userModel: Model<UserDocument> = models.User ?? model<UserDocument>(
+const userDocumentModel: Model<UserDocument> = models.User ?? model<UserDocument>(
   'User',
   new Schema<UserDocument>({
     email: {
@@ -45,4 +45,4 @@ const userModel: Model<UserDocument> = models.User ?? model<UserDocument>(
     timestamps: true
   })
 )
-export default userModel
+export default userDocumentModel

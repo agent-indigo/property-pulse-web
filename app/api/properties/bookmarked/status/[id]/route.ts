@@ -10,8 +10,8 @@ import {
 import {revalidatePath} from 'next/cache'
 import PropertyDocument from '@/types/PropertyDocument'
 import UserDocument from '@/types/UserDocument'
-import propertyModel from '@/models/propertyModel'
-import userModel from '@/models/userModel'
+import propertyDocumentModel from '@/models/propertyDocumentModel'
+import userDocumentModel from '@/models/userDocumentModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import success200response from '@/httpResponses/success200response'
 import error401response from '@/httpResponses/error401response'
@@ -33,7 +33,7 @@ export const GET = async (
     const session: Session | null = await getServerSession(authOpts)
     if (session) {
       await connectToMongoDB()
-      const user: UserDocument | null = await userModel.findOne({
+      const user: UserDocument | null = await userDocumentModel.findOne({
         email: session.user?.email
       })
       return user ? success200response({
@@ -60,11 +60,11 @@ export const PATCH = async (
     const session: Session | null = await getServerSession(authOpts)
     if (session) {
       await connectToMongoDB()
-      const user: UserDocument | null = await userModel.findOne({
+      const user: UserDocument | null = await userDocumentModel.findOne({
         email: session.user?.email
       })
       if (user) {
-        const property: PropertyDocument | null = await propertyModel.findById((await params).id)
+        const property: PropertyDocument | null = await propertyDocumentModel.findById((await params).id)
         if (property) {
           if (property.owner.toString() === user.id) {
             const {id}: PropertyDocument = property

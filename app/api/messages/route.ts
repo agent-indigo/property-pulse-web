@@ -8,7 +8,7 @@ import {
 } from 'next-auth'
 import {revalidatePath} from 'next/cache'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import messageModel from '@/models/messageModel'
+import messageDocumentModel from '@/models/messageDocumentModel'
 import success200response from '@/httpResponses/success200response'
 import error401response from '@/httpResponses/error401response'
 import error500response from '@/httpResponses/error500response'
@@ -16,7 +16,7 @@ import success201response from '@/httpResponses/success201response'
 import error400response from '@/httpResponses/error400response'
 import authOpts from '@/config/authOpts'
 import UserDocument from '@/types/UserDocument'
-import userModel from '@/models/userModel'
+import userDocumentModel from '@/models/userDocumentModel'
 import MessageDocument from '@/types/MessageDocument'
 export const dynamic = 'force-dynamic'
 /**
@@ -30,10 +30,10 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     const session: Session | null = await getServerSession(authOpts)
     if (session) {
       await connectToMongoDB()
-      const user: UserDocument | null = await userModel.findOne({
+      const user: UserDocument | null = await userDocumentModel.findOne({
         email: session.user?.email
       })
-      return user ? success200response(await messageModel.find({
+      return user ? success200response(await messageDocumentModel.find({
         recipient: user.id
       }).populate(
         'sender',
@@ -63,7 +63,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
     const session: Session | null = await getServerSession(authOpts)
     if (session) {
       await connectToMongoDB()
-      const user: UserDocument | null = await userModel.findOne({
+      const user: UserDocument | null = await userDocumentModel.findOne({
         email: session.user?.email
       })
       if (user) {
@@ -71,7 +71,7 @@ export const POST = async (request: NextRequest): Promise<NextResponse> => {
         const {id: sender}: UserDocument = user
         const recipient: string | undefined = form.get('recipient')?.valueOf().toString()
         if (recipient && recipient !== sender) {
-          const message: MessageDocument = await messageModel.create({
+          const message: MessageDocument = await messageDocumentModel.create({
             sender,
             ...Object.fromEntries(form.entries()),
             read: false

@@ -12,8 +12,8 @@ import error500response from '@/httpResponses/error500response'
 import success200response from '@/httpResponses/success200response'
 import PropertyDocument from '@/types/PropertyDocument'
 import UserDocument from '@/types/UserDocument'
-import propertyModel from '@/models/propertyModel'
-import userModel from '@/models/userModel'
+import propertyDocumentModel from '@/models/propertyDocumentModel'
+import userDocumentModel from '@/models/userDocumentModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 export const PATCH = async (
   request: NextRequest,
@@ -23,13 +23,13 @@ export const PATCH = async (
     const session: Session | null = await getServerSession()
     if (session) {
       await connectToMongoDB()
-      const user: UserDocument | null = await userModel.findOne({
+      const user: UserDocument | null = await userDocumentModel.findOne({
         email: session.user?.email
       })
       if (user) {
         const {role}: UserDocument = user
         if (role === 'root' || role === 'admin') {
-          const property: PropertyDocument | null = await propertyModel.findById((await params).id)
+          const property: PropertyDocument | null = await propertyDocumentModel.findById((await params).id)
           if (property) {
             property.is_featured = !property.is_featured
             await property.save()

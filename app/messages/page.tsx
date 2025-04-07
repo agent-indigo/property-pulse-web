@@ -6,16 +6,16 @@ import {Metadata} from 'next'
 import {getServerSession} from 'next-auth'
 import MessageCard from '@/components/MessageCard'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import messageModel from '@/models/messageModel'
+import messageDocumentModel from '@/models/messageDocumentModel'
 import PlainMessage from '@/types/PlainMessage'
-import userModel from '@/models/userModel'
+import userDocumentModel from '@/models/userDocumentModel'
 export const metadata: Metadata = {
   title: 'Messages'
 }
 const MessagesPage: FunctionComponent = async (): Promise<ReactElement> => {
   await connectToMongoDB()
-  const messages: PlainMessage[] = JSON.parse(JSON.stringify(await messageModel.find({
-    recipient: (await userModel.findOne({
+  const messages: PlainMessage[] = JSON.parse(JSON.stringify(await messageDocumentModel.find({
+    recipient: (await userDocumentModel.findOne({
       email: (await getServerSession())?.user?.email
     }))?.id
   }).populate(

@@ -7,7 +7,7 @@ import Link from 'next/link'
 import {FaArrowCircleLeft} from 'react-icons/fa'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import PropertySearchQuery from '@/types/PropertySearchQuery'
-import propertyModel from '@/models/propertyModel'
+import propertyDocumentModel from '@/models/propertyDocumentModel'
 import SearchPropertiesForm from '@/components/SearchPropertiesForm'
 import PropertyCard from '@/components/PropertyCard'
 import FeaturedProperties from '@/components/FeaturedProperties'
@@ -48,7 +48,7 @@ const ResultsPage: FunctionComponent<any> = async ({searchParams}): Promise<Reac
     type,
     'i'
   )
-  const properties: PlainProperty[] = JSON.parse(JSON.stringify(await propertyModel
+  const properties: PlainProperty[] = JSON.parse(JSON.stringify(await propertyDocumentModel
     .find(query)
     .skip((parseInt(page.toString() ?? '1') - 1) * size)
     .limit(size)

@@ -8,7 +8,7 @@ import {
 } from 'next-auth'
 import {revalidatePath} from 'next/cache'
 import MessageDocument from '@/types/MessageDocument'
-import messageModel from '@/models/messageModel'
+import messageDocumentModel from '@/models/messageDocumentModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import success204response from '@/httpResponses/success204response'
 import error401response from '@/httpResponses/error401response'
@@ -17,7 +17,7 @@ import error500response from '@/httpResponses/error500response'
 import success200response from '@/httpResponses/success200response'
 import authOpts from '@/config/authOpts'
 import UserDocument from '@/types/UserDocument'
-import userModel from '@/models/userModel'
+import userDocumentModel from '@/models/userDocumentModel'
 export const dynamic = 'force-dynamic'
 /**
  * @name    DELETE
@@ -33,11 +33,11 @@ export const DELETE = async (
     const session: Session | null = await getServerSession(authOpts)
     if (session) {
       await connectToMongoDB()
-      const user: UserDocument | null = await userModel.findOne({
+      const user: UserDocument | null = await userDocumentModel.findOne({
         email: session.user?.email
       })
       if (user) {
-        const message: MessageDocument | null = await messageModel.findById((await params).id)
+        const message: MessageDocument | null = await messageDocumentModel.findById((await params).id)
         if (message) {
           if (user.id === message.recipient.toString()) {
             await message.deleteOne()
@@ -76,11 +76,11 @@ export const PATCH = async (
     const session: Session | null = await getServerSession(authOpts)
     if (session) {
       await connectToMongoDB()
-      const user: UserDocument | null = await userModel.findOne({
+      const user: UserDocument | null = await userDocumentModel.findOne({
         email: session.user?.email
       })
       if (user) {
-        const message: MessageDocument | null = await messageModel.findById((await params).id)
+        const message: MessageDocument | null = await messageDocumentModel.findById((await params).id)
         if (message) {
           if (user.id === message.recipient.toString()) {
             message.read = !message.read

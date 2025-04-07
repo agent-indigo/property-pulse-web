@@ -12,14 +12,14 @@ import BookmarkButton from '@/components/BookmarkButton'
 import ContactForm from '@/components/ContactForm'
 import ShareButtons from '@/components/ShareButtons'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import propertyModel from '@/models/propertyModel'
+import propertyDocumentModel from '@/models/propertyDocumentModel'
 import PlainProperty from '@/types/PlainProperty'
 export const metadata: Metadata = {
   title: 'Property Details'
 }
 const PropertyPage: FunctionComponent<any> = async ({params}): Promise<ReactElement> => {
   await connectToMongoDB()
-  const property: PlainProperty = JSON.parse(JSON.stringify(await propertyModel.findById((await params).id).lean()))
+  const property: PlainProperty = JSON.parse(JSON.stringify(await propertyDocumentModel.findById((await params).id).lean()))
   const {images}: PlainProperty = property
   return (
     <>

@@ -2,8 +2,8 @@ import {
   NextRequest,
   NextResponse
 } from 'next/server'
-import propertyModel from '@/models/propertyModel'
-import userModel from '@/models/userModel'
+import propertyDocumentModel from '@/models/propertyDocumentModel'
+import userDocumentModel from '@/models/userDocumentModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import success200response from '@/httpResponses/success200response'
 import error404response from '@/httpResponses/error404response'
@@ -22,7 +22,7 @@ export const GET = async (
   try {
     const {id}: any = await params
     await connectToMongoDB()
-    return await userModel.findById(id) ? success200response(await propertyModel.find({
+    return await userDocumentModel.findById(id) ? success200response(await propertyDocumentModel.find({
       owner: id
     })) : error404response
   } catch (error: any) {

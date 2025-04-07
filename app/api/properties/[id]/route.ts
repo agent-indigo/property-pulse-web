@@ -8,7 +8,7 @@ import {
 } from 'next-auth'
 import {revalidatePath} from 'next/cache'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import propertyModel from '@/models/propertyModel'
+import propertyDocumentModel from '@/models/propertyDocumentModel'
 import PropertyDocument from '@/types/PropertyDocument'
 import cloudinary from '@/config/cloudinary'
 import success200response from '@/httpResponses/success200response'
@@ -18,7 +18,7 @@ import success204response from '@/httpResponses/success204response'
 import error401response from '@/httpResponses/error401response'
 import authOpts from '@/config/authOpts'
 import UserDocument from '@/types/UserDocument'
-import userModel from '@/models/userModel'
+import userDocumentModel from '@/models/userDocumentModel'
 export const dynamic = 'force-dynamic'
 /**
  * @name    GET
@@ -32,7 +32,7 @@ export const GET = async (
 ): Promise<NextResponse> => {
   try {
     await connectToMongoDB()
-    const property: PropertyDocument | null = await propertyModel.findById((await params).id)
+    const property: PropertyDocument | null = await propertyDocumentModel.findById((await params).id)
     return property ? success200response(property.toObject()) : error404response
   } catch (error: any) {
     return error500response(error)
@@ -52,11 +52,11 @@ export const DELETE = async (
     const session: Session | null = await getServerSession(authOpts)
     if (session) {
       await connectToMongoDB()
-      const user: UserDocument | null = await userModel.findOne({
+      const user: UserDocument | null = await userDocumentModel.findOne({
         email: session.user?.email
       })
       if (user) {
-        const property: PropertyDocument | null = await propertyModel.findById((await params).id)
+        const property: PropertyDocument | null = await propertyDocumentModel.findById((await params).id)
         if (property) {
           if (property.owner.toString() === user.id) {
             property.imageIds.map(async (id: string): Promise<void> => await cloudinary.uploader.destroy(id))
@@ -96,11 +96,11 @@ export const PATCH = async (
     const session: Session | null = await getServerSession(authOpts)
     if (session) {
       await connectToMongoDB()
-      const user: UserDocument | null = await userModel.findOne({
+      const user: UserDocument | null = await userDocumentModel.findOne({
         email: session.user?.email
       })
       if (user) {
-        const property: PropertyDocument | null = await propertyModel.findById((await params).id)
+        const property: PropertyDocument | null = await propertyDocumentModel.findById((await params).id)
         if (property) {
           if (property.owner.toString() === user.id) {
             await property.updateOne(await request.json())

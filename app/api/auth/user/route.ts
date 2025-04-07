@@ -10,7 +10,7 @@ import authOpts from '@/config/authOpts'
 import error401response from '@/httpResponses/error401response'
 import error500response from '@/httpResponses/error500response'
 import success200response from '@/httpResponses/success200response'
-import userModel from '@/models/userModel'
+import userDocumentModel from '@/models/userDocumentModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import UserDocument from '@/types/UserDocument'
 export const dynamic = 'force-dynamic'
@@ -25,7 +25,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
     const session: Session | null = await getServerSession(authOpts)
     if (session) {
       await connectToMongoDB()
-      const user: UserDocument | null = await userModel.findOne({
+      const user: UserDocument | null = await userDocumentModel.findOne({
         email: session.user?.email
       })
       return user ? success200response({
