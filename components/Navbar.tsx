@@ -2,7 +2,8 @@
 import {
   ClientSafeProvider,
   LiteralUnion,
-  SignInResponse
+  signOut,
+  getProviders
 } from 'next-auth/react'
 import {BuiltInProviderType} from 'next-auth/providers/index'
 import {
@@ -14,26 +15,21 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 import {usePathname} from 'next/navigation'
-import {
-  signIn,
-  signOut,
-  getProviders
-} from 'next-auth/react'
-import {FaGoogle} from 'react-icons/fa'
 import logo from '@/assets/images/logo-white.png'
 import profileDefault from '@/assets/images/profile.png'
 import UnreadMessagesCount from '@/components/UnreadMessagesCount'
 import ContextProps from '@/types/ContextProps'
 import {useGetContext} from '@/components/ContextProvider'
+import SignInButton from '@/components/SignInButton'
 const Navbar: FunctionComponent = (): ReactElement => {
   const {user}: ContextProps = useGetContext()
   const [
-    isMobileMenuOpen,
-    setIsMobileMenuOpen
+    mobileMenuOpen,
+    setMobileMenuOpen
   ] = useState<boolean>(false)
   const [
-    isProfileMenuOpen,
-    setIsProfileMenuOpen
+    profileMenuOpen,
+    setProfileMenuOpen
   ] = useState<boolean>(false)
   const [
     providers,
@@ -62,7 +58,7 @@ const Navbar: FunctionComponent = (): ReactElement => {
               className='relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white'
               aria-controls='mobile-menu'
               aria-expanded='false'
-              onClick={(): void => setIsMobileMenuOpen((previousValue: boolean): boolean => !previousValue)}
+              onClick={(): void => setMobileMenuOpen((previousValue: boolean): boolean => !previousValue)}
             >
               <span className='absolute -inset-0.5'/>
               <span className='sr-only'>
@@ -125,31 +121,10 @@ const Navbar: FunctionComponent = (): ReactElement => {
               </div>
             </div>
           </div>
-          {/* user menu (logged out) */}
-          {!user && (
-            <div className='hidden md:block md:ml-6'>
-              <div className='flex items-center'>
-                {providers && Object.values(providers).map((provider: ClientSafeProvider): ReactElement => {
-                  const {id}: ClientSafeProvider = provider
-                  return (
-                    <button
-                      key={id}
-                      onClick={(): Promise<SignInResponse | undefined> => signIn(id)}
-                      className='flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2'
-                    >
-                      <FaGoogle className='text-white mr-2'/>
-                      <span>
-                        Log In or Register
-                      </span>
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-          )}
-          {/* user menu (logged in) */}
-          {user && (
+          {/* user menu */}
+          {user ? (
             <div className='absolute inset-y-0 right-0 flex items-center pr-2 md:static md:inset-auto md:ml-6 md:pr-0'>
+              {/* logged in */}
               <Link
                 href='/messages'
                 className='relative group'
@@ -188,7 +163,7 @@ const Navbar: FunctionComponent = (): ReactElement => {
                     id='user-menu-button'
                     aria-expanded='false'
                     aria-haspopup='true'
-                    onClick={():void => setIsProfileMenuOpen((previousValue: boolean): boolean => !previousValue)}
+                    onClick={():void => setProfileMenuOpen((previousValue: boolean): boolean => !previousValue)}
                   >
                     <span className='absolute -inset-1.5'/>
                     <span className='sr-only'>
@@ -204,7 +179,7 @@ const Navbar: FunctionComponent = (): ReactElement => {
                   </button>
                 </div>
                 {/* profile dropdown */}
-                {isProfileMenuOpen && (
+                {profileMenuOpen && (
                   <div
                     id='user-menu'
                     className='absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none'
@@ -219,7 +194,7 @@ const Navbar: FunctionComponent = (): ReactElement => {
                       role='menuitem'
                       tabIndex={-1}
                       id='user-menu-item-0'
-                      onClick={(): void => setIsProfileMenuOpen(false)}
+                      onClick={(): void => setProfileMenuOpen(false)}
                     >
                       Your Profile
                     </Link>
@@ -229,7 +204,7 @@ const Navbar: FunctionComponent = (): ReactElement => {
                       role='menuitem'
                       tabIndex={-1}
                       id='user-menu-item-2'
-                      onClick={(): void => setIsProfileMenuOpen(false)}
+                      onClick={(): void => setProfileMenuOpen(false)}
                     >
                       Bookmarked Properties
                     </Link>
@@ -240,7 +215,7 @@ const Navbar: FunctionComponent = (): ReactElement => {
                       tabIndex={-1}
                       id='user-menu-item-2'
                       onClick={(): void => {
-                        setIsProfileMenuOpen(false)
+                        setProfileMenuOpen(false)
                         signOut()
                       }}
                     >
@@ -250,11 +225,20 @@ const Navbar: FunctionComponent = (): ReactElement => {
                 )}
               </div>
             </div>
+          ) : (
+            <div className='hidden md:block md:ml-6'>
+              {/* logged out */}
+              <div className='flex items-center'>
+                {providers && Object.values(providers).map((provider: ClientSafeProvider): ReactElement => (
+                  <SignInButton provider={provider}/>
+                ))}
+              </div>
+            </div>
           )}
         </div>
       </div>
       {/* mobile menu, show/hide based on menu state */}
-      {isMobileMenuOpen && (
+      {mobileMenuOpen && (
         <div id='mobile-menu'>
           <div className='space-y-1 px-2 pb-3 pt-2'>
             <Link
@@ -269,29 +253,16 @@ const Navbar: FunctionComponent = (): ReactElement => {
             >
               Properties
             </Link>
-            {user && (
+            {user ? (
               <Link
                 href='/properties/add'
                 className={`${pathname === '/properties/add' ? 'bg-black' : ''} text-white block rounded-md px-3 py-2 text-base font-medium`}
               >
                 Add Property
               </Link>
-            )}
-            {!user && providers && Object.values(providers).map((provider: ClientSafeProvider): ReactElement => {
-              const {id}: ClientSafeProvider = provider
-              return (
-                <button
-                  key={id}
-                  onClick={(): Promise<SignInResponse | undefined> => signIn(id)}
-                  className='flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2'
-                >
-                  <FaGoogle className='text-white mr-2'/>
-                  <span>
-                    Log In or Register
-                  </span>
-                </button>
-              )
-            })}
+            ) : (providers && Object.values(providers).map((provider: ClientSafeProvider): ReactElement => (
+              <SignInButton provider={provider}/>
+            )))}
           </div>
         </div>
       )}

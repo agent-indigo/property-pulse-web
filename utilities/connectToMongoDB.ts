@@ -10,7 +10,16 @@ const connectToMongoDB: Function = async (): Promise<void> => {
       true
     )
     const host: string = process.env.MONGODB_HOST ?? 'localhost'
-    const hostIsLocal: boolean = host === 'localhost' || host === '127.0.0.1' || host === '::1' || host.startsWith('192.168.') || host.startsWith('10.') || host.startsWith('172.16.') || host.startsWith('fe80:') || host.startsWith('fd00:')
+    const hostIsLocal: boolean = (
+      host === 'localhost' ||
+      host === '127.0.0.1' ||
+      host === '::1' ||
+      host.startsWith('192.168.') ||
+      host.startsWith('10.') ||
+      host.startsWith('172.16.') ||
+      host.startsWith('fe80:') ||
+      host.startsWith('fd00:')
+    )
     await connect(`mongodb${hostIsLocal ? '' : '+srv'}://${
       process.env.MONGODB_USER ?? ''
     }:${
