@@ -46,7 +46,7 @@ const authOpts: AuthOptions = {
       }
       return true
     },
-    session: async (params: SessionParams): Promise<Session> => params.session
+    session: (params: SessionParams): Session => params.session
   }
 }
 export default authOpts
