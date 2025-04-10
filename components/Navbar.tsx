@@ -230,7 +230,10 @@ const Navbar: FunctionComponent = (): ReactElement => {
               {/* logged out */}
               <div className='flex items-center'>
                 {providers && Object.values(providers).map((provider: ClientSafeProvider): ReactElement => (
-                  <SignInButton provider={provider}/>
+                  <SignInButton
+                    key={provider.id}
+                    provider={provider}
+                  />
                 ))}
               </div>
             </div>
