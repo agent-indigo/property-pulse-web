@@ -18,7 +18,7 @@ import success200response from '@/httpResponses/success200response'
 import authOpts from '@/config/authOpts'
 import UserDocument from '@/types/UserDocument'
 import userDocumentModel from '@/models/userDocumentModel'
-export const dynamic = 'force-dynammic'
+export const dynamic = 'force-dynamic'
 /**
  * @name    DELETE
  * @desc    DELETE an image from a property

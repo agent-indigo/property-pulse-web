@@ -51,7 +51,7 @@ const PropertyMap: FunctionComponent<DestructuredProperty> = ({property}): React
     }
     setLoading(false)
   })()}, [
-    location
+    _id
   ])
   return loading ? (
     <Spinner loading={loading}/>
