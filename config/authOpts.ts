@@ -31,7 +31,7 @@ const authOpts: AuthOptions = {
       })
       if (user) {
         if (user.image !== profile?.picture) {
-          user.image = profile.picture
+          user.image = profile?.picture
           await user.save()
         }
       } else {
