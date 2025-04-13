@@ -1,12 +1,8 @@
-import {
-  AuthOptions,
-  Session
-} from 'next-auth'
+import {AuthOptions} from 'next-auth'
 import Google, {GoogleProfile} from 'next-auth/providers/google'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import userDocumentModel from '@/models/userDocumentModel'
 import UserDocument from '@/types/UserDocument'
-import SessionParams from '@/types/SessionParams'
 import SignInParams from '@/types/SignInParams'
 const authOpts: AuthOptions = {
   providers: [
@@ -45,8 +41,7 @@ const authOpts: AuthOptions = {
         })
       }
       return true
-    },
-    session: (params: SessionParams): Session => params.session
+    }
   }
 }
 export default authOpts
