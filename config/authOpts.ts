@@ -35,7 +35,7 @@ const authOpts: AuthOptions = {
           email: profile?.email,
           username: profile?.name,
           image: profile?.picture,
-          roles: await userDocumentModel.findOne({
+          role: await userDocumentModel.findOne({
             role: 'root'
           }) ? 'user' : 'root'
         })
