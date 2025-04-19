@@ -1,15 +1,8 @@
 'use client'
-import {
-  ClientSafeProvider,
-  LiteralUnion,
-  signOut,
-  getProviders
-} from 'next-auth/react'
-import {BuiltInProviderType} from 'next-auth/providers/index'
+import {signOut} from 'next-auth/react'
 import {
   FunctionComponent,
   ReactElement,
-  useEffect,
   useState
 } from 'react'
 import Image from 'next/image'
@@ -31,21 +24,7 @@ const Navbar: FunctionComponent = (): ReactElement => {
     profileMenuOpen,
     setProfileMenuOpen
   ] = useState<boolean>(false)
-  const [
-    providers,
-    setProviders
-  ] = useState<Record<
-    LiteralUnion<
-      BuiltInProviderType,
-      string
-    >,
-    ClientSafeProvider
-  > | null>(null)
   const pathname: string = usePathname()
-  useEffect(
-    (): void => {(async (): Promise<void> => setProviders(await getProviders()))()},
-    []
-  )
   return (
     <nav className='bg-blue-700 border-b border-blue-500'>
       <div className='mx-auto max-w-7xl px-2 sm:px-6 lg:px-8'>
@@ -229,12 +208,7 @@ const Navbar: FunctionComponent = (): ReactElement => {
             <div className='hidden md:block md:ml-6'>
               {/* logged out */}
               <div className='flex items-center'>
-                {providers && Object.values(providers).map((provider: ClientSafeProvider): ReactElement => (
-                  <SignInButton
-                    key={provider.id}
-                    provider={provider}
-                  />
-                ))}
+                <SignInButton/>
               </div>
             </div>
           )}
@@ -263,12 +237,9 @@ const Navbar: FunctionComponent = (): ReactElement => {
               >
                 Add Property
               </Link>
-            ) : (providers && Object.values(providers).map((provider: ClientSafeProvider): ReactElement => (
-              <SignInButton
-                key={provider.id}
-                provider={provider}
-              />
-            )))}
+            ) : (
+              <SignInButton/>
+            )}
           </div>
         </div>
       )}
