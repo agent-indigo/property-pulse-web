@@ -14,11 +14,12 @@ const SignInButton: FunctionComponent<SignInButtonProps> = ({provider}): ReactEl
   const {id}: ClientSafeProvider = provider
   return (
   <button
-    key={id}
     onClick={(): Promise<SignInResponse | undefined> => signIn(id)}
     className='flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2'
   >
-    <FaGoogle className='text-white mr-2'/>
+    {id === 'google' && (
+      <FaGoogle className='text-white mr-2'/>
+    )}
     <span>
       Log In or Register
     </span>
