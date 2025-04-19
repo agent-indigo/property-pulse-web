@@ -8,8 +8,7 @@ import {
   SignInResponse
 } from 'next-auth/react'
 import {FaGoogle} from 'react-icons/fa'
-const SignInButton: FunctionComponent = (): ReactElement => {
-  return (
+const SignInButton: FunctionComponent = (): ReactElement =>  (
   <button
     onClick={(): Promise<SignInResponse | undefined> => signIn('google')}
     className='flex items-center text-white bg-gray-700 hover:bg-gray-900 hover:text-white rounded-md px-3 py-2'
@@ -19,5 +18,5 @@ const SignInButton: FunctionComponent = (): ReactElement => {
       Log In or Register
     </span>
   </button>
-)}
+)
 export default SignInButton
