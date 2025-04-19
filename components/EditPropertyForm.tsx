@@ -160,7 +160,10 @@ const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): 
         body: JSON.stringify(amenities.length === property.amenities.length ? body : {
           ...body,
           amenities
-        })
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
       }
     )
     if (response.ok) {

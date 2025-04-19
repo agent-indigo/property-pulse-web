@@ -13,7 +13,10 @@ const AddPropertyForm: FunctionComponent = (): ReactElement => {
     const response: Response = await fetch(
       `${process.env.NEXT_PUBLIC_API_DOMAIN}/properties`, {
         method: 'POST',
-        body
+        body,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       }
     )
     if (response.ok) {

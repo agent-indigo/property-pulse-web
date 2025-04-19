@@ -20,7 +20,10 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
     const response: Response = await fetch(
       `${process.env.NEXT_PUBLIC_API_DOMAIN}/messages`, {
         method: 'POST',
-        body
+        body,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
       }
     )
     response.ok ? toast.success('Message sent.') : toast.error(await response.text())
