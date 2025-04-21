@@ -59,6 +59,12 @@ const ProfilePropertyCard: FunctionComponent<DestructuredProperty> = ({property}
         >
           Edit
         </Link>
+        <Link
+          href={`/properties/${_id}/images/add`}
+          className='bg-blue-500 text-white px-3 py-3 rounded-md mr-2 hover:bg-blue-600'
+        >
+          Add Images
+        </Link>
         <button
           onClick={handleDelete}
           type='button'
