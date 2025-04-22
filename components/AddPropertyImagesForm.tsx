@@ -14,7 +14,7 @@ const AddPropertyImagesForm: FunctionComponent<DestructuredProperty> = ({propert
   const router: AppRouterInstance = useRouter()
   const handleSubmit: Function = async (body: FormData): Promise<void> => {
     const response: Response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/properties/${_id}/images`, {
+      `${process.env.NEXT_PUBLIC_API_DOMAIN}/properties/${_id}/images`, {
         method: 'POST',
         body,
         headers: {
