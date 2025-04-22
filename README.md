@@ -24,7 +24,9 @@ I made the following modifications:
 
 - Added API endpoints for adding photos to and deleting a photo from a property.
 
-- Added the page for adding images to a property
+- Added the page for adding images to a property.
+
+- Added the page for deleting images from a property.
 
 - Moved `NEXT_PUBLIC_DOMAIN` and `NEXT_PUBLIC_API_DOMAIN` into `next.config.ts`
 
