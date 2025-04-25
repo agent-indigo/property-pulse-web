@@ -2,11 +2,12 @@ import {MiddlewareConfig} from 'next/server'
 export {default} from 'next-auth/middleware'
 export const config: MiddlewareConfig = {
   matcher: [
-    '/properties/add',
-    '/properties/:id/edit',
-    '/properties/:id/images/*',
-    '/properties/bookmarks',
+    '/messages',
     '/profile',
-    '/messages'
+    '/properties/add',
+    '/properties/bookmarks',
+    '/properties/:id/edit',
+    '/properties/:id/images/add',
+    '/properties/:id/images/delete'
   ]
 }
