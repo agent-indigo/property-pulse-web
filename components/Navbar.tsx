@@ -193,9 +193,9 @@ const Navbar: FunctionComponent = (): ReactElement => {
                       role='menuitem'
                       tabIndex={-1}
                       id='user-menu-item-2'
-                      onClick={(): void => {
+                      onClick={async (): Promise<void> => {
                         setProfileMenuOpen(false)
-                        signOut()
+                        await signOut()
                       }}
                     >
                       Log Out
