@@ -18,6 +18,9 @@ const nextConfig: NextConfig = {
       hostname: 'res.cloudinary.com',
       pathname: '**'
     }]
-  }
+  },
+  output: process.env.VERCEL_URL ? undefined : 'standalone',
+  reactStrictMode: true,
+  generateBuildId: (): string => `property-pulse-web-${Date.now()}`
 }
 export default nextConfig
