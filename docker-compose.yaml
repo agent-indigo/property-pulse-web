@@ -1,9 +1,9 @@
 version: '3.8'
 services:
-  PropertyPulse:
+  property-pulse-web:
     build:
       context: .
       dockerfile: Dockerfile
-    image: PropertyPulse:latest
+    image: property-pulse-web:latest
     ports:
       - "3000:3000"
