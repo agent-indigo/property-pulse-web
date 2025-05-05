@@ -28,12 +28,16 @@ const ErrorPage: FunctionComponent<ErrorPageProps> = ({
             <p className='text-2xl font-bold my-2 text-red-400'>
               {message}
             </p>
-            <h2 className="text-3xl font-bold mt-4 mb-2">
-              Stack
-            </h2>
-            <p className='text-2xl font-bold my-2 text-red-400'>
-              {stack}
-            </p>
+            {process.env.NODE_ENV === 'development' && (
+              <>
+                <h2 className="text-3xl font-bold mt-4 mb-2">
+                  Stack
+                </h2>
+                <p className='text-2xl font-bold my-2 text-red-400'>
+                  {stack}
+                </p>
+              </>
+            )}
             <div className='pb-1'>
               <button
                 onClick={(): void => reset()}
