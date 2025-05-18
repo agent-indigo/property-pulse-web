@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:lts
 WORKDIR /property-pulse-web
 COPY .next/standalone/. .
 EXPOSE 3000

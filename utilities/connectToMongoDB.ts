@@ -21,9 +21,9 @@ const connectToMongoDB: Function = async (): Promise<void> => {
       host.startsWith('fd00:')
     )
     await connect(`mongodb${hostIsLocal ? '' : '+srv'}://${
-      process.env.MONGODB_USER ?? ''
+      process.env.MONGODB_USER ?? 'mongo'
     }:${
-      process.env.MONGODB_PASSWORD ?? ''
+      process.env.MONGODB_PASSWORD ?? 'p@5$w0rD'
     }@${host}${hostIsLocal ? `:${
       process.env.MONGODB_PORT ?? '27017'
     }` : ''}/${
