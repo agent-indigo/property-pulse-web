@@ -1,21 +1,18 @@
-version: '3.8'
 services:
   database:
     image: mongodb:latest
+    volumes:
+      - database:/data/db
     environment:
       MONGO_INITDB_ROOT_USERNAME: mongo
       MONGO_INITDB_ROOT_PASSWORD: p@5$w0rD
       MONGO_INITDB_DATABASE: PropertyPulse
-    volumes:
-      - database:/data/db
-    ports:
-      - "27017:27017"
   property-pulse-web:
     image: property-pulse-web:latest
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - 3000:3000
     depends_on:
       - database
