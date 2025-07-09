@@ -4,7 +4,7 @@
 
 This is the [refactor of the PropertyPulse project](https://github.com/bradtraversy/property-pulse/tree/refactor) from [Brad Traversy](https://github.com/bradtraversy)'s [2024 Next.js from Scratch](https://learning.oreilly.com/course/next-js-from-scratch/9781836207979/) course on [O'Reilly](https://learning.oreilly.com/home/).
 
-I made the following modifications:
+## Modifications
 
 - Added TypeScript
 
