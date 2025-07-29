@@ -44,7 +44,9 @@ const actionsApiSlice = apiSlice.injectEndpoints({
 })
 export const {
   useGetUserQuery,
+  useLazyGetUserQuery,
   useGetUnreadMessagesCountQuery,
+  useLazyGetUnreadMessagesCountQuery,
   useAddPropertyMutation,
   useEditPropertyMutation,
   useSendMessageMutation
