@@ -30,7 +30,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
         email: session.user?.email
       })
       return user ? success200response({
-        unread: await messageDocumentModel.countDocuments({
+        unreadMessagesCount: await messageDocumentModel.countDocuments({
           recipient: user.id,
           read: false
         })

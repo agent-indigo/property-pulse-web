@@ -31,7 +31,7 @@ const ContextProvider: FunctionComponent<PropsWithChildren> = ({children}): Reac
   useEffect((): void => {
     const getCount: Function = async (): Promise<void> => {
       const response: Response = await fetch(`${process.env.NEXT_PUBLIC_API_DOMAIN}/messages/unreadCount`)
-      response.ok && setUnreadMessagesCount((await response.json()).unread)
+      response.ok && setUnreadMessagesCount((await response.json()).unreadMessagesCount)
     }
     user && getCount()
   })
