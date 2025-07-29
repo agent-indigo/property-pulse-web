@@ -1,3 +1,4 @@
+import ReducerAction from '@/types/ReducerAction'
 import {
   createSlice,
   Slice
@@ -10,11 +11,9 @@ const userSlice: Slice = createSlice({
   },
   reducers: {
     setUser: (
-      state,
-      action
-    ) => {
-      state.user = action.payload
-    }
+      state: any,
+      action: ReducerAction
+    ): void => state.user = action.payload
   }
 })
 export const {setUser} = userSlice.actions

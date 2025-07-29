@@ -1,3 +1,4 @@
+import ReducerAction from '@/types/ReducerAction'
 import {
   createSlice,
   Slice
@@ -7,11 +8,9 @@ const unreadMessagesCountSlice: Slice = createSlice({
   initialState: 0,
   reducers: {
     setUnreadMessagesCount: (
-      state,
-      action
-    ) => {
-      state.unreadMessagesCount = action.payload.unreadMessagesCount
-    }
+      state: any,
+      action: ReducerAction
+    ): void => state.unreadMessagesCount = action.payload.unreadMessagesCount
   }
 })
 export const {setUnreadMessagesCount} = unreadMessagesCountSlice.actions
