@@ -4,7 +4,7 @@ import {
 } from '@reduxjs/toolkit/query/react'
 const apiSlice = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: '/api'
+    baseUrl: process.env.NEXT_PUBLIC_API_DOMAIN
   }),
   endpoints: builder => ({})
 })

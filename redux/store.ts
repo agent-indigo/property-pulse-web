@@ -8,8 +8,8 @@ import userReducer from '@/redux/userSlice'
 const store: EnhancedStore = configureStore({
   reducer: {
     [apiSlice.reducerPath]: apiSlice.reducer,
-    unreadMessagesCount: unreadMessagesCountReducer,
-    user: userReducer
+    user: userReducer,
+    unreadMessagesCount: unreadMessagesCountReducer
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().concat(apiSlice.middleware),
   devTools: process.env.NODE_ENV === 'development'

@@ -4,17 +4,15 @@ import {
 } from '@reduxjs/toolkit'
 const unreadMessagesCountSlice: Slice = createSlice({
   name: 'unreadMessagesCount',
-  initialState: {
-    unread: 0
-  },
+  initialState: 0,
   reducers: {
-    getUnreadMessagesCount: (
+    setUnreadMessagesCount: (
       state,
       action
     ) => {
-      state = action.payload
+      state.unreadMessagesCount = action.payload.unreadMessagesCount
     }
   }
 })
-export const {getUnreadMessagesCount} = unreadMessagesCountSlice.actions
+export const {setUnreadMessagesCount} = unreadMessagesCountSlice.actions
 export default unreadMessagesCountSlice.reducer
