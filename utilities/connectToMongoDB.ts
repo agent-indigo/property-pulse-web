@@ -12,8 +12,8 @@ const connectToMongoDB: Function = async (): Promise<void> => {
     const host: string = process.env.MONGODB_HOST ?? 'localhost'
     const hostIsLocal: boolean = (
       host === 'localhost' ||
-      host === '127.0.0.1' ||
       host === '::1' ||
+      host.startsWith('127') ||
       host.startsWith('192.168.') ||
       host.startsWith('10.') ||
       host.startsWith('172.16.') ||
