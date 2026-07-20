@@ -13,7 +13,7 @@ const connectToMongoDB: Function = async (): Promise<void> => {
     const hostIsLocal: boolean = (
       host === 'localhost' ||
       host === '::1' ||
-      host.startsWith('127') ||
+      host.startsWith('127.') ||
       host.startsWith('192.168.') ||
       host.startsWith('10.') ||
       host.startsWith('172.16.') ||
