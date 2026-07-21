@@ -60,7 +60,7 @@ const propertyDocumentModel: Model<PropertyDocument> = models.Property ?? model<
         ]
       },
       zipcode: {
-        type: Schema.Types.Number,
+        type: Schema.Types.String,
         required: [
           true,
           'Please provide the zip code.'
