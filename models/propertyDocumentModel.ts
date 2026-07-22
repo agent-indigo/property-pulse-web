@@ -104,7 +104,8 @@ const propertyDocumentModel: Model<PropertyDocument> = models.Property ?? model<
       },
       monthly: {
         type: Schema.Types.Number
-      }
+      },
+      required: true
     },
     seller_info: {
       name: {
