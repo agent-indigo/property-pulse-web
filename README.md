@@ -8,6 +8,8 @@ This is the [refactor of the PropertyPulse project](https://github.com/bradtrave
 
 - Added TypeScript
 
+- Moved source code into `src/`
+
 - Replaced `mapbox-gl` and `react-geocode` with Google Maps
 
 - Added a link to the property inquired about in the Message Card
