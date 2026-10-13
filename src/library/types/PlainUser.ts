@@ -1,4 +1,4 @@
-import PlainDocument from '@/src/library/types/PlainDocument'
+import PlainDocument from '@/types/PlainDocument'
 export default interface PlainUser extends PlainDocument {
   email: string
   username: string

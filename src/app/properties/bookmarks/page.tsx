@@ -4,12 +4,12 @@ import {
 } from 'react'
 import {Metadata} from 'next'
 import {getServerSession} from 'next-auth'
-import PropertyCard from '@/src/library/components/PropertyCard'
-import connectToMongoDB from '@/src/library/utilities/connectToMongoDB'
-import propertyDocumentModel from '@/src/library/models/propertyDocumentModel'
-import BookmarkButton from '@/src/library/components/BookmarkButton'
-import PlainProperty from '@/src/library/types/PlainProperty'
-import userDocumentModel from '@/src/library/models/userDocumentModel'
+import PropertyCard from '@/components/PropertyCard'
+import connectToMongoDB from '@/utilities/connectToMongoDB'
+import propertyDocumentModel from '@/models/propertyDocumentModel'
+import BookmarkButton from '@/components/BookmarkButton'
+import PlainProperty from '@/types/PlainProperty'
+import userDocumentModel from '@/models/userDocumentModel'
 export const metadata: Metadata = {
   title: 'Bookmarks'
 }

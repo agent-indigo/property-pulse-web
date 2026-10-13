@@ -5,10 +5,10 @@ import {
 } from 'react'
 import {useRouter} from 'next/navigation'
 import {toast} from 'react-toastify'
-import SubmitButton from '@/src/library/components/SubmitButton'
+import SubmitButton from '@/components/SubmitButton'
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
-import DestructuredProperty from '@/src/library/types/DestructuredProperty'
-import PlainProperty from '@/src/library/types/PlainProperty'
+import DestructuredProperty from '@/types/DestructuredProperty'
+import PlainProperty from '@/types/PlainProperty'
 const AddPropertyImagesForm: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
   const {_id}: PlainProperty = property
   const router: AppRouterInstance = useRouter()

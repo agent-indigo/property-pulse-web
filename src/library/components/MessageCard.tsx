@@ -3,10 +3,10 @@ import {
   ReactElement
 } from 'react'
 import Link from 'next/link'
-import DestructuredMessage from '@/src/library/types/DestructuredMessage'
-import PlainMessage from '@/src/library/types/PlainMessage'
-import PlainUser from '@/src/library/types/PlainUser'
-import PlainProperty from '@/src/library/types/PlainProperty'
+import DestructuredMessage from '@/types/DestructuredMessage'
+import PlainMessage from '@/types/PlainMessage'
+import PlainUser from '@/types/PlainUser'
+import PlainProperty from '@/types/PlainProperty'
 import ToggleMessageReadButton from './ToggleMessageReadButton'
 import DeleteMessageButton from './DeleteMessageButton'
 const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactElement | null => {

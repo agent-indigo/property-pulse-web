@@ -4,7 +4,7 @@ import {
   FunctionComponent,
   ReactElement
 } from 'react'
-import logo from '@/src/library/assets/images/logo.png'
+import logo from '@/assets/images/logo.png'
 const Footer: FunctionComponent = (): ReactElement =>  (
   <footer className='bg-gray-200 py-4 mt-24'>
     <div className='container mx-auto flex flex-col md:flex-row items-center justify-between px-4'>

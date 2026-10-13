@@ -6,10 +6,10 @@ import {
   useState
 } from 'react'
 import {toast} from 'react-toastify'
-import {useGetContext} from '@/src/library/components/ContextProvider'
-import ContextProps from '@/src/library/types/ContextProps'
-import ToggleMsgReadBtnProps from '@/src/library/types/ToggleMsgReadBtnProps'
-import PlainMessage from '@/src/library/types/PlainMessage'
+import {useGetContext} from '@/components/ContextProvider'
+import ContextProps from '@/types/ContextProps'
+import ToggleMsgReadBtnProps from '@/types/ToggleMsgReadBtnProps'
+import PlainMessage from '@/types/PlainMessage'
 const ToggleMessageReadButton: FunctionComponent<ToggleMsgReadBtnProps> = ({_id, read}): ReactElement => {
   const {setUnreadMessagesCount}: ContextProps = useGetContext()
   const [

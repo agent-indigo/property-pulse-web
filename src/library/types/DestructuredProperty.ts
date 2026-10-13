@@ -1,4 +1,4 @@
-import PlainProperty from '@/src/library/types/PlainProperty'
+import PlainProperty from '@/types/PlainProperty'
 export default interface DestructuredProperty {
   property: PlainProperty
 }

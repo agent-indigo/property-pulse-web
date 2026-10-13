@@ -1,6 +1,6 @@
-import PlainDocument from '@/src/library/types/PlainDocument'
-import PlainUser from '@/src/library/types/PlainUser'
-import PlainProperty from '@/src/library/types/PlainProperty'
+import PlainDocument from '@/types/PlainDocument'
+import PlainUser from '@/types/PlainUser'
+import PlainProperty from '@/types/PlainProperty'
 export default interface PlainMessage extends PlainDocument {
   sender: PlainUser
   recipient: string

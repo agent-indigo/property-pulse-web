@@ -2,12 +2,12 @@ import {
   NextRequest,
   NextResponse
 } from 'next/server'
-import propertyDocumentModel from '@/src/library/models/propertyDocumentModel'
-import userDocumentModel from '@/src/library/models/userDocumentModel'
-import connectToMongoDB from '@/src/library/utilities/connectToMongoDB'
-import success200response from '@/src/library/httpResponses/success200response'
-import error404response from '@/src/library/httpResponses/error404response'
-import error500response from '@/src/library/httpResponses/error500response'
+import propertyDocumentModel from '@/models/propertyDocumentModel'
+import userDocumentModel from '@/models/userDocumentModel'
+import connectToMongoDB from '@/utilities/connectToMongoDB'
+import success200response from '@/httpResponses/success200response'
+import error404response from '@/httpResponses/error404response'
+import error500response from '@/httpResponses/error500response'
 export const dynamic = 'force-dynamic'
 /**
  * @name    GET

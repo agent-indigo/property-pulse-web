@@ -3,9 +3,9 @@ import {
   ReactElement
 } from 'react'
 import {Metadata} from 'next'
-import EditPropertyForm from '@/src/library/components/EditPropertyForm'
-import connectToMongoDB from '@/src/library/utilities/connectToMongoDB'
-import propertyDocumentModel from '@/src/library/models/propertyDocumentModel'
+import EditPropertyForm from '@/components/EditPropertyForm'
+import connectToMongoDB from '@/utilities/connectToMongoDB'
+import propertyDocumentModel from '@/models/propertyDocumentModel'
 export const metadata: Metadata = {
   title: 'Edit Property'
 }

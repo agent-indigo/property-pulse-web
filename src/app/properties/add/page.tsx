@@ -3,7 +3,7 @@ import {
   FunctionComponent,
   ReactElement
 } from 'react'
-import AddPropertyForm from '@/src/library/components/AddPropertyForm'
+import AddPropertyForm from '@/components/AddPropertyForm'
 export const metadata: Metadata = {
   title: 'Add Property'
 }

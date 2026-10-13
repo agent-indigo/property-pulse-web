@@ -3,7 +3,7 @@ import {
   ReactElement
 } from 'react'
 import Link from 'next/link'
-import PaginatorProps from '@/src/library/types/PaginatorProps'
+import PaginatorProps from '@/types/PaginatorProps'
 const Paginator: FunctionComponent<PaginatorProps> = ({
   page = 1,
   size = 6,

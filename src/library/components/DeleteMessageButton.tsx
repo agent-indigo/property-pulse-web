@@ -5,9 +5,9 @@ import {
   ReactElement
 } from 'react'
 import {toast} from 'react-toastify'
-import {useGetContext} from '@/src/library/components/ContextProvider'
-import ContextProps from '@/src/library/types/ContextProps'
-import DestructuredId from '@/src/library/types/DestructuredId'
+import {useGetContext} from '@/components/ContextProvider'
+import ContextProps from '@/types/ContextProps'
+import DestructuredId from '@/types/DestructuredId'
 const DeleteMessageButton: FunctionComponent<DestructuredId> = ({_id}): ReactElement => {
   const {setUnreadMessagesCount}: ContextProps = useGetContext()
   const handleDelete: MouseEventHandler = async (): Promise<void> => {

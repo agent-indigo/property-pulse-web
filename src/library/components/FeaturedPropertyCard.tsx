@@ -11,11 +11,11 @@ import {
   FaMoneyBill,
   FaRulerCombined
 } from 'react-icons/fa'
-import getRateDisplay from '@/src/library/utilities/getRateDisplay'
-import PropertyLocation from '@/src/library/types/PropertyLocation'
-import PropertyRates from '@/src/library/types/PropertyRates'
-import DestructuredProperty from '@/src/library/types/DestructuredProperty'
-import PlainProperty from '@/src/library/types/PlainProperty'
+import getRateDisplay from '@/utilities/getRateDisplay'
+import PropertyLocation from '@/types/PropertyLocation'
+import PropertyRates from '@/types/PropertyRates'
+import DestructuredProperty from '@/types/DestructuredProperty'
+import PlainProperty from '@/types/PlainProperty'
 const FeaturedPropertyCard: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
   const {
     _id,

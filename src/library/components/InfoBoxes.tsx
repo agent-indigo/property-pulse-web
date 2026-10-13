@@ -2,7 +2,7 @@ import {
   FunctionComponent,
   ReactElement
 } from 'react'
-import InfoBox from '@/src/library/components/InfoBox'
+import InfoBox from '@/components/InfoBox'
 const InfoBoxes: FunctionComponent = (): ReactElement => (
   <section>
     <div className='container-xl lg:container m-auto'>

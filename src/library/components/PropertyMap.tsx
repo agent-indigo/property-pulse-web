@@ -12,9 +12,9 @@ import {
   Marker
 } from '@react-google-maps/api'
 import {LatLngLiteral} from '@googlemaps/google-maps-services-js'
-import Spinner from '@/src/library/components/Spinner'
-import DestructuredProperty from '@/src/library/types/DestructuredProperty'
-import PlainProperty from '@/src/library/types/PlainProperty'
+import Spinner from '@/components/Spinner'
+import DestructuredProperty from '@/types/DestructuredProperty'
+import PlainProperty from '@/types/PlainProperty'
 const PropertyMap: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
   const {_id}: PlainProperty = property
   const [

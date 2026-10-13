@@ -7,13 +7,13 @@ import {Metadata} from 'next'
 import {Inter} from 'next/font/google'
 import {NextFont} from 'next/dist/compiled/@next/font'
 import {ToastContainer} from 'react-toastify'
-import ContextProvider from '@/src/library/components/ContextProvider'
-import AuthProvider from '@/src/library/components/AuthProvider'
-import Navbar from '@/src/library/components/Navbar'
-import Footer from '@/src/library/components/Footer'
+import ContextProvider from '@/components/ContextProvider'
+import AuthProvider from '@/components/AuthProvider'
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
 import 'react-toastify/dist/ReactToastify.css'
 import 'photoswipe/dist/photoswipe.css'
-import '@/src/library/assets/styles.css'
+import '@/assets/styles.css'
 const inter: NextFont = Inter({subsets: ['latin']})
 export const metadata: Metadata = {
   title: {

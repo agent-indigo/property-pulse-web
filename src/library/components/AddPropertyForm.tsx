@@ -6,7 +6,7 @@ import {
 import {useRouter} from 'next/navigation'
 import {toast} from 'react-toastify'
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
-import SubmitButton from '@/src/library/components/SubmitButton'
+import SubmitButton from '@/components/SubmitButton'
 const AddPropertyForm: FunctionComponent = (): ReactElement => {
   const router: AppRouterInstance = useRouter()
   const handleSubmit: Function = async (body: FormData): Promise<void> => {

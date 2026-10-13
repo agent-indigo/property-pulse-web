@@ -4,10 +4,10 @@ import {
 } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import ProfilePropertyDeleteButton from '@/src/library/components/ProfilePropertyDeleteButton'
-import DestructuredProperty from '@/src/library/types/DestructuredProperty'
-import PlainProperty from '@/src/library/types/PlainProperty'
-import PropertyLocation from '@/src/library/types/PropertyLocation'
+import ProfilePropertyDeleteButton from '@/components/ProfilePropertyDeleteButton'
+import DestructuredProperty from '@/types/DestructuredProperty'
+import PlainProperty from '@/types/PlainProperty'
+import PropertyLocation from '@/types/PropertyLocation'
 const ProfilePropertyCard: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
   const {
     _id,

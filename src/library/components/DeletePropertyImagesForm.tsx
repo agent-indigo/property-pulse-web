@@ -15,8 +15,8 @@ import {toast} from 'react-toastify'
 import {FaTimes} from 'react-icons/fa'
 import {useRouter} from 'next/navigation'
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
-import DestructuredProperty from '@/src/library/types/DestructuredProperty'
-import PlainProperty from '@/src/library/types/PlainProperty'
+import DestructuredProperty from '@/types/DestructuredProperty'
+import PlainProperty from '@/types/PlainProperty'
 const DeletePropertyImagesForm: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
   const router: AppRouterInstance = useRouter()
   const {

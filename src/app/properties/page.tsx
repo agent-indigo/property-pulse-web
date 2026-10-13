@@ -3,12 +3,12 @@ import {
   ReactElement
 } from 'react'
 import {Metadata} from 'next'
-import SearchPropertiesForm from '@/src/library/components/SearchPropertiesForm'
-import Properties from '@/src/library/components/Properties'
-import propertyDocumentModel from '@/src/library/models/propertyDocumentModel'
-import connectToMongoDB from '@/src/library/utilities/connectToMongoDB'
-import FeaturedProperties from '@/src/library/components/FeaturedProperties'
-import PlainProperty from '@/src/library/types/PlainProperty'
+import SearchPropertiesForm from '@/components/SearchPropertiesForm'
+import Properties from '@/components/Properties'
+import propertyDocumentModel from '@/models/propertyDocumentModel'
+import connectToMongoDB from '@/utilities/connectToMongoDB'
+import FeaturedProperties from '@/components/FeaturedProperties'
+import PlainProperty from '@/types/PlainProperty'
 export const metadata: Metadata = {
   title: 'Properties'
 }

@@ -4,7 +4,7 @@ import {
   model,
   models
 } from 'mongoose'
-import PropertyDocument from '@/src/library/types/PropertyDocument'
+import PropertyDocument from '@/types/PropertyDocument'
 const propertyDocumentModel: Model<PropertyDocument> = models.Property ?? model<PropertyDocument>(
   'Property',
   new Schema<PropertyDocument>({

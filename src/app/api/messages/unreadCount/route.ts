@@ -6,14 +6,14 @@ import {
   getServerSession,
   Session
 } from 'next-auth'
-import messageDocumentModel from '@/src/library/models/messageDocumentModel'
-import connectToMongoDB from '@/src/library/utilities/connectToMongoDB'
-import success200response from '@/src/library/httpResponses/success200response'
-import error401response from '@/src/library/httpResponses/error401response'
-import error500response from '@/src/library/httpResponses/error500response'
-import authOpts from '@/src/library/config/authOpts'
-import UserDocument from '@/src/library/types/UserDocument'
-import userDocumentModel from '@/src/library/models/userDocumentModel'
+import messageDocumentModel from '@/models/messageDocumentModel'
+import connectToMongoDB from '@/utilities/connectToMongoDB'
+import success200response from '@/httpResponses/success200response'
+import error401response from '@/httpResponses/error401response'
+import error500response from '@/httpResponses/error500response'
+import authOpts from '@/config/authOpts'
+import UserDocument from '@/types/UserDocument'
+import userDocumentModel from '@/models/userDocumentModel'
 export const dynamic = 'force-dynamic'
 /**
  * @name    GET

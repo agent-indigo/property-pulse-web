@@ -3,8 +3,8 @@ import {
   FunctionComponent,
   ReactElement
 } from 'react'
-import {useGetContext} from '@/src/library/components/ContextProvider'
-import ContextProps from '@/src/library/types/ContextProps'
+import {useGetContext} from '@/components/ContextProvider'
+import ContextProps from '@/types/ContextProps'
 const UnreadMessagesCount: FunctionComponent = (): ReactElement | null => {
   const {unreadMessagesCount}: ContextProps = useGetContext()
   return unreadMessagesCount > 0 ? (

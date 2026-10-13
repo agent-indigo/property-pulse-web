@@ -10,11 +10,11 @@ import {
   FaCheck,
   FaMapMarker
 } from 'react-icons/fa'
-import PropertyMap from '@/src/library/components/PropertyMap'
-import PropertyLocation from '@/src/library/types/PropertyLocation'
-import PropertyRates from '@/src/library/types/PropertyRates'
-import DestructuredProperty from '@/src/library/types/DestructuredProperty'
-import PlainProperty from '@/src/library/types/PlainProperty'
+import PropertyMap from '@/components/PropertyMap'
+import PropertyLocation from '@/types/PropertyLocation'
+import PropertyRates from '@/types/PropertyRates'
+import DestructuredProperty from '@/types/DestructuredProperty'
+import PlainProperty from '@/types/PlainProperty'
 const PropertyDetails: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
   const {
     name,

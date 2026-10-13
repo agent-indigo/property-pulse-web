@@ -2,10 +2,10 @@ import {
   FunctionComponent,
   ReactElement
 } from 'react'
-import PropertyCard from '@/src/library/components/PropertyCard'
-import Paginator from '@/src/library/components/Paginator'
-import PropertiesComponentProps from '@/src/library/types/PropertiesComponentProps'
-import PlainProperty from '@/src/library/types/PlainProperty'
+import PropertyCard from '@/components/PropertyCard'
+import Paginator from '@/components/Paginator'
+import PropertiesComponentProps from '@/types/PropertiesComponentProps'
+import PlainProperty from '@/types/PlainProperty'
 const Properties: FunctionComponent<PropertiesComponentProps> = ({
   properties,
   page = 1,

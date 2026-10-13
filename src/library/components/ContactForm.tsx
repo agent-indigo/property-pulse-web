@@ -4,11 +4,11 @@ import {
   ReactElement
 } from 'react'
 import {toast} from 'react-toastify'
-import SubmitButton from '@/src/library/components/SubmitButton'
-import ContextProps from '@/src/library/types/ContextProps'
-import {useGetContext} from '@/src/library/components/ContextProvider'
-import DestructuredProperty from '@/src/library/types/DestructuredProperty'
-import PlainProperty from '@/src/library/types/PlainProperty'
+import SubmitButton from '@/components/SubmitButton'
+import ContextProps from '@/types/ContextProps'
+import {useGetContext} from '@/components/ContextProvider'
+import DestructuredProperty from '@/types/DestructuredProperty'
+import PlainProperty from '@/types/PlainProperty'
 const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
   const {
     _id,

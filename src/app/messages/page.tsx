@@ -4,11 +4,11 @@ import {
 } from 'react'
 import {Metadata} from 'next'
 import {getServerSession} from 'next-auth'
-import MessageCard from '@/src/library/components/MessageCard'
-import connectToMongoDB from '@/src/library/utilities/connectToMongoDB'
-import messageDocumentModel from '@/src/library/models/messageDocumentModel'
-import PlainMessage from '@/src/library/types/PlainMessage'
-import userDocumentModel from '@/src/library/models/userDocumentModel'
+import MessageCard from '@/components/MessageCard'
+import connectToMongoDB from '@/utilities/connectToMongoDB'
+import messageDocumentModel from '@/models/messageDocumentModel'
+import PlainMessage from '@/types/PlainMessage'
+import userDocumentModel from '@/models/userDocumentModel'
 export const metadata: Metadata = {
   title: 'Messages'
 }

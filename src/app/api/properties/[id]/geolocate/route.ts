@@ -7,13 +7,13 @@ import {
   GeocodeResponse,
   GeocodeResponseData
 } from '@googlemaps/google-maps-services-js'
-import propertyDocumentModel from '@/src/library/models/propertyDocumentModel'
-import connectToMongoDB from '@/src/library/utilities/connectToMongoDB'
-import PropertyDocument from '@/src/library/types/PropertyDocument'
-import success200response from '@/src/library/httpResponses/success200response'
-import error500response from '@/src/library/httpResponses/error500response'
-import error404response from '@/src/library/httpResponses/error404response'
-import PropertyLocation from '@/src/library/types/PropertyLocation'
+import propertyDocumentModel from '@/models/propertyDocumentModel'
+import connectToMongoDB from '@/utilities/connectToMongoDB'
+import PropertyDocument from '@/types/PropertyDocument'
+import success200response from '@/httpResponses/success200response'
+import error500response from '@/httpResponses/error500response'
+import error404response from '@/httpResponses/error404response'
+import PropertyLocation from '@/types/PropertyLocation'
 export const dynamic = 'force-dynamic'
 /**
  * @name    GET

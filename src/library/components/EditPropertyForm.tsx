@@ -9,9 +9,9 @@ import {
 import {useRouter} from 'next/navigation'
 import {AppRouterInstance} from 'next/dist/shared/lib/app-router-context.shared-runtime'
 import {toast} from 'react-toastify'
-import SubmitButton from '@/src/library/components/SubmitButton'
-import DestructuredProperty from '@/src/library/types/DestructuredProperty'
-import PlainProperty from '@/src/library/types/PlainProperty'
+import SubmitButton from '@/components/SubmitButton'
+import DestructuredProperty from '@/types/DestructuredProperty'
+import PlainProperty from '@/types/PlainProperty'
 const EditPropertyForm: FunctionComponent<DestructuredProperty> = ({property}): ReactElement => {
   const {_id}: PlainProperty = property
   const [

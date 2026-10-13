@@ -5,7 +5,7 @@ import {
   ReactElement
 } from 'react'
 import {toast} from 'react-toastify'
-import DestructuredId from '@/src/library/types/DestructuredId'
+import DestructuredId from '@/types/DestructuredId'
 const ProfilePropertyDeleteButton: FunctionComponent<DestructuredId> = ({_id}): ReactElement => {
   const handleDelete: MouseEventHandler = async (): Promise<void> => {
     if (window.confirm('Are you sure you want to delete this property?')) {

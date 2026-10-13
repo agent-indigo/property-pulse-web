@@ -1,5 +1,5 @@
 import NextAuth from 'next-auth/next'
-import authOpts from '@/src/library/config/authOpts'
+import authOpts from '@/config/authOpts'
 export const dynamic = 'force-dynamic'
 const NextAuthHandler = NextAuth(authOpts)
 export {

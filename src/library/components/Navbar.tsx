@@ -8,12 +8,12 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 import {usePathname} from 'next/navigation'
-import logo from '@/src/library/assets/images/logo-white.png'
-import profileDefault from '@/src/library/assets/images/profile.png'
-import UnreadMessagesCount from '@/src/library/components/UnreadMessagesCount'
-import ContextProps from '@/src/library/types/ContextProps'
-import {useGetContext} from '@/src/library/components/ContextProvider'
-import SignInButton from '@/src/library/components/SignInButton'
+import logo from '@/assets/images/logo-white.png'
+import profileDefault from '@/assets/images/profile.png'
+import UnreadMessagesCount from '@/components/UnreadMessagesCount'
+import ContextProps from '@/types/ContextProps'
+import {useGetContext} from '@/components/ContextProvider'
+import SignInButton from '@/components/SignInButton'
 const Navbar: FunctionComponent = (): ReactElement => {
   const {user}: ContextProps = useGetContext()
   const [

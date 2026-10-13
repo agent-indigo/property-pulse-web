@@ -3,9 +3,9 @@ import {
   ReactElement
 } from 'react'
 import {Metadata} from 'next'
-import connectToMongoDB from '@/src/library/utilities/connectToMongoDB'
-import DeletePropertyImagesForm from '@/src/library/components/DeletePropertyImagesForm'
-import propertyDocumentModel from '@/src/library/models/propertyDocumentModel'
+import connectToMongoDB from '@/utilities/connectToMongoDB'
+import DeletePropertyImagesForm from '@/components/DeletePropertyImagesForm'
+import propertyDocumentModel from '@/models/propertyDocumentModel'
 export const metadata: Metadata = {
   title: 'Delete Images'
 }

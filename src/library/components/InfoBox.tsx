@@ -3,8 +3,8 @@ import {
   FunctionComponent,
   ReactElement
 } from 'react'
-import InfoBoxProps from '@/src/library/types/InfoBoxProps'
-import ButtonProps from '@/src/library/types/ButtonProps'
+import InfoBoxProps from '@/types/InfoBoxProps'
+import ButtonProps from '@/types/ButtonProps'
 const InfoBox: FunctionComponent<InfoBoxProps> = ({
   heading,
   bgColor = 'bg-gray-100',

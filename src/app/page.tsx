@@ -3,10 +3,10 @@ import {
   ReactElement
 } from 'react'
 import {Metadata} from 'next'
-import Hero from '@/src/library/components/Hero'
-import InfoBoxes from '@/src/library/components/InfoBoxes'
-import HomeProperties from '@/src/library/components/HomeProperties'
-import FeaturedProperties from '@/src/library/components/FeaturedProperties'
+import Hero from '@/components/Hero'
+import InfoBoxes from '@/components/InfoBoxes'
+import HomeProperties from '@/components/HomeProperties'
+import FeaturedProperties from '@/components/FeaturedProperties'
 export const metadata: Metadata = {
   title: 'Home | PropertyPulse | Find the Perfect Rental',
   description: 'Find the perfect rental property.',

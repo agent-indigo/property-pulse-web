@@ -6,15 +6,15 @@ import {
   NextRequest,
   NextResponse
 } from 'next/server'
-import error401response from '@/src/library/httpResponses/error401response'
-import error404response from '@/src/library/httpResponses/error404response'
-import error500response from '@/src/library/httpResponses/error500response'
-import success200response from '@/src/library/httpResponses/success200response'
-import PropertyDocument from '@/src/library/types/PropertyDocument'
-import UserDocument from '@/src/library/types/UserDocument'
-import propertyDocumentModel from '@/src/library/models/propertyDocumentModel'
-import userDocumentModel from '@/src/library/models/userDocumentModel'
-import connectToMongoDB from '@/src/library/utilities/connectToMongoDB'
+import error401response from '@/httpResponses/error401response'
+import error404response from '@/httpResponses/error404response'
+import error500response from '@/httpResponses/error500response'
+import success200response from '@/httpResponses/success200response'
+import PropertyDocument from '@/types/PropertyDocument'
+import UserDocument from '@/types/UserDocument'
+import propertyDocumentModel from '@/models/propertyDocumentModel'
+import userDocumentModel from '@/models/userDocumentModel'
+import connectToMongoDB from '@/utilities/connectToMongoDB'
 export const PATCH = async (
   request: NextRequest,
   {params}: any
