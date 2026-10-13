@@ -1,25 +1,21 @@
-'use client'
 import {
   FunctionComponent,
-  MouseEventHandler,
-  ReactElement,
-  useState
+  ReactElement
 } from 'react'
-import {toast} from 'react-toastify'
 import Link from 'next/link'
-import {useGetContext} from '@/src/library/components/ContextProvider'
-import ContextProps from '@/src/library/types/ContextProps'
 import DestructuredMessage from '@/src/library/types/DestructuredMessage'
 import PlainMessage from '@/src/library/types/PlainMessage'
 import PlainUser from '@/src/library/types/PlainUser'
 import PlainProperty from '@/src/library/types/PlainProperty'
+import ToggleMessageReadButton from './ToggleMessageReadButton'
+import DeleteMessageButton from './DeleteMessageButton'
 const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactElement | null => {
   const {
-    _id: messageId,
+    _id,
     body,
     email,
     phone,
-    read: messageRead,
+    read,
     property,
     sender,
     createdAt
@@ -29,39 +25,6 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactEl
     _id: propertyId,
     name
   }: PlainProperty = property
-  const [
-    read,
-    setRead
-  ] = useState<boolean>(messageRead)
-  const {setUnreadMessagesCount}: ContextProps = useGetContext()
-  const handleToggle: MouseEventHandler = async (): Promise<void> => {
-    const response: Response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_DOMAIN}/messages/${messageId}`, {
-        method: 'PATCH'
-      }
-    )
-    if (response.ok) {
-      const {read}: PlainMessage = await response.json()
-      setRead(read)
-      setUnreadMessagesCount((previousValue: number): number => read ? previousValue - 1 : previousValue + 1)
-      toast.success(`Message marked as ${read ? 'read' : 'unread'}.`)
-    } else {
-      toast.error(await response.text())
-    }
-  }
-  const handleDelete: MouseEventHandler = async (): Promise<void> => {
-    const response: Response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_DOMAIN}/messages/${messageId}`, {
-        method: 'DELETE'
-      }
-    )
-    if (response.ok) {
-      setUnreadMessagesCount((previousValue: number): number => previousValue - 1)
-      toast.success('Message deleted.')
-    } else {
-      toast.error(await response.text())
-    }
-  }
   return (
     <div className='relative bg-white p-4 rounded-md shadow-md border border-gray-200'>
       {!read && (
@@ -108,18 +71,11 @@ const MessageCard: FunctionComponent<DestructuredMessage> = ({message}): ReactEl
           {new Date(createdAt).toLocaleString()}
         </li>
       </ul>
-      <button
-        onClick={handleToggle}
-        className={`mt-4 mr-3 ${read ? 'bg-gray-300' : 'bg-blue-500 text-white'} py-1 px-3 rounded-md`}
-      >
-        Mark as {read ? 'unread' : 'read'}
-      </button>
-      <button
-        onClick={handleDelete}
-        className='mt-4 bg-red-500 text-white py-1 px-3 rounded-md'
-      >
-        Delete
-      </button>
+      <ToggleMessageReadButton
+        _id={_id}
+        read={read}
+      />
+      <DeleteMessageButton _id={_id}/>
     </div>
   )
 }

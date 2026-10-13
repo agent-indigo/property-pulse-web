@@ -41,13 +41,24 @@ const PropertyPage: FunctionComponent<any> = async ({params}): Promise<ReactElem
             <PropertyDetails property={property}/>
             <aside className='space-y-4'>
               <BookmarkButton property={property}/>
-              <ShareButtons property={property}/>
-              <ContactForm property={property}/>
+              <h3 className='text-xl font-bold text-center pt-2'>
+                Share
+              </h3>
+              <div className='flex gap-3 justify-center pb-5'>
+                <ShareButtons property={property}/>
+              </div>
+              <div className='bg-white p-6 rounded-lg shadow-md'>
+                <ContactForm property={property}/>
+              </div>
             </aside>
           </div>
         </div>
       </section>
-      <PropertyImages images={images}/>
+      <section className='bg-blue-50 p-4'>
+        <div className='container mx-auto'>
+          <PropertyImages images={images}/>
+        </div>
+      </section>
     </>
   )
 }

@@ -60,9 +60,6 @@ const DeletePropertyImagesForm: FunctionComponent<DestructuredProperty> = ({prop
   ]) : setSelected(selected.filter((id: string): boolean => id !== event.target.value))
   return (
     <>
-      <h2 className='text-3xl text-center font-semibold mb-6'>
-        Delete Images
-      </h2>
       <div className='flex justify-center mb-4 gap-2'>
         <button
           className='bg-red-500 text-white px-4 py-2 rounded-md mr-2'

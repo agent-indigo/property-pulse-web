@@ -1,12 +1,10 @@
-'use client'
 import {
   FunctionComponent,
-  MouseEventHandler,
   ReactElement
 } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import {toast} from 'react-toastify'
+import ProfilePropertyDeleteButton from '@/src/library/components/ProfilePropertyDeleteButton'
 import DestructuredProperty from '@/src/library/types/DestructuredProperty'
 import PlainProperty from '@/src/library/types/PlainProperty'
 import PropertyLocation from '@/src/library/types/PropertyLocation'
@@ -22,16 +20,6 @@ const ProfilePropertyCard: FunctionComponent<DestructuredProperty> = ({property}
     state,
     street
   }: PropertyLocation = location
-  const handleDelete: MouseEventHandler = async (): Promise<void> => {
-    if (window.confirm('Are you sure you want to delete this property?')) {
-      const response: Response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_DOMAIN}/properties/${_id}`, {
-          method: 'DELETE'
-        }
-      )
-      response.ok ? toast.success('Property deleted.') : toast.error(await response.text())
-    }
-  }
   return (
     <div className='mb-10'>
       <Link href={`/properties/${_id}`}>
@@ -71,13 +59,7 @@ const ProfilePropertyCard: FunctionComponent<DestructuredProperty> = ({property}
         >
           Delete Images
         </Link>
-        <button
-          onClick={handleDelete}
-          type='button'
-          className='bg-red-500 text-white px-3 py-2 rounded-md hover:bg-red-600'
-        >
-          Delete Property
-        </button>
+        <ProfilePropertyDeleteButton _id={_id}/>
       </div>
     </div>
   )

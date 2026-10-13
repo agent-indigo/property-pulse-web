@@ -29,7 +29,7 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
     response.ok ? toast.success('Message sent.') : toast.error(await response.text())
   }
   return (
-    <div className='bg-white p-6 rounded-lg shadow-md'>
+    <>
       <h3 className='text-xl text-center font-bold py-1'>
         {user ? isOwner ? 'This is one of your properties.' : 'Inquiry Form' : 'Log in to Inquire'}
       </h3>
@@ -117,7 +117,7 @@ const ContactForm: FunctionComponent<DestructuredProperty> = ({property}): React
           </div>
         </form>
       )}
-    </div>
+    </>
   )
 }
 export default ContactForm

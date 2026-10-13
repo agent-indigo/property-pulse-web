@@ -13,73 +13,69 @@ const PropertyImages: FunctionComponent<Images> = ({images}): ReactElement => {
   const image: string = images[0]
   return (
     <Gallery>
-      <section className='bg-blue-50 p-4'>
-        <div className='container mx-auto'>
-          {images.length === 1 ? (
-            <Item
-              original={image}
-              thumbnail={image}
-              width={1000}
-              height={600}
-            >
-              {({
-                ref,
-                open
-              }): ReactElement => (
-                <Image
-                  ref={ref}
-                  onClick={open}
-                  src={image}
-                  alt=''
-                  className='object-cover h-[400px] mx-auto rounded-xl'
-                  width={1800}
-                  height={400}
-                  priority={true}
-                />
-              )}
-            </Item>
-          ) : (
-            <div className='grid grid-cols-2 gap-4'>
-              {images.map((
-                image: string,
-                index: number
-              ): ReactElement => (
-                <div
-                  key={index}
-                  className={
-                    images.length === 3 && index === 2
-                    ? 'col-span-2'
-                    : 'col-span-1'
-                  }
-                >
-                  <Item
-                    original={image}
-                    thumbnail={image}
-                    width={1000}
-                    height={600}
-                  >
-                    {({
-                      ref,
-                      open
-                    }): ReactElement => (
-                      <Image
-                        ref={ref}
-                        onClick={open}
-                        src={image}
-                        alt=''
-                        className='object-cover h-[400px] w-full rounded-xl'
-                        width={1800}
-                        height={400}
-                        priority={true}
-                      />
-                    )}
-                  </Item>
-                </div>
-              ))}
-            </div>
+      {images.length === 1 ? (
+        <Item
+          original={image}
+          thumbnail={image}
+          width={1000}
+          height={600}
+        >
+          {({
+            ref,
+            open
+          }): ReactElement => (
+            <Image
+              ref={ref}
+              onClick={open}
+              src={image}
+              alt=''
+              className='object-cover h-[400px] mx-auto rounded-xl'
+              width={1800}
+              height={400}
+              priority={true}
+            />
           )}
+        </Item>
+      ) : (
+        <div className='grid grid-cols-2 gap-4'>
+          {images.map((
+            image: string,
+            index: number
+          ): ReactElement => (
+            <div
+              key={index}
+              className={
+                images.length === 3 && index === 2
+                ? 'col-span-2'
+                : 'col-span-1'
+              }
+            >
+              <Item
+                original={image}
+                thumbnail={image}
+                width={1000}
+                height={600}
+              >
+                {({
+                  ref,
+                  open
+                }): ReactElement => (
+                  <Image
+                    ref={ref}
+                    onClick={open}
+                    src={image}
+                    alt=''
+                    className='object-cover h-[400px] w-full rounded-xl'
+                    width={1800}
+                    height={400}
+                    priority={true}
+                  />
+                )}
+              </Item>
+            </div>
+          ))}
         </div>
-      </section>
+      )}
     </Gallery>
   )
 }
