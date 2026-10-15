@@ -15,6 +15,7 @@ import UserDocument from '@/types/UserDocument'
 import propertyDocumentModel from '@/models/propertyDocumentModel'
 import userDocumentModel from '@/models/userDocumentModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
+import { revalidatePath } from 'next/cache'
 export const PATCH = async (
   request: NextRequest,
   {params}: any
@@ -33,6 +34,10 @@ export const PATCH = async (
           if (property) {
             property.is_featured = !property.is_featured
             await property.save()
+            revalidatePath(
+              '/',
+              'layout'
+            )
             return success200response(property.toObject())
           } else {
             return error404response
