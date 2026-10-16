@@ -19,6 +19,7 @@ import error401response from '@/httpResponses/error401response'
 import nextAuth from '@/configuration/nextAuth'
 import UserDocument from '@/types/UserDocument'
 import userDocumentModel from '@/models/userDocumentModel'
+import messageDocumentModel from '@/models/messageDocumentModel'
 export const dynamic = 'force-dynamic'
 /**
  * @name    GET
@@ -59,6 +60,9 @@ export const DELETE = async (
         const property: PropertyDocument | null = await propertyDocumentModel.findById((await params).id)
         if (property) {
           if (property.owner.toString() === user.id) {
+            await messageDocumentModel.deleteMany({
+              property: property.id
+            })
             property.imageIds.map(async (id: string): Promise<void> => await cloudinary.uploader.destroy(id))
             await property.deleteOne()
             revalidatePath(
