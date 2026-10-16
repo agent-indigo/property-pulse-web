@@ -1,11 +1,16 @@
 import PropertyRates from '@/types/PropertyRates'
 const getRateDisplay: Function = (rates: PropertyRates): string | undefined => {
-  if (rates.monthly) {
-    return `${rates.monthly?.toLocaleString()}/mo`
-  } else if (rates.weekly) {
-    return `${rates.weekly?.toLocaleString()}/wk`
-  } else if (rates.nightly) {
-    return `${rates.nightly?.toLocaleString()}/night`
+  const {
+    nightly,
+    weekly,
+    monthly
+  }: PropertyRates = rates
+  if (nightly) {
+    return `${nightly.toLocaleString()}/night`
+  } else if (weekly) {
+    return `${weekly.toLocaleString()}/week`
+  } else if (monthly) {
+    return `${monthly.toLocaleString()}/month`
   }
 }
 export default getRateDisplay
