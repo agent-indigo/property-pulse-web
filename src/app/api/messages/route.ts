@@ -14,7 +14,7 @@ import error401response from '@/httpResponses/error401response'
 import error500response from '@/httpResponses/error500response'
 import success201response from '@/httpResponses/success201response'
 import error400response from '@/httpResponses/error400response'
-import authOpts from '@/config/authOpts'
+import nextAuth from '@/configuration/nextAuth'
 import UserDocument from '@/types/UserDocument'
 import userDocumentModel from '@/models/userDocumentModel'
 import MessageDocument from '@/types/MessageDocument'
@@ -27,7 +27,7 @@ export const dynamic = 'force-dynamic'
  */
 export const GET = async (request: NextRequest): Promise<NextResponse> => {
   try {
-    const session: Session | null = await getServerSession(authOpts)
+    const session: Session | null = await getServerSession(nextAuth)
     if (session) {
       await connectToMongoDB()
       const user: UserDocument | null = await userDocumentModel.findOne({
@@ -60,7 +60,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
  */
 export const POST = async (request: NextRequest): Promise<NextResponse> => {
   try {
-    const session: Session | null = await getServerSession(authOpts)
+    const session: Session | null = await getServerSession(nextAuth)
     if (session) {
       await connectToMongoDB()
       const user: UserDocument | null = await userDocumentModel.findOne({

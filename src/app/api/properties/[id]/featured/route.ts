@@ -6,6 +6,7 @@ import {
   NextRequest,
   NextResponse
 } from 'next/server'
+import {revalidatePath} from 'next/cache'
 import error401response from '@/httpResponses/error401response'
 import error404response from '@/httpResponses/error404response'
 import error500response from '@/httpResponses/error500response'
@@ -15,7 +16,6 @@ import UserDocument from '@/types/UserDocument'
 import propertyDocumentModel from '@/models/propertyDocumentModel'
 import userDocumentModel from '@/models/userDocumentModel'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
-import { revalidatePath } from 'next/cache'
 export const PATCH = async (
   request: NextRequest,
   {params}: any

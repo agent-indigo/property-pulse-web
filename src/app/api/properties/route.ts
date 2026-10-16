@@ -10,13 +10,13 @@ import {revalidatePath} from 'next/cache'
 import {UploadApiResponse} from 'cloudinary'
 import PropertyDocument from '@/types/PropertyDocument'
 import propertyDocumentModel from '@/models/propertyDocumentModel'
-import cloudinary from '@/config/cloudinary'
+import cloudinary from '@/configuration/cloudinary'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import error500response from '@/httpResponses/error500response'
 import success200response from '@/httpResponses/success200response'
 import success201response from '@/httpResponses/success201response'
 import error401response from '@/httpResponses/error401response'
-import authOpts from '@/config/authOpts'
+import nextAuth from '@/configuration/nextAuth'
 import UserDocument from '@/types/UserDocument'
 import userDocumentModel from '@/models/userDocumentModel'
 export const dynamic = 'force-dynamic'
@@ -54,7 +54,7 @@ export const GET = async (request: NextRequest): Promise<NextResponse> => {
  */
 export const POST = async (request: NextRequest): Promise<NextResponse> => {
   try {
-    const session: Session | null = await getServerSession(authOpts)
+    const session: Session | null = await getServerSession(nextAuth)
     if (session) {
       await connectToMongoDB()
       const user: UserDocument | null = await userDocumentModel.findOne({

@@ -4,7 +4,7 @@ import connectToMongoDB from '@/utilities/connectToMongoDB'
 import userDocumentModel from '@/models/userDocumentModel'
 import UserDocument from '@/types/UserDocument'
 import SignInParams from '@/types/SignInParams'
-const authOpts: AuthOptions = {
+const nextAuth: AuthOptions = {
   providers: [
     Google<GoogleProfile>({
       clientId: process.env.GOOGLE_CLIENT_ID ?? '',
@@ -44,4 +44,4 @@ const authOpts: AuthOptions = {
     }
   }
 }
-export default authOpts
+export default nextAuth

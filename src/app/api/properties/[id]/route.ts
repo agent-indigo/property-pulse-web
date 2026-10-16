@@ -10,13 +10,13 @@ import {revalidatePath} from 'next/cache'
 import connectToMongoDB from '@/utilities/connectToMongoDB'
 import propertyDocumentModel from '@/models/propertyDocumentModel'
 import PropertyDocument from '@/types/PropertyDocument'
-import cloudinary from '@/config/cloudinary'
+import cloudinary from '@/configuration/cloudinary'
 import success200response from '@/httpResponses/success200response'
 import error404response from '@/httpResponses/error404response'
 import error500response from '@/httpResponses/error500response'
 import success204response from '@/httpResponses/success204response'
 import error401response from '@/httpResponses/error401response'
-import authOpts from '@/config/authOpts'
+import nextAuth from '@/configuration/nextAuth'
 import UserDocument from '@/types/UserDocument'
 import userDocumentModel from '@/models/userDocumentModel'
 export const dynamic = 'force-dynamic'
@@ -49,7 +49,7 @@ export const DELETE = async (
   {params}: any
 ): Promise<NextResponse> => {
   try {
-    const session: Session | null = await getServerSession(authOpts)
+    const session: Session | null = await getServerSession(nextAuth)
     if (session) {
       await connectToMongoDB()
       const user: UserDocument | null = await userDocumentModel.findOne({
@@ -93,7 +93,7 @@ export const PATCH = async (
   {params}: any
 ): Promise<NextResponse> => {
   try {
-    const session: Session | null = await getServerSession(authOpts)
+    const session: Session | null = await getServerSession(nextAuth)
     if (session) {
       await connectToMongoDB()
       const user: UserDocument | null = await userDocumentModel.findOne({

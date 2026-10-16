@@ -17,7 +17,7 @@ import success200response from '@/httpResponses/success200response'
 import error401response from '@/httpResponses/error401response'
 import error500response from '@/httpResponses/error500response'
 import error404response from '@/httpResponses/error404response'
-import authOpts from '@/config/authOpts'
+import nextAuth from '@/configuration/nextAuth'
 export const dynamic = 'force-dynamic'
 /**
  * @name    GET
@@ -30,7 +30,7 @@ export const GET = async (
   {params}: any
 ): Promise<NextResponse> => {
   try {
-    const session: Session | null = await getServerSession(authOpts)
+    const session: Session | null = await getServerSession(nextAuth)
     if (session) {
       await connectToMongoDB()
       const user: UserDocument | null = await userDocumentModel.findOne({
@@ -57,7 +57,7 @@ export const PATCH = async (
   {params}: any
 ): Promise<NextResponse> => {
   try {
-    const session: Session | null = await getServerSession(authOpts)
+    const session: Session | null = await getServerSession(nextAuth)
     if (session) {
       await connectToMongoDB()
       const user: UserDocument | null = await userDocumentModel.findOne({
